@@ -7,15 +7,11 @@ $next_next_name = get("next_next_name");
 $next_next_hash = get("next_next_hash", $next_next_name == null ? null : sha1($next_next_name));
 $location = get("location");
 $path = get("path", []);
+$this_script_url = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["SCRIPT_NAME"];
 
-if ($name == null) {
-    echo json_encode("This is FreeDomainNameSystem node ver 0.1 created by Mike Haiduk +375255451247. \n"
-        . "registration: ?name=&next_name=&location=\n"
-        . "rename: ?name=&next_name=&next_next_name=&location=\n"
-        . "update: ?name=&next_name=\n");
-} else {
-
+if ($name != null) {
     $result = array(
+        "success" => false,
         "name" => $name,
         "domain" => null,
         "similarDomains" => [],
@@ -26,7 +22,7 @@ if ($name == null) {
         "path" => $path,
     );
 
-    if ($next_name != null && $next_next_name == null && $location == null) {
+    if ($next_name != null && $next_next_hash == null && $location == null) {
         // update
         $result["success"] = updateList("domains", array(
             "online_time" => time()
@@ -39,7 +35,7 @@ if ($name == null) {
         . " and length(name) <= " . (strlen($name) + 1)
         . " and location not in ('" . implode('\'', $path) . "')");
 
-    $result["path"][] = "http://" . $_SERVER["HTTP_HOST"] . $_SERVER["SCRIPT_NAME"];
+    $result["path"][] = $this_script_url;
 
     function compare($first, $second)
     {
@@ -124,6 +120,32 @@ if ($name == null) {
             $result["domain"] = selectMap("select * from domains where name = '$name'");
         }
     }
-
-    echo json_encode_readable($result);
 }
+
+$domain_count = scalar("select count(*) from domains");
+
+define("MAX_DOMAIN_LIVE_SECONDS", 60 * 20);
+query("delete from domains where online_time < " . (time() - MAX_DOMAIN_LIVE_SECONDS));
+
+if ($name != null) {
+    $result["local_domain_count"] = $domain_count;
+    die(json_encode_readable($result));
+}
+
+
+header("Content-Type: text/html; charset=utf-8");
+$random = rand(0, 1000);
+?>
+<html>
+    <body>
+        This is FreeDomainNameSystem node ver 0.1 created by Mike Haiduk +375255451247<br>
+        domain counts = <?=$domain_count?><br>
+        Tests:<br>
+        <a href="?name=domain<?=$random?>&next_name=next_domain<?=$random?>&location=<?=$this_script_url?>" target="_blank"><button>Registration</button></a><br>
+        <a href="?name=domain<?=$random?>&next_name=next_domain<?=$random?>&location=<?=$this_script_url?>&next_next_name=next_next_domain<?=$random?>" target="_blank"><button>Rename</button></a><br>
+        <a href="?name=domain<?=$random?>&next_name=next_domain<?=$random?>" target="_blank"><button>Update</button></a><br>
+    </body>
+</html>
+
+
+
