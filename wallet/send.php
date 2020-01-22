@@ -11,15 +11,20 @@ $message = "";
 if ($coin_name != null && $coin_count != null && $receiver_user_login != null) {
     $receiver = selectMap("select * from users where user_login = '$receiver_user_login'");
     if ($receiver != null) {
+        if ($receiver["user_id"] != $user["user_id"]){
+
         $coin = selectMap("select * from coins where coin_name = '$coin_name'");
         if ($coin != null) {
             $coins = selectList("select * from domain_keys where user_id = " . $user["user_id"] . " and coin_id = " . $coin["coin_id"] . " limit $coin_count");
             if (sizeof($coins) == $coin_count) {
-                update("update domain_keys set user_id = " . $receiver["user_id"] . " where user_id = " . $user["user_id"] . " limit $coin_count");
+                update("update domain_keys set user_id = " . $receiver["user_id"]
+                    . " where user_id = " . $user["user_id"] . " and coin_id = " . $coin["coin_id"] .  " limit $coin_count");
             } else
                 $message = "not enough coins";
         } else
             $message = "coin doesnt exist in wallet";
+        }else
+            $message = "you cannot send coins to yourself";
     } else
         $message = "receiver doesnt exist";
 
