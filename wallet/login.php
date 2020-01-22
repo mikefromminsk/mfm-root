@@ -4,8 +4,9 @@ include_once "../db.php";
 
 $login = get("login");
 $password = get("password");
-$token = get("token");
+$token = get_int("token");
 $message = "";
+$user = null;
 
 if ($login != null && $password != null) {
     $user = selectMap("select * from users where user_login = '$login'");
@@ -31,9 +32,12 @@ if ($login != null && $password != null) {
         unset($_GET["login"]);
         unset($_GET["password"]);
         $_GET["token"] = $token;
-        redirect("wallet.php", $_GET);
+        redirect("wallet", $_GET);
     }
 }
+
+if ($user == null && $token != null)
+    $user = selectMap("select * from users where user_session_token = $token");
 
 if ($token == null) {
     ?>

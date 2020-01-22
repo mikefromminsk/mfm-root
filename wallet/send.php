@@ -12,7 +12,7 @@ if ($coin != null && $count != null && $receiver != null) {
     if ($count > 100)
         $message = "code doesnt exist";
     else
-        redirect($redirect ?: "wallet.php?token=" . $token);
+        redirect($redirect ?: "wallet", array("token" => $token));
 }
 ?>
 <html>
