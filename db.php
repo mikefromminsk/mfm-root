@@ -104,6 +104,7 @@ function db_error($error_code, $error_message = "")
 
 function get($param_name, $def_value = null)
 {
+    // TODO add test on sql
     $param_value = null;
     if (isset($_GET[$param_name]))
         $param_value = $_GET[$param_name];
@@ -167,7 +168,8 @@ function get_string_required($param_name)
 
 function insert($sql, $show_query = null)
 {
-    return query($sql, $show_query);
+    query($sql, $show_query);
+    return mysqli_insert_id($GLOBALS["conn"]);
 }
 
 function insertList($table_name, $params, $show_query = false)
@@ -367,11 +369,20 @@ function http_json_get($url)
     return json_decode($result, true);
 }
 
-function redirect($url, $params = array())
+function redirect($url, $params = array(), $params_in_url = true)
 {
+    if ($params_in_url == true){
+        $url_params = "";
+        foreach ($params as $key => $value)
+            $url_params .= "&" . urlencode($key) . "=" . urlencode($value);
+        if (strpos($url, "?") === false && $url_params != "")
+            $url_params[0] = "?";
+        $url .= $url_params;
+    }
     $redirect_script = '<html><body><form id="redirect" action="' . $url . '" method="post">';
-    foreach ($params as $key => $value)
-        $redirect_script .= '<input type="hidden" name="' . htmlentities($key) . '" value="' . htmlentities(json_encode($value)) . '">';
+    if ($params_in_url == false)
+        foreach ($params as $key => $value)
+            $redirect_script .= '<input type="hidden" name="' . htmlentities($key) . '" value="' . htmlentities(json_encode($value)) . '">';
     $redirect_script .= '</form><script>document.getElementById("redirect").submit();</script></body></html>';
     die($redirect_script);
 }
