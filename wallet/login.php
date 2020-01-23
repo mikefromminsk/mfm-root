@@ -1,6 +1,7 @@
 <?php
 
 include_once "../db.php";
+$node_url = uencode($node_url);
 
 $login = get("login");
 $password = get("password");

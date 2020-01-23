@@ -1,7 +1,7 @@
 <?php
-error_reporting(1);
+error_reporting(12);
 
-header("Content-type: " . strpos($_SERVER["HTTP_ACCEPT"], "text/html") != -1 ? "text/html" : "application/json"."; charset=utf-8");
+header("Content-type: " . strpos($_SERVER["HTTP_ACCEPT"], "text/html") != -1 ? "text/html" : "application/json" . "; charset=utf-8");
 
 include_once "properties.php";
 
@@ -25,6 +25,7 @@ $GLOBALS["conn"] = $mysql_conn;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT') {
     $inputJSON = file_get_contents('php://input');
+    file_put_contents("input.json", $inputJSON);
     $inputParams = json_decode($inputJSON, true);
     foreach ($inputParams as $key => $value)
         $_POST[$key] = $value;
@@ -102,6 +103,11 @@ function db_error($error_code, $error_message = "")
     exit;
 }
 
+function uencode($param_value)
+{
+    return mysqli_real_escape_string($GLOBALS["conn"], $param_value);
+}
+
 function get($param_name, $def_value = null)
 {
     // TODO add test on sql
@@ -168,8 +174,12 @@ function get_string_required($param_name)
 
 function insert($sql, $show_query = null)
 {
-    query($sql, $show_query);
-    return mysqli_insert_id($GLOBALS["conn"]);
+    $success_or_error = query($sql, $show_query);
+    /*$insert_autoincrement_id = mysqli_insert_id($GLOBALS["conn"]);
+    if ($insert_autoincrement_id === 0)
+        return $success_or_error;
+    return $insert_autoincrement_id;*/
+    return $success_or_error;
 }
 
 function insertList($table_name, $params, $show_query = false)
@@ -179,7 +189,7 @@ function insertList($table_name, $params, $show_query = false)
     });
     foreach ($params as $param_name => $param_value)
         if (is_string($param_value) && $param_value != "unix_timestamp()")
-            $params[$param_name] = "'" . mysqli_real_escape_string($GLOBALS["conn"], $param_value) . "'";
+            $params[$param_name] = "'" . uencode($param_value) . "'";
     $insert_query = "insert into $table_name (" . implode(",", array_keys($params)) . ") values (" . implode(",", array_values($params)) . ")";
     return insert($insert_query, $show_query);
 }
@@ -203,9 +213,9 @@ function updateList($table_name, $params, $primary_key, $primary_value, $show_qu
     $update_params = rtrim($update_params, ", ");
     $update_query = "update $table_name set $update_params ";
     if (is_array($primary_value))
-        $update_query .= " where $primary_key  in ('" . implode("','", $primary_value) . "')";
+        $update_query .= " where $primary_key  in ('" . implode("','", uencode($primary_value)) . "')";
     else
-        $update_query .= " where $primary_key = " . (is_string($primary_value) ? "'$primary_value'" : $primary_value);
+        $update_query .= " where $primary_key = " . (is_string($primary_value) ? "'" . uencode($primary_value) . "'" : $primary_value);
     if ($update_params != "") {
         return update($update_query, $show_query);
     } else
@@ -221,7 +231,7 @@ function object_properties_to_number(&$object)
         $object = doubleval($object);
 }
 
-function json_encode_readable($result)
+function json_encode_readable(&$result)
 {
     //object_properties_to_number($result);
     $json = json_encode($result, JSON_UNESCAPED_UNICODE);
@@ -345,17 +355,29 @@ function http_json_put($url, $fields)
     return json_decode($result, true);
 }
 
-function http_json_post($url, $fields)
+function utf8ize($mixed)
 {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
+    if (is_array($mixed)) {
+        foreach ($mixed as $key => $value)
+            $mixed[$key] = utf8ize($value);
+    } elseif (is_string($mixed)) {
+        return mb_convert_encoding($mixed, 'UTF-8', 'ISO-8859-1');
+    }
+    return $mixed;
+}
+
+function http_json_post($url, $data)
+{
+    $data_string = json_encode(utf8ize($data));
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-    $result = curl_exec($ch);
-    curl_close($ch);
-    return json_decode($result, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Content-Length: ' . strlen($data_string))
+    );
+    return curl_exec($ch);
 }
 
 function http_json_get($url)
@@ -371,7 +393,7 @@ function http_json_get($url)
 
 function redirect($url, $params = array(), $params_in_url = true)
 {
-    if ($params_in_url == true){
+    if ($params_in_url == true) {
         $url_params = "";
         foreach ($params as $key => $value)
             $url_params .= "&" . urlencode($key) . "=" . urlencode($value);

@@ -1,0 +1,1 @@
+<?php include_once "../wallet/create_coin.php"; ?>
