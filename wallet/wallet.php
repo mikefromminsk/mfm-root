@@ -63,7 +63,7 @@ include_once "login.php";
             </a>
         </td>
         <td>
-            <a href="<?= "$exchange_server?exchange_token=$token" ?>">
+            <a href="exchange?token=<?= $token ?>">
                 <button style="width: 100%">Exchange</button>
             </a>
         </td>
