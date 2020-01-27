@@ -13,10 +13,11 @@ if ($coin_name != null && $coin_code != null) {
     query("delete from coins");
     query("delete from domains");
     query("delete from domain_keys");
-    $coin_id = insertList("coins", array(
+    insertList("coins", array(
         "coin_name" => $coin_name,
         "coin_code" => $coin_code,
     ));
+    $coin_id = scalar("select coin_id from coins where coin_name = '$coin_name'");
     $user_id = $user["user_id"];
     for ($i = 0; $i < 64; $i++) {
         $domain_last_online_time = time();
@@ -33,7 +34,6 @@ if ($coin_name != null && $coin_code != null) {
         query($insert_domains_sql);
     }
 
-
     $max_block_domains = 65536;
     $request_count = 8;
     $domains_per_request = $max_block_domains / $request_count;
@@ -42,12 +42,10 @@ if ($coin_name != null && $coin_code != null) {
         for ($i = 0; $i < $request_count; $i++) {
             $domain_list = select("select * from domains where domain_name like '$coin_name%' "
                 . " limit " . ($i * $domains_per_request - ($i == 0 ? 0 : 1) . ", $domains_per_request" ));
-
-            $request_result = http_json_post($node_location, array("domains" => $domain_list));
-            echo json_encode($request_result);
+            http_json_post($node_location, array("domains" => $domain_list));
         }
     }
-    //redirect("wallet", array("token" => $token));
+    redirect("wallet", array("token" => $token));
 }
 
 ?>

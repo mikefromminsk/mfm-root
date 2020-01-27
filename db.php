@@ -25,7 +25,6 @@ $GLOBALS["conn"] = $mysql_conn;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT') {
     $inputJSON = file_get_contents('php://input');
-    file_put_contents("input.json", $inputJSON);
     $inputParams = json_decode($inputJSON, true);
     foreach ($inputParams as $key => $value)
         $_POST[$key] = $value;

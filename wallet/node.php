@@ -15,7 +15,6 @@ $results = array(
 
 // delete out of date domains
 query("delete from domains where domain_last_online_time < " . (time() - $domain_ttl_seconds));
-file_put_contents("data.json", json_encode($domains));
 if ($domains != null) {
     foreach ($domains as  $domain_remote) {
         $domain_name = uencode($domain_remote["domain_name"]);
