@@ -1,20 +1,14 @@
-<?php
-
-include_once "login.php";
-
-?>
+<?php include_once "login.php"; ?>
 <html>
 <head>
     <script>
         function copyToClipboard() {
-
             var copyText = document.getElementById("wallet_addr");
             copyText.select();
             copyText.setSelectionRange(0, 99999);
             document.execCommand("copy");
             copyText.setSelectionRange(0, 0);
             copyText.blur();
-
             document.getElementById("copy_button").innerText = 'coped';
         }
     </script>
@@ -33,14 +27,13 @@ include_once "login.php";
     </tr>
     <?php
     $coins = select("select *, count(*) as 'coin_count' from domain_keys t1"
-        . " left join coins t2 on t1.coin_id = t2.coin_id"
+        . " left join coins t2 on t1.coin_code = t2.coin_code"
         . " where t1.user_id = " . $user["user_id"]
-        . " group by t1.coin_id");
+        . " group by t1.coin_code");
     foreach ($coins as $coin) { ?>
         <tr>
             <td colspan="2">
-                <br>
-                <a href="send?token=<?= $token ?>&coin=<?= $coin["coin_name"] ?>">
+                <a href="send?token=<?= $token ?>&coin_code=<?= $coin["coin_code"] ?>">
                     <div style="background-color: lightgray;">
                         <big><b><?= $coin["coin_count"] ?></b> <?= $coin["coin_code"] ?></big><br>
                         <small>1 <?= $coin["coin_name"] ?> = 0.001 USD</small>

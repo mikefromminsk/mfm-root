@@ -6,8 +6,22 @@ $node_url = uencode($node_url);
 $login = get("login");
 $password = get("password");
 $token = get_int("token");
+$stock_token = get("stock_token");
 $message = "";
 $user = null;
+$user_id = null;
+
+if ($stock_token != null){
+    $user = selectMap("select * from users where user_session_token = $stock_token");
+    if ($user == null)
+        insertList("users", array(
+            "user_login" => "user" . rand(1, 1000000),
+            "user_password_hash" => hash("sha256", "pass" . rand(1, 1000000)),
+            "user_session_token" => $stock_token,
+            "user_stock_token" => random_id(),
+        ));
+    $token = $stock_token;
+}
 
 if ($login != null && $password != null) {
     $user = selectMap("select * from users where user_login = '$login'");
@@ -24,10 +38,12 @@ if ($login != null && $password != null) {
             } else {
             }
         } else {
+            $stock_token = random_id();
             insertList("users", array(
                 "user_login" => $login,
                 "user_password_hash" => $password_hash,
                 "user_session_token" => $token,
+                "user_stock_token" => $stock_token,
             ));
         }
         unset($_GET["login"]);
@@ -40,7 +56,9 @@ if ($login != null && $password != null) {
 if ($user == null && $token != null)
     $user = selectMap("select * from users where user_session_token = $token");
 
-if ($token == null) {
+$user_id = $user["user_id"];
+
+if ($user_id == null) {
     ?>
     <html>
     <head>
