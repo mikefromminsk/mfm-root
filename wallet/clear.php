@@ -20,13 +20,4 @@ http_json_post($host_url . "create_coin", array(
     "coin_code" => "USD",
 ));
 
-http_json_post($host_url . "exchange", array(
-    "user_login" => "ss",
-    "user_password" => "123",
-    "have_coin_code" => "FTR",
-    "have_coin_count" => 1000,
-    "want_coin_code" => "USD",
-    "want_coin_count" => 4000,
-));
-
 echo json_encode(true);

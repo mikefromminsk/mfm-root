@@ -61,6 +61,13 @@
             </a>
         </td>
     </tr>
+    <tr>
+        <td colspan="2">
+            <a href="stock?stock_token=<?= $user["user_stock_token"] ?>">
+                <button style="width: 100%">Stock</button>
+            </a>
+        </td>
+    </tr>
 </table>
 </body>
 </html>
