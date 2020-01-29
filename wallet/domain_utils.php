@@ -2,12 +2,12 @@
 
 include_once "../db.php";
 
-function receive_domain_keys($user_id, $have_coin_code, $have_domain_keys){
+function receive_domain_keys($user_id, $have_coin_code, $domain_keys){
     $success_domain_names = [];
 
-    foreach ($have_domain_keys as $have_domain_key) {
-        $domain_name = $have_domain_key["domain_name"];
-        $domain_next_name = $have_domain_key["domain_next_name"];
+    foreach ($domain_keys as $domain_key) {
+        $domain_name = uencode($domain_key["domain_name"]);
+        $domain_next_name = $domain_key["domain_next_name"];
         $domain_next_hash = hash("sha256", $domain_next_name);
         $domain = selectMap("select * from domains where domain_name = '$domain_name'");
         if ($domain != null && $domain["domain_next_hash"] == $domain_next_hash) {

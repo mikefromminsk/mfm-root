@@ -1,8 +1,9 @@
 <?php
+
 include_once "login.php";
 
-$coin_name = get("name");
-$coin_code = get("code");
+$coin_name = get("coin_name");
+$coin_code = get("coin_code");
 $message = "";
 
 function unichr($u)
@@ -65,7 +66,7 @@ if ($coin_name != null && $coin_code != null) {
                 Coin name:
             </td>
             <td>
-                <input type="text" name="name" placeholder="Bitcoin" autocomplete="off" required/>
+                <input name="coin_name" type="text" placeholder="Bitcoin" autocomplete="off" required/>
             </td>
         <tr/>
         <tr>
@@ -73,7 +74,7 @@ if ($coin_name != null && $coin_code != null) {
                 Coin code:
             </td>
             <td>
-                <input type="text" name="code" onkeyup="this.value = this.value.toUpperCase();" autocomplete="off"
+                <input name="coin_code" type="text" onkeyup="this.value = this.value.toUpperCase();" autocomplete="off"
                        maxlength="5" placeholder="BTC" required/>
             </td>
         <tr/>

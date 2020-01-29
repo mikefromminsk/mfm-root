@@ -365,9 +365,11 @@ function utf8ize($mixed)
     return $mixed;
 }
 
-function http_json_post($url, $data)
+function http_json_post($url, $data, $uencode = false)
 {
-    $data_string = json_encode(utf8ize($data));
+    if ($uencode)
+        $data = utf8ize($data);
+    $data_string = json_encode($data);
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
@@ -394,20 +396,22 @@ function http_json_get($url)
 
 function redirect($url, $params = array(), $params_in_url = true)
 {
-    if ($params_in_url == true) {
-        $url_params = "";
-        foreach ($params as $key => $value)
-            $url_params .= "&" . urlencode($key) . "=" . urlencode($value);
-        if (strpos($url, "?") === false && $url_params != "")
-            $url_params[0] = "?";
-        $url .= $url_params;
+    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        if ($params_in_url == true) {
+            $url_params = "";
+            foreach ($params as $key => $value)
+                $url_params .= "&" . urlencode($key) . "=" . urlencode($value);
+            if (strpos($url, "?") === false && $url_params != "")
+                $url_params[0] = "?";
+            $url .= $url_params;
+        }
+        $redirect_script = '<html><body><form id="redirect" action="' . $url . '" method="post">';
+        if ($params_in_url == false)
+            foreach ($params as $key => $value)
+                $redirect_script .= '<input type="hidden" name="' . htmlentities($key) . '" value="' . htmlentities(json_encode($value)) . '">';
+        $redirect_script .= '</form><script>document.getElementById("redirect").submit();</script></body></html>';
+        die($redirect_script);
     }
-    $redirect_script = '<html><body><form id="redirect" action="' . $url . '" method="post">';
-    if ($params_in_url == false)
-        foreach ($params as $key => $value)
-            $redirect_script .= '<input type="hidden" name="' . htmlentities($key) . '" value="' . htmlentities(json_encode($value)) . '">';
-    $redirect_script .= '</form><script>document.getElementById("redirect").submit();</script></body></html>';
-    die($redirect_script);
 }
 
 function array_extend(array $a, array $b)

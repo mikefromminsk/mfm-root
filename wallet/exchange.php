@@ -25,8 +25,7 @@ if ($have_coin_code != null && $have_coin_count != null && $want_coin_code != nu
         query("delete from domain_keys where $domains_where");
 
         $response = http_json_post($exchange_server_dir . "create_offer", $request);
-        header("Content-type: " . "application/json; charset=utf-8");
-        die(json_encode_readable($response));
+        die(json_encode($response));
     }
 
     //redirect("stock", array("stock_token", $user["user_stock_token"]));

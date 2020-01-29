@@ -3,15 +3,15 @@
 include_once "../db.php";
 $node_url = uencode($node_url);
 
-$login = get("login");
-$password = get("password");
+$user_login = get("user_login");
+$user_password = get("user_password");
 $token = get_int("token");
 $stock_token = get("stock_token");
 $message = "";
 $user = null;
 $user_id = null;
 
-if ($stock_token != null){
+if ($stock_token != null) {
     $user = selectMap("select * from users where user_session_token = $stock_token");
     if ($user == null)
         insertList("users", array(
@@ -23,9 +23,9 @@ if ($stock_token != null){
     $token = $stock_token;
 }
 
-if ($login != null && $password != null) {
-    $user = selectMap("select * from users where user_login = '$login'");
-    $password_hash = hash("sha256", $password);
+if ($user_login != null && $user_password != null) {
+    $user = selectMap("select * from users where user_login = '$user_login'");
+    $password_hash = hash("sha256", $user_password);
     if ($user != null && $user["user_password_hash"] != $password_hash) {
         $message = "Password is not correct";
     } else {
@@ -40,7 +40,7 @@ if ($login != null && $password != null) {
         } else {
             $stock_token = random_id();
             insertList("users", array(
-                "user_login" => $login,
+                "user_login" => $user_login,
                 "user_password_hash" => $password_hash,
                 "user_session_token" => $token,
                 "user_stock_token" => $stock_token,
@@ -55,6 +55,7 @@ if ($login != null && $password != null) {
 
 if ($user == null && $token != null)
     $user = selectMap("select * from users where user_session_token = $token");
+
 
 $user_id = $user["user_id"];
 
@@ -71,7 +72,7 @@ if ($user_id == null) {
                     Login:
                 </td>
                 <td>
-                    <input type="text" name="login" value="<?= $login ?>" required/>
+                    <input name="user_login" type="text" value="<?= $user_login ?>" required/>
                 </td>
             <tr/>
             <tr>
@@ -79,7 +80,7 @@ if ($user_id == null) {
                     Password:
                 </td>
                 <td>
-                    <input type="password" name="password" required/>
+                    <input name="user_password" type="password" required/>
                 </td>
             <tr/>
             <tr>
