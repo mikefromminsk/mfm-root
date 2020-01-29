@@ -35,12 +35,12 @@ $sell_offers = select("select * from offers where have_coin_code = '$want_coin_c
 <body>
 <form method="get">
     <table align="center">
-        <tr align="center">
+        <tr align="center" style="display: <?= $have_coin_code != null && $want_coin_code != null ? "block": "none"?>">
             <td colspan="2">
                 <?= $have_coin_code ?>:<?= $want_coin_code ?>
             </td>
         <tr/>
-        <tr>
+        <tr style="display: <?= $have_coin_code != null && $want_coin_code != null ? "inherit": "none"?>">
             <td style="vertical-align: top">
                 <table border="1" cellspacing="0">
                     <tr>
