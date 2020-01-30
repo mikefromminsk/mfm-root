@@ -5,11 +5,7 @@ function get(name){
 controller("wallet", function ($scope, $routeParams) {
     $scope.message = "12d12d12";
 
-    $scope.next = function () {
-        get("#main-page").scrollLeft += get("#left-fragment").clientWidth;
-    }
-
-    $scope.back = function () {
-        get("#main-page").scrollLeft = 0;
+    $scope.page = function (index) {
+        get("#main-page").scrollLeft = window.innerWidth * index;
     }
 })
