@@ -1,23 +1,19 @@
 <!DOCTYPE html>
-<html ng-app="AngularApp">
+<html lang="en" ng-app="AngularApp">
 <head>
-    <!--start-page is a first loaded by angular-->
-    <meta name="start-page" content="wallet">
-    <link rel="stylesheet" href="angular/css/angular-material.min.css">
-    <link rel="stylesheet" href="angular/css/angular-main-controller.css">
+    <title>AngularTemplate</title>
+    <meta name="start-page" content="login"><!--start-page is a first loaded by angular-->
+    <link rel="stylesheet" href="modules/angular/css/angular-material.min.css">
+    <link rel="stylesheet" href="modules/angular-template/css/angular-main-controller.css">
 </head>
 <body ng-controller="MainController">
-<script src="angular/js/angular.min.js"></script>
-<!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
-<script src="angular/js/angular-animate.min.js"></script>
-<!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
-<script src="angular/js/angular-aria.min.js"></script>
-<!--angular-route for working with url-->
-<script src="angular/js/angular-route.min.js"></script>
-<!--angular-main-controller for auto loading js scripts-->
-<script src="angular/js/angular-main-controller.js"></script>
-<!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
-<script src="angular/js/angular-material.min.js"></script>
+<script src="modules/angular/js/angular.min.js"></script>
+<script src="modules/angular/js/angular-animate.min.js"></script><!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
+<script src="modules/angular/js/angular-aria.min.js"></script><!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
+<script src="modules/angular/js/angular-route.min.js"></script><!--angular-route for working with url-->
+<script src="modules/angular/js/angular-material.min.js"></script><!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
+<script src="modules/angular-template/js/angular-main-controller.js"></script><!--angular-main-controller for auto loading js scripts-->
+<script src="modules/store/store.everything.min.js"></script><!--angular-main-controller for auto loading js scripts-->
 <div class="view-container">
     <div ng-view class="view-frame"></div>
 </div>

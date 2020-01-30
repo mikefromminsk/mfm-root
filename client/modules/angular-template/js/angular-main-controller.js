@@ -4,9 +4,15 @@ let app = angular.module('AngularApp', [
     'ngAnimate',
 ]);
 
-app.config(function ($routeProvider, $controllerProvider) {
+app.config(function ($routeProvider, $controllerProvider, $mdThemingProvider) {
     app.register = $controllerProvider.register;
     app.routeProvider = $routeProvider;
+    $mdThemingProvider.theme('default')
+        .primaryPalette('blue')
+        .accentPalette('teal')
+        .warnPalette('red')
+        .backgroundPalette('grey')
+        .dark();
 });
 
 function controller(controllerId, callback) {

@@ -1,3 +1,3 @@
 controller("wallet", function ($scope, $routeParams) {
-    $scope.message = "123";
+    $scope.message = "12d12d12";
 })
