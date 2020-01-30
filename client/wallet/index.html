@@ -1,24 +1,38 @@
 <style>
     .page-container {
+        width: 100%;
+        height: 100%;
+        text-align: center;
         overflow: hidden;
         scroll-behavior: smooth;
     }
 
-    @media (max-width: 600px) {
-        .fragment{
+    .page-wrapper {
+        margin: auto;
+        width: 960px;
+        height: 100%;
+    }
+
+    @media (max-width: 960px) {
+        .page-wrapper {
+            width: 100%;
+        }
+        .fragment {
             min-width: 100%;
         }
     }
 
     .fragment {
-        width: 400px
+        width: 50%
     }
 </style>
-<div id="main-page" class="layout-fill layout-row page-container" style="background-color: #666666">
-    <md-content id="left-fragment" class="fragment">
-        <md-button class="md-raised md-primary" ng-click="next()">Next</md-button>
-    </md-content>
-    <md-content class="fragment" style="background-color: gray">
-        <md-button class="md-raised md-primary" ng-click="back()">Next</md-button>
-    </md-content>
+<div id="main-page" class="page-container" style="background-color: #666666">
+    <div class="page-wrapper  layout-row ">
+        <md-content id="left-fragment" class="fragment">
+            <md-button class="md-raised md-primary" ng-click="next()">Next</md-button>
+        </md-content>
+        <md-content class="fragment" style="background-color: gray">
+            <md-button class="md-raised md-primary" ng-click="back()">Next</md-button>
+        </md-content>
+    </div>
 </div>
