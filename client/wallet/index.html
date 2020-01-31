@@ -1,12 +1,19 @@
 <style>
     .header {
         height: 64px;
+        box-shadow: 0 0 5px black;
+    }
+
+    .cell {
+        border: 1px solid #666666;
+        text-align: center;
+        padding: 16px 0;
     }
 </style>
 <div class="layout-fill layout-row" style="background-color: #666666">
-    <md-content class="layout-column flex-30">
+    <md-content class="layout-column flex-30 ">
         <div class="layout-column flex" ng-show="!toggleSendFragment">
-            <div class="layout-column flex-25" style="background-color: #666666; padding: 20px">
+            <div class="layout-column flex-25" style="background-color: #444444; padding: 20px">
                 <div class="layout-row layout-align-center">
                     <h1>DarkWallet</h1>
                 </div>
@@ -37,9 +44,12 @@
             </div>
         </div>
         <div class="layout-row">
-            <md-button class="md-raised md-primary flex header" ng-click="toggleSendFragment = !toggleSendFragment">Send</md-button>
+            <md-button class="md-raised md-primary flex header" ng-click="toggleSendFragment = !toggleSendFragment">
+                Send
+            </md-button>
         </div>
-        <form class="layout-column layout-align-center-center  flex" ng-show="toggleSendFragment" style="background-color: #444444" >
+        <form class="layout-column layout-align-center-center  flex" ng-show="toggleSendFragment"
+              style="background-color: #444444">
             <md-card class="layout-column" style="padding: 20px">
                 <md-input-container>
                     <label>Wallet ID</label>
@@ -65,7 +75,55 @@
             </md-card>
         </form>
     </md-content>
-    <md-content flex style="background-color: #9e9e9e;">
+    <md-content class="layout-column flex" style="background-color: #9e9e9e;">
+        <div class="layout-row layout-align-center header" style="background-color: #666666; ">
+            <h2>{{have_coin_code}} : {{want_coin_code}}</h2>
+        </div>
+        <div class="layout-column">
+            <div class="layout-column">
+                <div class="layout-row layout-align-center flex">
+                    <h2>My exchange processes</h2>
+                </div>
+                <md-card ng-repeat="offer in haveOffers" class="flex">
+                    <md-progress-linear md-mode="determinate" value="{{offer.offer_progress}}"></md-progress-linear>
+                    <div class="layout-row" style="padding: 16px">
+                        <b>{{offer.offer_type}}</b>
+                        <div class="layout-row layout-align-center flex"><b>{{offer.have_coin_count + " " +
+                            offer.have_coin_code + " ➠ " + offer.want_coin_count + " " + offer.want_coin_code}}</b>
+                        </div>
+                        <b>Progress {{offer.offer_progress}}%</b>
+                    </div>
+                </md-card>
+            </div>
+            <md-card class="layout-column">
+                <md-progress-linear md-mode="determinate" value="100"></md-progress-linear>
+                <div class="layout-row">
+                    <div class="cell flex-20">Have {{have_coin_code}}</div>
+                    <div class="cell flex-20">Want {{want_coin_code}}</div>
+                    <div class="cell flex-20">{{have_coin_code}}/{{want_coin_code}}</div>
+                    <div class="cell flex-20">Have {{have_coin_code}}</div>
+                    <div class="cell flex-20 ">Want {{want_coin_code}}</div>
+                    <div class="cell flex-20">{{have_coin_code}}/{{want_coin_code}}</div>
+                </div>
+                <div class="layout-row">
+                    <div class="layout-column flex-50">
+                        <div class="layout-row" ng-repeat="offer in saleOffers">
+                            <div class="cell flex-33">{{offer.have_coin_count}}</div>
+                            <div class="cell flex-33">{{offer.want_coin_count}}</div>
+                            <div class="cell flex-33">{{offer.offer_rate}}</div>
+                        </div>
+                    </div>
+                    <div class="layout-column flex-50">
+                        <div class="layout-row" ng-repeat="offer in buyOffers">
+                            <div class="cell flex-33">{{offer.have_coin_count}}</div>
+                            <div class="cell flex-33">{{offer.want_coin_count}}</div>
+                            <div class="cell flex-33">{{offer.offer_rate}}</div>
+                        </div>
+                        <div class="flex"></div>
+                    </div>
+                </div>
+            </md-card>
+        </div>
     </md-content>
     <md-content flex-25 hide-xs hide-sm hide-md style="background-color: gray;">
     </md-content>
