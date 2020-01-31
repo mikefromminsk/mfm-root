@@ -1,5 +1,6 @@
 controller("wallet", function ($scope, $routeParams) {
     $scope.toggleSendFragment = false;
+    $scope.toggleExchangeFragment = true;
     $scope.walletId = "http://darkwallet.store/user_login";
     $scope.coins = [
         {"coin_code": "USD", "coin_count": 65000},
@@ -15,6 +16,8 @@ controller("wallet", function ($scope, $routeParams) {
         {"coin_code": "VEQ", "coin_count": 40407},
     ]
     $scope.sendCoin = ""
+    $scope.offer_have_coin_code = "BTC"
+    $scope.offer_want_coin_code = "USD"
     $scope.have_coin_code = "BTC"
     $scope.want_coin_code = "USD"
     $scope.haveOffers = [
