@@ -1,7 +1,7 @@
 controller("wallet", function ($scope, $routeParams) {
     $scope.toggleSendFragment = true;
     $scope.toggleExchangeFragment = true;
-    $scope.toggleCreateCoinFragment = true;
+    $scope.toggleCreateCoinFragment = false;
 
     $scope.show = function (fragmentName){
         $scope.toggleSendFragment = !$scope.toggleSendFragment || fragmentName !== "send";
@@ -67,4 +67,38 @@ controller("wallet", function ($scope, $routeParams) {
             {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
             {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
     ]
+
+
+    $scope.rates =[
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+    ]
+
 })
