@@ -1,6 +1,13 @@
-controller("wallet", function ($scope, $routeParams) {
+controller("wallet", function ($scope, $routeParams, $window) {
+    $scope.activeWindow = 0;
+    $scope.windowWidth = $window.innerWidth;
+    angular.element($window).bind('resize', function(){
+        $scope.windowWidth = $window.innerWidth;
+        $scope.$apply();
+    });
+
     $scope.toggleSendFragment = true;
-    $scope.toggleExchangeFragment = false;
+    $scope.toggleExchangeFragment = true;
     $scope.toggleCreateCoinFragment = true;
 
     $scope.show = function (fragmentName){
