@@ -14,7 +14,7 @@
         background-color: black;
     }
 
-    .scrollable{
+    .scrollable {
         overflow: auto;
     }
 
@@ -30,7 +30,6 @@
         background-color: #666666;
         outline: 1px solid #000000;
     }
-
 
 </style>
 <div class="layout-fill layout-row" style="background-color: #666666">
@@ -157,54 +156,40 @@
         </md-button>
         <form class="layout-column layout-align-center-center  flex" ng-show="!toggleExchangeFragment"
               style="background-color: #444444">
-            <div class="layout-column">
+            <md-card class="layout-column" style="padding: 20px; max-width: 400px">
                 <div class="layout-row">
-                    <md-card class="layout-column" style="padding: 20px">
+                    <div class="layout-column">
                         <md-input-container>
-                            <label>Wallet ID</label>
-                            <input required>
+                            <label>Coin</label>
+                            <md-select ng-model="offer_have_coin_code" required>
+                                <md-option ng-repeat="coin in [have_coin_code, want_coin_code]" value="{{coin}}">
+                                    {{coin}}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
-                        <div class="layout-row">
-                            <md-input-container>
-                                <label>Coin</label>
-                                <md-select ng-model="offer_have_coin_code" required>
-                                    <md-option ng-repeat="coin in [have_coin_code, want_coin_code]" value="{{coin}}">
-                                        {{coin}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Count</label>
-                                <input required>
-                            </md-input-container>
-                        </div>
-                    </md-card>
+                        <md-input-container>
+                            <input required placeholder="4000">
+                        </md-input-container>
+                    </div>
                     <font class="layout-column layout-align-center-center" size="20">➠</font>
-                    <md-card class="layout-column" style="padding: 20px">
+                    <div class="layout-column">
                         <md-input-container>
-                            <label>Wallet ID</label>
-                            <input required>
+                            <label>Coin</label>
+                            <md-select ng-model="offer_have_coin_code" required>
+                                <md-option ng-repeat="coin in [have_coin_code, want_coin_code]" value="{{coin}}">
+                                    {{coin}}
+                                </md-option>
+                            </md-select>
                         </md-input-container>
-                        <div class="layout-row">
-                            <md-input-container>
-                                <label>Coin</label>
-                                <md-select ng-model="offer_want_coin_code" required>
-                                    <md-option ng-repeat="coin in [want_coin_code, have_coin_code]" value="{{coin}}">
-                                        {{coin}}
-                                    </md-option>
-                                </md-select>
-                            </md-input-container>
-                            <md-input-container>
-                                <label>Count</label>
-                                <input required>
-                            </md-input-container>
-                        </div>
-                    </md-card>
+                        <md-input-container>
+                            <input required placeholder="4000">
+                        </md-input-container>
+                    </div>
                 </div>
                 <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px">
                     Exchange
                 </md-button>
-            </div>
+            </md-card>
         </form>
     </md-content>
 

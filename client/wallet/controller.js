@@ -1,6 +1,6 @@
 controller("wallet", function ($scope, $routeParams) {
     $scope.toggleSendFragment = true;
-    $scope.toggleExchangeFragment = true;
+    $scope.toggleExchangeFragment = false;
     $scope.toggleCreateCoinFragment = true;
 
     $scope.show = function (fragmentName){
