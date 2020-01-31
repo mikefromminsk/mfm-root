@@ -1,3 +1,7 @@
+html{
+    user-select: none;
+}
+
 /*For ngRoute animation*/
 .view-container {
     position: relative;

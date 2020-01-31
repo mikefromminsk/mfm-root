@@ -1,41 +1,37 @@
-<style>
-    .page-container {
-        width: 100%;
-        height: 100%;
-        text-align: center;
-        overflow: hidden;
-        scroll-behavior: smooth;
-    }
-
-    .page-wrapper {
-        margin: auto;
-        width: 960px;
-        height: 100%;
-    }
-
-    @media (max-width: 960px) {
-        .page-wrapper {
-            width: 100%;
-        }
-        .fragment {
-            min-width: 100%;
-        }
-    }
-
-    .fragment {
-        width: 50%
-    }
-</style>
-<div id="main-page" class="page-container" style="background-color: #666666">
-    <div class="page-wrapper  layout-row ">
-        <md-content id="left-fragment" class="fragment" style="width: 180px">
-            <md-button class="md-raised md-primary" ng-click="page(1)">Next</md-button>
-        </md-content>
-        <md-content class="fragment" style="background-color: #9e9e9e; width: 600px;">
-            <md-button class="md-raised md-primary" ng-click="page(2)">Next</md-button>
-        </md-content>
-        <md-content class="fragment" style="background-color: gray; width: 180px;">
-            <md-button class="md-raised md-primary" ng-click="page(0)">Next</md-button>
-        </md-content>
-    </div>
+<div class="layout-fill layout-row" style="background-color: #666666">
+    <md-content class="layout-column flex-30">
+        <div class="layout-column flex-25" style="background-color: #666666; padding: 20px">
+            <div class="layout-row layout-align-center">
+                <h1>DarkWallet</h1>
+            </div>
+            <div class="layout-column layout-align-end-center flex">
+                <div class="layout-row">
+                    <h3>Your wallet ID</h3>
+                </div>
+                <div class="layout-row">
+                    <input class="flex-70" type="text" ng-value="walletId"
+                           style="border-radius: 10px 0 0 10px; padding-left: 20px; height: 100%">
+                    <md-button class="md-raised md-primary flex-30" style="border-radius: 0 10px 10px 0;">Copy
+                    </md-button>
+                </div>
+            </div>
+        </div>
+        <div class="layout-column" style="overflow: auto">
+            <div class="layout-column" ng-repeat="coin in coins">
+                <md-content class="layout-column" md-ink-ripple style="padding: 16px 16px 16px 24px;">
+                    <div class="layout-row">
+                        <big><b>{{coin.coin_count + " " + coin.coin_code}}</b></big>
+                    </div>
+                    <div class="layout-row" style="padding: 8px 0 0 40px">
+                        <small style="color: #9e9e9e">{{"1 " + coin.coin_code + " = " + "requesting..."}}</small>
+                    </div>
+                </md-content>
+                <md-divider></md-divider>
+            </div>
+        </div>
+    </md-content>
+    <md-content flex style="background-color: #9e9e9e;">
+    </md-content>
+    <md-content flex-25 hide-xs hide-sm hide-md style="background-color: gray;">
+    </md-content>
 </div>
