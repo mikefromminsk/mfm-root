@@ -13,6 +13,25 @@
     .cell-header {
         background-color: black;
     }
+
+    .scrollable{
+        overflow: auto;
+    }
+
+    .scrollable::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scrollable::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .scrollable::-webkit-scrollbar-thumb {
+        background-color: #666666;
+        outline: 1px solid #000000;
+    }
+
+
 </style>
 <div class="layout-fill layout-row" style="background-color: #666666">
     <md-content class="layout-column flex-30 ">
@@ -33,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="layout-column" style="overflow: auto">
+            <div class="layout-column scrollable">
                 <div class="layout-column" ng-repeat="coin in coins">
                     <md-content class="layout-column" md-ink-ripple style="padding: 16px 16px 16px 24px;">
                         <div class="layout-row">
@@ -84,7 +103,7 @@
             <div class="layout-row layout-align-center header" style="background-color: #666666; ">
                 <h2>Exchange service</h2>
             </div>
-            <div class="layout-column flex" style="overflow: auto">
+            <div class="layout-column flex scrollable">
                 <div class="layout-column">
                     <div class="layout-row layout-align-center flex">
                         <h2>{{have_coin_code}} : {{want_coin_code}}</h2>
@@ -194,7 +213,7 @@
             <div class="layout-row layout-align-center header" style="background-color: #666666; ">
                 <h2>Rates</h2>
             </div>
-            <div class="layout-column flex" style="overflow: auto">
+            <div class="layout-column flex scrollable">
                 <md-card class="layout-column">
                     <md-progress-linear md-mode="determinate" value="100"></md-progress-linear>
                     <div class="layout-row">
