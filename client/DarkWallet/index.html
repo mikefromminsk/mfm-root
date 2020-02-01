@@ -99,13 +99,14 @@
             <md-card class="layout-column" style="padding: 20px">
                 <md-input-container>
                     <label>Wallet ID</label>
-                    <input ng-model="send_wallet_id" required maxlength="256" placeholder="http://....">
+                    <input ng-model="send_wallet_id" required maxlength="256" placeholder="example@gmail.com">
                 </md-input-container>
                 <div class="layout-row">
                     <md-input-container>
                         <label>Coin</label>
                         <md-select ng-model="send_coin_code" required>
-                            <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}</md-option>
+                            <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}
+                            </md-option>
                         </md-select>
                     </md-input-container>
                     <md-input-container>
@@ -114,9 +115,12 @@
                                min="1" max="{{findMyCoin()['coin_count']}}">
                     </md-input-container>
                 </div>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px">
+                <div ng-show="send_message != null" style="color: red">{{send_message}}</div>
+                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px"
+                           ng-disabled="send_request_in_progress">
                     Send
                 </md-button>
+                <md-progress-linear md-mode="query" ng-disabled="!send_request_in_progress"></md-progress-linear>
             </md-card>
         </form>
     </md-content>
@@ -138,7 +142,7 @@
                 <div class="layout-row layout-align-center">
                     <h2>{{have_coin_code}} : {{want_coin_code}}</h2>
                 </div>
-                <div class="layout-row layout-align-center">
+                <div class="layout-row layout-align-center" ng-show="!haveOffers">
                     <h2>My processes</h2>
                 </div>
                 <md-card ng-repeat="offer in haveOffers">
@@ -196,7 +200,8 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <input type="number" ng-model="offer_have_coin_count" required placeholder="4000"  maxlength="5">
+                            <input type="number" ng-model="offer_have_coin_count" required placeholder="4000"
+                                   maxlength="5">
                         </md-input-container>
                     </div>
                     <font class="layout-column layout-align-center-center" size="20">➠</font>
@@ -208,13 +213,18 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <input type="number" ng-model="offer_want_coin_count" required placeholder="4000" maxlength="5">
+                            <input type="number" ng-model="offer_want_coin_count" required placeholder="4000"
+                                   maxlength="5">
                         </md-input-container>
                     </div>
                 </div>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px">
+
+                <div ng-show="exchange_message != null" style="color: red">{{exchange_message}}</div>
+                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px"
+                           ng-disabled="exchange_in_progress">
                     Exchange
                 </md-button>
+                <md-progress-linear md-mode="query" ng-disabled="!exchange_in_progress"></md-progress-linear>
             </md-card>
         </form>
     </md-content>
@@ -261,9 +271,13 @@
                     <input ng-model="newCoinCode" minlength="3" maxlength="5" style="text-transform: uppercase;"
                            required>
                 </md-input-container>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px;">
+
+                <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
+                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px;"
+                           ng-disabled="create_coin_request_in_progress">
                     Create coin
                 </md-button>
+                <md-progress-linear md-mode="query" ng-disabled="!create_coin_request_in_progress"></md-progress-linear>
             </md-card>
         </form>
     </md-content>
