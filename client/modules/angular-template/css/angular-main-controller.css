@@ -59,7 +59,7 @@ md-input-container {
     display: none;
 }
 
-.md-primary{
+.md-button {
     margin: 0;
     border-radius: 0;
 }

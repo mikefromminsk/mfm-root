@@ -1,1 +1,0 @@
-<?php include_once "../wallet/send.php"; ?>

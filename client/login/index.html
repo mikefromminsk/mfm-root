@@ -1,20 +1,26 @@
 <div class="layout-fill layout-column layout-align-center" style="background-color: #666666">
-    <div class="layout-row layout-align-center">
-        <md-content  class="layout-column" style="width: 350px; padding: 20px">
-            <div class="layout-row layout-align-center">
-                <h3>Login</h3>
-            </div>
-            <md-input-container>
-                <label>Login</label>
-                <input ng-model="login">
-            </md-input-container>
-            <md-input-container>
-                <label>Password</label>
-                <input ng-model="password">
-            </md-input-container>
-            <md-button class="md-raised md-primary" style="margin-top: 30px;" ng-click="loginButton()">
-                Sign In
-            </md-button>
-        </md-content>
-    </div>
+    <form class="layout-row layout-align-center" ng-submit="loginButton()">
+            <md-content class="layout-column" style="width: 350px; padding: 20px">
+                <div class="layout-row layout-align-center">
+                    <h3>Authorization</h3>
+                </div>
+                <md-input-container>
+                    <label>Email</label>
+                    <input type="email" ng-model="login" ng-required="true">
+                </md-input-container>
+                <md-input-container>
+                    <label>Password</label>
+                    <input type="password" ng-model="password" ng-required="true"  minlength="8">
+                </md-input-container>
+                <div class="layout-row" style="margin-top: 30px;">
+                    <md-button type="submit" class="flex-40 md-raised">
+                        Sign Up
+                    </md-button>
+                    <div class="flex"></div>
+                    <md-button type="submit" class="flex-40 md-raised md-primary">
+                        Sign In
+                    </md-button>
+                </div>
+            </md-content>
+    </form>
 </div>

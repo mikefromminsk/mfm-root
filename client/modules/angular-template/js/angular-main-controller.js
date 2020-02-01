@@ -19,6 +19,12 @@ function controller(controllerId, callback) {
     app.register(controllerId, callback);
 }
 
+function property(propertyName, propertyObject){
+    app.factory(propertyName, function() {
+        return propertyObject;
+    });
+}
+
 function loader(scriptPath) {
 
     if (document.querySelector('script[src="' + scriptPath + '"]') != null)

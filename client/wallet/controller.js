@@ -1,4 +1,4 @@
-controller("wallet", function ($scope, $routeParams, $window) {
+controller("api", function ($scope, $routeParams, $window) {
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
     angular.element($window).bind('resize', function(){

@@ -49,7 +49,7 @@ if ($user_login != null && $user_password != null) {
         unset($_GET["login"]);
         unset($_GET["password"]);
         $_GET["token"] = $token;
-        redirect("wallet", $_GET);
+        redirect("api", $_GET);
     }
 }
 
