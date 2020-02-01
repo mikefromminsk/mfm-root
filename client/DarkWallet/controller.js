@@ -1,7 +1,8 @@
-controller("DarkWallet", function ($scope, $routeParams, $window) {
+controller("DarkWallet", function ($scope, $window, $http,
+                                   api_url, client_url, exchange_api_url) {
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
-    angular.element($window).bind('resize', function(){
+    angular.element($window).bind('resize', function () {
         $scope.windowWidth = $window.innerWidth;
         $scope.$apply();
     });
@@ -10,102 +11,91 @@ controller("DarkWallet", function ($scope, $routeParams, $window) {
     $scope.toggleExchangeFragment = true;
     $scope.toggleCreateCoinFragment = true;
 
-    $scope.show = function (fragmentName){
+    $scope.show = function (fragmentName) {
         $scope.toggleSendFragment = !$scope.toggleSendFragment || fragmentName !== "send";
         $scope.toggleExchangeFragment = !$scope.toggleExchangeFragment || fragmentName !== "exchange";
         $scope.toggleCreateCoinFragment = !$scope.toggleCreateCoinFragment || fragmentName !== "create_coin";
     }
 
-    $scope.walletId = "http://darkwallet.store/user_login";
-    $scope.coins = [
-        {"coin_code": "USD", "coin_count": 65000},
-        {"coin_code": "BTC", "coin_count": 1000},
-        {"coin_code": "FTS", "coin_count": 2400},
-        {"coin_code": "SEF", "coin_count": 10040},
-        {"coin_code": "SIL", "coin_count": 2},
-        {"coin_code": "WGS", "coin_count": 1205},
-        {"coin_code": "VWD", "coin_count": 62125},
-        {"coin_code": "WBWE", "coin_count": 120},
-        {"coin_code": "EGW", "coin_count": 1207},
-        {"coin_code": "BWQET", "coin_count": 120},
-        {"coin_code": "VEQ", "coin_count": 40407},
-    ]
+
+    $scope.copyButtonLabel = "Copy Wallet ID"
+    $scope.copyToClipboard = function (text) {
+        var copyText = document.getElementById("walletId");
+        copyText.select();
+        copyText.setSelectionRange(0, 99999);
+        document.execCommand("copy");
+        copyText.setSelectionRange(0, 0);
+        copyText.blur();
+        $scope.copyButtonLabel = 'coped';
+    }
+
+    var login = store.get("user_login");
+    var token = store.get("user_session_token");
+    var stock_token = store.get("user_session_token");
+
+    $scope.walletId = client_url + "#!/send/" + login;
+
+    if (login == null || token == null || stock_token == null)
+        $scope.open('login');
+    else {
+        $http.post(api_url + "wallet.php", {
+            token: token,
+        }).then(function (response) {
+            if (response.data.message == null) {
+                $scope.coins = response.data.coins;
+            }
+        })
+        $http.post(exchange_api_url + "stock.php", {
+            token: token,
+        }).then(function (response) {
+            if (response.data.message == null) {
+                $scope.saleOffers = response.data.sale_offers;
+                $scope.buyOffers = response.data.buy_offers;
+                $scope.haveOffers = response.data.have_offers;
+                $scope.rates = response.data.rates;
+            }
+        })
+
+    }
+
     $scope.sendCoin = ""
     $scope.offer_have_coin_code = "BTC"
     $scope.offer_want_coin_code = "USD"
     $scope.have_coin_code = "BTC"
     $scope.want_coin_code = "USD"
     $scope.haveOffers = [
-        {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-        {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
+        {
+            "have_coin_code": "USD",
+            "have_coin_count": 4000,
+            "want_coin_code": "BTC",
+            "want_coin_count": "200",
+            "offer_rate": 4.0,
+            "offer_progress": 80,
+            "offer_type": "Buy"
+        },
     ]
-    $scope.saleOffers =[
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
-            {"have_coin_code": "BTC", "have_coin_count": 4000, "want_coin_code": "USD", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 40, "offer_type": "Sale"},
+    $scope.saleOffers = [
+        {
+            "have_coin_code": "BTC",
+            "have_coin_count": 4000,
+            "want_coin_code": "USD",
+            "want_coin_count": "200",
+            "offer_rate": 4.0,
+            "offer_progress": 40,
+            "offer_type": "Sale"
+        },
     ]
 
     $scope.buyOffers = [
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-            {"have_coin_code": "USD", "have_coin_count": 4000, "want_coin_code": "BTC", "want_coin_count": "200", "offer_rate": 4.0, "offer_progress": 80, "offer_type": "Buy"},
-    ]
-
-
-    $scope.rates =[
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "SIL", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
-        {"coin_code": "BTC", "buy_rate": 4000,  "sale_rate": 200},
+        {
+            "have_coin_code": "USD",
+            "have_coin_count": 4000,
+            "want_coin_code": "BTC",
+            "want_coin_count": "200",
+            "offer_rate": 4.0,
+            "offer_progress": 80,
+            "offer_type": "Buy"
+        },
     ]
 
 })

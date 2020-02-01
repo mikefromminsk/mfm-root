@@ -1,5 +1,5 @@
 <?php
-error_reporting(12);
+error_reporting(1);
 
 header("Content-type: " . strpos($_SERVER["HTTP_ACCEPT"], "text/html") != -1 ? "text/html" : "application/json" . "; charset=utf-8");
 

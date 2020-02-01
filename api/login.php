@@ -19,6 +19,7 @@ if ($user_login != null && $user_password != null) {
             updateList("users", array(
                 "user_session_token" => $token,
             ), "user_id", $user["user_id"]);
+            $user["user_session_token"] = $token;
         } else {
             $message = "Password is not correct";
         }

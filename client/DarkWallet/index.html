@@ -67,10 +67,10 @@
                     </div>
                     <div class="layout-row layout-align-center">
                         <div class="layout-row flex-80">
-                            <input class="flex" type="text" ng-value="walletId"
+                            <input id="walletId" class="flex" type="text" ng-value="walletId"
                                    style="border-radius: 10px 0 0 10px; padding-left: 20px;">
-                            <md-button class="md-raised md-primary flex" style="border-radius: 0 10px 10px 0;">
-                                Copy Wallet ID
+                            <md-button class="md-raised md-primary flex" style="border-radius: 0 10px 10px 0;" ng-click="copyToClipboard()">
+                                {{copyButtonLabel}}
                             </md-button>
                         </div>
                     </div>

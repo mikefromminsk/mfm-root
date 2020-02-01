@@ -19,8 +19,8 @@ function controller(controllerId, callback) {
     app.register(controllerId, callback);
 }
 
-function property(propertyName, propertyObject){
-    app.factory(propertyName, function() {
+function property(propertyName, propertyObject) {
+    app.factory(propertyName, function () {
         return propertyObject;
     });
 }
@@ -64,13 +64,13 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         var params = route.replace('\\', '/').split('/')
         var appName = params[0]
         var routeTemplate = ""
-        for (var i=1; i<params.length; i++)
-            routeTemplate = routeTemplate + "/:arg" + i;
+        for (var i = 1; i < params.length; i++)
+            routeTemplate = routeTemplate + "/:arg" + (i - 1);
         app.routeProvider.when("/" + appName + routeTemplate, {
-                templateUrl: pathToRootDir + appName + "/index.html",
-                controller: appName,
-                resolve: loader(pathToRootDir + appName + "/controller.js")
-            });
+            templateUrl: pathToRootDir + appName + "/index.html",
+            controller: appName,
+            resolve: loader(pathToRootDir + appName + "/controller.js")
+        });
         // set global path for all urls
         if (document.getElementsByTagName("base").length === 0)
             document.getElementsByTagName('head')[0].appendChild(document.createElement("base"));

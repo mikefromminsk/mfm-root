@@ -14,8 +14,8 @@ if ($message == null) {
     query("delete from coins");
 
     $message = $message == null && http_json_post($host_url . "create_coin", array(
-        "user_login" => "ss",
-        "user_password" => "123",
+        "user_login" => "x29a100@mail.ru",
+        "user_password" => "12345678",
         "coin_name" => "ftr",
         "coin_code" => "FTR",
     )) ? null : "create ftr error";
