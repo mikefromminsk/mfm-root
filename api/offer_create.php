@@ -26,72 +26,79 @@ $offer = array(
     "back_user_login" => $back_user_login,
     "offer_rate" => $offer_rate,
     "offer_rate_inverse" => $offer_rate_inverse,
+    "offer_progress" => 0,
 );
 
+if ($have_coin_count < 0 || $want_coin_count < 0) {
+    $message = "numbers are less zero";
+} else {
+
 // set domains
-$success_domain_names = receive_domain_keys($user_id, $have_coin_code, $offer_domain_keys);
+    $success_domain_names = receive_domain_keys($user_id, $have_coin_code, $offer_domain_keys);
 
 // auto exchange
-$opposite_offers = select("select * from offers where have_coin_code = '$want_coin_code' and  want_coin_code = '$have_coin_code' "
-    . " and offer_rate_inverse >= $offer_rate order by offer_rate_inverse desc, offer_time desc limit 5");
+    $opposite_offers = select("select * from offers where have_coin_code = '$want_coin_code' and  want_coin_code = '$have_coin_code' "
+        . " and offer_rate_inverse >= $offer_rate order by offer_rate_inverse desc limit 5");
 
 
-foreach ($opposite_offers as $opposite_offer) {
-    $offer_have_exchange_coin_count = min($offer["have_coin_count"], $opposite_offer["want_coin_count"]);
-    $opposite_have_exchange_coin_count = ceil($offer_have_exchange_coin_count * $opposite_offer["offer_rate"]);
+    foreach ($opposite_offers as $opposite_offer) {
+        $offer_have_exchange_coin_count = min($offer["have_coin_count"], $opposite_offer["want_coin_count"]);
+        $opposite_have_exchange_coin_count = ceil($offer_have_exchange_coin_count * $opposite_offer["offer_rate"]);
 
-    http_json_post($offer["back_host_url"] . "receive_domain_keys", array(
-        "back_user_login" => $offer["back_user_login"],
-        "coin_code" => $opposite_offer["have_coin_code"],
-        "domain_keys" => getDomainKeys($opposite_offer["user_id"], $opposite_offer["have_coin_code"], $opposite_have_exchange_coin_count)
-    ));
+        http_json_post($offer["back_host_url"] . "receive_domain_keys", array(
+            "back_user_login" => $offer["back_user_login"],
+            "coin_code" => $opposite_offer["have_coin_code"],
+            "domain_keys" => getDomainKeys($opposite_offer["user_id"], $opposite_offer["have_coin_code"], $opposite_have_exchange_coin_count)
+        ));
 
-    http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys", array(
-        "back_user_login" => $opposite_offer["back_user_login"],
-        "coin_code" => $offer["have_coin_code"],
-        "domain_keys" => getDomainKeys($offer["user_id"], $offer["have_coin_code"], $offer_have_exchange_coin_count)
-    ));
+        http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys", array(
+            "back_user_login" => $opposite_offer["back_user_login"],
+            "coin_code" => $offer["have_coin_code"],
+            "domain_keys" => getDomainKeys($offer["user_id"], $offer["have_coin_code"], $offer_have_exchange_coin_count)
+        ));
 
-    $opposite_offer["have_coin_count"] = $opposite_offer["have_coin_count"] - $opposite_have_exchange_coin_count;
-    $opposite_offer["want_coin_count"] = $opposite_offer["want_coin_count"] - $offer_have_exchange_coin_count;
-    if ($opposite_offer["have_coin_count"] != 0 && $opposite_offer["want_coin_count"] != 0) {
-        updateList("offers", array(
-            "have_coin_count" => $opposite_offer["have_coin_count"],
-            "want_coin_count" => $opposite_offer["want_coin_count"],
-            "offer_rate" => $opposite_offer["have_coin_count"] / $opposite_offer["want_coin_count"],
-            "offer_rate_inverse" => $opposite_offer["want_coin_count"] / $opposite_offer["have_coin_count"],
-        ), "offer_id", $opposite_offer["offer_id"]);
-    } else {
-        if ($opposite_offer["have_coin_count"] > 0) {
-            http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys", array(
-                "back_user_login" => $opposite_offer["back_user_login"],
-                "coin_code" => $opposite_offer["have_coin_code"],
-                "domain_keys" => getDomainKeys($opposite_offer["user_id"], $opposite_offer["have_coin_code"], $opposite_offer["have_coin_count"]),
-            ));
+        $opposite_offer["have_coin_count"] = $opposite_offer["have_coin_count"] - $opposite_have_exchange_coin_count;
+        $opposite_offer["want_coin_count"] = $opposite_offer["want_coin_count"] - $offer_have_exchange_coin_count;
+        if ($opposite_offer["have_coin_count"] != 0 && $opposite_offer["want_coin_count"] != 0) {
+            updateList("offers", array(
+                "have_coin_count" => $opposite_offer["have_coin_count"],
+                "want_coin_count" => $opposite_offer["want_coin_count"],
+                "offer_rate" => $opposite_offer["have_coin_count"] / $opposite_offer["want_coin_count"],
+                "offer_rate_inverse" => $opposite_offer["want_coin_count"] / $opposite_offer["have_coin_count"],
+            ), "offer_id", $opposite_offer["offer_id"]);
+        } else {
+            if ($opposite_offer["have_coin_count"] > 0) {
+                http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys", array(
+                    "back_user_login" => $opposite_offer["back_user_login"],
+                    "coin_code" => $opposite_offer["have_coin_code"],
+                    "domain_keys" => getDomainKeys($opposite_offer["user_id"], $opposite_offer["have_coin_code"], $opposite_offer["have_coin_count"]),
+                ));
+            }
+            query("delete from offers where offer_id = " . $opposite_offer["offer_id"]);
         }
-        query("delete from offers where offer_id = " . $opposite_offer["offer_id"]);
+
+        $offer["have_coin_count"] = $offer["have_coin_count"] - $offer_have_exchange_coin_count;
+        $offer["want_coin_count"] = $offer["want_coin_count"] - $opposite_have_exchange_coin_count;
+        if ($offer["have_coin_count"] != 0 && $offer["want_coin_count"] != 0) {
+            $offer["offer_rate"] = $offer["have_coin_count"] / $offer["want_coin_count"];
+            $offer["offer_rate_inverse"] = $offer["want_coin_count"] / $offer["have_coin_count"];
+        } else {
+            // money back
+            if ($offer["have_coin_count"] > 0) {
+                http_json_post($offer["back_host_url"] . "receive_domain_keys", array(
+                    "back_user_login" => $offer["back_user_login"],
+                    "coin_code" => $offer["have_coin_code"],
+                    "domain_keys" => getDomainKeys($offer["user_id"], $offer["have_coin_code"], $offer["have_coin_count"]),
+                ));
+            }
+            break;
+        }
     }
 
-    $offer["have_coin_count"] = $offer["have_coin_count"] - $offer_have_exchange_coin_count;
-    $offer["want_coin_count"] = $offer["want_coin_count"] - $opposite_have_exchange_coin_count;
-    if ($offer["have_coin_count"] != 0 && $offer["want_coin_count"] != 0) {
-        $offer["offer_rate"] = $offer["have_coin_count"] / $offer["want_coin_count"];
-        $offer["offer_rate_inverse"] = $offer["want_coin_count"] / $offer["have_coin_count"];
-    } else {
-        // money back
-        if ($offer["have_coin_count"] > 0) {
-            http_json_post($offer["back_host_url"] . "receive_domain_keys", array(
-                "back_user_login" => $offer["back_user_login"],
-                "coin_code" => $offer["have_coin_code"],
-                "domain_keys" => getDomainKeys($offer["user_id"], $offer["have_coin_code"], $offer["have_coin_count"]),
-            ));
-        }
-        break;
-    }
+    if ($offer["have_coin_count"] > 0)
+        insertList("offers", $offer);
 }
 
-if ($offer["have_coin_count"] > 0)
-    insertList("offers", $offer);
 
 echo json_encode(array(
     "message" => $message,

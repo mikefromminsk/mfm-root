@@ -69,13 +69,14 @@
                         <div class="layout-row flex-80">
                             <input id="walletId" class="flex" type="text" ng-value="walletId"
                                    style="border-radius: 10px 0 0 10px; padding-left: 20px;">
-                            <md-button class="md-raised md-primary flex" style="border-radius: 0 10px 10px 0;" ng-click="copyToClipboard()">
+                            <md-button class="md-raised md-primary flex" style="border-radius: 0 10px 10px 0;"
+                                       ng-click="copyToClipboard()">
                                 {{copyButtonLabel}}
                             </md-button>
                         </div>
                     </div>
                 </div>
-                <div class="layout-column" ng-repeat="coin in coins">
+                <div class="layout-column" ng-repeat="coin in have_coins">
                     <md-content class="layout-column" md-ink-ripple style="padding: 16px 16px 16px 24px;">
                         <div class="layout-row">
                             <big><b>{{coin.coin_count + " " + coin.coin_code}}</b></big>
@@ -94,24 +95,23 @@
             </md-button>
         </div>
         <form class="layout-column layout-align-center-center  flex" ng-show="!toggleSendFragment"
-              style="background-color: #444444">
+              style="background-color: #444444" ng-submit="send()">
             <md-card class="layout-column" style="padding: 20px">
                 <md-input-container>
                     <label>Wallet ID</label>
-                    <input required>
+                    <input ng-model="send_wallet_id" required maxlength="256" placeholder="http://....">
                 </md-input-container>
                 <div class="layout-row">
                     <md-input-container>
                         <label>Coin</label>
-                        <md-select ng-model="sendCoin" required>
-                            <md-option ng-repeat="coin in coins" value="{{coin.coin_code}}">
-                                {{coin.coin_code}}
-                            </md-option>
+                        <md-select ng-model="send_coin_code" required>
+                            <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}</md-option>
                         </md-select>
                     </md-input-container>
                     <md-input-container>
                         <label>Count</label>
-                        <input required>
+                        <input type="number" ng-model="send_coin_count" required
+                               min="1" max="{{findMyCoin()['coin_count']}}">
                     </md-input-container>
                 </div>
                 <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px">
@@ -185,34 +185,30 @@
             Exchange
         </md-button>
         <form class="layout-column layout-align-center-center  flex" ng-show="!toggleExchangeFragment"
-              style="background-color: #444444">
+              style="background-color: #444444" ng-submit="exchange()">
             <md-card class="layout-column" style="padding: 20px; max-width: 400px">
                 <div class="layout-row">
                     <div class="layout-column">
                         <md-input-container>
                             <label>Coin</label>
                             <md-select ng-model="offer_have_coin_code" required>
-                                <md-option ng-repeat="coin in [have_coin_code, want_coin_code]" value="{{coin}}">
-                                    {{coin}}
-                                </md-option>
+                                <md-option ng-repeat="coin in coins" value="{{coin}}">{{coin}}</md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <input required placeholder="4000">
+                            <input type="number" ng-model="offer_have_coin_count" required placeholder="4000"  maxlength="5">
                         </md-input-container>
                     </div>
                     <font class="layout-column layout-align-center-center" size="20">➠</font>
                     <div class="layout-column">
                         <md-input-container>
                             <label>Coin</label>
-                            <md-select ng-model="offer_have_coin_code" required>
-                                <md-option ng-repeat="coin in [have_coin_code, want_coin_code]" value="{{coin}}">
-                                    {{coin}}
-                                </md-option>
+                            <md-select ng-model="offer_want_coin_code" required>
+                                <md-option ng-repeat="coin in coins" value="{{coin}}">{{coin}}</md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <input required placeholder="4000">
+                            <input type="number" ng-model="offer_want_coin_count" required placeholder="4000" maxlength="5">
                         </md-input-container>
                     </div>
                 </div>
@@ -253,18 +249,19 @@
         <md-button class="md-raised md-primary header" ng-click="show('create_coin')">
             Create coin
         </md-button>
-        <form class="layout-column layout-align-center-center  flex" ng-show="!toggleCreateCoinFragment"
-              style="background-color: #444444">
+        <form class="layout-column layout-align-center-center flex" ng-show="!toggleCreateCoinFragment"
+              style="background-color: #444444" ng-submit="createCoin()">
             <md-card class="layout-column" style="padding: 20px">
                 <md-input-container>
                     <label>Full name of Your Coin</label>
-                    <input required>
+                    <input ng-model="newCoinName" required minlength="3" maxlength="30">
                 </md-input-container>
                 <md-input-container>
                     <label>Code of Your Coin</label>
-                    <input required>
+                    <input ng-model="newCoinCode" minlength="3" maxlength="5" style="text-transform: uppercase;"
+                           required>
                 </md-input-container>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px">
+                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px;">
                     Create coin
                 </md-button>
             </md-card>

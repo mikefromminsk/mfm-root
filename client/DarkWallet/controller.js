@@ -17,7 +17,6 @@ controller("DarkWallet", function ($scope, $window, $http,
         $scope.toggleCreateCoinFragment = !$scope.toggleCreateCoinFragment || fragmentName !== "create_coin";
     }
 
-
     $scope.copyButtonLabel = "Copy Wallet ID"
     $scope.copyToClipboard = function (text) {
         var copyText = document.getElementById("walletId");
@@ -38,11 +37,16 @@ controller("DarkWallet", function ($scope, $window, $http,
     if (login == null || token == null || stock_token == null)
         $scope.open('login');
     else {
+        updateData();
+    }
+
+    function updateData() {
         $http.post(api_url + "wallet.php", {
             token: token,
         }).then(function (response) {
             if (response.data.message == null) {
                 $scope.coins = response.data.coins;
+                $scope.have_coins = response.data.have_coins;
             }
         })
         $http.post(exchange_api_url + "stock.php", {
@@ -55,47 +59,73 @@ controller("DarkWallet", function ($scope, $window, $http,
                 $scope.rates = response.data.rates;
             }
         })
-
     }
 
-    $scope.sendCoin = ""
-    $scope.offer_have_coin_code = "BTC"
-    $scope.offer_want_coin_code = "USD"
-    $scope.have_coin_code = "BTC"
-    $scope.want_coin_code = "USD"
-    $scope.haveOffers = [
-        {
-            "have_coin_code": "USD",
-            "have_coin_count": 4000,
-            "want_coin_code": "BTC",
-            "want_coin_count": "200",
-            "offer_rate": 4.0,
-            "offer_progress": 80,
-            "offer_type": "Buy"
-        },
-    ]
-    $scope.saleOffers = [
-        {
-            "have_coin_code": "BTC",
-            "have_coin_count": 4000,
-            "want_coin_code": "USD",
-            "want_coin_count": "200",
-            "offer_rate": 4.0,
-            "offer_progress": 40,
-            "offer_type": "Sale"
-        },
-    ]
+    $scope.newCoinName = "";
+    $scope.newCoinCode = "";
+    $scope.createCoin = function () {
+        $http.post(api_url + "create_coin.php", {
+            token: token,
+            coin_name: $scope.newCoinName,
+            coin_code: $scope.newCoinCode,
+        }).then(function (response) {
+            if (response.data.message == null) {
+                $scope.newCoinName = "";
+                $scope.newCoinCode = "";
+                $scope.toggleCreateCoinFragment = true;
+                updateData();
+            }
+        })
+    };
 
-    $scope.buyOffers = [
-        {
-            "have_coin_code": "USD",
-            "have_coin_count": 4000,
-            "want_coin_code": "BTC",
-            "want_coin_count": "200",
-            "offer_rate": 4.0,
-            "offer_progress": 80,
-            "offer_type": "Buy"
-        },
-    ]
+    $scope.have_coin_code = "FTR"
+    $scope.want_coin_code = "WEF"
+    $scope.offer_have_coin_code = $scope.have_coin_code
+    $scope.offer_have_coin_count = null;
+    $scope.offer_want_coin_code = $scope.want_coin_code
+    $scope.offer_want_coin_count = null
+    $scope.exchange = function () {
+        $http.post(api_url + "exchange.php", {
+            token: token,
+            have_coin_code: $scope.offer_have_coin_code,
+            have_coin_count: $scope.offer_have_coin_count,
+            want_coin_code: $scope.offer_want_coin_code,
+            want_coin_count: $scope.offer_want_coin_count,
+        }).then(function (response) {
+            if (response.data.message == null) {
+                $scope.offer_have_coin_count = null;
+                $scope.offer_want_coin_count = null
+                $scope.toggleExchangeFragment = true;
+                updateData();
+            }
+        })
+    };
+
+    $scope.send_wallet_id = null
+    $scope.send_coin_code = null
+    $scope.send_coin_count = null
+
+    $scope.send = function () {
+        $http.post(api_url + "send.php", {
+            token: token,
+            wallet_id: $scope.send_wallet_id,
+            coin_code: $scope.send_coin_code,
+            coin_count: $scope.send_coin_count,
+        }).then(function (response) {
+            if (response.data.message == null) {
+                $scope.send_coin_count = null
+                $scope.toggleSendFragment = true;
+                updateData();
+            }
+        })
+    }
+
+    $scope.maxSendCoinCount = function () {
+        if ($scope.have_coins != null)
+            for (let i = 0; i < $scope.have_coins.length; i++)
+                if ($scope.have_coins[i]["coin_code"] === $scope.send_coin_code)
+                    return $scope.have_coins[i]["coin_count"];
+        return 0;
+    }
 
 })
