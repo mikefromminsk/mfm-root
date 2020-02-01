@@ -1,26 +1,27 @@
 <div class="layout-fill layout-column layout-align-center" style="background-color: #666666">
-    <form class="layout-row layout-align-center" ng-submit="loginButton()">
-            <md-content class="layout-column" style="width: 350px; padding: 20px">
-                <div class="layout-row layout-align-center">
-                    <h3>Authorization</h3>
-                </div>
-                <md-input-container>
-                    <label>Email</label>
-                    <input type="email" ng-model="login" ng-required="true">
-                </md-input-container>
-                <md-input-container>
-                    <label>Password</label>
-                    <input type="password" ng-model="password" ng-required="true"  minlength="8">
-                </md-input-container>
-                <div class="layout-row" style="margin-top: 30px;">
-                    <md-button type="submit" class="flex-40 md-raised">
-                        Sign Up
-                    </md-button>
-                    <div class="flex"></div>
-                    <md-button type="submit" class="flex-40 md-raised md-primary">
-                        Sign In
-                    </md-button>
-                </div>
-            </md-content>
+    <form class="layout-row layout-align-center" name="myForm" ng-submit="loginButton()">
+        <md-content class="layout-column" style="width: 350px; padding: 20px">
+            <div class="layout-row layout-align-center">
+                <h3>Authorization</h3>
+            </div>
+            <md-input-container>
+                <label>Email</label>
+                <input type="email" name="myField" ng-model="login" ng-required="true">
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" name="myField2" ng-model="password" ng-required="true" minlength="8">
+            </md-input-container>
+            <div class="div" ng-show="message" style="padding-top: 20px; color:red;">{{message}}</div>
+            <div class="layout-row" style="margin-top: 20px;">
+                <md-button type="submit" class="flex-40 md-raised">
+                    Sign Up
+                </md-button>
+                <div class="flex"></div>
+                <md-button type="submit" class="flex-40 md-raised md-primary">
+                    Sign In
+                </md-button>
+            </div>
+        </md-content>
     </form>
 </div>
