@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Янв 22 2020 г., 09:13
+-- Время создания: Фев 01 2020 г., 11:46
 -- Версия сервера: 10.4.10-MariaDB
 -- Версия PHP: 7.3.12
 
@@ -30,12 +30,10 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `coins`;
 CREATE TABLE IF NOT EXISTS `coins` (
-  `coin_id` int(11) NOT NULL AUTO_INCREMENT,
-  `coin_name` varchar(20) NOT NULL,
   `coin_code` varchar(5) NOT NULL,
-  PRIMARY KEY (`coin_id`),
-  UNIQUE KEY `coin_name` (`coin_name`),
-  UNIQUE KEY `coin_code` (`coin_code`)
+  `coin_name` varchar(64) NOT NULL,
+  UNIQUE KEY `coin_code` (`coin_code`),
+  UNIQUE KEY `coin_name` (`coin_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -46,12 +44,11 @@ CREATE TABLE IF NOT EXISTS `coins` (
 
 DROP TABLE IF EXISTS `domains`;
 CREATE TABLE IF NOT EXISTS `domains` (
-  `domain_name` varchar(256) CHARACTER SET utf8 NOT NULL,
+  `domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `domain_next_hash` varchar(64) CHARACTER SET utf8 NOT NULL,
-  `domain_location` varchar(256) CHARACTER SET utf8 DEFAULT NULL,
-  `domain_last_active_time` int(11) NOT NULL,
-  UNIQUE KEY `name` (`domain_name`),
-  KEY `name_2` (`domain_name`)
+  `domain_last_online_time` int(11) NOT NULL,
+  `node_location` varchar(256) CHARACTER SET utf8 NOT NULL,
+  UNIQUE KEY `domain_name` (`domain_name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -63,9 +60,35 @@ CREATE TABLE IF NOT EXISTS `domains` (
 DROP TABLE IF EXISTS `domain_keys`;
 CREATE TABLE IF NOT EXISTS `domain_keys` (
   `user_id` int(11) NOT NULL,
-  `coin_id` int(11) NOT NULL,
-  `domain_name` varchar(256) NOT NULL,
-  `domain_next_name` varchar(256) NOT NULL
+  `domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `domain_next_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `coin_code` varchar(5) NOT NULL,
+  UNIQUE KEY `domain_name` (`domain_name`),
+  UNIQUE KEY `domain_next_name` (`domain_next_name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `offers`
+--
+
+DROP TABLE IF EXISTS `offers`;
+CREATE TABLE IF NOT EXISTS `offers` (
+  `offer_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `have_coin_code` varchar(5) NOT NULL,
+  `have_coin_count` int(11) NOT NULL,
+  `want_coin_code` varchar(5) NOT NULL,
+  `want_coin_count` int(11) NOT NULL,
+  `start_have_coin_count` int(11) NOT NULL,
+  `start_want_coin_count` int(11) NOT NULL,
+  `offer_rate` double NOT NULL,
+  `offer_rate_inverse` double NOT NULL,
+  `offer_progress` double NOT NULL,
+  `back_host_url` varchar(256) NOT NULL,
+  `back_user_login` varchar(64) NOT NULL,
+  PRIMARY KEY (`offer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -80,8 +103,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_login` varchar(64) NOT NULL,
   `user_password_hash` varchar(64) NOT NULL,
   `user_session_token` bigint(14) NOT NULL,
+  `user_stock_token` bigint(14) NOT NULL,
   PRIMARY KEY (`user_id`),
-  UNIQUE KEY `user_session_token` (`user_session_token`)
+  UNIQUE KEY `user_session_token` (`user_session_token`),
+  UNIQUE KEY `user_stock_token` (`user_stock_token`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 COMMIT;
 
