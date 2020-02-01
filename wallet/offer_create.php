@@ -12,6 +12,7 @@ $back_host_url = get_required("back_host_url");
 $offer_domain_keys = get_required("have_domain_keys");
 $offer_rate = $have_coin_count / $want_coin_count;
 $offer_rate_inverse = $want_coin_count / $have_coin_count;
+$message = null;
 
 $offer = array(
     "user_id" => $user_id,
@@ -19,6 +20,8 @@ $offer = array(
     "have_coin_count" => $have_coin_count,
     "want_coin_code" => $want_coin_code,
     "want_coin_count" => $want_coin_count,
+    "start_have_coin_count" => $have_coin_count,
+    "start_want_coin_count" => $want_coin_count,
     "back_host_url" => $back_host_url,
     "back_user_login" => $back_user_login,
     "offer_rate" => $offer_rate,
@@ -87,21 +90,12 @@ foreach ($opposite_offers as $opposite_offer) {
     }
 }
 
-if ($offer["have_coin_count"] > 0) {
-    $result["inserted"] = insertList("offers", array(
-        "offer_time" => time(),
-        "user_id" => $user_id,
-        "have_coin_code" => $have_coin_code,
-        "have_coin_count" => $offer["have_coin_count"],
-        "want_coin_code" => $want_coin_code,
-        "want_coin_count" => $offer["want_coin_count"],
-        "offer_rate" => $offer_rate,
-        "offer_rate_inverse" => $offer_rate_inverse,
-        "back_host_url" => $back_host_url,
-        "back_user_login" => $back_user_login,
-    ));
-}
+if ($offer["have_coin_count"] > 0)
+    insertList("offers", $offer);
 
-echo json_encode(array("exchanged" => $have_coin_count - $offer["have_coin_count"]));
+echo json_encode(array(
+    "message" => $message,
+    "exchanged" => $have_coin_count - $offer["have_coin_count"]
+));
 
 

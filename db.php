@@ -95,9 +95,9 @@ define("ERROR_MYSQL", 3);
 define("ERROR_TOKEN_IS_BAD", 4);
 function db_error($error_code, $error_message = "")
 {
-    $result["error_code"] = $error_code;
-    $result["error_message"] = $error_message;
-    $result["error_stack"] = generateCallTrace();
+    $result["error"] = $error_code;
+    $result["message"] = $error_message;
+    $result["stack"] = generateCallTrace();
     echo json_encode_readable($result);
     exit;
 }
