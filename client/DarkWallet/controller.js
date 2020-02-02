@@ -22,7 +22,7 @@ controller("DarkWallet", function ($scope, $window, $http,
         $scope.open('login');
     }
 
-    $scope.copyButtonLabel = "Copy Wallet ID"
+    $scope.copyButtonLabel = "Copy Login"
     $scope.copyToClipboard = function (text) {
         var copyText = document.getElementById("walletId");
         copyText.select();
@@ -76,7 +76,6 @@ controller("DarkWallet", function ($scope, $window, $http,
     var token = store.get("user_session_token");
     var stock_token = store.get("user_session_token");
 
-    $scope.walletId = $scope.user_login;
     $scope.have_coin_code = null
     $scope.want_coin_code = null
 
@@ -188,7 +187,7 @@ controller("DarkWallet", function ($scope, $window, $http,
 
     $scope.send_message = null
     $scope.send_request_in_progress = false
-    $scope.send_wallet_id = null
+    $scope.send_user_login = null
     $scope.send_coin_code = null
     $scope.send_coin_count = null
 
@@ -197,7 +196,7 @@ controller("DarkWallet", function ($scope, $window, $http,
         $scope.send_request_in_progress = true
         $http.post(api_url + "send.php", {
             token: token,
-            receiver_user_login: $scope.send_wallet_id,
+            receiver_user_login: $scope.send_user_login,
             coin_code: $scope.send_coin_code,
             coin_count: $scope.send_coin_count,
         }).then(function (response) {

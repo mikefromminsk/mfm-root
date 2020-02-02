@@ -80,7 +80,7 @@
                     </div>
                     <div class="layout-row layout-align-center">
                         <div class="layout-row flex-80">
-                            <input id="walletId" class="flex" type="text" ng-value="walletId"
+                            <input id="walletId" class="flex" type="text" ng-value="user_login"
                                    style="border-radius: 10px 0 0 10px; padding-left: 20px;">
                             <md-button class="md-raised md-primary flex" style="border-radius: 0 10px 10px 0;"
                                        ng-click="copyToClipboard()">
@@ -110,10 +110,10 @@
         </div>
         <form class="layout-column layout-align-center-center  flex" ng-show="!toggleSendFragment"
               style="background-color: #444444" ng-submit="send()">
-            <md-card class="layout-column" style="padding: 20px">
+            <md-card class="layout-column" style="padding: 20px; width: 300px;">
                 <md-input-container>
-                    <label>Wallet ID</label>
-                    <input ng-model="send_wallet_id" required maxlength="256" placeholder="example@gmail.com">
+                    <label>Receiver login</label>
+                    <input type="email" ng-model="send_user_login" required maxlength="256" placeholder="example@gmail.com">
                 </md-input-container>
                 <div class="layout-row">
                     <md-input-container>
@@ -123,7 +123,7 @@
                             </md-option>
                         </md-select>
                     </md-input-container>
-                    <md-input-container>
+                    <md-input-container class="flex">
                         <label>Count</label>
                         <input type="number" ng-model="send_coin_count" required
                                min="1" max="{{getHaveCoin(send_coin_code)['coin_count']}}">
