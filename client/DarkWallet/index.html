@@ -279,14 +279,12 @@
                 <md-card class="layout-column">
                     <md-progress-linear md-mode="determinate" value="100"></md-progress-linear>
                     <div class="layout-row">
-                        <div class="cell cell-header flex-33">Coin</div>
-                        <div class="cell cell-header flex-33">Buy</div>
-                        <div class="cell cell-header flex-33">Sale</div>
+                        <div class="cell cell-header flex-50">Coin</div>
+                        <div class="cell cell-header flex-50">Rate</div>
                     </div>
                     <div class="layout-row" ng-repeat="rate in rates">
-                        <div class="cell flex-33">{{rate.have_coin_code + ":" + rate.want_coin_code}}</div>
-                        <div class="cell flex-33">{{rate.buy_rate}}</div>
-                        <div class="cell flex-33">{{rate.sale_rate}}</div>
+                        <div class="cell flex-50">1 {{rate.coin_code}}</div>
+                        <div class="cell flex-50">{{round(rate.offer_rate)}} USD</div>
                     </div>
                 </md-card>
             </div>
