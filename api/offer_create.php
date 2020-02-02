@@ -10,6 +10,14 @@ $want_coin_count = get_int_required("want_coin_count");
 $back_user_login = get_required("back_user_login");
 $back_host_url = get_required("back_host_url");
 $offer_domain_keys = get_required("have_domain_keys");
+
+$have_coin_code = strtoupper($have_coin_code);
+$want_coin_code = strtoupper($want_coin_code);
+if ($have_coin_count <= 0)
+    db_error(0, "have_coin_count is zero or less zero");
+if ($want_coin_count <= 0)
+    db_error(0, "want_coin_count is zero or less zero");
+
 $offer_rate = $have_coin_count / $want_coin_count;
 $offer_rate_inverse = $want_coin_count / $have_coin_count;
 $message = null;

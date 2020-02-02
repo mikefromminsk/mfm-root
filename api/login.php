@@ -46,6 +46,9 @@ if ($stock_token != null) {
         ));
 }
 
+/*if ($stock_token != null && $user_password != null)
+    //change passwrod*/
+
 if ($user == null && $token != null)
     $user = selectMap("select * from users where user_session_token = $token");
 

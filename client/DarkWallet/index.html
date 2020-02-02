@@ -52,16 +52,25 @@
         right: 0;
     }
 
+    .buy-sale-delimiter {
+        width: 4px;
+        background-color: rgb(33,150,243);
+    }
+
 </style>
 <div class="layout-fill layout-row" style="background-color: #666666;">
     <md-content class="layout-column flex-gt-xs-30 flex" ng-show="activeWindow == 0">
         <div class="layout-column flex scrollable" ng-show="toggleSendFragment">
             <div class="layout-column" style="background-color: #444444;">
                 <div class="layout-column" style="padding: 20px">
-                    <md-button class="md-fab md-mini hide-gt-xs next-button"
-                               ng-click="activeWindow = 1">
-                        <md-icon md-svg-src="img/next.svg"></md-icon>
-                    </md-button>
+                    <div class="layout-row">
+                        <md-button ng-click="logout()">Log Out</md-button>
+                        <div class="flex"></div>
+                        <md-button class="md-fab md-mini hide-gt-xs"
+                                   ng-click="activeWindow = 1">
+                            <md-icon md-svg-src="img/next.svg"></md-icon>
+                        </md-button>
+                    </div>
                     <div class="layout-column layout-align-center-center" style="height: 200px">
                         <h1>DarkWallet</h1>
                     </div>
@@ -161,6 +170,9 @@
                         <div class="cell cell-header flex-20">Have {{have_coin_code}}</div>
                         <div class="cell cell-header flex-20">Want {{want_coin_code}}</div>
                         <div class="cell cell-header flex-20">{{have_coin_code}}/{{want_coin_code}}</div>
+                        <div class="layout-column">
+                            <div class="flex buy-sale-delimiter"></div>
+                        </div>
                         <div class="cell cell-header flex-20">Have {{have_coin_code}}</div>
                         <div class="cell cell-header flex-20 ">Want {{want_coin_code}}</div>
                         <div class="cell cell-header flex-20">{{have_coin_code}}/{{want_coin_code}}</div>
@@ -170,14 +182,17 @@
                             <div class="layout-row" ng-repeat="offer in saleOffers">
                                 <div class="cell flex-33">{{offer.have_coin_count}}</div>
                                 <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{convertRate(offer.offer_rate)}}</div>
+                                <div class="cell flex-33">{{convertRate(offer.offer_rate, offer.offer_rate_inverse)}}</div>
                             </div>
+                        </div>
+                        <div class="layout-column">
+                            <div class="flex buy-sale-delimiter"></div>
                         </div>
                         <div class="layout-column flex-50">
                             <div class="layout-row" ng-repeat="offer in buyOffers">
                                 <div class="cell flex-33">{{offer.have_coin_count}}</div>
                                 <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{convertRate(offer.offer_rate)}}</div>
+                                <div class="cell flex-33">{{convertRate(offer.offer_rate, offer.offer_rate_inverse)}}</div>
                             </div>
                             <div class="flex"></div>
                         </div>
@@ -196,18 +211,29 @@
                         <md-input-container>
                             <label>Coin</label>
                             <md-select ng-model="offer_have_coin_code" required>
-                                <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}</md-option>
+                                <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">
+                                    {{coin.coin_code}}
+                                </md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <input type="number" ng-model="offer_have_coin_count" required placeholder="4000"
-                                   maxlength="5">
+                            <label>Count</label>
+                            <input type="number" ng-model="offer_have_coin_count" required maxlength="5"
+                                ng-change="offerHaveCoinCountChange()">
                         </md-input-container>
                     </div>
-                    <div class="layout-column layout-align-center-center">
-                        <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
-                            <md-icon md-svg-src="img/next.svg"></md-icon>
-                        </md-button>
+                    <div class="layout-column">
+                        <div class="layout-row layout-align-center">
+                            <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
+                                <md-icon md-svg-src="img/next.svg"></md-icon>
+                            </md-button>
+                        </div>
+                        <div class="flex"></div>
+                        <md-input-container>
+                            <label>Rate</label>
+                            <input type="number" ng-model="offer_rate"  step="0.0001" required maxlength="10"
+                                   ng-change="offerRateChange()">
+                        </md-input-container>
                     </div>
                     <div class="layout-column">
                         <md-input-container>
@@ -217,8 +243,9 @@
                             </md-select>
                         </md-input-container>
                         <md-input-container>
-                            <input type="number" ng-model="offer_want_coin_count" required placeholder="4000"
-                                   maxlength="5">
+                            <label>Count</label>
+                            <input type="number" ng-model="offer_want_coin_count" required maxlength="5"
+                                   ng-change="offerWantCoinCountChange()">
                         </md-input-container>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 controller("login", function ($scope, $http, api_url) {
     $scope.message = null;
-    $scope.login = "x29a100@mail.ru";
+    $scope.login = "selevich@mail.ru";
     $scope.password = "12345678";
     $scope.loginButton = function () {
         $http.post(api_url + "login_check.php", {

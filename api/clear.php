@@ -16,17 +16,33 @@ if ($message == null) {
     $message = $message == null && http_json_post($host_url . "create_coin", array(
         "user_login" => "x29a100@mail.ru",
         "user_password" => "12345678",
-        "coin_name" => "ftr",
-        "coin_code" => "FTR",
-    )) ? null : "create ftr error";
+        "coin_name" => "UsDollar",
+        "coin_code" => "USD",
+    )) ? null : "create USD error";
 
     $message = $message == null && http_json_post($host_url . "create_coin", array(
-        "user_login" => "ww",
-        "user_password" => "123",
-        "coin_name" => "usd",
-        "coin_code" => "USD",
-    )) ? null : "create usd error";
+        "user_login" => "selevich@mail.ru",
+        "user_password" => "12345678",
+        "coin_name" => "Silinium",
+        "coin_code" => "SIL",
+    )) ? null : "create Silinium error";
 
+    $login = http_json_post($host_url . "login_check", array(
+        "user_login" => "selevich@mail.ru",
+        "user_password" => "12345678"
+    ));
+
+
+    $message = $message == null && http_json_post($host_url . "exchange", array(
+        "token" => $login["user_session_token"],
+        "have_coin_code" => "SIL",
+        "have_coin_count" => "2000",
+        "want_coin_code" => "USD",
+        "want_coin_count" => "50",
+    )) ? null : "exchange error";
 }
 
-echo json_encode(array("message" => $message));
+echo json_encode(array(
+    "message" => $message,
+    "login" => $login,
+));
