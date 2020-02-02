@@ -9,7 +9,7 @@ controller("DarkWallet", function ($scope, $window, $http,
 
     $scope.toggleSendFragment = true;
     $scope.toggleExchangeFragment = true;
-    $scope.toggleCreateCoinFragment = false;
+    $scope.toggleCreateCoinFragment = true;
 
     $scope.show = function (fragmentName) {
         $scope.toggleSendFragment = !$scope.toggleSendFragment || fragmentName !== "send";
@@ -34,11 +34,8 @@ controller("DarkWallet", function ($scope, $window, $http,
 
     $scope.walletId = login;
 
-    if (login == null || token == null || stock_token == null)
-        $scope.open('login');
-    else {
-        updateData();
-    }
+    $scope.have_coin_code = "FTR"
+    $scope.want_coin_code = "WEF"
 
     function updateData() {
         $http.post(api_url + "wallet.php", {
@@ -51,6 +48,8 @@ controller("DarkWallet", function ($scope, $window, $http,
         })
         $http.post(exchange_api_url + "stock.php", {
             token: token,
+            have_coin_code: $scope.have_coin_code,
+            want_coin_code: $scope.want_coin_code,
         }).then(function (response) {
             if (response.data.message == null) {
                 $scope.saleOffers = response.data.sale_offers;
@@ -59,6 +58,12 @@ controller("DarkWallet", function ($scope, $window, $http,
                 $scope.rates = response.data.rates;
             }
         })
+    }
+
+    if (login == null || token == null || stock_token == null)
+        $scope.open('login');
+    else {
+        updateData();
     }
 
     $scope.create_coin_message = null
@@ -86,12 +91,10 @@ controller("DarkWallet", function ($scope, $window, $http,
 
     $scope.exchange_in_progress = false
     $scope.exchange_message = null
-    $scope.have_coin_code = "FTR"
-    $scope.want_coin_code = "WEF"
     $scope.offer_have_coin_code = $scope.have_coin_code
-    $scope.offer_have_coin_count = null;
+    $scope.offer_have_coin_count = 123;
     $scope.offer_want_coin_code = $scope.want_coin_code
-    $scope.offer_want_coin_count = null
+    $scope.offer_want_coin_count = 2321
     $scope.exchange = function () {
         $scope.exchange_message = null
         $scope.exchange_in_progress = true
@@ -112,6 +115,26 @@ controller("DarkWallet", function ($scope, $window, $http,
                 $scope.exchange_message = response.data.message
         })
     };
+
+    $scope.convertRate = function(offer_rate) {
+        var rate = parseFloat(offer_rate);
+        return (rate < 1) ? rate.toFixed(4) : rate.toFixed(2);
+    }
+
+    $scope.exchangeSwapCurrencies = function () {
+        $scope.exchange_message = null;
+        if ($scope.getHaveCoin($scope.offer_want_coin_code) != null) {
+            var buf_coin_code = $scope.offer_have_coin_code
+            var buf_coin_count = $scope.offer_have_coin_count
+            $scope.offer_have_coin_code = $scope.offer_want_coin_code;
+            $scope.offer_have_coin_count = $scope.offer_want_coin_count;
+            $scope.offer_want_coin_code = buf_coin_code
+            $scope.offer_want_coin_count = buf_coin_count
+        } else {
+            $scope.exchange_message = "you dont have " + $scope.offer_want_coin_code;
+        }
+    }
+
 
     $scope.send_message = null
     $scope.send_request_in_progress = false
@@ -138,12 +161,12 @@ controller("DarkWallet", function ($scope, $window, $http,
         })
     }
 
-    $scope.maxSendCoinCount = function () {
+    $scope.getHaveCoin = function (coin_code) {
         if ($scope.have_coins != null)
             for (let i = 0; i < $scope.have_coins.length; i++)
-                if ($scope.have_coins[i]["coin_code"] === $scope.send_coin_code)
-                    return $scope.have_coins[i]["coin_count"];
-        return 0;
+                if ($scope.have_coins[i]["coin_code"] === coin_code)
+                    return $scope.have_coins[i];
+        return null;
     }
 
 })

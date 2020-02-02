@@ -112,7 +112,7 @@
                     <md-input-container>
                         <label>Count</label>
                         <input type="number" ng-model="send_coin_count" required
-                               min="1" max="{{findMyCoin()['coin_count']}}">
+                               min="1" max="{{getHaveCoin(send_coin_code)['coin_count']}}">
                     </md-input-container>
                 </div>
                 <div ng-show="send_message != null" style="color: red">{{send_message}}</div>
@@ -170,14 +170,14 @@
                             <div class="layout-row" ng-repeat="offer in saleOffers">
                                 <div class="cell flex-33">{{offer.have_coin_count}}</div>
                                 <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{offer.offer_rate}}</div>
+                                <div class="cell flex-33">{{convertRate(offer.offer_rate)}}</div>
                             </div>
                         </div>
                         <div class="layout-column flex-50">
                             <div class="layout-row" ng-repeat="offer in buyOffers">
                                 <div class="cell flex-33">{{offer.have_coin_count}}</div>
                                 <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{offer.offer_rate}}</div>
+                                <div class="cell flex-33">{{convertRate(offer.offer_rate)}}</div>
                             </div>
                             <div class="flex"></div>
                         </div>
@@ -196,7 +196,7 @@
                         <md-input-container>
                             <label>Coin</label>
                             <md-select ng-model="offer_have_coin_code" required>
-                                <md-option ng-repeat="coin in coins" value="{{coin}}">{{coin}}</md-option>
+                                <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}</md-option>
                             </md-select>
                         </md-input-container>
                         <md-input-container>
@@ -204,7 +204,11 @@
                                    maxlength="5">
                         </md-input-container>
                     </div>
-                    <font class="layout-column layout-align-center-center" size="20">➠</font>
+                    <div class="layout-column layout-align-center-center">
+                        <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
+                            <md-icon md-svg-src="img/next.svg"></md-icon>
+                        </md-button>
+                    </div>
                     <div class="layout-column">
                         <md-input-container>
                             <label>Coin</label>
