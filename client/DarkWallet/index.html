@@ -63,7 +63,7 @@
 
 </style>
 <div class="layout-fill layout-row" style="background-color: #666666;">
-    <md-content class="layout-column flex-gt-xs-30 flex" ng-show="activeWindow == 0">
+    <md-content class="layout-column flex-gt-xs-25 flex" ng-show="activeWindow == 0">
         <div class="layout-column flex scrollable" ng-show="toggleSendFragment">
             <div class="layout-column" style="background-color: #444444;">
                 <div class="layout-column" style="padding: 20px">
@@ -95,7 +95,8 @@
                             <big><b>{{coin.coin_count + " " + coin.coin_code}}</b></big>
                         </div>
                         <div class="layout-row" style="padding: 8px 0 0 40px">
-                            <small style="color: #9e9e9e">{{"1 " + coin.coin_code + " = " + "requesting..."}}</small>
+                            <small style="color: #9e9e9e">{{"1 " + coin.coin_name + " = "
+                                + (getRate(coin.coin_code) != null ? round(getRate(coin.coin_code)) + " USD" : "no data")}}</small>
                         </div>
                     </md-content>
                     <md-divider></md-divider>
@@ -264,7 +265,7 @@
         </form>
     </md-content>
 
-    <md-content class="layout-column flex-gt-md-20 flex" style="background-color: #9e9e9e;"
+    <md-content class="layout-column flex-gt-md-25 flex" style="background-color: #9e9e9e;"
                 ng-show="windowWidth >= 1280 || activeWindow == 2">
         <div class="layout-column flex" ng-show="toggleCreateCoinFragment">
             <div class="layout-row layout-align-start-center header" style="background-color: #666666; ">

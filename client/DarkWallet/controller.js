@@ -88,7 +88,7 @@ controller("DarkWallet", function ($scope, $window, $http,
 
 
     $scope.calcRate = function () {
-        $scope.offer_rate = $scope.offer_want_coin_count / $scope.offer_have_coin_count
+        $scope.offer_rate = $scope.round($scope.offer_want_coin_count / $scope.offer_have_coin_count)
     }
 
     $scope.create_coin_message = null
@@ -134,7 +134,7 @@ controller("DarkWallet", function ($scope, $window, $http,
         $scope.offer_want_coin_count = $scope.offer_have_coin_count * $scope.offer_rate
     }
 
-    function setBaseOffer(){
+    function setBaseOffer() {
         var rate = $scope.getRate($scope.have_coin_code)
         if (rate < 1) {
             $scope.offer_have_coin_count = Math.round(1 / rate)
@@ -167,8 +167,9 @@ controller("DarkWallet", function ($scope, $window, $http,
     };
 
     $scope.round = function (rate) {
-        rate = parseFloat(rate)
-        return (rate < 1) ? rate.toFixed(4) : rate.toFixed(2)
+        if (typeof rate == "string")
+            rate = parseFloat(rate)
+        return (rate < 1) ? parseFloat(rate.toFixed(4)) : parseFloat(rate.toFixed(2))
     }
 
     $scope.exchangeSwapCurrencies = function () {
