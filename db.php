@@ -1,7 +1,7 @@
 <?php
 error_reporting(1);
 
-header("Content-type: " . strpos($_SERVER["HTTP_ACCEPT"], "text/html") != -1 ? "text/html" : "application/json" . "; charset=utf-8");
+header("Content-type: application/json;charset=utf-8");
 
 include_once "properties.php";
 

@@ -31,8 +31,6 @@ if ($message == null) {
         "user_login" => "selevich@mail.ru",
         "user_password" => "12345678"
     ));
-
-
     $message = $message == null && http_json_post($host_url . "exchange", array(
         "token" => $login["user_session_token"],
         "have_coin_code" => "SIL",
@@ -40,9 +38,20 @@ if ($message == null) {
         "want_coin_code" => "USD",
         "want_coin_count" => "50",
     )) ? null : "exchange error";
+
+    $login = http_json_post($host_url . "login_check", array(
+        "user_login" => "x29a100@mail.ru",
+        "user_password" => "12345678"
+    ));
+    $message = $message == null && http_json_post($host_url . "exchange", array(
+        "token" => $login["user_session_token"],
+        "have_coin_code" => "USD",
+        "have_coin_count" => "1",
+        "want_coin_code" => "SIL",
+        "want_coin_count" => "45",
+    )) ? null : "exchange error";
 }
 
 echo json_encode(array(
     "message" => $message,
-    "login" => $login,
 ));

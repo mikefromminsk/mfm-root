@@ -8,7 +8,7 @@ controller("DarkWallet", function ($scope, $window, $http,
     });
 
     $scope.toggleSendFragment = true;
-    $scope.toggleExchangeFragment = false;
+    $scope.toggleExchangeFragment = true;
     $scope.toggleCreateCoinFragment = true;
 
     $scope.show = function (fragmentName) {
@@ -38,6 +38,8 @@ controller("DarkWallet", function ($scope, $window, $http,
     var stock_token = store.get("user_session_token");
 
     $scope.walletId = login;
+    $scope.have_coin_code = null
+    $scope.want_coin_code = null
 
     function updateData() {
         $http.post(api_url + "wallet.php", {
@@ -46,10 +48,12 @@ controller("DarkWallet", function ($scope, $window, $http,
             if (response.data.message == null) {
                 $scope.coins = response.data.coins;
                 $scope.have_coins = response.data.have_coins;
-                $scope.have_coin_code = $scope.have_coins[0]["coin_code"]
-                $scope.want_coin_code = $scope.coins[0] === $scope.have_coin_code ? $scope.coins[1] : $scope.coins[0]
-                $scope.offer_have_coin_code = $scope.have_coin_code
-                $scope.offer_want_coin_code = $scope.want_coin_code
+                if ($scope.have_coin_code == null && $scope.want_coin_code == null){
+                    $scope.have_coin_code = $scope.have_coins[0]["coin_code"]
+                    $scope.want_coin_code = $scope.coins[0] === $scope.have_coin_code ? $scope.coins[1] : $scope.coins[0]
+                    $scope.offer_have_coin_code = $scope.have_coin_code
+                    $scope.offer_want_coin_code = $scope.want_coin_code
+                }
 
                 $http.post(exchange_api_url + "stock.php", {
                     token: token,
@@ -149,6 +153,11 @@ controller("DarkWallet", function ($scope, $window, $http,
 
     $scope.convertRate = function (offer_rate, offer_rate_inverse) {
         var rate = Math.max(parseFloat(offer_rate), parseFloat(offer_rate_inverse));
+        return $scope.round(rate);
+    }
+
+    $scope.round = function(rate){
+        rate = parseFloat(rate);
         return (rate < 1) ? rate.toFixed(4) : rate.toFixed(2);
     }
 

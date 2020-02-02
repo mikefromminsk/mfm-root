@@ -167,22 +167,22 @@
                 <md-card class="layout-column">
                     <md-progress-linear md-mode="determinate" value="100"></md-progress-linear>
                     <div class="layout-row">
-                        <div class="cell cell-header flex-20">Have {{have_coin_code}}</div>
+                        <div class="cell cell-header flex-20">Sale {{have_coin_code}}</div>
                         <div class="cell cell-header flex-20">Want {{want_coin_code}}</div>
                         <div class="cell cell-header flex-20">{{have_coin_code}}/{{want_coin_code}}</div>
                         <div class="layout-column">
                             <div class="flex buy-sale-delimiter"></div>
                         </div>
-                        <div class="cell cell-header flex-20">Have {{have_coin_code}}</div>
-                        <div class="cell cell-header flex-20 ">Want {{want_coin_code}}</div>
                         <div class="cell cell-header flex-20">{{have_coin_code}}/{{want_coin_code}}</div>
+                        <div class="cell cell-header flex-20">Buy {{want_coin_code}}</div>
+                        <div class="cell cell-header flex-20 ">Want {{have_coin_code}}</div>
                     </div>
                     <div class="layout-row">
                         <div class="layout-column flex-50">
                             <div class="layout-row" ng-repeat="offer in saleOffers">
                                 <div class="cell flex-33">{{offer.have_coin_count}}</div>
                                 <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{convertRate(offer.offer_rate, offer.offer_rate_inverse)}}</div>
+                                <div class="cell flex-33">{{round(offer.offer_rate_inverse)}}</div>
                             </div>
                         </div>
                         <div class="layout-column">
@@ -190,9 +190,9 @@
                         </div>
                         <div class="layout-column flex-50">
                             <div class="layout-row" ng-repeat="offer in buyOffers">
+                                <div class="cell flex-33">{{round(offer.offer_rate)}}</div>
                                 <div class="cell flex-33">{{offer.have_coin_count}}</div>
                                 <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{convertRate(offer.offer_rate, offer.offer_rate_inverse)}}</div>
                             </div>
                             <div class="flex"></div>
                         </div>
@@ -280,7 +280,7 @@
                         <div class="cell cell-header flex-33">Sale</div>
                     </div>
                     <div class="layout-row" ng-repeat="rate in rates">
-                        <div class="cell flex-33">{{rate.coin_code}}</div>
+                        <div class="cell flex-33">{{rate.have_coin_code + ":" + rate.want_coin_code}}</div>
                         <div class="cell flex-33">{{rate.buy_rate}}</div>
                         <div class="cell flex-33">{{rate.sale_rate}}</div>
                     </div>

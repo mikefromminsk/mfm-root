@@ -7,6 +7,7 @@ $have_coin_code = get_required("have_coin_code");
 $have_coin_count = get_int_required("have_coin_count");
 $want_coin_code = get_required("want_coin_code");
 $want_coin_count = get_int_required("want_coin_count");
+
 $back_user_login = get_required("back_user_login");
 $back_host_url = get_required("back_host_url");
 $offer_domain_keys = get_required("have_domain_keys");
@@ -17,9 +18,11 @@ if ($have_coin_count <= 0)
     db_error(0, "have_coin_count is zero or less zero");
 if ($want_coin_count <= 0)
     db_error(0, "want_coin_count is zero or less zero");
-
+if ($have_coin_code == $want_coin_code)
+    db_error(0, "you cannot buy and sale the same coins");
 $offer_rate = $have_coin_count / $want_coin_count;
 $offer_rate_inverse = $want_coin_count / $have_coin_count;
+
 $message = null;
 
 $offer = array(
@@ -42,12 +45,16 @@ if ($have_coin_count < 0 || $want_coin_count < 0) {
 } else {
 
 // set domains
-    $success_domain_names = receive_domain_keys($user_id, $have_coin_code, $offer_domain_keys);
+    $success_domain_names = receiveDomainKeys($user_id, $have_coin_code, $offer_domain_keys);
 
 // auto exchange
     $opposite_offers = select("select * from offers where have_coin_code = '$want_coin_code' and  want_coin_code = '$have_coin_code' "
-        . " and offer_rate_inverse >= $offer_rate order by offer_rate_inverse desc limit 5");
+        . " and offer_rate <= $offer_rate order by offer_rate desc limit 5");
 
+    $message["sef"] = $opposite_offers;
+    $message["offer_rate"] = $offer_rate;
+    $message["have_coin_count"] = $have_coin_count;
+    $message["want_coin_count"] = $want_coin_count;
 
     foreach ($opposite_offers as $opposite_offer) {
         $offer_have_exchange_coin_count = min($offer["have_coin_count"], $opposite_offer["want_coin_count"]);

@@ -13,7 +13,10 @@ if ($have_coin_count <= 0)
     db_error(0, "have_coin_count is zero or less zero");
 if ($want_coin_count <= 0)
     db_error(0, "want_coin_count is zero or less zero");
+if ($have_coin_code == $want_coin_code)
+    db_error(0, "you cannot buy and sale the same coins");
 $offer_rate = $have_coin_count / $want_coin_count;
+$offer_rate_inverse = $want_coin_count / $have_coin_count;
 
 $message = null;
 
@@ -30,14 +33,11 @@ $request_count = ceil($have_coin_count / $max_request_coin_count);
 for ($i = 0; $i < $request_count && $message == null; $i++) {
     $coin_count = ($i == $request_count - 1) ? bcmod($have_coin_count, $max_request_coin_count) : ($i + 1) * $max_request_coin_count;
     $request["have_coin_count"] = $coin_count;
-    $request["want_coin_count"] = ceil($coin_count * $offer_rate);
+    $request["want_coin_count"] = ceil($coin_count * $offer_rate_inverse);
     $request["have_domain_keys"] = getDomainKeys($user_id, $have_coin_code, $coin_count);
-    $message = http_json_post($exchange_host_url . "offer_create.php", $request)["message"];
+    $message = http_json_post($exchange_host_url . "offer_create.php", $request);
 }
 
 echo json_encode(array(
     "message" => $message,
-    "request_count" => $request_count,
-    "offer_rate" => $offer_rate,
-    "bcmod" => bcmod($have_coin_count, $max_request_coin_count),
 ));

@@ -2,7 +2,7 @@
 
 include_once "../db.php";
 
-function receive_domain_keys($user_id, $have_coin_code, $domain_keys){
+function receiveDomainKeys($user_id, $have_coin_code, $domain_keys){
     $success_domain_names = [];
 
     /*foreach ($domain_keys as $domain_key) {
