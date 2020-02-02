@@ -19,6 +19,10 @@
         background-color: black;
     }
 
+    .my-cell{
+        background-color: #325032;
+    }
+
     .scrollable {
         overflow: auto;
     }
@@ -86,7 +90,7 @@
                     </div>
                 </div>
                 <div class="layout-column" ng-repeat="coin in have_coins">
-                    <md-content class="layout-column" md-ink-ripple style="padding: 16px 16px 16px 24px;">
+                    <md-content class="layout-column" md-ink-ripple style="padding: 16px 16px 16px 24px;" ng-click="updateData(coin.coin_code)">
                         <div class="layout-row">
                             <big><b>{{coin.coin_count + " " + coin.coin_code}}</b></big>
                         </div>
@@ -180,9 +184,9 @@
                     <div class="layout-row">
                         <div class="layout-column flex-50">
                             <div class="layout-row" ng-repeat="offer in saleOffers">
-                                <div class="cell flex-33">{{offer.have_coin_count}}</div>
-                                <div class="cell flex-33">{{offer.want_coin_count}}</div>
-                                <div class="cell flex-33">{{round(offer.offer_rate_inverse)}}</div>
+                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">{{offer.have_coin_count}}</div>
+                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">{{offer.want_coin_count}}</div>
+                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">{{round(offer.offer_rate_inverse)}}</div>
                             </div>
                         </div>
                         <div class="layout-column">
@@ -190,9 +194,9 @@
                         </div>
                         <div class="layout-column flex-50">
                             <div class="layout-row" ng-repeat="offer in buyOffers">
-                                <div class="cell flex-33">{{round(offer.offer_rate)}}</div>
-                                <div class="cell flex-33">{{offer.have_coin_count}}</div>
-                                <div class="cell flex-33">{{offer.want_coin_count}}</div>
+                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}" >{{round(offer.offer_rate)}}</div>
+                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">{{offer.have_coin_count}}</div>
+                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">{{offer.want_coin_count}}</div>
                             </div>
                             <div class="flex"></div>
                         </div>

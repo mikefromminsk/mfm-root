@@ -35,7 +35,7 @@ for ($i = 0; $i < $request_count && $message == null; $i++) {
     $request["have_coin_count"] = $coin_count;
     $request["want_coin_count"] = ceil($coin_count * $offer_rate_inverse);
     $request["have_domain_keys"] = getDomainKeys($user_id, $have_coin_code, $coin_count);
-    $message = http_json_post($exchange_host_url . "offer_create.php", $request);
+    $message = http_json_post($exchange_host_url . "offer_create.php", $request)["message"];
 }
 
 echo json_encode(array(
