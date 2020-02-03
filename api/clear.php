@@ -13,6 +13,10 @@ if ($message == null) {
     query("delete from offers");
     query("delete from coins");
 
+    $message = $message == null && http_json_post($exchange_host_url . "clear", array(
+        "access" => $access,
+    )) ? null : "stock clear error";
+
     $message = $message == null && http_json_post($host_url . "create_coin", array(
         "user_login" => "x29a100@mail.ru",
         "user_password" => "12345678",
@@ -50,6 +54,7 @@ if ($message == null) {
         "want_coin_code" => "SIL",
         "want_coin_count" => "45",
     )) ? null : "exchange error";
+
 }
 
 echo json_encode(array(

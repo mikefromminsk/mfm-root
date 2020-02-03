@@ -2,8 +2,6 @@
 
 include_once "login.php";
 
-$result = array();
-
 echo json_encode(array(
     "coins" => selectList("select coin_code from coins"),
     "have_coins" => select("select t1.coin_code, t2.coin_name, count(*) as coin_count from domain_keys t1 "

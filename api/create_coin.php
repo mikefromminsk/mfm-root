@@ -1,6 +1,7 @@
 <?php
 
 include_once "login.php";
+include_once "domain_utils.php";
 
 $coin_name = get_required("coin_name");
 $coin_code = get_required("coin_code");
@@ -33,17 +34,9 @@ if ($message == null) {
         $message = $message == null && query($insert_domains_sql) ? null : "insert_domain_keys_sql error";
     }
 
-    $max_block_domains = 65536;
-    $request_count = 8;
-    $domains_per_request = $max_block_domains / $request_count;
-    $node_locations = selectList("select distinct node_location from domains where node_location <> '$node_url' limit 5") ?: $start_node_locations;
-    foreach ($node_locations as $node_location) {
-        for ($i = 0; $i < $request_count; $i++) {
-            $domain_list = select("select * from domains where domain_name like '$coin_name%' "
-                . " limit " . ($i * $domains_per_request - ($i == 0 ? 0 : 1) . ", $domains_per_request"));
-            http_json_post($node_location, array("domains" => $domain_list));
-        }
-    }
+    // send 1 coin and 50 usd to exchange server
+
+    syncDomains($coin_code);
 }
 
 echo json_encode(array("message" => $message));

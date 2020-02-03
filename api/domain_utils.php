@@ -46,3 +46,25 @@ function getDomainKeys($user_id, $have_coin_code, $have_coin_count)
     query("delete from domain_keys $where");
     return $domain_keys;
 }
+
+function syncDomains($coin_code){
+/*    $max_block_domains = 65536;
+    $request_count = 8;
+    $domains_per_request = $max_block_domains / $request_count;
+    $node_locations = selectList("select distinct node_location from domains where node_location <> '$node_url' limit 5") ?: $start_node_locations;
+    foreach ($node_locations as $node_location) {
+        for ($i = 0; $i < $request_count; $i++) {
+            $domain_list = select("select * from domains where domain_name like '$coin_name%' "
+                . " limit " . ($i * $domains_per_request - ($i == 0 ? 0 : 1) . ", $domains_per_request"));
+            http_json_post($node_location, array("domains" => $domain_list));
+        }
+    }
+
+
+
+
+    $request_data = array("domains" => selectList("select * from domains where domain_name in ('" . implode("','", $domain_names) . "')"));
+    $node_locations = selectList("select distinct node_location from domains where node_location <> '$node_url' limit 5") ?: $start_node_locations;
+    foreach ($node_locations as $node_location)
+        http_json_post($node_location, $request_data);*/
+}
