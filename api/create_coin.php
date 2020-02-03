@@ -18,7 +18,6 @@ $message = insertList("coins", array(
 )) == true ? null : "coin name exist";
 
 if ($message == null) {
-    $user_id = $user["user_id"];
     for ($i = 0; $i < 64; $i++) {
         $domain_last_online_time = time();
         $insert_domain_keys_sql = "insert into domain_keys (user_id, coin_code, domain_name, domain_next_name) VALUES ";

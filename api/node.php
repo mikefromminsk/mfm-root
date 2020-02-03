@@ -14,7 +14,7 @@ $result = array(
 );
 
 // delete out of date domains
-query("delete from domains where domain_last_online_time < " . (time() - $domain_ttl_seconds));
+query("delete from domains where domain_last_online_time < " . (time() - (60 * 60 * 24 * 30))); // one month
 
 foreach ($domains as $domain_remote) {
     $domain_name = uencode($domain_remote["domain_name"]);
