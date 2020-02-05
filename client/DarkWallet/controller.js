@@ -15,6 +15,12 @@ controller("DarkWallet", function ($scope, $window, $http,
         $scope.toggleSendFragment = !$scope.toggleSendFragment || fragmentName !== "send";
         $scope.toggleExchangeFragment = !$scope.toggleExchangeFragment || fragmentName !== "exchange";
         $scope.toggleCreateCoinFragment = !$scope.toggleCreateCoinFragment || fragmentName !== "create_coin";
+        if (!$scope.toggleSendFragment)
+            $scope.activeWindow = 0;
+        if (!$scope.toggleExchangeFragment)
+            $scope.activeWindow = 1;
+        if (!$scope.toggleCreateCoinFragment)
+            $scope.activeWindow = 2;
     }
 
     $scope.logout = function () {
@@ -44,7 +50,7 @@ controller("DarkWallet", function ($scope, $window, $http,
                 $scope.want_coin_code = $scope.coins[0] === $scope.have_coin_code ? $scope.coins[1] : $scope.coins[0]
 
                 $http.post(exchange_api_url + "stock.php", {
-                    token: token,
+                    stock_token: stock_token,
                     have_coin_code: $scope.have_coin_code,
                     want_coin_code: $scope.want_coin_code,
                 }).then(function (response) {
@@ -74,7 +80,7 @@ controller("DarkWallet", function ($scope, $window, $http,
 
     $scope.user_login = store.get("user_login");
     var token = store.get("user_session_token");
-    var stock_token = store.get("user_session_token");
+    var stock_token = store.get("user_stock_token");
 
     $scope.have_coin_code = null
     $scope.want_coin_code = null
@@ -216,6 +222,12 @@ controller("DarkWallet", function ($scope, $window, $http,
                 if ($scope.have_coins[i]["coin_code"] === coin_code)
                     return $scope.have_coins[i];
         return null;
+    }
+
+    $scope.openCreateCoinFrame = function () {
+        $scope.toggleSendFragment = true
+        $scope.toggleExchangeFragment = true
+        $scope.toggleCreateCoinFragment = false
     }
 
 })

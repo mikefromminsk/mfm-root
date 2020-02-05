@@ -26,7 +26,7 @@ function receiveDomainKeys($user_id, $have_coin_code, $domain_keys){
         $domain_list = select("select * from domains where domain_name in ('" . implode("','", $success_domain_names) . "') ");
         http_json_post($node_location, array("domains" => $domain_list));
     }*/
-
+    //syncDomains($coin_code);
     foreach ($domain_keys as $domain_key) {
         insertList("domain_keys", array(
             "user_id" => $user_id,
@@ -35,6 +35,7 @@ function receiveDomainKeys($user_id, $have_coin_code, $domain_keys){
             "domain_next_name" => $domain_key["domain_next_name"],
         ));
     }
+
     return $success_domain_names;
 }
 
@@ -48,6 +49,7 @@ function getDomainKeys($user_id, $have_coin_code, $have_coin_count)
 }
 
 function syncDomains($coin_code){
+
 /*    $max_block_domains = 65536;
     $request_count = 8;
     $domains_per_request = $max_block_domains / $request_count;
@@ -58,13 +60,13 @@ function syncDomains($coin_code){
                 . " limit " . ($i * $domains_per_request - ($i == 0 ? 0 : 1) . ", $domains_per_request"));
             http_json_post($node_location, array("domains" => $domain_list));
         }
-    }
+    }*/
+
+    /*
 
 
-
-
-    $request_data = array("domains" => selectList("select * from domains where domain_name in ('" . implode("','", $domain_names) . "')"));
-    $node_locations = selectList("select distinct node_location from domains where node_location <> '$node_url' limit 5") ?: $start_node_locations;
-    foreach ($node_locations as $node_location)
-        http_json_post($node_location, $request_data);*/
+        $request_data = array("domains" => selectList("select * from domains where domain_name in ('" . implode("','", $domain_names) . "')"));
+        $node_locations = selectList("select distinct node_location from domains where node_location <> '$node_url' limit 5") ?: $start_node_locations;
+        foreach ($node_locations as $node_location)
+            http_json_post($node_location, $request_data);*/
 }

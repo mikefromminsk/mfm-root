@@ -63,3 +63,8 @@ md-input-container {
     margin: 0;
     border-radius: 0;
 }
+
+*:focus {
+    outline: none;
+    border: 0;
+}

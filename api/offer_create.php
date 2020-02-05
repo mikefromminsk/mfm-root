@@ -49,7 +49,7 @@ if ($have_coin_count < 0 || $want_coin_count < 0) {
 
 // auto exchange
     $opposite_offers = select("select * from offers where have_coin_code = '$want_coin_code' and  want_coin_code = '$have_coin_code' "
-        . " and offer_rate <= $offer_rate order by offer_rate desc limit 5");
+        . " and offer_rate >= $offer_rate_inverse order by offer_rate_inverse limit 20");
 
     foreach ($opposite_offers as $opposite_offer) {
         $offer_have_exchange_coin_count = min($offer["have_coin_count"], $opposite_offer["want_coin_count"]);

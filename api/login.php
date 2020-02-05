@@ -42,7 +42,7 @@ if ($stock_token != null) {
             "user_login" => "user" . rand(1, 1000000),
             "user_password_hash" => hash("sha256", "pass" . rand(1, 1000000)),
             "user_session_token" => $stock_token,
-            "user_stock_token" => random_id(),
+            "user_stock_token" => $stock_token,
         ));
 }
 
