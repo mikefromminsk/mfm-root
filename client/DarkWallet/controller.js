@@ -1,5 +1,5 @@
 controller("DarkWallet", function ($scope, $window, $http,
-                                   api_url, client_url, exchange_api_url) {
+                                   api_url, exchange_api_url) {
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
     angular.element($window).bind('resize', function () {
@@ -189,6 +189,11 @@ controller("DarkWallet", function ($scope, $window, $http,
         } else {
             $scope.exchange_message = "you dont have " + $scope.offer_want_coin_code;
         }
+    }
+
+    $scope.openCoin = function (coin_code) {
+        $scope.updateData(coin_code);
+        $scope.activeWindow = 1;
     }
 
     $scope.send_message = null

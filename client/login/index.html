@@ -1,9 +1,19 @@
-<div class="layout-fill layout-column layout-align-center" style="background-color: #666666">
-    <form class="layout-row layout-align-center" ng-submit="loginButton()">
-        <md-content class="layout-column" style="width: 350px; padding: 20px">
-            <div class="layout-row layout-align-center">
-                <h3>Authorization</h3>
-            </div>
+<style>
+    a {
+        color: rgb(33, 150, 243);
+    }
+    .input-container {
+        padding: 16px;
+    }
+</style>
+
+<div class="layout-fill layout-column layout-align-center-center" style="background: url(img/background.png) center center no-repeat;">
+    <form class="layout-column" ng-submit="loginButton()" style="width: 350px; box-shadow: 0 0 25px black;">
+        <div style="height: 6px; background-color: rgb(33, 150, 243)"></div>
+        <div class="layout-row layout-align-center" style="background-color: black">
+            <h3>{{toggleLoginReg ? "Authorization" : "Registration"}}</h3>
+        </div>
+        <md-content class="layout-column input-container" ng-show="toggleLoginReg == true">
             <md-input-container>
                 <label>Email</label>
                 <input type="email" ng-model="login" ng-required="true">
@@ -14,7 +24,7 @@
             </md-input-container>
             <div class="div" ng-show="message" style="margin-top: 20px; color: red;">{{message}}</div>
             <div class="layout-row" style="margin-top: 20px;">
-                <md-button type="submit" class="flex-40 md-raised">
+                <md-button class="flex-40 md-raised" ng-click="toggleLoginReg = false">
                     Sign Up
                 </md-button>
                 <div class="flex"></div>
@@ -22,6 +32,23 @@
                     Sign In
                 </md-button>
             </div>
+        </md-content>
+        <md-content class="layout-column input-container" ng-show="toggleLoginReg == false">
+            <md-input-container>
+                <label>Email</label>
+                <input type="email" ng-model="login" ng-required="true">
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" ng-model="password" ng-required="true" minlength="8">
+            </md-input-container>
+            <md-checkbox ng-model="agreeWithTeems" class="md-align-top-left" style="margin: 16px 0" required>
+                I agree to <a href="terms.html" target="_blank">the terms of use</a>
+            </md-checkbox>
+            <div class="div" ng-show="message" style="margin-top: 20px; color: red;">{{message}}</div>
+            <md-button type="submit" ng-disabled="!agreeWithTeems" class="md-raised">
+                Sign Up
+            </md-button>
         </md-content>
     </form>
 </div>

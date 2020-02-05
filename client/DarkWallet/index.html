@@ -36,22 +36,6 @@
         outline: 1px solid #000000;
     }
 
-    .prev-button, .next-button {
-        background-color: #444444;
-    }
-
-    .prev-button {
-        position: absolute;
-        top: 6px;
-        left: 0;
-    }
-
-    .next-button {
-        position: absolute;
-        top: 6px;
-        right: 0;
-    }
-
     .buy-sale-delimiter {
         width: 4px;
         background-color: rgb(33, 150, 243);
@@ -97,7 +81,7 @@
                 </md-content>
                 <md-content class="layout-column" ng-repeat="coin in have_coins">
                     <md-card class="layout-column" style="padding: 16px 16px 16px 24px;" md-ink-ripple
-                             ng-click="updateData(coin.coin_code)">
+                             ng-click="openCoin(coin.coin_code)">
                         <div class="layout-row">
                             <big><b>{{coin.coin_count + " " + coin.coin_code}}</b></big>
                         </div>
@@ -160,13 +144,13 @@
                 ng-show="windowWidth >= 600 || activeWindow == 1">
         <div class="layout-column flex" ng-show="toggleExchangeFragment">
             <div class="layout-row layout-align-center-center header" style="background-color: #666666;">
-                <md-button class="md-fab md-mini hide-gt-xs prev-button" ng-click="activeWindow = 0">
+                <md-button class="md-fab md-mini hide-gt-xs " ng-click="activeWindow = 0">
                     <md-icon md-svg-src="img/back.svg"></md-icon>
                 </md-button>
                 <div class="layout-row layout-align-center flex">
                     <h2>Exchange service</h2>
                 </div>
-                <md-button class="md-fab md-mini hide-gt-xs next-button" ng-click="activeWindow = 2">
+                <md-button class="md-fab md-mini hide-gt-xs " ng-click="activeWindow = 2">
                     <md-icon md-svg-src="img/next.svg"></md-icon>
                 </md-button>
             </div>
@@ -183,9 +167,9 @@
                         <b>{{offer.start_have_coin_count + " " + offer.have_coin_code + " ➠ " +
                             offer.start_want_coin_count + " " + offer.want_coin_code}}</b>
                         <div class="flex"></div>
-                        <b>Left {{offer.have_coin_count+ " " + offer.have_coin_code}}</b>
-                        <b style="position: absolute; left: 50%;
-                        transform: translate(-50%, 0);">Progress {{offer.offer_progress}}%</b>
+                        <b>Progress {{offer.offer_progress}}%</b>
+                        <div ng-show="windowWidth >= 600" class="flex"></div>
+                        <b ng-show="windowWidth >= 600">Left {{offer.have_coin_count+ " " + offer.have_coin_code}}</b>
                     </div>
                 </md-card>
                 <div class="layout-row layout-align-center">
@@ -302,7 +286,7 @@
                 ng-show="windowWidth >= 1280 || activeWindow == 2">
         <div class="layout-column flex" ng-show="toggleCreateCoinFragment">
             <div class="layout-row layout-align-start-center header" style="background-color: #666666; ">
-                <md-button class="md-fab md-mini hide-gt-xs prev-button" ng-click="activeWindow = 1">
+                <md-button class="md-fab md-mini hide-gt-xs " ng-click="activeWindow = 1">
                     <md-icon md-svg-src="img/back.svg"></md-icon>
                 </md-button>
                 <div class="layout-row layout-align-center flex">
