@@ -9,9 +9,9 @@ if (!isset($db_host) || !isset($db_user) || !isset($db_pass) || !isset($db_name)
     die("create properties.php file with next body:\n"
         . "<?php\n"
         . "\$db_host=\"xxxx\";\n"
+        . "\$db_name=\"xxxx\";\n"
         . "\$db_user=\"xxxx\";\n"
-        . "\$db_pass=\"xxxx\";\n"
-        . "\$db_name=\"xxxx\";\n");
+        . "\$db_pass=\"xxxx\";\n");
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;
 if ($mysql_conn == null)

@@ -7,6 +7,7 @@ $user_login = get("user_login");
 $user_password = get("user_password");
 $token = get_int("token");
 $stock_token = get("stock_token");
+$without_verification = get("without_verification");
 $message = "";
 $user = null;
 
@@ -45,28 +46,38 @@ if ($user_login != null && $user_password != null) {
     $user = selectMap("select * from users where user_login = '$user_login'");
     $password_hash = hash("sha256", $user_password);
     if ($user != null) {
-        $token = random_id();
-        if ($user["user_password_hash"] == $password_hash) {
-            updateList("users", array(
-                "user_session_token" => $token,
-            ), "user_id", $user["user_id"]);
-            $user["user_session_token"] = $token;
-        } else {
-            $message = "Password is not correct";
-        }
+        if ($user["user_stock_token"] != null){
+            $token = random_id();
+            if ($user["user_password_hash"] == $password_hash) {
+                updateList("users", array(
+                    "user_session_token" => $token,
+                ), "user_id", $user["user_id"]);
+                $user["user_session_token"] = $token;
+            } else
+                $message = "Password is not correct";
+        } else
+            $message = "Open your email and verify your account";
     } else {
-        $token = random_id();
-        $user_verify_token = random_id();
-        insertList("users", array(
-            "user_login" => $user_login,
-            "user_password_hash" => $password_hash,
-            "user_session_token" => $token,
-            "user_stock_token" => random_id(),
-            "user_verify_token" => $user_verify_token,
-        ));
-        echo "LOGIN VALIDATION NOT FINISHED";
-        $validation_link = $host_url . "verify.php?user_validation_token=". $user_verify_token;
-        send($user_login, "DarkCoin registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
+        if ($without_verification != null){
+            $token = random_id();
+            insertList("users", array(
+                "user_login" => $user_login,
+                "user_password_hash" => $password_hash,
+                "user_session_token" => $token,
+                "user_stock_token" => random_id(),
+            ));
+        } else {
+            $token = random_id();
+            insertList("users", array(
+                "user_login" => $user_login,
+                "user_password_hash" => $password_hash,
+                "user_session_token" => $token,
+            ));
+
+            $validation_link = str_replace("/api/", "/index.html", $host_url) . "#!/login/" . $token;
+            send($user_login, "DarkCoin registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
+            $message = "please verify your email address";
+        }
     }
 }
 
@@ -97,6 +108,11 @@ if ($message != null)
     die(json_encode(array(
         "message" => $message
     )));
+
+if ($user["user_stock_token"] == null) {
+    $user["user_stock_token"] = random_id();
+    updateList("users", array("user_stock_token" => $user["user_stock_token"]), "user_id", $user_id);
+}
 
 
 
