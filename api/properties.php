@@ -8,3 +8,6 @@ $start_node_locations = [
     "http://localhost/DarkNet/node/node",
 ];
 $exchange_host_url =  "http://localhost/DarkNet/stock/";
+
+$gmail_email = "darkcoin.store@gmail.com";
+$gmail_password = "qzwxecrv123!";
