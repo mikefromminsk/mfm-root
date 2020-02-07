@@ -34,7 +34,7 @@ $message = null;
                 $message = $message == null && query($insert_domain_keys_sql) ? null : "insert_domain_keys_sql error";
                 $message = $message == null && query($insert_domains_sql) ? null : "insert_domain_keys_sql error";
             }
-
+            send($user["user_login"], "You created new DarkCoin", "Congratulations you created yourself coin with name $coin_name.");
             //$servers = selectList("select * from servers where server_location != '$node_url' order by ");
             // send 1 coin and 50 usd to exchange server
 

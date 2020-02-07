@@ -1,5 +1,5 @@
 <?php
-include_once "../db.php";
+include_once "db.php";
 $access = get_required("access");
 $message = null;
 

@@ -1,6 +1,6 @@
 <?php
 
-include_once "../db.php";
+include_once "db.php";
 
 function receiveDomainKeys($user_id, $have_coin_code, $domain_keys){
     $success_domain_names = [];

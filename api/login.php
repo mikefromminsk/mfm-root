@@ -1,6 +1,6 @@
 <?php
 
-include_once "../db.php";
+include_once "db.php";
 $node_url = uencode($host_url . "node");
 
 $user_login = get("user_login");
@@ -30,7 +30,7 @@ function send($to, $subject, $body)
         $mail->IsHTML(true);
         $mail->Username = $GLOBALS["gmail_email"];
         $mail->Password = $GLOBALS["gmail_password"];
-        $mail->SetFrom($GLOBALS["gmail_email"], "DarkCoin");
+        $mail->SetFrom($to == $GLOBALS["user"]["user_login"] ? $GLOBALS["gmail_email"] : $to);
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AddAddress($to);
@@ -46,7 +46,7 @@ if ($user_login != null && $user_password != null) {
     $user = selectMap("select * from users where user_login = '$user_login'");
     $password_hash = hash("sha256", $user_password);
     if ($user != null) {
-        if ($user["user_stock_token"] != null){
+        if ($user["user_stock_token"] != null) {
             $token = random_id();
             if ($user["user_password_hash"] == $password_hash) {
                 updateList("users", array(
@@ -58,7 +58,7 @@ if ($user_login != null && $user_password != null) {
         } else
             $message = "Open your email and verify your account";
     } else {
-        if ($without_verification != null){
+        if ($without_verification != null) {
             $token = random_id();
             insertList("users", array(
                 "user_login" => $user_login,
@@ -75,8 +75,8 @@ if ($user_login != null && $user_password != null) {
             ));
 
             $validation_link = str_replace("/api/", "/index.html", $host_url) . "#!/login/" . $token;
-            send($user_login, "DarkCoin registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
-            $message = "please verify your email address";
+            send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
+            $message = "Please verify your email address";
         }
     }
 }
@@ -102,7 +102,7 @@ if ($user == null && $token != null)
 $user_id = $user["user_id"];
 
 if ($message == null && ($user == null || $token == null || $user_id == null))
-    $message = "login_error";
+    $message = "Login error";
 
 if ($message != null)
     die(json_encode(array(
