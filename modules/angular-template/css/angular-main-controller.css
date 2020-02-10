@@ -14,7 +14,7 @@ html{
 
 .view-frame.ng-enter,
 .view-frame.ng-leave {
-    background: white;
+    background-color: rgb(48, 48, 48);
     left: 0;
     position: absolute;
     right: 0;
