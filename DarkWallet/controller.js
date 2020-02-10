@@ -1,5 +1,4 @@
-controller("DarkWallet", function ($scope, $window, $http,
-                                   api_url, exchange_api_url) {
+controller("DarkWallet", function ($scope, $window, $http) {
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
     angular.element($window).bind('resize', function () {
@@ -40,7 +39,7 @@ controller("DarkWallet", function ($scope, $window, $http,
     }
 
     $scope.updateData = function (coin_code) {
-        $http.post(api_url + "wallet.php", {
+        $http.post(pathToRootDir + "api/wallet.php", {
             token: token,
         }).then(function (response) {
             if (response.data.message == null) {
@@ -48,8 +47,9 @@ controller("DarkWallet", function ($scope, $window, $http,
                 $scope.have_coins = response.data.have_coins;
                 $scope.have_coin_code = coin_code || $scope.have_coins[0]["coin_code"]
                 $scope.want_coin_code = $scope.coins[0] === $scope.have_coin_code ? $scope.coins[1] : $scope.coins[0]
+                $scope.exchange_server_script = response.data.exchange_server_script
 
-                $http.post(exchange_api_url + "stock.php", {
+                $http.post($scope.exchange_server_script, {
                     stock_token: stock_token,
                     have_coin_code: $scope.have_coin_code,
                     want_coin_code: $scope.want_coin_code,
@@ -103,7 +103,7 @@ controller("DarkWallet", function ($scope, $window, $http,
     $scope.createCoin = function () {
         $scope.create_coin_message = null
         $scope.create_coin_request_in_progress = true;
-        $http.post(api_url + "create_coin.php", {
+        $http.post(pathToRootDir + "api/create_coin.php", {
             token: token,
             coin_name: $scope.newCoinName,
             coin_code: $scope.newCoinCode,
@@ -155,7 +155,7 @@ controller("DarkWallet", function ($scope, $window, $http,
     $scope.exchange = function () {
         $scope.exchange_message = null
         $scope.exchange_in_progress = true
-        $http.post(api_url + "exchange.php", {
+        $http.post(pathToRootDir + "api/exchange.php", {
             token: token,
             have_coin_code: $scope.offer_have_coin_code,
             have_coin_count: $scope.offer_have_coin_count,
@@ -205,7 +205,7 @@ controller("DarkWallet", function ($scope, $window, $http,
     $scope.send = function () {
         $scope.send_message = null
         $scope.send_request_in_progress = true
-        $http.post(api_url + "send.php", {
+        $http.post(pathToRootDir + "api/send.php", {
             token: token,
             receiver_user_login: $scope.send_user_login,
             coin_code: $scope.send_coin_code,

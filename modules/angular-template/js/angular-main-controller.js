@@ -54,7 +54,7 @@ function loader(scriptPath) {
     };
 }
 
-let pathToRootDir = window.location.pathname
+let pathToRootDir = window.location.origin + window.location.pathname
 if (pathToRootDir.endsWith("index.html"))
     pathToRootDir = pathToRootDir.substr(0, pathToRootDir.length - "index.html".length)
 

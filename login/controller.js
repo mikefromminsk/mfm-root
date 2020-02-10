@@ -1,4 +1,4 @@
-controller("login", function ($scope, $http, $routeParams, api_url) {
+controller("login", function ($scope, $http, $routeParams) {
     $scope.toggleLoginReg = true
     $scope.userToken = $routeParams.arg0
 
@@ -11,7 +11,7 @@ controller("login", function ($scope, $http, $routeParams, api_url) {
     $scope.loginButton = function () {
         $scope.login_request_in_progress = true
         store.clear()
-        $http.post(api_url + "login_check.php", {
+        $http.post(pathToRootDir + "api/login_check.php", {
             user_login: $scope.login,
             user_password: $scope.password,
         })
@@ -27,12 +27,12 @@ controller("login", function ($scope, $http, $routeParams, api_url) {
                 }
             }, function () {
                 $scope.login_request_in_progress = false
-                alert("Connection failed to " + api_url)
+                alert("Connection failed to server")
             })
     }
 
     if ($scope.userToken != null){
-        $http.post(api_url + "login_check.php", {
+        $http.post(pathToRootDir + "api/login_check.php", {
             token: $scope.userToken,
         })
             .then(function (response) {
@@ -49,7 +49,7 @@ controller("login", function ($scope, $http, $routeParams, api_url) {
                     $scope.message = "Verification fail. Please login again"
                 }
             }, function () {
-                alert("Connection failed to " + api_url)
+                alert("Connection failed to server")
             });
 
     }
