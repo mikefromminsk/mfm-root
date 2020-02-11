@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 01 2020 г., 11:46
+-- Время создания: Фев 11 2020 г., 06:05
 -- Версия сервера: 10.4.10-MariaDB
 -- Версия PHP: 7.3.12
 
@@ -94,6 +94,22 @@ CREATE TABLE IF NOT EXISTS `offers` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `servers`
+--
+
+DROP TABLE IF EXISTS `servers`;
+CREATE TABLE IF NOT EXISTS `servers` (
+  `server_id` int(11) NOT NULL AUTO_INCREMENT,
+  `server_location` varchar(256) NOT NULL,
+  `server_sync_time` int(11) NOT NULL,
+  `server_success_request_count` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`server_id`),
+  UNIQUE KEY `server_location` (`server_location`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `users`
 --
 
@@ -103,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_login` varchar(64) NOT NULL,
   `user_password_hash` varchar(64) NOT NULL,
   `user_session_token` bigint(14) NOT NULL,
-  `user_stock_token` bigint(14) NOT NULL,
+  `user_stock_token` bigint(14) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_session_token` (`user_session_token`),
   UNIQUE KEY `user_stock_token` (`user_stock_token`)

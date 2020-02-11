@@ -3,8 +3,8 @@ controller("login", function ($scope, $http, $routeParams) {
     $scope.userToken = $routeParams.arg0
 
     $scope.message = null
-    $scope.login = "selevich@mail.ru"
-    $scope.password = "12345678"
+    $scope.login = null
+    $scope.password = null
     $scope.agreeWithTeems = false
 
     $scope.login_request_in_progress = false;
@@ -18,7 +18,7 @@ controller("login", function ($scope, $http, $routeParams) {
             .then(function (response) {
                 $scope.login_request_in_progress = false
                 if (response.data.message == null) {
-                    store.set("user_login", $scope.login)
+                    store.set("user_login", response.data.user_login)
                     store.set("user_session_token", response.data.user_session_token)
                     store.set("user_stock_token", response.data.user_stock_token)
                     $scope.open('DarkWallet')
@@ -37,7 +37,7 @@ controller("login", function ($scope, $http, $routeParams) {
         })
             .then(function (response) {
                 if (response.data.message == null) {
-                    store.set("user_login", $scope.login)
+                    store.set("user_login", response.data.user_login)
                     store.set("user_session_token", response.data.user_session_token)
                     store.set("user_stock_token", response.data.user_stock_token)
                     setTimeout(function () {

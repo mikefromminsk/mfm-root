@@ -30,13 +30,16 @@
             </md-input-container>
             <div class="div" ng-show="message" style="color: red;">{{message}}</div>
             <div class="layout-row">
-                <md-button class="flex-40 md-raised" ng-click="toggleLoginReg = false">
+                <md-button class="flex-40 md-raised" ng-click="toggleLoginReg = false" ng-disabled="login_request_in_progress">
                     Sign Up
                 </md-button>
                 <div class="flex"></div>
-                <md-button type="submit" class="flex-40 md-raised md-primary">
-                    Sign In
-                </md-button>
+                <div class="layout-column flex-40">
+                    <md-button type="submit" class="md-raised md-primary" ng-disabled="login_request_in_progress">
+                        Sign In
+                    </md-button>
+                    <md-progress-linear md-mode="query" ng-disabled="!login_request_in_progress"></md-progress-linear>
+                </div>
             </div>
         </md-content>
         <md-content class="input-container layout-column " ng-show="userToken == null && toggleLoginReg == false">

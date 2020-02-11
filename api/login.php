@@ -20,24 +20,26 @@ require("PHPMailer/SMTP.php");
 
 function send($to, $subject, $body)
 {
+    if ($GLOBALS["email_server_secure"] != null && !extension_loaded('openssl'))
+        return "openssl not available";
     try {
         $mail = new PHPMailer\PHPMailer\PHPMailer(true);
         $mail->IsSMTP();
+        $mail->Host = $GLOBALS["email_server_host"];
+        $mail->SMTPSecure = $GLOBALS["email_server_security"];
+        $mail->Port = $GLOBALS["email_server_port"];
         $mail->SMTPAuth = true;
-        $mail->SMTPSecure = 'ssl';
-        $mail->Host = "smtp.gmail.com";
-        $mail->Port = 465;
+        $mail->Username = $GLOBALS["email_login"];
+        $mail->Password = $GLOBALS["email_password"];
+        $mail->SetFrom($to == $GLOBALS["email_login"] ? $GLOBALS["email_login"] : $to);
         $mail->IsHTML(true);
-        $mail->Username = $GLOBALS["gmail_email"];
-        $mail->Password = $GLOBALS["gmail_password"];
-        $mail->SetFrom($to == $GLOBALS["user"]["user_login"] ? $GLOBALS["gmail_email"] : $to);
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AddAddress($to);
         $mail->send();
         return true;
     } catch (PHPMailer\PHPMailer\Exception $e) {
-        return false;
+        return $e->getTraceAsString();
     }
 }
 
@@ -68,15 +70,18 @@ if ($user_login != null && $user_password != null) {
             ));
         } else {
             $token = random_id();
-            insertList("users", array(
-                "user_login" => $user_login,
-                "user_password_hash" => $password_hash,
-                "user_session_token" => $token,
-            ));
-
             $validation_link = str_replace("/api/", "/index.html", $host_url) . "#!/login/" . $token;
-            send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
-            $message = "Please verify your email address";
+            $send_result = send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
+            if ($send_result === true) {
+                insertList("users", array(
+                    "user_login" => $user_login,
+                    "user_password_hash" => $password_hash,
+                    "user_session_token" => $token,
+                ));
+                $message = "Please verify your email address";
+            } else {
+                $message = $send_result;
+            }
         }
     }
 }
