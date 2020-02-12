@@ -1,4 +1,5 @@
 controller("DarkWallet", function ($scope, $window, $http) {
+    $scope.hostname = window.location.hostname
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
     angular.element($window).bind('resize', function () {
@@ -8,7 +9,7 @@ controller("DarkWallet", function ($scope, $window, $http) {
 
     $scope.toggleSendFragment = true
     $scope.toggleExchangeFragment = true
-    $scope.toggleCreateCoinFragment = true
+    $scope.toggleCreateCoinFragment = false
 
     $scope.show = function (fragmentName) {
         $scope.toggleSendFragment = !$scope.toggleSendFragment || fragmentName !== "send";
@@ -100,6 +101,7 @@ controller("DarkWallet", function ($scope, $window, $http) {
     $scope.create_coin_request_in_progress = false
     $scope.newCoinName = ""
     $scope.newCoinCode = ""
+    $scope.agreeWithPublicationOnExchangeStock = false
     $scope.createCoin = function () {
         $scope.create_coin_message = null
         $scope.create_coin_request_in_progress = true;
@@ -234,5 +236,8 @@ controller("DarkWallet", function ($scope, $window, $http) {
         $scope.toggleExchangeFragment = true
         $scope.toggleCreateCoinFragment = false
     }
+
+
+
 
 })

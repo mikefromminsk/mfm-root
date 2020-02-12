@@ -63,7 +63,7 @@
                         </md-button>
                     </div>
                     <div class="layout-column layout-align-center-center" style="height: 200px">
-                        <h1>DarkWallet</h1>
+                        <h1>{{hostname}}</h1>
                     </div>
                     <div class="layout-row layout-align-center">
                         <div class="layout-row flex-80">
@@ -107,36 +107,42 @@
                 Send
             </md-button>
         </div>
-        <form class="layout-column layout-align-center-center  flex" ng-show="!toggleSendFragment"
-              style="background-color: #444444" ng-submit="send()">
-            <md-card class="layout-column" style="padding: 20px; width: 300px;">
-                <md-input-container>
-                    <label>Receiver login</label>
-                    <input type="email" ng-model="send_user_login" required maxlength="256"
-                           placeholder="example@gmail.com">
-                </md-input-container>
-                <div class="layout-row">
-                    <md-input-container>
-                        <label>Coin</label>
-                        <md-select ng-model="send_coin_code" required>
-                            <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}
-                            </md-option>
-                        </md-select>
-                    </md-input-container>
-                    <md-input-container class="flex">
-                        <label>Count</label>
-                        <input type="number" ng-model="send_coin_count" required
-                               min="1" max="{{getHaveCoin(send_coin_code)['coin_count']}}">
-                    </md-input-container>
+        <div class="layout-column layout-align-center-center flex" ng-show="!toggleSendFragment"
+             style="background-color: #444444">
+            <form class="input-wrapper layout-column" ng-submit="send()">
+                <div class="input-header layout-row layout-align-center">
+                    <h3>Send</h3>
                 </div>
-                <div ng-show="send_message != null" style="color: red">{{send_message}}</div>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px"
-                           ng-disabled="send_request_in_progress">
-                    Send
-                </md-button>
-                <md-progress-linear md-mode="query" ng-disabled="!send_request_in_progress"></md-progress-linear>
-            </md-card>
-        </form>
+                <md-content class="input-container layout-column">
+                    <md-input-container>
+                        <label>Receiver login</label>
+                        <input type="email" ng-model="send_user_login" required maxlength="256"
+                               placeholder="example@gmail.com">
+                    </md-input-container>
+                    <div class="layout-row">
+                        <md-input-container>
+                            <label>Coin</label>
+                            <md-select ng-model="send_coin_code" required>
+                                <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">{{coin.coin_code}}
+                                </md-option>
+                            </md-select>
+                        </md-input-container>
+                        <md-input-container class="flex">
+                            <label>Count</label>
+                            <input type="number" ng-model="send_coin_count" required
+                                   min="1" max="{{getHaveCoin(send_coin_code)['coin_count']}}">
+                        </md-input-container>
+                    </div>
+                    <div ng-show="send_message != null" style="color: red">{{send_message}}</div>
+                    <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px"
+                               ng-disabled="send_request_in_progress">
+                        Send
+                        <md-progress-linear md-mode="query"
+                                            ng-disabled="!send_request_in_progress"></md-progress-linear>
+                    </md-button>
+                </md-content>
+            </form>
+        </div>
     </md-content>
 
 
@@ -224,61 +230,65 @@
         <md-button class="md-raised md-primary header" ng-click="show('exchange')">
             Exchange
         </md-button>
-        <form class="layout-column layout-align-center-center  flex" ng-show="!toggleExchangeFragment"
-              style="background-color: #444444" ng-submit="exchange()">
-            <md-card class="layout-column" style="padding: 20px; max-width: 400px">
-                <div class="layout-row">
-                    <div class="layout-column">
-                        <md-input-container>
-                            <label>Coin</label>
-                            <md-select ng-model="offer_have_coin_code" required>
-                                <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">
-                                    {{coin.coin_code}}
-                                </md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container>
-                            <label>Count</label>
-                            <input type="number" ng-model="offer_have_coin_count" required maxlength="5"
-                                   ng-change="offerHaveCoinCountChange()">
-                        </md-input-container>
-                    </div>
-                    <div class="layout-column">
-                        <div class="layout-row layout-align-center">
-                            <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
-                                <md-icon md-svg-src="img/next.svg"></md-icon>
-                            </md-button>
-                        </div>
-                        <div class="flex"></div>
-                        <md-input-container>
-                            <label>Rate</label>
-                            <input type="number" ng-model="offer_rate" step="0.0001" required maxlength="10"
-                                   ng-change="offerRateChange()">
-                        </md-input-container>
-                    </div>
-                    <div class="layout-column">
-                        <md-input-container>
-                            <label>Coin</label>
-                            <md-select ng-model="offer_want_coin_code" required>
-                                <md-option ng-repeat="coin in coins" value="{{coin}}">{{coin}}</md-option>
-                            </md-select>
-                        </md-input-container>
-                        <md-input-container>
-                            <label>Count</label>
-                            <input type="number" ng-model="offer_want_coin_count" required maxlength="5"
-                                   ng-change="offerWantCoinCountChange()">
-                        </md-input-container>
-                    </div>
+        <div class="layout-column layout-align-center-center flex" ng-show="!toggleExchangeFragment"
+             style="background-color: #444444">
+            <form class="input-wrapper layout-column" ng-submit="exchange()">
+                <div class="input-header layout-row layout-align-center">
+                    <h3>Exchange</h3>
                 </div>
-
-                <div ng-show="exchange_message != null" style="color: red">{{exchange_message}}</div>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px"
-                           ng-disabled="exchange_in_progress">
-                    Exchange
-                </md-button>
-                <md-progress-linear md-mode="query" ng-disabled="!exchange_in_progress"></md-progress-linear>
-            </md-card>
-        </form>
+                <md-content class="input-container layout-column">
+                    <div class="layout-row">
+                        <div class="layout-column">
+                            <md-input-container>
+                                <label>Coin</label>
+                                <md-select ng-model="offer_have_coin_code" required>
+                                    <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">
+                                        {{coin.coin_code}}
+                                    </md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Count</label>
+                                <input type="number" ng-model="offer_have_coin_count" required maxlength="5"
+                                       ng-change="offerHaveCoinCountChange()">
+                            </md-input-container>
+                        </div>
+                        <div class="layout-column">
+                            <div class="layout-row layout-align-center">
+                                <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
+                                    <md-icon md-svg-src="img/next.svg"></md-icon>
+                                </md-button>
+                            </div>
+                            <div class="flex"></div>
+                            <md-input-container>
+                                <label>Rate</label>
+                                <input type="number" ng-model="offer_rate" step="0.0001" required maxlength="10"
+                                       ng-change="offerRateChange()">
+                            </md-input-container>
+                        </div>
+                        <div class="layout-column">
+                            <md-input-container>
+                                <label>Coin</label>
+                                <md-select ng-model="offer_want_coin_code" required>
+                                    <md-option ng-repeat="coin in coins" value="{{coin}}">{{coin}}</md-option>
+                                </md-select>
+                            </md-input-container>
+                            <md-input-container>
+                                <label>Count</label>
+                                <input type="number" ng-model="offer_want_coin_count" required maxlength="5"
+                                       ng-change="offerWantCoinCountChange()">
+                            </md-input-container>
+                        </div>
+                    </div>
+                    <div ng-show="exchange_message != null" style="color: red">{{exchange_message}}</div>
+                    <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px"
+                               ng-disabled="exchange_in_progress">
+                        Exchange
+                        <md-progress-linear md-mode="query" ng-disabled="!exchange_in_progress"></md-progress-linear>
+                    </md-button>
+                </md-content>
+            </form>
+        </div>
     </md-content>
 
 
@@ -313,26 +323,49 @@
         <md-button class="md-raised md-primary header" ng-click="show('create_coin')">
             Create coin
         </md-button>
-        <form class="layout-column layout-align-center-center flex" ng-show="!toggleCreateCoinFragment"
-              style="background-color: #444444" ng-submit="createCoin()">
-            <md-card class="layout-column" style="padding: 20px">
-                <md-input-container>
-                    <label>Full name of Your Coin</label>
-                    <input ng-model="newCoinName" required minlength="3" maxlength="30">
-                </md-input-container>
-                <md-input-container>
-                    <label>Code of Your Coin</label>
-                    <input ng-model="newCoinCode" minlength="3" maxlength="5" style="text-transform: uppercase;"
-                           required>
-                </md-input-container>
+        <div class="layout-column layout-align-center-center flex" ng-show="!toggleCreateCoinFragment"
+             style="background-color: #444444">
+            <form class="input-wrapper layout-column" target="_blank"
+                  method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">
+                <div class="input-header layout-row layout-align-center">
+                    <h3>Create coin</h3>
+                </div>
+                <md-content class="input-container layout-column">
+                    <md-input-container>
+                        <label>Full name of Your Coin</label>
+                        <input ng-model="newCoinName" required minlength="3" maxlength="30">
+                    </md-input-container>
+                    <md-input-container>
+                        <label>Code of Your Coin</label>
+                        <input ng-model="newCoinCode" minlength="3" maxlength="5" style="text-transform: uppercase;"
+                               required>
+                    </md-input-container>
+                    <md-checkbox ng-model="agreeWithPublicationOnExchangeStock">
+                        Publication on exchange stock
+                    </md-checkbox>
+                    <div ng-show="agreeWithPublicationOnExchangeStock">
+                        Exchange stock fee: 325 RUB
+                    </div>
 
-                <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
-                <md-button type="submit" class="md-raised md-primary" style="margin-top: 20px;"
-                           ng-disabled="create_coin_request_in_progress">
-                    Create coin
-                </md-button>
-                <md-progress-linear md-mode="query" ng-disabled="!create_coin_request_in_progress"></md-progress-linear>
-            </md-card>
-        </form>
+                    <input type="hidden" name="receiver" value="410016298318202">
+                    <input type="hidden" name="quickpay-form" value="donate">
+                    <input type="hidden" name="targets" value="Transaction {{1}}">
+                    <input type="hidden" name="sum" value="122" data-type="number">
+                    <md-radio-group name="paymentType" ng-show="agreeWithPublicationOnExchangeStock">
+                        <md-radio-button value="PC" class="md-primary">Яндекс.Деньгами</md-radio-button>
+                        <md-radio-button value="AC"> Банковской картой</md-radio-button>
+                    </md-radio-group>
+
+                    <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
+                    <md-button type="submit" class="md-raised md-primary"
+                               style="margin-top: 20px; background-color: green"
+                               ng-disabled="create_coin_request_in_progress">
+                        {{agreeWithPublicationOnExchangeStock ? "Create public coin" : "Create coin"}}
+                        <md-progress-linear md-mode="query"
+                                            ng-disabled="!create_coin_request_in_progress"></md-progress-linear>
+                    </md-button>
+                </md-content>
+            </form>
+        </div>
     </md-content>
 </div>

@@ -2,24 +2,15 @@
     a {
         color: rgb(33, 150, 243);
     }
-
-    .input-container {
-        padding: 16px;
-    }
-
-    .input-container > * {
-        margin: 16px 0 0 0;
-    }
 </style>
 
 <div class="layout-fill layout-column layout-align-center-center"
      style="background: url(img/background.png) center center no-repeat;">
-    <form class="layout-column" ng-submit="loginButton()" style="width: 350px; box-shadow: 0 0 25px black;">
-        <div style="height: 6px; background-color: rgb(33, 150, 243)"></div>
-        <div class="layout-row layout-align-center" style="background-color: black">
+    <form class="input-wrapper layout-column" ng-submit="loginButton()">
+        <div class="input-header layout-row layout-align-center">
             <h3>{{userToken != null ? "Verification" : toggleLoginReg ? "Authorization" : "Registration"}}</h3>
         </div>
-        <md-content class="input-container layout-column " ng-show="userToken == null && toggleLoginReg == true">
+        <md-content class="input-container layout-column" ng-show="userToken == null && toggleLoginReg == true">
             <md-input-container>
                 <label>Email</label>
                 <input type="email" ng-model="login" ng-required="true">
@@ -37,12 +28,12 @@
                 <div class="layout-column flex-40">
                     <md-button type="submit" class="md-raised md-primary" ng-disabled="login_request_in_progress">
                         Sign In
+                        <md-progress-linear md-mode="query" ng-disabled="!login_request_in_progress"></md-progress-linear>
                     </md-button>
-                    <md-progress-linear md-mode="query" ng-disabled="!login_request_in_progress"></md-progress-linear>
                 </div>
             </div>
         </md-content>
-        <md-content class="input-container layout-column " ng-show="userToken == null && toggleLoginReg == false">
+        <md-content class="input-container layout-column" ng-show="userToken == null && toggleLoginReg == false">
             <md-input-container>
                 <label>Email</label>
                 <input type="email" ng-model="login" ng-required="true">
@@ -57,8 +48,8 @@
             <div class="layout-column">
                 <md-button type="submit" ng-disabled="!agreeWithTeems && !login_request_in_progress" class="md-raised">
                     Sign Up
+                    <md-progress-linear md-mode="query" ng-disabled="!login_request_in_progress"></md-progress-linear>
                 </md-button>
-                <md-progress-linear md-mode="query" ng-disabled="!login_request_in_progress"></md-progress-linear>
             </div>
             <div class="div" ng-show="message" style="color: rgb(33, 150, 243);">{{message}}</div>
         </md-content>
