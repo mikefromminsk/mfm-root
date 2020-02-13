@@ -4,6 +4,8 @@ include_once "login.php";
 
 echo json_encode(array(
     "exchange_server_script" =>  $exchange_host_url . "/api/stock.php",
+    "yandex_money_wallet_id" =>  $yandex_money_wallet_id,
+    "yandex_money_registration_fee" =>  $yandex_money_registration_fee,
     "coins" => selectList("select coin_code from coins"),
     "have_coins" => select("select t1.coin_code, t2.coin_name, count(*) as coin_count from domain_keys t1 "
         . " left join coins t2 on t1.coin_code = t2.coin_code "

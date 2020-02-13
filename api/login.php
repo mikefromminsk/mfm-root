@@ -1,6 +1,8 @@
 <?php
 
 include_once "db.php";
+include_once "const.php";
+
 $node_url = uencode($host_url . "node");
 
 $user_login = get("user_login");
@@ -18,8 +20,24 @@ require("PHPMailer/Exception.php");
 require("PHPMailer/PHPMailer.php");
 require("PHPMailer/SMTP.php");
 
-function send($to, $subject, $body)
+function send($to, $subject, $body, $message_type = null, $message_object_id = null)
 {
+    $to_user_id = null;
+    if (is_numeric($to)) {
+        $to_user_id = $to;
+        $to = scalar("select user_login from users where user_id = $to_user_id");
+    } else if (is_string($to)) {
+        $to_user_id = scalar("select user_id from users where user_login = '" . uencode($to) . "'");
+    }
+    if ($to_user_id != null) {
+        insertList("messages", array(
+             "user_id" => $to_user_id,
+             "message_title" => $subject,
+             "message_text" => $body,
+             "message_type" => $message_type,
+             "message_object_id" => $message_object_id,
+        ));
+    }
     if ($GLOBALS["email_server_secure"] != null && !extension_loaded('openssl'))
         return "openssl not available";
     try {

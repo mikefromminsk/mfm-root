@@ -1,4 +1,4 @@
-controller("DarkWallet", function ($scope, $window, $http) {
+controller("DarkWallet", function ($scope, $window, $http, $interval) {
     $scope.hostname = window.location.hostname
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
@@ -39,6 +39,9 @@ controller("DarkWallet", function ($scope, $window, $http) {
         $scope.copyButtonLabel = 'coped';
     }
 
+    $scope.yandex_money_wallet_id = null;
+    $scope.yandex_money_registration_fee = null;
+
     $scope.updateData = function (coin_code) {
         $http.post(pathToRootDir + "api/wallet.php", {
             token: token,
@@ -49,6 +52,8 @@ controller("DarkWallet", function ($scope, $window, $http) {
                 $scope.have_coin_code = coin_code || $scope.have_coins[0]["coin_code"]
                 $scope.want_coin_code = $scope.coins[0] === $scope.have_coin_code ? $scope.coins[1] : $scope.coins[0]
                 $scope.exchange_server_script = response.data.exchange_server_script
+                $scope.yandex_money_wallet_id = response.data.yandex_money_wallet_id;
+                $scope.yandex_money_registration_fee = response.data.yandex_money_registration_fee;
 
                 $http.post($scope.exchange_server_script, {
                     stock_token: stock_token,
@@ -82,6 +87,7 @@ controller("DarkWallet", function ($scope, $window, $http) {
     $scope.user_login = store.get("user_login");
     var token = store.get("user_session_token");
     var stock_token = store.get("user_stock_token");
+    $scope.token = token;
 
     $scope.have_coin_code = null
     $scope.want_coin_code = null
@@ -237,7 +243,18 @@ controller("DarkWallet", function ($scope, $window, $http) {
         $scope.toggleCreateCoinFragment = false
     }
 
+    var messagesInterval = $interval(function () {
+        $http.post(pathToRootDir + "api/messages.php", {
+            token: token,
+        }).then(function (response) {
+            if (response.data.message != null) {
 
+            }
+        })
+    }, 1000);
 
-
+    $scope.$on('$destroy', function () {
+        if (angular.isDefined(messagesInterval))
+            $interval.cancel(messagesInterval);
+    });
 })

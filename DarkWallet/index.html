@@ -326,7 +326,8 @@
         <div class="layout-column layout-align-center-center flex" ng-show="!toggleCreateCoinFragment"
              style="background-color: #444444">
             <form class="input-wrapper layout-column" target="_blank"
-                  method="POST" action="https://money.yandex.ru/quickpay/confirm.xml">
+                  method="GET" action="/api/order_create.php">
+                <input type="hidden" name="token" value="{{token}}">
                 <div class="input-header layout-row layout-align-center">
                     <h3>Create coin</h3>
                 </div>
@@ -347,10 +348,6 @@
                         Exchange stock fee: 325 RUB
                     </div>
 
-                    <input type="hidden" name="receiver" value="410016298318202">
-                    <input type="hidden" name="quickpay-form" value="donate">
-                    <input type="hidden" name="targets" value="Transaction {{1}}">
-                    <input type="hidden" name="sum" value="122" data-type="number">
                     <md-radio-group name="paymentType" ng-show="agreeWithPublicationOnExchangeStock">
                         <md-radio-button value="PC" class="md-primary">Яндекс.Деньгами</md-radio-button>
                         <md-radio-button value="AC"> Банковской картой</md-radio-button>
