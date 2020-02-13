@@ -2,22 +2,21 @@
 
 include_once "db.php";
 
-//метод — POST;
-//каждый параметр уведомления указывается в виде пары «ключ=значение» в виде параметра POST-запроса;
-//MIME-тип — application/x-www-form-urlencoded;
-//кодировка символов — UTF-8.
+$sha1_hash = get_required("sha1_hash");
 
-//$yandex_money_wallet_id = "";
-//$yandex_money_secret_code = "";
+$notification_type = get_required("notification_type");
+$operation_id = get_required("operation_id");
+$amount = get_required("amount");
+$currency = get_required("currency");
+$datetime = get_required("datetime");
+$sender = get_required("sender");
+$codepro = get_required("codepro");
+$label = get_required("label");
+$notification_secret = $yandex_money_secret_code;
 
-//notification_type	string	Для переводов из кошелька — p2p-incoming. Для переводов с произвольной карты — card-incoming.
-//operation_id	string	Идентификатор операции в истории счета получателя.
-//amount	amount	Сумма, которая зачислена на счет получателя.
-//withdraw_amount	amount	Сумма, которая списана со счета отправителя.
-//currency	string	Код валюты — всегда 643 (рубль РФ согласно ISO 4217).
-//datetime	datetime	Дата и время совершения перевода.
-//sender	string	Для переводов из кошелька — номер счета отправителя. Для переводов с произвольной карты — параметр содержит пустую строку.
-//codepro	boolean	Для переводов из кошелька — перевод защищен кодом протекции. Для переводов с произвольной карты — всегда false.
-//label	string	Метка платежа. Если ее нет, параметр содержит пустую строку.
-//sha1_hash	string	SHA-1 hash параметров уведомления.
-//unaccepted	boolean	Перевод еще не зачислен. Получателю нужно освободить место в кошельке или использовать код протекции (если codepro=true).
+$test_string = "$notification_type&$operation_id&$amount&$currency&$datetime&$sender&$codepro&$notification_secret&$label";
+$test_hash = hash("sha1", $test_string);
+
+if ($sha1_hash != $test_hash)
+    db_error(USER_ERROR, "receipt is invalid");
+

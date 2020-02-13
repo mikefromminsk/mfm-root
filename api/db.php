@@ -23,7 +23,8 @@ if ($mysql_conn->connect_error)
 $mysql_conn->set_charset("utf8");
 $GLOBALS["conn"] = $mysql_conn;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT') {
+if ($_SERVER["CONTENT_TYPE"] != 'application/x-www-form-urlencoded'
+    && ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')) {
     $inputJSON = file_get_contents('php://input');
     $inputParams = json_decode($inputJSON, true);
     foreach ($inputParams as $key => $value)
