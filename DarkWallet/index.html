@@ -83,10 +83,10 @@
                     <md-card class="layout-column" style="padding: 16px 16px 16px 24px;" md-ink-ripple
                              ng-click="openCoin(coin.coin_code)">
                         <div class="layout-row">
-                            <big><b>{{coin.coin_count + " " + coin.coin_code}}</b></big>
+                            <big><b>{{coin.coin_count + " " + coin.coin_name}}</b></big>
                         </div>
                         <div class="layout-row" style="padding: 8px 0 0 40px">
-                            <small style="color: #9e9e9e">{{"1 " + coin.coin_name + " = "
+                            <small style="color: #9e9e9e">{{"1 " + coin.coin_code + " = "
                                 + (getRate(coin.coin_code) != null ? round(getRate(coin.coin_code)) + " USD" :
                                 "no data")}}</small>
                         </div>
@@ -94,7 +94,7 @@
                 </md-content>
                 <md-content class="layout-column">
                     <md-card class="layout-row layout-align-start-center"
-                             style="padding: 16px 16px 16px 24px; background-color: #333333" md-ink-ripple
+                             style="padding: 16px 16px 16px 24px;" md-ink-ripple
                              ng-click="show('create_coin')">
                         <md-icon style="margin: 0 12px 0 0;" md-svg-src="img/add.svg"></md-icon>
                         Create Dark coin
@@ -154,7 +154,7 @@
                     <md-icon md-svg-src="img/back.svg"></md-icon>
                 </md-button>
                 <div class="layout-row layout-align-center flex">
-                    <h2>Exchange service</h2>
+                    <h2>Exchange stock</h2>
                 </div>
                 <md-button class="md-fab md-mini hide-gt-xs " ng-click="activeWindow = 2">
                     <md-icon md-svg-src="img/next.svg"></md-icon>
@@ -163,21 +163,7 @@
             <h2 class="layout-column layout-align-center-center" style="padding: 16px"
                 ng-show="buyOffers == null && haveOffers == null">There are no exchange offers yet</h2>
             <div class="layout-column flex scrollable" ng-show="buyOffers != null || haveOffers != null">
-                <div class="layout-row layout-align-center" ng-show="haveOffers != null">
-                    <h2>My exchange</h2>
-                </div>
-                <md-card ng-repeat="offer in haveOffers">
-                    <div class="top-border"></div>
-                    <div class="layout-row" style="padding: 16px;
-                    background: linear-gradient(to right, #325032 {{offer.offer_progress}}%, #444444 {{offer.offer_progress}}%, #444444 100%);">
-                        <b>{{offer.start_have_coin_count + " " + offer.have_coin_code + " ➠ " +
-                            offer.start_want_coin_count + " " + offer.want_coin_code}}</b>
-                        <div class="flex"></div>
-                        <b>Progress {{offer.offer_progress}}%</b>
-                        <div ng-show="windowWidth >= 600" class="flex"></div>
-                        <b ng-show="windowWidth >= 600">Left {{offer.have_coin_count+ " " + offer.have_coin_code}}</b>
-                    </div>
-                </md-card>
+
                 <div class="layout-row layout-align-center">
                     <h2>{{have_coin_code}} : {{want_coin_code}}</h2>
                 </div>
@@ -208,7 +194,7 @@
                         <div class="layout-column flex-50">
                             <div class="layout-row">
                                 <div class="cell cell-header flex-33">{{have_coin_code}}/{{want_coin_code}}</div>
-                                <div class="cell cell-header flex-33">Buy {{want_coin_code}}</div>
+                                <div class="cell cell-header flex-33">Sale {{want_coin_code}}</div>
                                 <div class="cell cell-header flex-33 ">Want {{have_coin_code}}</div>
                             </div>
                             <div class="layout-row" ng-repeat="offer in buyOffers">
@@ -223,6 +209,21 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </md-card>
+
+                <div class="layout-row layout-align-center" ng-show="haveOffers != null">
+                    <h2>My offers</h2>
+                </div>
+                <md-card ng-repeat="offer in haveOffers">
+                    <div class="top-border"></div>
+                    <div class="layout-row" style="padding: 16px;
+                    background: linear-gradient(to right, #325032 {{offer.offer_progress}}%, #444444 {{offer.offer_progress}}%, #444444 100%);">
+                        <b>{{offer.have_coin_code + " ➠ " + offer.want_coin_code}}</b>
+                        <div class="flex"></div>
+                        <b>Progress {{offer.offer_progress}}%</b>
+                        <div ng-show="windowWidth >= 600" class="flex"></div>
+                        <b ng-show="windowWidth >= 600">{{offer.have_coin_count+ " " + offer.have_coin_code + " ➠ " + offer.want_coin_count + " " + offer.want_coin_code}}</b>
                     </div>
                 </md-card>
             </div>
@@ -240,7 +241,7 @@
                     <div class="layout-row">
                         <div class="layout-column">
                             <md-input-container>
-                                <label>Coin</label>
+                                <label>Sale</label>
                                 <md-select ng-model="offer_have_coin_code" required>
                                     <md-option ng-repeat="coin in have_coins" value="{{coin.coin_code}}">
                                         {{coin.coin_code}}
@@ -255,20 +256,20 @@
                         </div>
                         <div class="layout-column">
                             <div class="layout-row layout-align-center">
-                                <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
+                                <md-button class="md-icon-button" ng-click=""> <!--exchangeSwapCurrencies()-->
                                     <md-icon md-svg-src="img/next.svg"></md-icon>
                                 </md-button>
                             </div>
                             <div class="flex"></div>
                             <md-input-container>
                                 <label>Rate</label>
-                                <input type="number" ng-model="offer_rate" step="0.0001" required maxlength="10"
+                                <input type="number" ng-model="offer_rate" step="0.00000001" required maxlength="10"
                                        ng-change="offerRateChange()">
                             </md-input-container>
                         </div>
                         <div class="layout-column">
                             <md-input-container>
-                                <label>Coin</label>
+                                <label>Want</label>
                                 <md-select ng-model="offer_want_coin_code" required>
                                     <md-option ng-repeat="coin in coins" value="{{coin}}">{{coin}}</md-option>
                                 </md-select>
