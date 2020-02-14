@@ -314,7 +314,7 @@
                         <div class="cell cell-header flex-50">Rate</div>
                     </div>
                     <div class="layout-row" ng-repeat="rate in rates">
-                        <div class="cell flex-50">1 {{rate.coin_code}}</div>
+                        <div class="cell flex-50">{{rate.coin_code}}</div>
                         <div class="cell flex-50">{{round(rate.offer_rate)}} USD</div>
                     </div>
                 </md-card>
@@ -326,7 +326,7 @@
         <div class="layout-column layout-align-center-center flex" ng-show="!toggleCreateCoinFragment"
              style="background-color: #444444">
             <form class="input-wrapper layout-column" target="_blank"
-                  method="GET" action="/api/order_create.php">
+                  ng-submit="createCoin()">
                 <input type="hidden" name="token" value="{{token}}">
                 <div class="input-header layout-row layout-align-center">
                     <h3>Create coin</h3>
@@ -344,14 +344,6 @@
                     <md-checkbox ng-model="agreeWithPublicationOnExchangeStock">
                         Publication on exchange stock
                     </md-checkbox>
-                    <div ng-show="agreeWithPublicationOnExchangeStock">
-                        Exchange stock fee: 325 RUB
-                    </div>
-
-                    <md-radio-group name="paymentType" ng-show="agreeWithPublicationOnExchangeStock">
-                        <md-radio-button value="PC" class="md-primary">Яндекс.Деньгами</md-radio-button>
-                        <md-radio-button value="AC"> Банковской картой</md-radio-button>
-                    </md-radio-group>
 
                     <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
                     <md-button type="submit" class="md-raised md-primary"
@@ -365,4 +357,29 @@
             </form>
         </div>
     </md-content>
+</div>
+<div style="position: absolute; right: 0; bottom: 0; max-width: 100%; padding: 16px" ng-show="messages != null">
+    <div class="input-wrapper" >
+        <div class="input-header layout-row layout-align-center-center" style="padding: 16px">
+            <h2 class="layout-row flex" style="margin: 0">{{messages[message_index].message_title}}</h2>
+            <md-button class="md-fab md-mini" style="background-color: black" ng-click="messages = null">
+                <md-icon md-svg-src="img/close.svg"></md-icon>
+            </md-button>
+        </div>
+        <md-content class="input-container layout-column " >
+            {{messages[message_index].message_text}}
+            <div class="layout-row layout-align-center-center" style="border-top: 2px solid black; padding-top: 6px" ng-show="messages.length > 1">
+                <div class="flex"></div>
+                <md-button class="md-fab md-mini" style="background-color: rgb(48,48,48)"
+                           ng-disabled="message_index == 0" ng-click="message_index = message_index - 1">
+                    <md-icon md-svg-src="img/back.svg"></md-icon>
+                </md-button>
+                {{message_index + 1}} / {{messages.length}}
+                <md-button class="md-fab md-mini" style="background-color: rgb(48,48,48)"
+                           ng-disabled="message_index == messages.length - 1" ng-click="message_index = message_index + 1">
+                    <md-icon md-svg-src="img/next.svg"></md-icon>
+                </md-button>
+            </div>
+        </md-content>
+    </div>
 </div>

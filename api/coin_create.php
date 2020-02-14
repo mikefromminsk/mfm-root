@@ -5,14 +5,15 @@ include_once "domain_utils.php";
 
 $coin_name = get_required("coin_name");
 $coin_code = get_required("coin_code");
-//$usd_keys = get_required("usd_keys");
 $coin_code = strtoupper($coin_code);
 $message = null;
 
-/*if ($usd_keys >= 10)*/ {
+/*if ($usd_keys >= 10)*/
+{
 
     /*$success_domain_names = receiveDomainKeys($user_id, $coin_code, $usd_keys);
-    if (sizeof($success_domain_names) == sizeof($usd_keys))*/ {
+    if (sizeof($success_domain_names) == sizeof($usd_keys))*/
+    {
 
         $message = insertList("coins", array(
             "coin_name" => $coin_name,
@@ -34,7 +35,31 @@ $message = null;
                 $message = $message == null && query($insert_domain_keys_sql) ? null : "insert_domain_keys_sql error";
                 $message = $message == null && query($insert_domains_sql) ? null : "insert_domain_keys_sql error";
             }
-            send($user["user_login"], "You created new DarkCoin", "Congratulations you created yourself coin with name $coin_name.");
+            if ($message == null) {
+                send($user_id, "You created new Coin", "Congratulations you created yourself coin with name $coin_name.");
+
+                if ($coin_code != "USD"){
+                    $message = http_json_post($api_url . "exchange.php", array(
+                        "token" => $user["user_session_token"],
+                        "have_coin_code" => $coin_code,
+                        "have_coin_count" => 536,
+                        "want_coin_code" => "USD",
+                        "want_coin_count" => 1,
+                    ))["message"];
+
+                    $admin = selectMap("select * from users where user_id = 1");
+                    $message = http_json_post($api_url . "exchange.php", array(
+                        "token" => $admin["user_session_token"],
+                        "have_coin_code" => "USD",
+                        "have_coin_count" => 1,
+                        "want_coin_code" => $coin_code,
+                        "want_coin_count" => 65536,
+                    ))["message"];
+                }
+            } else {
+                send(1, "Coin create error", $message);
+            }
+
             //$servers = selectList("select * from servers where server_location != '$node_url' order by ");
             // send 1 coin and 50 usd to exchange server
 

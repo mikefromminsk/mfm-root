@@ -2,8 +2,9 @@
 
 include_once "db.php";
 include_once "const.php";
+include_once "mail_utils.php";
 
-$node_url = uencode($host_url . "node");
+$node_url = uencode($api_url . "node");
 
 $user_login = get("user_login");
 $user_password = get("user_password");
@@ -15,52 +16,6 @@ $user = null;
 
 if ($user_login != null && !filter_var($user_login, FILTER_VALIDATE_EMAIL))
     db_error(USER_ERROR, "login is not email");
-
-require("PHPMailer/Exception.php");
-require("PHPMailer/PHPMailer.php");
-require("PHPMailer/SMTP.php");
-
-function send($to, $subject, $body, $message_type = null, $message_object_id = null)
-{
-    $to_user_id = null;
-    if (is_numeric($to)) {
-        $to_user_id = $to;
-        $to = scalar("select user_login from users where user_id = $to_user_id");
-    } else if (is_string($to)) {
-        $to_user_id = scalar("select user_id from users where user_login = '" . uencode($to) . "'");
-    }
-    if ($to_user_id != null) {
-        insertList("messages", array(
-             "user_id" => $to_user_id,
-             "message_title" => $subject,
-             "message_text" => $body,
-             "message_type" => $message_type,
-             "message_object_id" => $message_object_id,
-        ));
-    }
-    if ($GLOBALS["email_server_secure"] != null && !extension_loaded('openssl'))
-        return "openssl not available";
-    try {
-        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-        $mail->IsSMTP();
-        $mail->Host = $GLOBALS["email_server_host"];
-        $mail->SMTPSecure = $GLOBALS["email_server_security"];
-        $mail->Port = $GLOBALS["email_server_port"];
-        $mail->SMTPAuth = true;
-        $mail->Username = $GLOBALS["email_login"];
-        $mail->Password = $GLOBALS["email_password"];
-        $mail->SetFrom($to == $GLOBALS["email_login"] ? $GLOBALS["email_login"] : $to);
-        $mail->IsHTML(true);
-        $mail->Subject = $subject;
-        $mail->Body = $body;
-        $mail->AddAddress($to);
-        $mail->send();
-        return true;
-    } catch (PHPMailer\PHPMailer\Exception $e) {
-        return $e->getTraceAsString();
-    }
-}
-
 
 if ($user_login != null && $user_password != null) {
     $user = selectMap("select * from users where user_login = '$user_login'");
@@ -88,7 +43,7 @@ if ($user_login != null && $user_password != null) {
             ));
         } else {
             $token = random_id();
-            $validation_link = str_replace("/api/", "/index.html", $host_url) . "#!/login/" . $token;
+            $validation_link = str_replace("/api/", "", $api_url) . "#!/login/" . $token;
             $send_result = send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
             if ($send_result === true) {
                 insertList("users", array(
@@ -112,7 +67,7 @@ if ($stock_token != null) {
             "user_login" => "user" . rand(1, 1000000),
             "user_password_hash" => hash("sha256", "pass" . rand(1, 1000000)),
             "user_session_token" => $stock_token,
-            "user_stock_token" => $stock_token,
+            "user_stock_token" => random_id(),
         ));
 }
 

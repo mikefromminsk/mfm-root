@@ -55,13 +55,13 @@ if ($have_coin_count < 0 || $want_coin_count < 0) {
         $offer_have_exchange_coin_count = min($offer["have_coin_count"], $opposite_offer["want_coin_count"]);
         $opposite_have_exchange_coin_count = ceil($offer_have_exchange_coin_count * $opposite_offer["offer_rate"]);
 
-        http_json_post($offer["back_host_url"] . "receive_domain_keys", array(
+        http_json_post($offer["back_host_url"] . "receive_domain_keys.php", array(
             "back_user_login" => $offer["back_user_login"],
             "coin_code" => $opposite_offer["have_coin_code"],
             "domain_keys" => getDomainKeys($opposite_offer["user_id"], $opposite_offer["have_coin_code"], $opposite_have_exchange_coin_count)
         ));
 
-        http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys", array(
+        http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys.php", array(
             "back_user_login" => $opposite_offer["back_user_login"],
             "coin_code" => $offer["have_coin_code"],
             "domain_keys" => getDomainKeys($offer["user_id"], $offer["have_coin_code"], $offer_have_exchange_coin_count)
@@ -78,7 +78,7 @@ if ($have_coin_count < 0 || $want_coin_count < 0) {
             ), "offer_id", $opposite_offer["offer_id"]);
         } else {
             if ($opposite_offer["have_coin_count"] > 0) {
-                http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys", array(
+                http_json_post($opposite_offer["back_host_url"] . "receive_domain_keys.php", array(
                     "back_user_login" => $opposite_offer["back_user_login"],
                     "coin_code" => $opposite_offer["have_coin_code"],
                     "domain_keys" => getDomainKeys($opposite_offer["user_id"], $opposite_offer["have_coin_code"], $opposite_offer["have_coin_count"]),
@@ -95,7 +95,7 @@ if ($have_coin_count < 0 || $want_coin_count < 0) {
         } else {
             // money back
             if ($offer["have_coin_count"] > 0) {
-                http_json_post($offer["back_host_url"] . "receive_domain_keys", array(
+                http_json_post($offer["back_host_url"] . "receive_domain_keys.php", array(
                     "back_user_login" => $offer["back_user_login"],
                     "coin_code" => $offer["have_coin_code"],
                     "domain_keys" => getDomainKeys($offer["user_id"], $offer["have_coin_code"], $offer["have_coin_count"]),

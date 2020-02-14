@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 11 2020 г., 06:05
+-- Время создания: Фев 14 2020 г., 11:27
 -- Версия сервера: 10.4.10-MariaDB
 -- Версия PHP: 7.3.12
 
@@ -70,6 +70,24 @@ CREATE TABLE IF NOT EXISTS `domain_keys` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `messages`
+--
+
+DROP TABLE IF EXISTS `messages`;
+CREATE TABLE IF NOT EXISTS `messages` (
+  `message_id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `message_title` varchar(150) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `message_text` varchar(1000) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `message_type` varchar(256) DEFAULT NULL,
+  `message_object_id` bigint(20) DEFAULT NULL,
+  `message_readied` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`message_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `offers`
 --
 
@@ -122,6 +140,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_stock_token` bigint(14) DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_session_token` (`user_session_token`),
+  UNIQUE KEY `user_login` (`user_login`),
   UNIQUE KEY `user_stock_token` (`user_stock_token`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 COMMIT;

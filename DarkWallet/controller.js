@@ -39,8 +39,7 @@ controller("DarkWallet", function ($scope, $window, $http, $interval) {
         $scope.copyButtonLabel = 'coped';
     }
 
-    $scope.yandex_money_wallet_id = null;
-    $scope.yandex_money_registration_fee = null;
+    $scope.stock_fee_in_rub = null;
 
     $scope.updateData = function (coin_code) {
         $http.post(pathToRootDir + "api/wallet.php", {
@@ -49,11 +48,10 @@ controller("DarkWallet", function ($scope, $window, $http, $interval) {
             if (response.data.message == null) {
                 $scope.coins = response.data.coins;
                 $scope.have_coins = response.data.have_coins;
-                $scope.have_coin_code = coin_code || $scope.have_coins[0]["coin_code"]
-                $scope.want_coin_code = $scope.coins[0] === $scope.have_coin_code ? $scope.coins[1] : $scope.coins[0]
+                $scope.have_coin_code = coin_code || $scope.coins[0]["coin_code"] || $scope.have_coins[0]["coin_code"]
+                $scope.want_coin_code = "USD"
                 $scope.exchange_server_script = response.data.exchange_server_script
-                $scope.yandex_money_wallet_id = response.data.yandex_money_wallet_id;
-                $scope.yandex_money_registration_fee = response.data.yandex_money_registration_fee;
+                $scope.stock_fee_in_rub = response.data.stock_fee_in_rub;
 
                 $http.post($scope.exchange_server_script, {
                     stock_token: stock_token,
@@ -111,7 +109,7 @@ controller("DarkWallet", function ($scope, $window, $http, $interval) {
     $scope.createCoin = function () {
         $scope.create_coin_message = null
         $scope.create_coin_request_in_progress = true;
-        $http.post(pathToRootDir + "api/create_coin.php", {
+        $http.post(pathToRootDir + "api/coin_create.php", {
             token: token,
             coin_name: $scope.newCoinName,
             coin_code: $scope.newCoinCode,
@@ -182,7 +180,12 @@ controller("DarkWallet", function ($scope, $window, $http, $interval) {
     $scope.round = function (rate) {
         if (typeof rate == "string")
             rate = parseFloat(rate)
-        return (rate < 1) ? parseFloat(rate.toFixed(4)) : parseFloat(rate.toFixed(2))
+        if (rate > 1)
+        if (rate > 0.0001 && rate < 1)
+            return parseFloat(rate.toFixed(2))
+        if (rate > 0.0001 && rate < 1)
+            return parseFloat(rate.toFixed(4))
+        return parseFloat(rate.toFixed(8))
     }
 
     $scope.exchangeSwapCurrencies = function () {
@@ -200,8 +203,10 @@ controller("DarkWallet", function ($scope, $window, $http, $interval) {
     }
 
     $scope.openCoin = function (coin_code) {
-        $scope.updateData(coin_code);
-        $scope.activeWindow = 1;
+        if (coin_code !== "USD"){
+            $scope.updateData(coin_code);
+            $scope.activeWindow = 1;
+        }
     }
 
     $scope.send_message = null
@@ -243,12 +248,16 @@ controller("DarkWallet", function ($scope, $window, $http, $interval) {
         $scope.toggleCreateCoinFragment = false
     }
 
+    $scope.messages = null;
+    $scope.message_index = 0;
     var messagesInterval = $interval(function () {
         $http.post(pathToRootDir + "api/messages.php", {
             token: token,
         }).then(function (response) {
-            if (response.data.message != null) {
-
+            if (response.data.messages != null) {
+                $scope.messages = response.data.messages;
+                $scope.message_index = 0;
+                $scope.updateData();
             }
         })
     }, 1000);
