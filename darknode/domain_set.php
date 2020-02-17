@@ -14,6 +14,7 @@ if ($domain_name == null)
 
 $errors = 0;
 
+$success_updated_usd = [];
 if ($domain_name != "USD") {
 
     $usd_server_item = selectMap("select * from servers where server_domain_name = 'USD' and server_url = '" . uencode($server_url) . "'");

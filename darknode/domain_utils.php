@@ -2,6 +2,13 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
 
+function domain_hash($domain_name)
+{
+    $charsum = 0;
+    for ($i = 0; $i < strlen($domain_name); $i++)
+        $charsum += ord($domain_name[$i]);
+    return $charsum;
+}
 
 function domains_set($domain_prefix, $domains, $servers)
 {
@@ -11,7 +18,7 @@ function domains_set($domain_prefix, $domains, $servers)
         return "server_url is not defined";
 
     $current_server_item = selectMap("select * from servers where server_domain_name = '" . uencode($domain_prefix) . "' "
-        ." and server_url = '" . uencode($server_url) . "'");
+        . " and server_url = '" . uencode($server_url) . "'");
     if ($current_server_item != null) {
 
         foreach ($domains as $domain) {
@@ -24,6 +31,7 @@ function domains_set($domain_prefix, $domains, $servers)
                         $domain_next_key = random_id();
                         $new_domain = array(
                             "domain_name" => $domain["domain_name"],
+                            "domain_name_hash" => domain_hash($domain["domain_name"]),
                             "domain_prev_key" => $domain["domain_prev_key"],
                             "domain_next_key_hash" => hash("sha256", $domain_next_key),
                             "domain_next_key" => $domain_next_key,
@@ -35,6 +43,7 @@ function domains_set($domain_prefix, $domains, $servers)
                 } else {
                     $new_domain = array(
                         "domain_name" => $domain["domain_name"],
+                        "domain_name_hash" => domain_hash($domain["domain_name"]),
                         "domain_prev_key" => $domain["domain_prev_key"],
                         "domain_next_key_hash" => $domain["domain_next_key_hash"],
                         "domain_next_key" => $domain["domain_next_key"],
