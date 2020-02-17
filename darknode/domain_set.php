@@ -9,10 +9,6 @@ $domains = get("domains");
 $servers = get("servers");
 
 $message = null;
-if ($domain_name == null)
-    $message = $inputJSON;;
-
-$errors = 0;
 
 $success_updated_usd = [];
 if ($domain_name != "USD") {
@@ -41,7 +37,7 @@ if ($message == null) {
     } else {
         insertList("servers", array(
             "server_group_id" => random_id(),
-            "server_domain_name" => "USD",
+            "server_domain_name" => $domain_name,
             "server_url" => $server_url,
             "server_domain_remove_time" => (time() + $hosting_minutes_for_one_usd * 1000 * 60 * sizeof($success_updated_usd)),
         ));
