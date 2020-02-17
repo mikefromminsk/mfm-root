@@ -1,8 +1,8 @@
 <?php
 
-require("PHPMailer/Exception.php");
-require("PHPMailer/PHPMailer.php");
-require("PHPMailer/SMTP.php");
+require("../../PHPMailer/Exception.php");
+require("../../PHPMailer/PHPMailer.php");
+require("../../PHPMailer/SMTP.php");
 
 function send($to, $subject, $body, $message_type = null, $message_object_id = null)
 {

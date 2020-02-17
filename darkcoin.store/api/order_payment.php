@@ -1,6 +1,6 @@
 <?php
 
-include_once "db.php";
+include_once "../../db-utils/db.php";
 include_once "const.php";
 include_once "mail_utils.php";
 

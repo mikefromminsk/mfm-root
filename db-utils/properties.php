@@ -20,8 +20,6 @@ $yandex_money_secret_code = "";
 $usd_rub_rate = null;
 $stock_fee_in_usd = null;
 
-include_once "properties_overload.php";
-
 $stock_fee_in_rub = 5; //$stock_fee_in_usd * $usd_rub_rate;
 
 if ($db_host == null || $db_name == null || $db_user == null || $db_pass == null

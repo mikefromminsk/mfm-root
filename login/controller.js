@@ -11,7 +11,7 @@ controller("login", function ($scope, $http, $routeParams) {
     $scope.loginButton = function () {
         $scope.login_request_in_progress = true
         store.clear()
-        $http.post(pathToRootDir + "api/login_check.php", {
+        $http.post(pathToRootDir + "darkcoin.store/api/login_check.php", {
             user_login: $scope.login,
             user_password: $scope.password,
         })
@@ -21,7 +21,7 @@ controller("login", function ($scope, $http, $routeParams) {
                     store.set("user_login", response.data.user_login)
                     store.set("user_session_token", response.data.user_session_token)
                     store.set("user_stock_token", response.data.user_stock_token)
-                    $scope.open('DarkWallet')
+                    $scope.open('darkcoin.store')
                 } else {
                     $scope.message = response.data.message
                 }
@@ -32,7 +32,7 @@ controller("login", function ($scope, $http, $routeParams) {
     }
 
     if ($scope.userToken != null){
-        $http.post(pathToRootDir + "api/login_check.php", {
+        $http.post(pathToRootDir + "darkcoin.store/api/login_check.php", {
             token: $scope.userToken,
         })
             .then(function (response) {
@@ -41,7 +41,7 @@ controller("login", function ($scope, $http, $routeParams) {
                     store.set("user_session_token", response.data.user_session_token)
                     store.set("user_stock_token", response.data.user_stock_token)
                     setTimeout(function () {
-                        $scope.open('DarkWallet')
+                        $scope.open('darkcoin.store')
                         $scope.$apply();
                     }, 2000)
                 } else {
