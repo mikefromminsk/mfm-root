@@ -1,6 +1,6 @@
 <?php
 
-include_once "../../db-utils/db.php";
+include_once "../db-utils/db.php";
 
 $domains = get_required("domains");
 

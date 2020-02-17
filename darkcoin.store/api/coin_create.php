@@ -1,74 +1,37 @@
 <?php
 
-include_once "login.php";
-include_once "domain_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
 
-$coin_name = get_required("coin_name");
+query("delete from users");
+query("alter table users AUTO_INCREMENT = 1");
+query("delete from domains");
+query("delete from offers");
+query("delete from coins");
+query("delete from messages");
+query("delete from servers");
+
 $coin_code = get_required("coin_code");
 $coin_code = strtoupper($coin_code);
+
 $message = null;
 
-/*if ($usd_keys >= 10)*/
-{
+$server_group_id = random_id();
 
-    /*$success_domain_names = receiveDomainKeys($user_id, $coin_code, $usd_keys);
-    if (sizeof($success_domain_names) == sizeof($usd_keys))*/
-    {
-
-        $message = insertList("coins", array(
-            "coin_name" => $coin_name,
-            "coin_code" => $coin_code,
-        )) == true ? null : "coin name exist";
-
-        if ($message == null) {
-            for ($i = 0; $i < 64; $i++) {
-                $domain_last_online_time = time();
-                $insert_domain_keys_sql = "insert into domain_keys (user_id, coin_code, domain_name, domain_next_name) VALUES ";
-                $insert_domains_sql = "insert into domains (domain_name, domain_next_hash, domain_last_online_time, node_location) VALUES ";
-                for ($j = 0; $j < 1024; $j++) {
-                    $domain_name = uencode($coin_name . mb_convert_encoding('&#' . intval($i * 1024 + $j) . ';', 'UTF-8', 'HTML-ENTITIES'));
-                    $domain_next_name = "" . random_id();
-                    $domain_next_hash = hash("sha256", $domain_next_name);
-                    $insert_domain_keys_sql .= "($user_id,'$coin_code','$domain_name','$domain_next_name')" . ($j != 1023 ? "," : "");
-                    $insert_domains_sql .= "('$domain_name','$domain_next_hash',$domain_last_online_time, '$node_url')" . ($j != 1023 ? "," : "");
-                }
-                $message = $message == null && query($insert_domain_keys_sql) ? null : "insert_domain_keys_sql error";
-                $message = $message == null && query($insert_domains_sql) ? null : "insert_domain_keys_sql error";
-            }
-            if ($message == null) {
-                send($user_id, "You created new Coin", "Congratulations you created yourself coin with name $coin_name.");
-
-                if ($coin_code != "USD"){
-                    $message = http_json_post($api_url . "exchange.php", array(
-                        "token" => $user["user_session_token"],
-                        "have_coin_code" => $coin_code,
-                        "have_coin_count" => 536,
-                        "want_coin_code" => "USD",
-                        "want_coin_count" => 1,
-                    ))["message"];
-
-                    $admin = selectMap("select * from users where user_id = 1");
-                    $message = http_json_post($api_url . "exchange.php", array(
-                        "token" => $admin["user_session_token"],
-                        "have_coin_code" => "USD",
-                        "have_coin_count" => 1,
-                        "want_coin_code" => $coin_code,
-                        "want_coin_count" => 65536,
-                    ))["message"];
-                }
-            } else {
-                send(1, "Coin create error", $message);
-            }
-
-            //$servers = selectList("select * from servers where server_location != '$node_url' order by ");
-            // send 1 coin and 50 usd to exchange server
-
-            //syncDomains($coin_code);
-        }
-    } /*else{
-        $message = "usd keys not enough";
-        // return new
-    }*/
+for ($i = 0; $i < 64 && $message == null; $i++) {
+    $domains = [];
+    for ($j = 0; $j < 1024; $j++) {
+        $domain_next_key = random_id();
+        $domains[] = array(
+            "domain_name" => uencode($coin_code . mb_convert_encoding('&#' . intval($i * 1024 + $j) . ';', 'UTF-8', 'HTML-ENTITIES')),
+            "domain_next_key_hash" => hash("sha256", $domain_next_key),
+            "domain_next_key" => $domain_next_key,
+        );
+    }
+    $message = http_json_post($server_url . "darknode/domain_set.php", array(
+        "domain_name" => $coin_code,
+        "domains" => $domains,
+        "servers" => [],
+    ))["message"];
 }
 
 echo json_encode(array("message" => $message));

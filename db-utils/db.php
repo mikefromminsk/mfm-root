@@ -23,6 +23,7 @@ if ($mysql_conn->connect_error)
 $mysql_conn->set_charset("utf8");
 $GLOBALS["conn"] = $mysql_conn;
 
+$inputJSON = null;
 if ($_SERVER["CONTENT_TYPE"] != 'application/x-www-form-urlencoded'
     && ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')) {
     $inputJSON = file_get_contents('php://input');
@@ -181,7 +182,7 @@ function insert($sql, $show_query = null)
     return $insert_autoincrement_id;*/
     return $success_or_error;
 }
-
+//rename to insertMap
 function insertList($table_name, $params, $show_query = false)
 {
     $params = array_filter($params, function ($value) {
@@ -198,7 +199,7 @@ function update($sql, $show_query = null)
 {
     return query($sql, $show_query);
 }
-
+// rename to update Map
 function updateList($table_name, $params, $primary_key, $primary_value, $show_query = false)
 {
     $params = array_filter($params, function ($value) {
@@ -366,7 +367,7 @@ function utf8ize($mixed)
     return $mixed;
 }
 
-function http_json_post($url, $data, $uencode = false)
+function http_json_post($url, $data, $uencode = true)
 {
     if ($uencode)
         $data = utf8ize($data);
