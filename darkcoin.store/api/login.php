@@ -43,7 +43,7 @@ if ($user_login != null && $user_password != null) {
             ));
         } else {
             $token = random_id();
-            $validation_link = str_replace("/api/", "", $api_url) . "#!/login/" . $token;
+            $validation_link = str_replace("/api/", "", $api_url) . "#!/darkcoin.store/" . $token;
             $send_result = send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
             if ($send_result === true) {
                 insertList("users", array(

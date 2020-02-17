@@ -7,6 +7,8 @@ let app = angular.module('AngularApp', [
 app.config(function ($routeProvider, $controllerProvider, $mdThemingProvider) {
     app.register = $controllerProvider.register;
     app.routeProvider = $routeProvider;
+    $routeProvider.otherwise({redirectTo: '/' + document.querySelector("meta[name='start-page']").getAttribute("content")});
+
     $mdThemingProvider.theme('default')
         .primaryPalette('blue')
         .accentPalette('teal')
@@ -79,5 +81,5 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         $location.path(route)
     };
 
-    $scope.open($location.path().substr(1) || document.querySelector("meta[name='start-page']").getAttribute("content"));
+    $scope.open($location.path().substr(1));
 });
