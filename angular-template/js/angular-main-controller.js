@@ -34,8 +34,8 @@ function loader(scriptPath) {
 
     return {
         load: function ($q) {
-            var result = $q.defer();
-            var script = document.createElement("script");
+            let result = $q.defer();
+            let script = document.createElement("script");
             script.async = "async";
             script.type = "text/javascript";
             script.src = scriptPath;
@@ -63,20 +63,22 @@ if (pathToRootDir.endsWith("index.html"))
 app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location) {
 
     $scope.open = function (route) {
-        var params = route.replace('\\', '/').split('/')
-        var appName = params[0]
-        var routeTemplate = ""
-        for (var i = 1; i < params.length; i++)
+        let params = route.replace('\\', '/').split('/')
+        let appName = params[0]
+        let routeTemplate = "";
+        for (let i = 1; i < params.length; i++)
             routeTemplate = routeTemplate + "/:arg" + (i - 1);
-        app.routeProvider.when("/" + appName + routeTemplate, {
-            templateUrl: pathToRootDir + appName + "/index.html",
-            controller: appName,
-            resolve: loader(pathToRootDir + appName + "/controller.js")
-        });
-        // set global path for all urls
-        if (document.getElementsByTagName("base").length === 0)
-            document.getElementsByTagName('head')[0].appendChild(document.createElement("base"));
-        document.getElementsByTagName("base")[0].href = pathToRootDir + appName + "/"
+        if (appName !== ""){
+            app.routeProvider.when("/" + appName + routeTemplate, {
+                templateUrl: pathToRootDir + appName + "/index.html",
+                controller: appName,
+                resolve: loader(pathToRootDir + appName + "/controller.js")
+            });
+            // set global path for all urls
+            if (document.getElementsByTagName("base").length === 0)
+                document.getElementsByTagName('head')[0].appendChild(document.createElement("base"));
+            document.getElementsByTagName("base")[0].href = pathToRootDir + appName + "/"
+        }
         document.title = appName
         $location.path(route)
     };

@@ -37,7 +37,7 @@ function query($sql, $show_query = false)
         echo $sql;
     $success = $GLOBALS["conn"]->query($sql);
     if (!$success)
-        db_error(ERROR_MYSQL, mysqli_error($GLOBALS["conn"]));
+        error(mysqli_error($GLOBALS["conn"]));
     return $success;
 }
 
@@ -89,18 +89,11 @@ function table_exist($table_name)
     return scalar("show tables like '$table_name'") != null;
 }
 
-define("ERROR_PARAMS_IS_NO_SET", 0);
-define("ERROR_DUPLICATE_REQUEST", 1);
-define("USER_ERROR", 2);
-define("ERROR_MYSQL", 3);
-define("ERROR_TOKEN_IS_BAD", 4);
-function db_error($error_code, $error_message = "")
+function error($error_message)
 {
-    $result["error"] = $error_code;
     $result["message"] = $error_message;
     $result["stack"] = generateCallTrace();
-    echo json_encode_readable($result);
-    exit;
+    die(json_encode_readable($result));
 }
 
 function uencode($param_value)
@@ -153,7 +146,7 @@ function get_required($param_name)
 {
     $param_value = get($param_name);
     if ($param_value === null)
-        db_error(ERROR_PARAMS_IS_NO_SET, $param_name . " is empty");
+        error($param_name . " is empty");
     return $param_value;
 }
 

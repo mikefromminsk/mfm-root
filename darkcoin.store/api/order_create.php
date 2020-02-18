@@ -12,7 +12,7 @@ $admin_login = scalar("select user_login from users where user_id = 0");
 $admin_usd_count = scalar("select count(*) from domain_keys where coin_code = 'USD'");
 
 if ($admin_usd_count < $stock_fee_in_usd)
-    db_error(USER_ERROR, "Admin doesnt have enough usd");
+    error("Admin doesnt have enough usd");
 
 $order_id = random_id();
 send($user_id, "Order created", "Order №$order_id created. You have 15 minutes to pay.", MESSAGE_ORDER_CREATE, $order_id);

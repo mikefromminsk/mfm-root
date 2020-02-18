@@ -2,9 +2,9 @@
 
 include_once "../../db-utils/db.php";
 include_once "const.php";
-include_once "mail_utils.php";
+include_once "messages_utils.php";
 
-$node_url = uencode($api_url . "node");
+$node_url = uencode($server_url . "node");
 
 $user_login = get("user_login");
 $user_password = get("user_password");
@@ -15,7 +15,7 @@ $message = "";
 $user = null;
 
 if ($user_login != null && !filter_var($user_login, FILTER_VALIDATE_EMAIL))
-    db_error(USER_ERROR, "login is not email");
+    error("login is not email");
 
 if ($user_login != null && $user_password != null) {
     $user = selectMap("select * from users where user_login = '$user_login'");
@@ -43,7 +43,7 @@ if ($user_login != null && $user_password != null) {
             ));
         } else {
             $token = random_id();
-            $validation_link = str_replace("/api/", "", $api_url) . "#!/darkcoin.store/" . $token;
+            $validation_link = str_replace("/api/", "", $server_url) . "#!/darkcoin.store/" . $token;
             $send_result = send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
             if ($send_result === true) {
                 insertList("users", array(

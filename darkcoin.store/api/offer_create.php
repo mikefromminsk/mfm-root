@@ -15,11 +15,11 @@ $offer_domain_keys = get_required("have_domain_keys");
 $have_coin_code = strtoupper($have_coin_code);
 $want_coin_code = strtoupper($want_coin_code);
 if ($have_coin_count <= 0)
-    db_error(0, "have_coin_count is zero or less zero");
+    error("have_coin_count is zero or less zero");
 if ($want_coin_count <= 0)
-    db_error(0, "want_coin_count is zero or less zero");
+    error("want_coin_count is zero or less zero");
 if ($have_coin_code == $want_coin_code)
-    db_error(0, "you cannot buy and sale the same coins");
+    error("you cannot buy and sale the same coins");
 $offer_rate = $have_coin_count / $want_coin_count;
 $offer_rate_inverse = $want_coin_count / $have_coin_count;
 

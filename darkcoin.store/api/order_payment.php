@@ -2,7 +2,7 @@
 
 include_once "../../db-utils/db.php";
 include_once "const.php";
-include_once "mail_utils.php";
+include_once "messages_utils.php";
 
 send(1, "Payment receive start", json_encode($_POST));
 $sha1_hash = get_required("sha1_hash");
@@ -23,7 +23,7 @@ $test_hash = hash("sha1", $test_string);
 send(1, "Payment receive", $test_string);
 
 if ($sha1_hash != $test_hash)
-    db_error(USER_ERROR, "receipt is invalid");
+    error("receipt is invalid");
 
 $lines = explode("&", $label);
 
@@ -51,7 +51,7 @@ if ($order_id != null && $coin_code != null && $coin_name != null) {
         $update_success = update("update domain_keys set user_id = $user_id where user_id = 1 and coin_code = 'USD' limit $stock_fee_in_usd");
         if ($update_success == true) {
             $user = selectMap("select * from users where user_id = $user_id");
-            $coin_create_response = http_json_post($api_url . "coin_create.php", array(
+            $coin_create_response = http_json_post($server_url . "coin_create.php", array(
                 "token" => $user["user_session_token"],
                 "coin_name" => $coin_name,
                 "coin_code" => $coin_code,
