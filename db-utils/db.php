@@ -30,11 +30,11 @@ if ($_SERVER["CONTENT_TYPE"] != 'application/x-www-form-urlencoded'
     foreach ($inputParams as $key => $value)
         $_POST[$key] = $value;
 }
-
+// delete all usages of query !!!! rename to query without delete
 function query($sql, $show_query = false)
 {
     if ($show_query)
-        echo $sql;
+        error($sql);
     $success = $GLOBALS["conn"]->query($sql);
     if (!$success)
         error(mysqli_error($GLOBALS["conn"]));
@@ -91,8 +91,7 @@ function table_exist($table_name)
 
 function error($error_message)
 {
-    $result["message"] = $error_message;
-    $result["stack"] = generateCallTrace();
+    $result["message"] = $error_message . "    Stacktrace:" . implode("   ", generateCallTrace());
     die(json_encode_readable($result));
 }
 
@@ -174,6 +173,7 @@ function insert($sql, $show_query = null)
     return $insert_autoincrement_id;*/
     return $success_or_error;
 }
+
 //rename to insertMap
 function insertList($table_name, $params, $show_query = false)
 {
@@ -191,6 +191,7 @@ function update($sql, $show_query = null)
 {
     return query($sql, $show_query);
 }
+
 // rename to update Map
 function updateList($table_name, $params, $primary_key, $primary_value, $show_query = false)
 {

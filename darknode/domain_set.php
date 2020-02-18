@@ -22,30 +22,25 @@ if ($domain_name != "USD") {
             "server_url" => $server_url,
         ));
 
-    $success_updated_usd = domains_set("USD", $usd_domains, $servers);
-
-    $message = is_string($success_updated_usd) ? $success_updated_usd : null;
+    $success_updated_usd = domains_set("USD", $usd_domains);
 }
 
-if ($message == null) {
 
-    $current_server = selectMap("select * from servers where server_domain_name = '" . uencode($domain_name) . "' and server_url = '" . uencode($server_url) . "'");
+$current_server = selectMap("select * from servers where server_domain_name = '" . uencode($domain_name) . "' and server_url = '" . uencode($server_url) . "'");
 
-    if ($current_server != null) {
-        update("update servers set server_domain_remove_time = server_domain_remove_time + " . ($hosting_minutes_for_one_usd * 1000 * 60 * sizeof($success_updated_usd))
-            . " where server_domain_name = '" . uencode($domain_name) . "' and server_url = '" . uencode($server_url) . "'");
-    } else {
-        insertList("servers", array(
-            "server_group_id" => random_id(),
-            "server_domain_name" => $domain_name,
-            "server_url" => $server_url,
-            "server_domain_remove_time" => (time() + $hosting_minutes_for_one_usd * 1000 * 60 * sizeof($success_updated_usd)),
-        ));
-    }
-
-    $success_domain_changed = domains_set($domain_name, $domains, $servers);
-    $message = is_string($success_domain_changed) ? $success_domain_changed : null;
+if ($current_server != null) {
+    update("update servers set server_domain_remove_time = server_domain_remove_time + " . ($hosting_minutes_for_one_usd * 1000 * 60 * sizeof($success_updated_usd))
+        . " where server_domain_name = '" . uencode($domain_name) . "' and server_url = '" . uencode($server_url) . "'");
+} else {
+    insertList("servers", array(
+        "server_group_id" => random_id(),
+        "server_domain_name" => $domain_name,
+        "server_url" => $server_url,
+        "server_domain_remove_time" => (time() + $hosting_minutes_for_one_usd * 1000 * 60 * sizeof($success_updated_usd)),
+    ));
 }
+
+$success_domain_changed = domains_set($domain_name, $domains);
 
 echo json_encode(array(
     "message" => $message,

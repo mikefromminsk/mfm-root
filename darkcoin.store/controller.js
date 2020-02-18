@@ -99,10 +99,10 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
                 $scope.have_coins = response.data.have_coins;
                 $scope.have_coin_code = coin_code || $scope.coins[0]["coin_code"] || $scope.have_coins[0]["coin_code"]
                 $scope.want_coin_code = "USD"
-                $scope.exchange_server_script = response.data.exchange_server_script
+                $scope.stock_script = response.data.stock_script
                 $scope.stock_fee_in_rub = response.data.stock_fee_in_rub;
 
-                $http.post($scope.exchange_server_script, {
+                $http.post($scope.stock_script, {
                     stock_token: store.get("user_stock_token"),
                     have_coin_code: $scope.have_coin_code,
                     want_coin_code: $scope.want_coin_code,

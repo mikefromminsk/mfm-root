@@ -1,7 +1,6 @@
 <?php
 
 include_once "../../db-utils/db.php";
-include_once "const.php";
 include_once "messages_utils.php";
 
 $node_url = uencode($server_url . "node");

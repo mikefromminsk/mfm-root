@@ -4,6 +4,9 @@ require("../../PHPMailer/Exception.php");
 require("../../PHPMailer/PHPMailer.php");
 require("../../PHPMailer/SMTP.php");
 
+define("MESSAGE_ORDER_CREATE", "Order created");
+define("MESSAGE_ORDER_SUCCESS_PAID", "Success paid");
+
 function send($to, $subject, $body, $message_type = null, $message_object_id = null)
 {
 
