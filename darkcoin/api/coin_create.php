@@ -8,8 +8,6 @@ $coin_code = strtoupper($coin_code);
 
 $message = null;
 
-$server_group_id = random_id();
-
 for ($i = 0; $i < 64 && $message == null; $i++) {
     $domains = [];
     for ($j = 0; $j < 1024; $j++) {

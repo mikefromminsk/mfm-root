@@ -24,12 +24,12 @@ $request = array(
     "stock_token" => $user["user_stock_token"],
     "have_coin_code" => $have_coin_code,
     "want_coin_code" => $want_coin_code,
-    "back_server_script_url" => $server_url . "darknode/domain_set.php",
+    "back_script_url" => $server_url . "darknode/domain_set.php",
     "back_user_login" => $user["user_login"],
 );
 
 $max_request_coin_count = 1024;
-$request_count = ceil($have_coin_count / $max_request_coin_count);
+$request_count = intdiv($have_coin_count, $max_request_coin_count) + bcmod($have_coin_count, $max_request_coin_count) > 0 ? 1 : 0;
 for ($i = 0; $i < $request_count && $message == null; $i++) {
     $coin_count = ($i == $request_count - 1) ? bcmod($have_coin_count, $max_request_coin_count) : ($i + 1) * $max_request_coin_count;
     $request["have_coin_count"] = $coin_count;

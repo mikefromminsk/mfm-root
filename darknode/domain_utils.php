@@ -24,7 +24,7 @@ function domains_set($domain_prefix, $domains)
         $users_cache = array();
         foreach ($domains as $domain) {
 
-            $user_id = null;
+            $user_id = $domain["user_id"];
             $user_login = $domain["user_login"];
             $domain_name = $domain["domain_name"];
 
@@ -39,7 +39,7 @@ function domains_set($domain_prefix, $domains)
 
             $current_domain = selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
             if ($current_domain != null) {
-                if (hash("sha256", $domain["domain_prev_key"]) == $current_domain["domain_next_key_hash"]) {
+                if (hash("sha256", $domain["domain_next_key"]) == $current_domain["domain_next_key_hash"]) {
                     $domain_next_key = random_id();
                     $new_domain = array(
                         "domain_name" => $domain_name,

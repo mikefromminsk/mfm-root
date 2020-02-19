@@ -83,7 +83,7 @@ function table_exist($table_name)
 
 function error($error_message)
 {
-    $result["message"] = $error_message . "    Stacktrace:" . implode("   ", generateCallTrace());
+    $result["message"] = basename($_SERVER["SCRIPT_FILENAME"], '.php') . ".php: " . $error_message . "    Stacktrace:" . implode("   ", generateCallTrace());
     die(json_encode_readable($result));
 }
 

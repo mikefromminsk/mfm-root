@@ -10,13 +10,10 @@
     }
 
     .cell {
-        box-shadow: 0 0 0 1px black inset;
+        border-bottom: 1px solid black;
+        border-right: 1px solid black;
         text-align: center;
         padding: 16px 0;
-    }
-
-    .cell-header {
-        background-color: black;
     }
 
     .scrollable {
@@ -41,12 +38,6 @@
         background-color: rgb(33, 150, 243);
     }
 
-    .top-border {
-        width: 100%;
-        height: 6px;
-        background-color: rgb(33, 150, 243)
-    }
-
 </style>
 <div class="layout-fill layout-column layout-align-center-center"
      style="background: url(img/background.png) center center no-repeat;" ng-show="token == null">
@@ -65,14 +56,16 @@
             </md-input-container>
             <div class="div" ng-show="login_message" style="color: rgb(33, 150, 243);">{{login_message}}</div>
             <div class="layout-row">
-                <md-button class="flex-40 md-raised" ng-click="toggleLoginReg = false" ng-disabled="login_request_in_progress">
+                <md-button class="flex-40 md-raised" ng-click="toggleLoginReg = false"
+                           ng-disabled="login_request_in_progress">
                     Sign Up
                 </md-button>
                 <div class="flex"></div>
                 <div class="layout-column flex-40">
                     <md-button type="submit" class="md-raised md-primary" ng-disabled="login_request_in_progress">
                         Sign In
-                        <md-progress-linear md-mode="query" ng-disabled="!login_request_in_progress"></md-progress-linear>
+                        <md-progress-linear md-mode="query"
+                                            ng-disabled="!login_request_in_progress"></md-progress-linear>
                     </md-button>
                 </div>
             </div>
@@ -108,8 +101,7 @@
 </div>
 
 
-
-<div class="layout-fill layout-row" style="background-color: #666666;"  ng-show="token != null">
+<div class="layout-fill layout-row" style="background-color: #666666;" ng-show="token != null">
     <md-content class="layout-column flex-gt-xs-25 flex" ng-show="windowWidth >= 600 || activeWindow == 0">
         <div class="layout-column flex scrollable" ng-show="toggleSendFragment">
             <div class="layout-column" style="background-color: #444444;">
@@ -222,69 +214,68 @@
                 </md-button>
             </div>
             <h2 class="layout-column layout-align-center-center" style="padding: 16px"
-                ng-show="buyOffers == null && haveOffers == null">There are no exchange offers yet</h2>
-            <div class="layout-column flex scrollable" ng-show="buyOffers != null || haveOffers != null">
-
+                ng-show="buyOffers == null && saleOffers == null">There are no exchange offers yet</h2>
+            <div class="layout-column flex scrollable" ng-show="buyOffers != null || saleOffers != null">
                 <div class="layout-row layout-align-center">
                     <h2>{{have_coin_code}} : {{want_coin_code}}</h2>
                 </div>
-                <md-card class="layout-column">
-                    <div class="top-border"></div>
-                    <div class="layout-row">
-                        <div class="layout-column flex-50">
-                            <div class="layout-row">
-                                <div class="cell cell-header flex-33">Sale {{have_coin_code}}</div>
-                                <div class="cell cell-header flex-33">Want {{want_coin_code}}</div>
-                                <div class="cell cell-header flex-33">{{have_coin_code}}/{{want_coin_code}}</div>
+                <md-card class="layout-row ">
+                    <div class="layout-column flex-50">
+                        <div class="layout-row input-header">
+                            <div class="cell flex-33">Sale {{have_coin_code}}</div>
+                            <div class="cell flex-33">Want {{want_coin_code}}</div>
+                            <div class="cell flex-33">Rate</div>
+                        </div>
+                        <div class="layout-row" ng-repeat="offer in saleOffers">
+                            <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
+                                {{offer.have_coin_count}}
                             </div>
-                            <div class="layout-row" ng-repeat="offer in saleOffers">
-                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
-                                    {{offer.have_coin_count}}
-                                </div>
-                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
-                                    {{offer.want_coin_count}}
-                                </div>
-                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
-                                    {{round(offer.offer_rate_inverse)}}
-                                </div>
+                            <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
+                                {{offer.want_coin_count}}
+                            </div>
+                            <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
+                                {{round(offer.offer_rate_inverse)}}
                             </div>
                         </div>
-                        <div class="layout-column">
-                            <div class="flex buy-sale-delimiter"></div>
+                    </div>
+                    <div class="layout-column">
+                        <div class="flex buy-sale-delimiter"></div>
+                    </div>
+                    <div class="layout-column flex-50">
+                        <div class="layout-row input-header">
+                            <div class="cell flex-33">Rate</div>
+                            <div class="cell flex-33">Sale {{want_coin_code}}</div>
+                            <div class="cell flex-33 ">Want {{have_coin_code}}</div>
                         </div>
-                        <div class="layout-column flex-50">
-                            <div class="layout-row">
-                                <div class="cell cell-header flex-33">{{have_coin_code}}/{{want_coin_code}}</div>
-                                <div class="cell cell-header flex-33">Sale {{want_coin_code}}</div>
-                                <div class="cell cell-header flex-33 ">Want {{have_coin_code}}</div>
+                        <div class="layout-row" ng-repeat="offer in buyOffers">
+                            <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
+                                {{round(offer.offer_rate)}}
                             </div>
-                            <div class="layout-row" ng-repeat="offer in buyOffers">
-                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
-                                    {{round(offer.offer_rate)}}
-                                </div>
-                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
-                                    {{offer.have_coin_count}}
-                                </div>
-                                <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
-                                    {{offer.want_coin_count}}
-                                </div>
+                            <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
+                                {{offer.have_coin_count}}
+                            </div>
+                            <div class="cell flex-33" ng-class="{'my-cell': offer.back_user_login == user_login}">
+                                {{offer.want_coin_count}}
                             </div>
                         </div>
                     </div>
                 </md-card>
 
-                <div class="layout-row layout-align-center" ng-show="haveOffers != null">
-                    <h2>My offers</h2>
-                </div>
-                <md-card ng-repeat="offer in haveOffers">
-                    <div class="top-border"></div>
-                    <div class="layout-row" style="padding: 16px;
-                    background: linear-gradient(to right, #325032 {{offer.offer_progress}}%, #444444 {{offer.offer_progress}}%, #444444 100%);">
-                        <b>{{offer.have_coin_code + " ➠ " + offer.want_coin_code}}</b>
-                        <div class="flex"></div>
-                        <b>Progress {{offer.offer_progress}}%</b>
-                        <div ng-show="windowWidth >= 600" class="flex"></div>
-                        <b ng-show="windowWidth >= 600">{{offer.have_coin_count+ " " + offer.have_coin_code + " ➠ " + offer.want_coin_count + " " + offer.want_coin_code}}</b>
+                <md-card class="layout-column">
+                    <div class="layout-row layout-align-center input-header" ng-show="haveOffers != null">
+                        <h2>My offers</h2>
+                    </div>
+                    <div class="layout-column" ng-repeat="offer in haveOffers">
+                        <div class="layout-row"
+                             style="padding: 10px">
+                            <b>{{offer.have_coin_count+ " " + offer.have_coin_code + " ➠ " +
+                                offer.want_coin_count + " " + offer.want_coin_code}}</b>
+                            <div class="flex"></div>
+                            <b>Progress {{offer.offer_progress}}%</b>
+                            <div ng-show="windowWidth >= 600" class="flex"></div>
+                            <b ng-show="windowWidth >= 600">Rate {{offer.offer_rate}}</b>
+                        </div>
+                        <md-divider ></md-divider>
                     </div>
                 </md-card>
             </div>
@@ -317,7 +308,7 @@
                         </div>
                         <div class="layout-column">
                             <div class="layout-row layout-align-center">
-                                <md-button class="md-icon-button" ng-click=""> <!--exchangeSwapCurrencies()-->
+                                <md-button class="md-icon-button" ng-click="exchangeSwapCurrencies()">
                                     <md-icon md-svg-src="img/next.svg"></md-icon>
                                 </md-button>
                             </div>
@@ -366,19 +357,19 @@
                 </div>
             </div>
             <div class="layout-column layout-align-center-center" style="padding: 16px" ng-show="rates == null">There
-                are no rates yet
+                Are no rates yet
             </div>
             <div class="layout-column flex scrollable" ng-show="rates != null">
                 <md-card class="layout-column">
-                    <md-progress-linear md-mode="determinate" value="100"></md-progress-linear>
-                    <div class="layout-row">
-                        <div class="cell cell-header flex-50">Coin</div>
-                        <div class="cell cell-header flex-50">Rate</div>
+                    <div class="layout-row input-header">
+                        <div class="cell flex-50">Coin</div>
+                        <div class="cell flex-50">Rate</div>
                     </div>
-                    <div class="layout-row" ng-repeat="rate in rates">
+                    <md-content class="layout-row" ng-repeat="rate in rates" ng-click="updateData(rate.coin_code)"
+                                md-ink-ripple>
                         <div class="cell flex-50">{{rate.coin_code}}</div>
                         <div class="cell flex-50">{{round(rate.offer_rate)}} USD</div>
-                    </div>
+                    </md-content>
                 </md-card>
             </div>
         </div>
@@ -421,16 +412,17 @@
     </md-content>
 </div>
 <div style="position: absolute; right: 0; bottom: 0; max-width: 100%; padding: 16px" ng-show="messages != null">
-    <div class="input-wrapper" >
+    <div class="input-wrapper">
         <div class="input-header layout-row layout-align-center-center" style="padding: 16px">
             <h2 class="layout-row flex" style="margin: 0">{{messages[message_index].message_title}}</h2>
             <md-button class="md-fab md-mini" style="background-color: black" ng-click="messages = null">
                 <md-icon md-svg-src="img/close.svg"></md-icon>
             </md-button>
         </div>
-        <md-content class="input-container layout-column " >
+        <md-content class="input-container layout-column ">
             {{messages[message_index].message_text}}
-            <div class="layout-row layout-align-center-center" style="border-top: 2px solid black; padding-top: 6px" ng-show="messages.length > 1">
+            <div class="layout-row layout-align-center-center" style="border-top: 2px solid black; padding-top: 6px"
+                 ng-show="messages.length > 1">
                 <div class="flex"></div>
                 <md-button class="md-fab md-mini" style="background-color: rgb(48,48,48)"
                            ng-disabled="message_index == 0" ng-click="message_index = message_index - 1">
@@ -438,7 +430,8 @@
                 </md-button>
                 {{message_index + 1}} / {{messages.length}}
                 <md-button class="md-fab md-mini" style="background-color: rgb(48,48,48)"
-                           ng-disabled="message_index == messages.length - 1" ng-click="message_index = message_index + 1">
+                           ng-disabled="message_index == messages.length - 1"
+                           ng-click="message_index = message_index + 1">
                     <md-icon md-svg-src="img/next.svg"></md-icon>
                 </md-button>
             </div>

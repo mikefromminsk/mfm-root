@@ -8,8 +8,8 @@ $message = $access == "admin" ? null : "access error";
 
 if ($message == null) {
 
-    query("delete from users");
-    query("alter table users AUTO_INCREMENT = 1");
+    //query("delete from users");
+    //query("alter table users AUTO_INCREMENT = 1");
     query("delete from domains");
     query("delete from offers");
     query("delete from messages");
@@ -34,33 +34,50 @@ if ($message == null) {
         "coin_code" => "SIL",
     ))["message"];
 
-    $login = http_json_post($server_url . "darkcoin/api/login_check.php", array(
+    $message = $message ?: http_json_post($server_url . "darkcoin/api/exchange.php", array(
         "user_login" => "selevich@mail.ru",
         "user_password" => "12345678",
-    ));
-    $message = $message ?: $login["message"];
-
-    $message = $message ?: http_json_post($server_url . "darkcoin/api/exchange.php", array(
-        "token" => $login["user_session_token"],
         "have_coin_code" => "SIL",
-        "have_coin_count" => "2000",
+        "have_coin_count" => "200",
         "want_coin_code" => "USD",
         "want_coin_count" => "50",
     ))["message"];
 
-    $login = http_json_post($server_url . "darkcoin/api/login_check.php", array(
-        "user_login" => "x29a100@mail.ru",
+    $message = $message ?: http_json_post($server_url . "darkcoin/api/exchange.php", array(
+        "user_login" => "selevich@mail.ru",
         "user_password" => "12345678",
-    ));
-    $message = $message ?: $login["message"];
+        "have_coin_code" => "SIL",
+        "have_coin_count" => "200",
+        "want_coin_code" => "USD",
+        "want_coin_count" => "50",
+    ))["message"];
 
     $message = $message ?: http_json_post($server_url . "darkcoin/api/exchange.php", array(
-        "token" => $login["user_session_token"],
+        "user_login" => "x29a100@mail.ru",
+        "user_password" => "12345678",
         "have_coin_code" => "USD",
-        "have_coin_count" => "1",
+        "have_coin_count" => "5",
         "want_coin_code" => "SIL",
-        "want_coin_count" => "45",
+        "want_coin_count" => "20",
     ))["message"];
+
+    $message = $message ?: http_json_post($server_url . "darkcoin/api/send.php", array(
+        "user_login" => "selevich@mail.ru",
+        "user_password" => "12345678",
+        "coin_code" => "SIL",
+        "coin_count" => "100",
+        "receiver_user_login" => "x29a100@mail.ru",
+    ))["message"];
+
+    $message = $message ?: http_json_post($server_url . "darkcoin/api/exchange.php", array(
+        "user_login" => "x29a100@mail.ru",
+        "user_password" => "12345678",
+        "have_coin_code" => "USD",
+        "have_coin_count" => "5",
+        "want_coin_code" => "SIL",
+        "want_coin_count" => "20",
+    ))["message"];
+
 
 }
 

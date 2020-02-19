@@ -60,6 +60,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
                     store.set("user_login", response.data.user_login)
                     store.set("user_session_token", response.data.user_session_token)
                     store.set("user_stock_token", response.data.user_stock_token)
+                    updateData()
                     startTimer()
                 } else {
                     $scope.login_message = response.data.message
@@ -97,7 +98,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
             if (response.data.message == null) {
                 $scope.coins = response.data.coins;
                 $scope.have_coins = response.data.have_coins;
-                $scope.have_coin_code = coin_code || $scope.coins[0]["coin_code"] || $scope.have_coins[0]["coin_code"]
+                $scope.have_coin_code = coin_code || $scope.coins[1]
                 $scope.want_coin_code = "USD"
                 $scope.stock_script = response.data.stock_script
                 $scope.stock_fee_in_rub = response.data.stock_fee_in_rub;
@@ -108,9 +109,9 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
                     want_coin_code: $scope.want_coin_code,
                 }).then(function (response) {
                     if (response.data.message == null) {
+                        $scope.haveOffers = response.data.have_offers;
                         $scope.saleOffers = response.data.sale_offers;
                         $scope.buyOffers = response.data.buy_offers;
-                        $scope.haveOffers = response.data.have_offers;
                         $scope.rates = response.data.rates;
 
                         $scope.offer_have_coin_code = $scope.have_coin_code
@@ -121,6 +122,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
             }
         })
     }
+    $scope.updateData = updateData;
 
     $scope.getRate = function (coin_code) {
         if ($scope.rates != null)
@@ -205,7 +207,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
             $scope.exchange_in_progress = false
             if (response.data.message == null) {
                 $scope.toggleExchangeFragment = true
-                updateData($scope.offer_have_coin_code)
+                updateData(notUSD($scope.offer_have_coin_code, $scope.offer_want_coin_code))
             } else
                 $scope.exchange_message = response.data.message
         })
@@ -286,7 +288,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
     $scope.message_index = 0;
     var messagesInterval;
     function startTimer() {
-        messagesInterval = $interval(function () {
+        /*messagesInterval = $interval(function () {
             $http.post(pathToRootDir + "darkcoin/api/messages.php", {
                 token: $scope.token,
             }).then(function (response) {
@@ -296,7 +298,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
                     updateData();
                 }
             })
-        }, 1000);
+        }, 1000);*/
     }
 
     function stopTimer() {
@@ -307,4 +309,10 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
     $scope.$on('$destroy', function () {
         stopTimer();
     });
+
+    function notUSD(first, second) {
+        if (first === "USD")
+            return second;
+        return first;
+    }
 })
