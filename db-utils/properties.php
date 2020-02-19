@@ -1,9 +1,16 @@
 <?php
 
-$db_host = "localhost";
-$db_name = "darkwallet";
-$db_user = "root";
-$db_pass = "root";
+$db_host = "";
+$db_name = "";
+$db_user = "";
+$db_pass = "";
 
-if (!isset($db_host) || !isset($db_user) || !isset($db_pass) || !isset($db_name))
-    die(json_encode(array("message" => "Сreate properties.php with database connection parameters")));
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/properties_overload.php";
+
+if (
+    $db_host == null
+    || $db_name == null
+    || $db_user == null
+    || $db_pass == null
+)
+    die(json_encode(array("message" => "Create properties.php with database connection parameters")));
