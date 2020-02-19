@@ -1,4 +1,4 @@
-controller("darkcoin.store", function ($scope, $window, $http, $interval, $routeParams) {
+controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams) {
     $scope.hostname = window.location.hostname
     $scope.activeWindow = 0;
     $scope.windowWidth = $window.innerWidth;
@@ -46,7 +46,7 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
     $scope.loginButton = function () {
         $scope.login_request_in_progress = true
         store.clear()
-        $http.post(pathToRootDir + "darkcoin.store/api/login_check.php", {
+        $http.post(pathToRootDir + "darkcoin/api/login_check.php", {
             token: $scope.token,
             user_login: $scope.login,
             user_password: $scope.password,
@@ -91,7 +91,7 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
     $scope.stock_fee_in_rub = null;
 
     function updateData(coin_code) {
-        $http.post(pathToRootDir + "darkcoin.store/api/wallet.php", {
+        $http.post(pathToRootDir + "darkcoin/api/wallet.php", {
             token: $scope.token,
         }).then(function (response) {
             if (response.data.message == null) {
@@ -143,7 +143,7 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
     $scope.createCoin = function () {
         $scope.create_coin_message = null
         $scope.create_coin_request_in_progress = true;
-        $http.post(pathToRootDir + "darkcoin.store/api/coin_create.php", {
+        $http.post(pathToRootDir + "darkcoin/api/coin_create.php", {
             token: $scope.token,
             coin_name: $scope.newCoinName,
             coin_code: $scope.newCoinCode,
@@ -195,7 +195,7 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
     $scope.exchange = function () {
         $scope.exchange_message = null
         $scope.exchange_in_progress = true
-        $http.post(pathToRootDir + "darkcoin.store/api/exchange.php", {
+        $http.post(pathToRootDir + "darkcoin/api/exchange.php", {
             token: $scope.token,
             have_coin_code: $scope.offer_have_coin_code,
             have_coin_count: $scope.offer_have_coin_count,
@@ -252,7 +252,7 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
     $scope.send = function () {
         $scope.send_message = null
         $scope.send_request_in_progress = true
-        $http.post(pathToRootDir + "darkcoin.store/api/send.php", {
+        $http.post(pathToRootDir + "darkcoin/api/send.php", {
             token: $scope.token,
             receiver_user_login: $scope.send_user_login,
             coin_code: $scope.send_coin_code,
@@ -287,7 +287,7 @@ controller("darkcoin.store", function ($scope, $window, $http, $interval, $route
     var messagesInterval;
     function startTimer() {
         messagesInterval = $interval(function () {
-            $http.post(pathToRootDir + "darkcoin.store/api/messages.php", {
+            $http.post(pathToRootDir + "darkcoin/api/messages.php", {
                 token: $scope.token,
             }).then(function (response) {
                 if (response.data.messages != null) {

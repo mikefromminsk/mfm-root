@@ -1,7 +1,6 @@
 <?php
 
-include_once "../../db-utils/db.php";
-include_once "const.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
 include_once "messages_utils.php";
 
 send(1, "Payment receive start", json_encode($_POST));
@@ -15,9 +14,8 @@ $datetime = get_required("datetime");
 $sender = get_required("sender");
 $codepro = get_required("codepro");
 $label = get("label");
-$notification_secret = $yandex_money_secret_code;
 
-$test_string = "$notification_type&$operation_id&$amount&$currency&$datetime&$sender&$codepro&$notification_secret&$label";
+$test_string = "$notification_type&$operation_id&$amount&$currency&$datetime&$sender&$codepro&$yandex_money_secret_code&$label";
 $test_hash = hash("sha1", $test_string);
 
 send(1, "Payment receive", $test_string);

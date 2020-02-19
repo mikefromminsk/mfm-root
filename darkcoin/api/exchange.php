@@ -35,7 +35,7 @@ for ($i = 0; $i < $request_count && $message == null; $i++) {
     $request["have_coin_count"] = $coin_count;
     $request["want_coin_count"] = ceil($coin_count * $offer_rate_inverse);
     $request["have_domains"] = getListFromStart($have_coin_code, $coin_count, $user_id);
-    $message = http_json_post($stock_url . "darkcoin.store/api/offer_create.php", $request)["message"];
+    $message = http_json_post($stock_url . "darkcoin/api/offer_create.php", $request)["message"];
 }
 
 echo json_encode(array(

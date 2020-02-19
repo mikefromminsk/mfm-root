@@ -1,8 +1,8 @@
 <?php
 
-require("../../PHPMailer/Exception.php");
-require("../../PHPMailer/PHPMailer.php");
-require("../../PHPMailer/SMTP.php");
+require_once $_SERVER["DOCUMENT_ROOT"] . "/PHPMailer/Exception.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/PHPMailer/PHPMailer.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/PHPMailer/SMTP.php";
 
 define("MESSAGE_ORDER_CREATE", "Order created");
 define("MESSAGE_ORDER_SUCCESS_PAID", "Success paid");
@@ -17,8 +17,6 @@ function send($to, $subject, $body, $message_type = null, $message_object_id = n
     } else if (is_string($to)) {
         $to_user_id = scalar("select user_id from users where user_login = '" . uencode($to) . "'");
     }
-
-    file_put_contents("send.log", date("Y-m-d H:i:s") . " $to: $subject\n$body\n\n", FILE_APPEND);
 
     if ($to_user_id != null) {
         insertList("messages", array(

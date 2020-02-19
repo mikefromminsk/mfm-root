@@ -3,7 +3,7 @@
 include_once "login.php";
 
 echo json_encode(array(
-    "stock_script" => $stock_url . "darkcoin.store/api/stock.php",
+    "stock_script" => $stock_url . "darkcoin/api/stock.php",
     "stock_fee_in_rub" => $stock_fee_in_rub,
     "coins" => selectList("select server_domain_name as coin_code from servers where server_url = '" . uencode($server_url) . "'"),
     "have_coins" => select("select t2.server_domain_name as coin_code, count(*) as coin_count from domains t1 "

@@ -1,6 +1,6 @@
 <?php
 
-include_once "../../db-utils/db.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
 include_once "messages_utils.php";
 
 $node_url = uencode($server_url . "node");
@@ -42,7 +42,7 @@ if ($user_login != null && $user_password != null) {
             ));
         } else {
             $token = random_id();
-            $validation_link = str_replace("/api/", "", $server_url) . "#!/darkcoin.store/" . $token;
+            $validation_link = str_replace("/api/", "", $server_url) . "#!/darkcoin/" . $token;
             $send_result = send($user_login, "Registration", "Click link follow: <a href='$validation_link'>$validation_link</a>");
             if ($send_result === true) {
                 insertList("users", array(

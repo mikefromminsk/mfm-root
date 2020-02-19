@@ -1,10 +1,8 @@
 <?php
-$db_host = "localhost";
-$db_name = "darkwallet";
-$db_user = "root";
-$db_pass = "root";
+
+include_once $_SERVER["DOCUMENT_ROOT"] ."/db-utils/properties.php";
 
 $server_url = "http://localhost/";
 
-$hosting_minutes_for_one_usd = 60 * 24;
-$start_node_locations = [""];
+if (!isset($server_url))
+    die(json_encode(array("message" => "Set \$server_url variable")));
