@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 17 2020 г., 08:10
+-- Время создания: Фев 19 2020 г., 17:43
 -- Версия сервера: 10.4.10-MariaDB
 -- Версия PHP: 7.3.12
 
@@ -25,46 +25,35 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `coins`
---
-
-DROP TABLE IF EXISTS `coins`;
-CREATE TABLE IF NOT EXISTS `coins` (
-  `coin_code` varchar(5) NOT NULL,
-  `coin_name` varchar(64) NOT NULL,
-  UNIQUE KEY `coin_code` (`coin_code`),
-  UNIQUE KEY `coin_name` (`coin_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `domains`
 --
 
 DROP TABLE IF EXISTS `domains`;
 CREATE TABLE IF NOT EXISTS `domains` (
-  `domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `domain_next_hash` varchar(64) CHARACTER SET utf8 NOT NULL,
-  `domain_last_online_time` int(11) NOT NULL,
-  `node_location` varchar(256) CHARACTER SET utf8 NOT NULL,
+  `domain_name` varchar(256) COLLATE utf8_bin NOT NULL,
+  `domain_name_hash` int(11) NOT NULL,
+  `domain_prev_key` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+  `domain_next_key_hash` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `domain_next_key` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+  `server_group_id` bigint(14) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
   UNIQUE KEY `domain_name` (`domain_name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `domain_keys`
+-- Структура таблицы `files`
 --
 
-DROP TABLE IF EXISTS `domain_keys`;
-CREATE TABLE IF NOT EXISTS `domain_keys` (
-  `user_id` int(11) NOT NULL,
-  `domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `domain_next_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `coin_code` varchar(5) NOT NULL,
-  UNIQUE KEY `domain_name` (`domain_name`),
-  UNIQUE KEY `domain_next_name` (`domain_next_name`)
+DROP TABLE IF EXISTS `files`;
+CREATE TABLE IF NOT EXISTS `files` (
+  `file_id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_path` varchar(512) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `file_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `file_size` bigint(20) NOT NULL,
+  `file_hash` varchar(64) NOT NULL,
+  PRIMARY KEY (`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -104,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `offers` (
   `offer_rate` double NOT NULL,
   `offer_rate_inverse` double NOT NULL,
   `offer_progress` double NOT NULL,
-  `back_host_url` varchar(256) NOT NULL,
+  `back_script_url` varchar(256) NOT NULL,
   `back_user_login` varchar(64) NOT NULL,
   PRIMARY KEY (`offer_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -117,12 +106,12 @@ CREATE TABLE IF NOT EXISTS `offers` (
 
 DROP TABLE IF EXISTS `servers`;
 CREATE TABLE IF NOT EXISTS `servers` (
-  `server_id` int(11) NOT NULL AUTO_INCREMENT,
-  `server_location` varchar(256) NOT NULL,
-  `server_sync_time` int(11) NOT NULL,
-  `server_success_request_count` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`server_id`),
-  UNIQUE KEY `server_location` (`server_location`)
+  `servers_id` int(11) NOT NULL AUTO_INCREMENT,
+  `server_group_id` bigint(14) NOT NULL,
+  `server_url` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `server_domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `server_domain_remove_time` bigint(14) DEFAULT NULL,
+  PRIMARY KEY (`servers_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

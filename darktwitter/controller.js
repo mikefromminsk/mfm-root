@@ -1,3 +1,0 @@
-controller("darktwitter", function ($scope) {
-
-})

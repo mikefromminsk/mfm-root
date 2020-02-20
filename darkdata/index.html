@@ -1,0 +1,52 @@
+<style>
+
+    .file-line {
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .file-line:hover {
+        background: #3b3b3b;
+        text-decoration: underline;
+    }
+
+    .file_name {
+        padding-left: 24px;
+    }
+
+</style>
+
+<div class="layout-column">
+    <div class="layout-row layout-align-start-center header">
+        <div class="layout-row layout-align-center flex">
+            <h2>DarkData</h2>
+        </div>
+    </div>
+    <div class="layout-row scrollable layout-align-center" style="padding: 24px;">
+        <div class="layout-column input-wrapper" style="width: 980px; max-width: 100%;">
+            <div class="layout-row layout-align-start-center input-header">
+                <div class="layout-row">
+                    <h2>{{path_text()}}</h2>
+                </div>
+                <div class="flex"></div>
+                <md-button
+                        style="background-color: #28a745; background-image: linear-gradient(-180deg,#34d058,#28a745 90%); width: 120px; height: 30px">
+                    Download
+                </md-button>
+            </div>
+            <md-content class="layout-column file-line" ng-repeat="file in files" md-ink-ripple>
+                <div class="layout-row" style="padding: 20px;">
+                    <md-icon md-svg-src="{{file.file_size == 0 ? 'img/folder.svg' : 'img/file.svg'}}"
+                             ng-style="{'color': (file.file_size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
+                    <div class="file_name" style=" ">{{file.file_name}}</div>
+                    <div class="flex"></div>
+                    {{file.file_size == 0 ? "" : file.file_size}}
+                </div>
+                <md-divider></md-divider>
+            </md-content>
+            <div class="input-footer">
+                <h2> </h2>
+            </div>
+        </div>
+    </div>
+</div>

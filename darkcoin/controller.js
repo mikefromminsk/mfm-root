@@ -30,7 +30,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
     $scope.have_coin_code = null
     $scope.want_coin_code = null
 
-    if ($scope.token != null){
+    if ($scope.token != null) {
         updateData()
         startTimer()
     }
@@ -122,6 +122,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
             }
         })
     }
+
     $scope.updateData = updateData;
 
     $scope.getRate = function (coin_code) {
@@ -168,6 +169,10 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
     $scope.offer_want_coin_code = null
     $scope.offer_want_coin_count = null
     $scope.offer_rate = null
+
+    $scope.openOffer = function (offer) {
+        updateData(notUSD(offer.offer_have_coin_code, offer.offer_want_coin_code))
+    }
 
     $scope.offerHaveCoinCountChange = function () {
         $scope.calcRate()
@@ -287,6 +292,7 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
     $scope.messages = null;
     $scope.message_index = 0;
     var messagesInterval;
+
     function startTimer() {
         /*messagesInterval = $interval(function () {
             $http.post(pathToRootDir + "darkcoin/api/messages.php", {
