@@ -1,9 +1,5 @@
 <style>
 
-    md-button {
-        font-weight: 600;
-    }
-
     .cell {
         border-bottom: 1px solid black;
         border-right: 1px solid black;
@@ -17,7 +13,7 @@
     }
 
 </style>
-<div class="layout-fill layout-column layout-align-center-center"
+<div class="layout-fill layout-column layout-align-center-center ng-cloak"
      style="background: url(img/background.png) center center no-repeat;" ng-show="token == null">
     <form class="input-wrapper layout-column" ng-submit="loginButton()">
         <div class="input-header layout-row layout-align-center">
@@ -79,7 +75,7 @@
 </div>
 
 
-<div class="layout-fill layout-row" style="background-color: #666666;" ng-show="token != null">
+<div class="layout-fill layout-row ng-cloak" style="background-color: #666666;" ng-show="token != null">
     <md-content class="layout-column flex-gt-xs-25 flex" ng-show="windowWidth >= 600 || activeWindow == 0">
         <div class="layout-column flex scrollable" ng-show="toggleSendFragment">
             <div class="layout-column" style="background-color: #444444;">

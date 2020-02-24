@@ -1,0 +1,107 @@
+<style>
+
+    .file-line {
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .file-line:hover {
+        background: #3b3b3b;
+        text-decoration: underline;
+    }
+
+    .file_name {
+        padding-left: 24px;
+    }
+
+</style>
+<div class="layout-fill layout-row" ng-cloak>
+    <div class="layout-column flex-30 scrollable">
+        <div class="flex scrollable">
+            <div class="layout-column header">
+                <div class="layout-row flex" style="padding: 5px 16px 0 16px">
+                    <md-input-container class="flex">
+                        <label>Search</label>
+                        <md-icon md-svg-src="img/search.svg"></md-icon>
+                        <input type="text" autocomplete="off" ng-model="searchText">
+                    </md-input-container>
+                </div>
+                <md-progress-linear md-mode="query" ng-disabled="!search_request_in_progress"></md-progress-linear>
+            </div>
+            <div class="layout-column" ng-repeat="item in apps">
+                <md-content class="layout-row layout-align-start-center" md-ink-ripple
+                            ng-click="openApp(item)"
+                            style="padding: 24px 16px;">
+                    {{item.domain_name}}
+                    <div class="flex"></div>
+                    <md-button class="md-raised" style="background-color: lightgreen"
+                               ng-click="downloadApp(item); $event.stopPropagation();">
+                        Download
+                    </md-button>
+                </md-content>
+                <md-divider></md-divider>
+            </div>
+        </div>
+    </div>
+    <div class="layout-column flex">
+        <div class="flex scrollable" ng-show="!toggleExplorerFragment">
+            <div class="layout-row layout-align-center-center header">
+                {{app.domain_name}}
+            </div>
+            <div class="layout-column" style="padding: 16px">
+                <div class="layout-row">
+                    <img src="/{{app.domain_name}}/logo.png"
+                         style="width:200px; height: 200px; background: url(img/logo_default.jpg); background-size: 100% 100%;" alt="">
+                    <div class="layout-column  flex"  style="padding-left: 16px">
+                        <div class="layout-row layout-align-start-center">
+                            <h1>{{app.domain_name}}</h1>
+                            <div class="flex"></div>
+                            <h3>{{app.author}}</h3>
+                        </div>
+                        <h3 style="padding: 16px 0;">
+                            {{app.descripition}}
+                        </h3>
+                    </div>
+                </div>
+                <div class="layout-row flex" style="padding-top: 16px">
+                    Readme.md
+                </div>
+            </div>
+        </div>
+        <md-button class="md-raised md-primary header" ng-click="toggleExplorerFragment = !toggleExplorerFragment">
+            File explorer
+        </md-button>
+        <div class="layout-row" style="padding: 24px;"  ng-show="toggleExplorerFragment">
+            <div class="layout-column input-wrapper" style="width: 980px; max-width: 100%;">
+                <div class="layout-row input-header">
+                    <div class="layout-row">
+                        <h2>{{path_text()}}</h2>
+                    </div>
+                    <div class="flex"></div>
+                    <md-button style="background-color: #4447a7; margin-right: 16px;">
+                        + Upload
+                    </md-button>
+                    <md-button style="background-color: #28a745;">
+                        Download
+                    </md-button>
+                </div>
+                <md-content class="layout-column file-line" ng-repeat="file in files" md-ink-ripple>
+                    <div class="layout-row" style="padding: 20px;">
+                        <md-icon md-svg-src="{{file.file_size == 0 ? 'img/folder.svg' : 'img/file.svg'}}"
+                                 ng-style="{'color': (file.file_size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
+                        <div class="file_name" style=" ">{{file.file_name}}</div>
+                        <div class="flex"></div>
+                        {{file.file_size == 0 ? "" : file.file_size}}
+                    </div>
+                    <md-divider></md-divider>
+                </md-content>
+                <div class="input-footer">
+                    <h2></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

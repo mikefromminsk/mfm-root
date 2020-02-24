@@ -56,13 +56,13 @@ h1, h2, h3, h4, h5 {
 
 .header {
     background-color: #666666;
-    height: 64px;
+    height: 80px;
     box-shadow: 0 0 5px black;
     font-size: 20px;
+    font-weight: 600;
 }
 
-
-/*For inputs*/
+/*for inputs*/
 md-input-container {
     margin: 18px 0 0 0;
 }
@@ -71,9 +71,20 @@ md-input-container {
     display: none;
 }
 
+/*for md-autocomplete*/
+/*md-autocomplete-wrap > md-input-container {
+    margin: 18px 0;
+}
+
+md-input-container > .md-errors-spacer {
+    display: block;
+}*/
+
+
 .md-button {
     margin: 0;
     border-radius: 0;
+    font-weight: 600;
 }
 
 *:focus {
