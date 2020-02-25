@@ -21,12 +21,10 @@
         </div>
         <md-content class="input-container layout-column" ng-show="toggleLoginReg == true">
             <md-input-container>
-                <label>Email</label>
-                <input type="email" ng-model="login" ng-required="true">
+                <input type="email" ng-model="login" ng-required="true" placeholder="Email">
             </md-input-container>
             <md-input-container>
-                <label>Password</label>
-                <input type="password" ng-model="password" ng-required="true" minlength="8">
+                <input type="password" ng-model="password" ng-required="true" minlength="8" placeholder="Password">
             </md-input-container>
             <div class="div" ng-show="login_message" style="color: rgb(33, 150, 243);">{{login_message}}</div>
             <div class="layout-row">
@@ -46,12 +44,10 @@
         </md-content>
         <md-content class="input-container layout-column" ng-show="toggleLoginReg == false">
             <md-input-container>
-                <label>Email</label>
-                <input type="email" ng-model="login" ng-required="true">
+                <input type="email" ng-model="login" ng-required="true" placeholder="Email">
             </md-input-container>
             <md-input-container>
-                <label>Password</label>
-                <input type="password" ng-model="password" ng-required="true" minlength="8">
+                <input type="password" ng-model="password" ng-required="true" minlength="8" placeholder="Password">
             </md-input-container>
             <md-checkbox ng-model="agreeWithTeems" class="md-align-top-left" required>
                 I agree to <a href="terms.html" target="_blank">the terms of use</a>
@@ -142,9 +138,8 @@
                 </div>
                 <md-content class="input-container layout-column">
                     <md-input-container>
-                        <label>Receiver login</label>
                         <input type="email" ng-model="send_user_login" required maxlength="256"
-                               placeholder="example@gmail.com">
+                               placeholder="receiver@gmail.com">
                     </md-input-container>
                     <div class="layout-row">
                         <md-input-container>
@@ -274,9 +269,8 @@
                                 </md-select>
                             </md-input-container>
                             <md-input-container>
-                                <label>Count</label>
                                 <input type="number" ng-model="offer_have_coin_count" required maxlength="5"
-                                       ng-change="offerHaveCoinCountChange()">
+                                       ng-change="offerHaveCoinCountChange()" placeholder="Count">
                             </md-input-container>
                         </div>
                         <div class="layout-column">
@@ -287,9 +281,8 @@
                             </div>
                             <div class="flex"></div>
                             <md-input-container>
-                                <label>Rate</label>
                                 <input type="number" ng-model="offer_rate" step="0.00000001" required maxlength="10"
-                                       ng-change="offerRateChange()">
+                                       ng-change="offerRateChange()" placeholder="Rate">
                             </md-input-container>
                         </div>
                         <div class="layout-column">
@@ -300,9 +293,8 @@
                                 </md-select>
                             </md-input-container>
                             <md-input-container>
-                                <label>Count</label>
                                 <input type="number" ng-model="offer_want_coin_count" required maxlength="5"
-                                       ng-change="offerWantCoinCountChange()">
+                                       ng-change="offerWantCoinCountChange()" placeholder="Count">
                             </md-input-container>
                         </div>
                     </div>
@@ -359,13 +351,11 @@
                 </div>
                 <md-content class="input-container layout-column">
                     <md-input-container>
-                        <label>Full name of Your Coin</label>
-                        <input ng-model="newCoinName" required minlength="3" maxlength="30">
+                        <input ng-model="newCoinName" required minlength="3" maxlength="30" placeholder="Full name of Your Coin">
                     </md-input-container>
                     <md-input-container>
-                        <label>Code of Your Coin</label>
                         <input ng-model="newCoinCode" minlength="3" maxlength="5" style="text-transform: uppercase;"
-                               required>
+                               required placeholder="Code of Your Coin">
                     </md-input-container>
                     <md-checkbox ng-model="agreeWithPublicationOnExchangeStock">
                         Publication on exchange stock

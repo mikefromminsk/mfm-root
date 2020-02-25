@@ -17,7 +17,7 @@
 </style>
 <div class="layout-fill layout-row" ng-cloak>
     <div class="layout-column flex-30 scrollable">
-        <div class="flex scrollable">
+        <div class="flex scrollable" ng-show="!toggleCreateAppFragment">
             <div class="layout-column header">
                 <div class="layout-row flex" style="padding: 5px 16px 0 16px">
                     <md-input-container class="flex">
@@ -42,7 +42,44 @@
                 <md-divider></md-divider>
             </div>
         </div>
+        <md-button class="md-raised md-primary header" ng-click="toggleCreateAppFragment = !toggleCreateAppFragment">
+            Create app
+        </md-button>
+        <div class="layout-column layout-align-center-center flex" ng-show="toggleCreateAppFragment"
+             style="background-color: #444444">
+            <form class="input-wrapper layout-column" target="_blank"
+                  ng-submit="createCoin()">
+                <input type="hidden" name="token" value="{{token}}">
+                <div class="input-header layout-row layout-align-center">
+                    <h3>Create app</h3>
+                </div>
+                <md-content class="input-container layout-column">
+                    <div class="layout-row layout-align-center" ng-click="uploadLogo()">
+                        <img src="/{{app.domain_name}}/logo.png"
+                             style="width:200px; height: 200px; background: url(img/logo_default.jpg); background-size: 100% 100%;"
+                             alt="">
+                    </div>
+                    <md-input-container>
+                        <input ng-model="newCoinName" required minlength="3" maxlength="30" placeholder="Name">
+                    </md-input-container>
+                    <md-input-container>
+                        <textarea rows="5" md-select-on-focus required placeholder="This is text"></textarea>
+                    </md-input-container>
+
+                    <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
+                    <md-button type="submit" class="md-raised md-primary"
+                               style="margin-top: 20px; background-color: green"
+                               ng-disabled="create_coin_request_in_progress">
+                        {{agreeWithPublicationOnExchangeStock ? "Create public coin" : "Create coin"}}
+                        <md-progress-linear md-mode="query"
+                                            ng-disabled="!create_coin_request_in_progress"></md-progress-linear>
+                    </md-button>
+                </md-content>
+            </form>
+        </div>
     </div>
+
+
     <div class="layout-column flex">
         <div class="flex scrollable" ng-show="!toggleExplorerFragment">
             <div class="layout-row layout-align-center-center header">
@@ -51,8 +88,9 @@
             <div class="layout-column" style="padding: 16px">
                 <div class="layout-row">
                     <img src="/{{app.domain_name}}/logo.png"
-                         style="width:200px; height: 200px; background: url(img/logo_default.jpg); background-size: 100% 100%;" alt="">
-                    <div class="layout-column  flex"  style="padding-left: 16px">
+                         style="width:200px; height: 200px; background: url(img/logo_default.jpg); background-size: 100% 100%;"
+                         alt="">
+                    <div class="layout-column  flex" style="padding-left: 16px">
                         <div class="layout-row layout-align-start-center">
                             <h1>{{app.domain_name}}</h1>
                             <div class="flex"></div>
@@ -71,18 +109,19 @@
         <md-button class="md-raised md-primary header" ng-click="toggleExplorerFragment = !toggleExplorerFragment">
             File explorer
         </md-button>
-        <div class="layout-row" style="padding: 24px;"  ng-show="toggleExplorerFragment">
-            <div class="layout-column input-wrapper" style="width: 980px; max-width: 100%;">
+        <div class="layout-row " style="padding: 24px;" ng-show="toggleExplorerFragment">
+            <div class="layout-column input-wrapper flex">
                 <div class="layout-row input-header">
                     <div class="layout-row">
-                        <h2>{{path_text()}}</h2>
+                        <h2>{{path()}}</h2>
                     </div>
                     <div class="flex"></div>
-                    <md-button style="background-color: #4447a7; margin-right: 16px;">
-                        + Upload
+
+                    <md-button style="background-color: #58a75d; margin-right: 16px" ng-click="upload()">
+                        + File
                     </md-button>
-                    <md-button style="background-color: #28a745;">
-                        Download
+                    <md-button style="background-color: #58a75d; margin-right: 16px">
+                        + Dir
                     </md-button>
                 </div>
                 <md-content class="layout-column file-line" ng-repeat="file in files" md-ink-ripple>
@@ -92,12 +131,22 @@
                         <div class="file_name" style=" ">{{file.file_name}}</div>
                         <div class="flex"></div>
                         {{file.file_size == 0 ? "" : file.file_size}}
+                        <md-menu md-position-mode="target-right target">
+                            <md-button aria-label="Open demo menu" class="md-icon-button"
+                                       ng-click="$mdMenu.open($event)">
+                                <md-icon md-menu-origin md-svg-icon="img/menu.svg"></md-icon>
+                            </md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="delete(file)">
+                                        Delete
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
                     </div>
                     <md-divider></md-divider>
                 </md-content>
-                <div class="input-footer">
-                    <h2></h2>
-                </div>
             </div>
         </div>
     </div>

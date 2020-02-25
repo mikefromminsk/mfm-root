@@ -107,10 +107,6 @@ md-input-container > .md-errors-spacer {
     border-top: 6px solid rgb(33, 150, 243);
 }
 
-.input-footer {
-    border-bottom: 6px solid rgb(33, 150, 243);
-}
-
 .input-container {
     padding: 16px;
 }
