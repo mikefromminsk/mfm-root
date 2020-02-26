@@ -1,5 +1,5 @@
 <?php
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 
 $have_coin_code = get_required("have_coin_code");
 $want_coin_code = get_required("want_coin_code");

@@ -1,6 +1,6 @@
 <?php
 
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 
 $coin_code = get_required("coin_code");
 $coin_count = get_int_required("coin_count");

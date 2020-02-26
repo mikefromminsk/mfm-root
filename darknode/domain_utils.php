@@ -90,3 +90,51 @@ function getListFromStart($domain_prefix, $count, $user_id = null, $to_user_logi
             $domain["user_login"] = $to_user_login;
     return $domains;
 }
+
+
+define("FILE_SIZE_HEX_LENGTH", 8);
+define("HASH_ALGO", "sha256");
+define("HASH_LENGTH", 51);
+define("MAX_SMALL_DATA_LENGTH", HASH_LENGTH + FILE_SIZE_HEX_LENGTH);
+
+function getFile($filename, $override_user_id = null)
+{
+    $path_items = explode("/", $filename);
+    $domain_name = $path_items[0];
+    $server_group_id = scalar("select server_group_id from domains where domain_name = '" . uencode($domain_name) . "' "
+        . ($override_user_id == null ? "" : " and user_id = $override_user_id"));
+    if ($server_group_id == null)
+        return null;
+    $file_id = $server_group_id;
+    array_shift($path_items);
+    foreach ($path_items as $file_name) {
+        $next_file_id = scalar("select file_id from files where file_parent_id = $file_id and file_name = '" . uencode($file_name) . "'");
+        if ($next_file_id == null) {
+            if ($mkdirs) {
+                $next_file_id = insertListAndGetId("files", array(
+                    "file_parent_id" => $file_id,
+                    "file_name" => $file_name, // save to file if > 59
+                ));
+            } else
+                return null;
+        }
+        $file_id = $next_file_id;
+    }
+    return selectMap("select * from files where file_id = $file_id");
+}
+
+function getData($hash_or_data)
+{
+    if (strlen($hash_or_data) == MAX_SMALL_DATA_LENGTH) {
+        $hash = substr($hash_or_data, FILE_SIZE_HEX_LENGTH);
+        return file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/darknode/files/" . $hash);
+    }
+    return $hash_or_data;
+}
+
+function getSize($hash_or_data)
+{
+    if (strlen($hash_or_data) == MAX_SMALL_DATA_LENGTH)
+        return hexdec(substr($hash_or_data, 0, FILE_SIZE_HEX_LENGTH));
+    return strlen($hash_or_data);
+}

@@ -159,10 +159,6 @@ function get_string_required($param_name)
 function insert($sql, $show_query = null)
 {
     $success_or_error = query($sql, $show_query);
-    /*$insert_autoincrement_id = mysqli_insert_id($GLOBALS["conn"]);
-    if ($insert_autoincrement_id === 0)
-        return $success_or_error;
-    return $insert_autoincrement_id;*/
     return $success_or_error;
 }
 
@@ -177,6 +173,19 @@ function insertList($table_name, $params, $show_query = false)
             $params[$param_name] = "'" . uencode($param_value) . "'";
     $insert_query = "insert into $table_name (" . implode(",", array_keys($params)) . ") values (" . implode(",", array_values($params)) . ")";
     return insert($insert_query, $show_query);
+}
+
+function insertListAndGetId($table_name, $params, $show_query = false)
+{
+    $success = insertList($table_name, $params, $show_query);
+    if ($success)
+        return get_last_insert_id();
+    return null;
+}
+
+function get_last_insert_id()
+{
+    return mysqli_insert_id($GLOBALS["conn"]);
 }
 
 function update($sql, $show_query = null)

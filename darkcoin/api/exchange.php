@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 
 $have_coin_code = get_required("have_coin_code");
 $have_coin_count = get_int_required("have_coin_count");

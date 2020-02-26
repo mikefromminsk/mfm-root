@@ -1,6 +1,6 @@
 <?php
 
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 header("Content-type: text/html;charset=utf-8");
 
 $coin_name = get_required("coin_name");

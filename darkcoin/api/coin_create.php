@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 
 $coin_code = get_required("coin_code");
 $coin_code = strtoupper($coin_code);

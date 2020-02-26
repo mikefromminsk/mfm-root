@@ -1,6 +1,6 @@
 <?php
 
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 
 echo json_encode(array(
     "user_login" => $user["user_login"],

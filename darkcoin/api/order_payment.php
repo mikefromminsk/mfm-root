@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
-include_once "messages_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darkmessages/messages_utils.php";
 
 send(1, "Payment receive start", json_encode($_POST));
 $sha1_hash = get_required("sha1_hash");

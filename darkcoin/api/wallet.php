@@ -1,6 +1,6 @@
 <?php
 
-include_once "login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
 
 echo json_encode(array(
     "stock_script" => $stock_url . "darkcoin/api/stock.php",
