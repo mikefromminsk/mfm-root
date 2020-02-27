@@ -83,7 +83,11 @@ function table_exist($table_name)
 
 function error($error_message)
 {
-    $result["message"] = basename($_SERVER["SCRIPT_FILENAME"], '.php') . ".php: " . $error_message . "    Stacktrace:" . implode("   ", generateCallTrace());
+    $result["message"] = $error_message;
+    $stack = generateCallTrace();
+    if ($stack != null)
+        $result["stack"] = $stack;
+    http_response_code(500); // INTERNAL SERVER ERROR
     die(json_encode_readable($result));
 }
 

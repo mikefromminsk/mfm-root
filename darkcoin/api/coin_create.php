@@ -6,9 +6,8 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/login.php";
 $coin_code = get_required("coin_code");
 $coin_code = strtoupper($coin_code);
 
-$message = null;
 
-for ($i = 0; $i < 64 && $message == null; $i++) {
+for ($i = 0; $i < 64; $i++) {
     $domains = [];
     for ($j = 0; $j < 1024; $j++) {
         $domain_next_key = random_id();
@@ -23,9 +22,9 @@ for ($i = 0; $i < 64 && $message == null; $i++) {
         "domain_name" => $coin_code,
         "domains" => $domains,
     ))["message"];
+    if ($message != null) error($message);
 }
-
-if ($message == null) {
+if ($user_id != 1){
     $message = http_json_post($server_url . "darkcoin/api/exchange.php", array(
         "token" => scalar("select user_session_token from users where user_id = 1"),
         "have_coin_code" => "USD",
@@ -33,7 +32,6 @@ if ($message == null) {
         "want_coin_code" => $coin_code,
         "want_coin_count" => 20000,
     ))["message"];
+    if ($message != null) error($message);
 }
-
-echo json_encode(array("message" => $message));
 

@@ -20,60 +20,77 @@ function domains_set($domain_prefix, $domains)
     $current_server_item = selectMap("select * from servers where server_domain_name = '" . uencode($domain_prefix) . "' "
         . " and server_url = '" . uencode($server_url) . "'");
 
-    if ($current_server_item != null) {
-        $users_cache = array();
-        foreach ($domains as $domain) {
+    if ($current_server_item == null) {
+        $current_server_item = array(
+            "server_group_id" => random_id(),
+            "server_domain_name" => $domain_prefix,
+            "server_url" => $server_url,
+        );
+        insertList("servers", $current_server_item);
+    }
+    $users_cache = array();
+    foreach ($domains as $domain) {
 
-            $user_id = $domain["user_id"];
-            $user_login = $domain["user_login"];
-            $domain_name = $domain["domain_name"];
+        $user_id = $domain["user_id"];
+        $user_login = $domain["user_login"];
+        $domain_name = $domain["domain_name"];
 
-            if (strpos($domain_name, $domain_prefix) != 0)
-                continue;
+        if (strpos($domain_name, $domain_prefix) != 0)
+            continue;
 
-            if ($user_login != null) {
-                if ($users_cache[$user_login] == null)
-                    $users_cache[$user_login] = scalar("select user_id from users where user_login = '" . uencode($user_login) . "'");
-                $user_id = $users_cache[$user_login];
-            }
+        if ($user_login != null) {
+            if ($users_cache[$user_login] == null)
+                $users_cache[$user_login] = scalar("select user_id from users where user_login = '" . uencode($user_login) . "'");
+            $user_id = $users_cache[$user_login];
+        }
 
-            $current_domain = selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
-            if ($current_domain != null) {
-                if (hash("sha256", $domain["domain_next_key"]) == $current_domain["domain_next_key_hash"]) {
-                    $domain_next_key = random_id();
-                    $new_domain = array(
-                        "domain_name" => $domain_name,
-                        "domain_name_hash" => domain_hash($domain_name),
-                        "domain_prev_key" => $domain["domain_prev_key"],
-                        "domain_next_key_hash" => hash("sha256", $domain_next_key),
-                        "domain_next_key" => $domain_next_key,
-                        "server_group_id" => $current_server_item["server_group_id"],
-                        "user_id" => $user_id,
-                    );
-                    if (updateList("domains", $new_domain, "domain_name", $domain_name))
-                        $success_domain_changed[] = $new_domain["domain_name"];
-                }
-            } else {
+        $current_domain = selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
+        if ($current_domain != null) {
+            if (hash("sha256", $domain["domain_next_key"]) == $current_domain["domain_next_key_hash"]) {
+                $domain_next_key = random_id();
                 $new_domain = array(
                     "domain_name" => $domain_name,
                     "domain_name_hash" => domain_hash($domain_name),
                     "domain_prev_key" => $domain["domain_prev_key"],
-                    "domain_next_key_hash" => $domain["domain_next_key_hash"],
-                    "domain_next_key" => $domain["domain_next_key"],
+                    "domain_next_key_hash" => hash("sha256", $domain_next_key),
+                    "domain_next_key" => $domain_next_key,
                     "server_group_id" => $current_server_item["server_group_id"],
                     "user_id" => $user_id,
                 );
-                if (insertList("domains", $new_domain))
+                if (updateList("domains", $new_domain, "domain_name", $domain_name))
                     $success_domain_changed[] = $new_domain["domain_name"];
             }
+        } else {
+            $new_domain = array(
+                "domain_name" => $domain_name,
+                "domain_name_hash" => domain_hash($domain_name),
+                "domain_prev_key" => $domain["domain_prev_key"],
+                "domain_next_key_hash" => $domain["domain_next_key_hash"],
+                "domain_next_key" => $domain["domain_next_key"],
+                "server_group_id" => $current_server_item["server_group_id"],
+                "user_id" => $user_id,
+            );
+            if (insertList("domains", $new_domain))
+                $success_domain_changed[] = $new_domain["domain_name"];
         }
+    }
 
-    } else
-        error("domain name $domain_prefix is not hosting");
 
     return $success_domain_changed;
 }
 
+function domain_get($domain_name)
+{
+    return selectMap("select domain_name, domain_prev_key, domain_next_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+}
+
+function domain_similar($domain_name)
+{
+    $domain_name_hash = domain_hash($domain_name);
+    return select("select domain_name, domain_prev_key, domain_next_key_hash from domains "
+        . " where domain_name_hash > " . ($domain_name_hash - 32768) . " and domain_name_hash < " . ($domain_name_hash + 32768)
+        . " order by ABS(domain_name_hash - $domain_name_hash)  limit 5");
+}
 
 function getListFromStart($domain_prefix, $count, $user_id = null, $to_user_login = null)
 {

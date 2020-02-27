@@ -4,9 +4,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
 
 $domain_name = get_required("domain_name");
 
-$domain = domain_get($domain_name);
-
-if ($domain == null)
-    error("domain is not exist");
-
-echo json_encode($domain);
+echo json_encode(array(
+    "domain" => domain_get($domain_name),
+    "similar" => domain_similar($domain_name)
+));

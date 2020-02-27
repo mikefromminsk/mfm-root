@@ -44,6 +44,5 @@ if (sizeof($_FILES) != 0) {
     }
 }
 
-echo json_encode(array("message" => null));
 
 

@@ -115,12 +115,12 @@
                         </div>
                     </md-card>
                 </md-content>
-                <md-card class="layout-row layout-align-start-center"
+                <md-content class="layout-row layout-align-start-center"
                          style="padding: 16px 16px 16px 24px;" md-ink-ripple
                          ng-click="show('create_coin')">
                     <md-icon style="margin: 0 12px 0 0;" md-svg-src="img/add.svg"></md-icon>
                     Create coin
-                </md-card>
+                </md-content>
             </div>
         </div>
         <div class="layout-row">
@@ -354,7 +354,6 @@
                     </md-input-container>
                     <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
                     <md-button type="submit" class="md-raised md-primary"
-                               style="background-color: green"
                                ng-disabled="create_coin_request_in_progress">
                         Create coin
                         <md-progress-linear md-mode="query"

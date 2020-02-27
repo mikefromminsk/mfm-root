@@ -12,8 +12,6 @@ $back_user_login = get_required("back_user_login");
 $back_script_url = get_required("back_script_url");
 $have_domains = get_required("have_domains");
 
-$message = null;
-
 foreach ($have_domains as $key => $domain)
     $have_domains[$key]["user_id"] = $user_id;
 
@@ -105,7 +103,5 @@ foreach ($opposite_offers as $opposite_offer) {
 
 if ($offer["have_coin_count"] > 0)
     insertList("offers", $offer);
-
-echo json_encode(array("message" => $message));
 
 

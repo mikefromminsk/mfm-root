@@ -18,8 +18,6 @@ if ($have_coin_code == $want_coin_code)
 $offer_rate = $have_coin_count / $want_coin_count;
 $offer_rate_inverse = $want_coin_count / $have_coin_count;
 
-$message = null;
-
 $request = array(
     "stock_token" => $user["user_stock_token"],
     "have_coin_code" => $have_coin_code,
@@ -30,14 +28,12 @@ $request = array(
 
 $max_request_coin_count = 1024;
 $request_count = intdiv($have_coin_count, $max_request_coin_count) + bcmod($have_coin_count, $max_request_coin_count) > 0 ? 1 : 0;
-for ($i = 0; $i < $request_count && $message == null; $i++) {
+for ($i = 0; $i < $request_count; $i++) {
     $coin_count = ($i == $request_count - 1) ? bcmod($have_coin_count, $max_request_coin_count) : ($i + 1) * $max_request_coin_count;
     $request["have_coin_count"] = $coin_count;
     $request["want_coin_count"] = ceil($coin_count * $offer_rate_inverse);
     $request["have_domains"] = getListFromStart($have_coin_code, $coin_count, $user_id);
     $message = http_json_post($stock_url . "darkcoin/api/offer_create.php", $request)["message"];
+    if ($message != null) error($message);
 }
 
-echo json_encode(array(
-    "message" => $message,
-));

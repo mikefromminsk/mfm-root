@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 19 2020 г., 17:43
+-- Время создания: Фев 27 2020 г., 14:51
 -- Версия сервера: 10.4.10-MariaDB
 -- Версия PHP: 7.3.12
 
@@ -48,11 +48,10 @@ CREATE TABLE IF NOT EXISTS `domains` (
 
 DROP TABLE IF EXISTS `files`;
 CREATE TABLE IF NOT EXISTS `files` (
+  `file_parent_id` int(11) NOT NULL,
   `file_id` int(11) NOT NULL AUTO_INCREMENT,
-  `file_path` varchar(512) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `file_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `file_size` bigint(20) NOT NULL,
-  `file_hash` varchar(64) NOT NULL,
+  `file_name` varchar(59) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `file_data` varchar(59) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`file_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -106,12 +105,9 @@ CREATE TABLE IF NOT EXISTS `offers` (
 
 DROP TABLE IF EXISTS `servers`;
 CREATE TABLE IF NOT EXISTS `servers` (
-  `servers_id` int(11) NOT NULL AUTO_INCREMENT,
   `server_group_id` bigint(14) NOT NULL,
   `server_url` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `server_domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `server_domain_remove_time` bigint(14) DEFAULT NULL,
-  PRIMARY KEY (`servers_id`)
+  `server_domain_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

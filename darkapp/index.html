@@ -54,25 +54,15 @@
                     <h3>Create app</h3>
                 </div>
                 <md-content class="input-container layout-column">
-                    <div class="layout-row layout-align-center" ng-click="uploadLogo()">
-                        <img src="/{{app.domain_name}}/logo.png"
-                             style="width:200px; height: 200px; background: url(img/logo_default.jpg); background-size: 100% 100%;"
-                             alt="">
-                    </div>
                     <md-input-container>
-                        <input ng-model="newCoinName" required minlength="3" maxlength="30" placeholder="Name">
-                    </md-input-container>
-                    <md-input-container>
-                        <textarea rows="5" md-select-on-focus required placeholder="This is text"></textarea>
+                        <input ng-model="app_name" required minlength="3" maxlength="30" placeholder="Name">
                     </md-input-container>
 
-                    <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
-                    <md-button type="submit" class="md-raised md-primary"
-                               style="margin-top: 20px; background-color: green"
-                               ng-disabled="create_coin_request_in_progress">
-                        {{agreeWithPublicationOnExchangeStock ? "Create public coin" : "Create coin"}}
+                    <div ng-show="create_app_message != null" style="color: red">{{create_app_message}}</div>
+                    <md-button type="submit" class="md-raised md-primary" ng-click="createApp()">
+                        Create app
                         <md-progress-linear md-mode="query"
-                                            ng-disabled="!create_coin_request_in_progress"></md-progress-linear>
+                                            ng-disabled="!create_app_request_in_progress"></md-progress-linear>
                     </md-button>
                 </md-content>
             </form>
