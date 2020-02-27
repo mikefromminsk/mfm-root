@@ -115,14 +115,12 @@
                         </div>
                     </md-card>
                 </md-content>
-                <md-content class="layout-column">
-                    <md-card class="layout-row layout-align-start-center"
-                             style="padding: 16px 16px 16px 24px;" md-ink-ripple
-                             ng-click="show('create_coin')">
-                        <md-icon style="margin: 0 12px 0 0;" md-svg-src="img/add.svg"></md-icon>
-                        Create Dark coin
-                    </md-card>
-                </md-content>
+                <md-card class="layout-row layout-align-start-center"
+                         style="padding: 16px 16px 16px 24px;" md-ink-ripple
+                         ng-click="show('create_coin')">
+                    <md-icon style="margin: 0 12px 0 0;" md-svg-src="img/add.svg"></md-icon>
+                    Create coin
+                </md-card>
             </div>
         </div>
         <div class="layout-row">
@@ -351,21 +349,14 @@
                 </div>
                 <md-content class="input-container layout-column">
                     <md-input-container>
-                        <input ng-model="newCoinName" required minlength="3" maxlength="30" placeholder="Full name of Your Coin">
-                    </md-input-container>
-                    <md-input-container>
                         <input ng-model="newCoinCode" minlength="3" maxlength="5" style="text-transform: uppercase;"
-                               required placeholder="Code of Your Coin">
+                               required placeholder="New coin code (3 letters)">
                     </md-input-container>
-                    <md-checkbox ng-model="agreeWithPublicationOnExchangeStock">
-                        Publication on exchange stock
-                    </md-checkbox>
-
                     <div ng-show="create_coin_message != null" style="color: red">{{create_coin_message}}</div>
                     <md-button type="submit" class="md-raised md-primary"
-                               style="margin-top: 20px; background-color: green"
+                               style="background-color: green"
                                ng-disabled="create_coin_request_in_progress">
-                        {{agreeWithPublicationOnExchangeStock ? "Create public coin" : "Create coin"}}
+                        Create coin
                         <md-progress-linear md-mode="query"
                                             ng-disabled="!create_coin_request_in_progress"></md-progress-linear>
                     </md-button>
@@ -374,6 +365,13 @@
         </div>
     </md-content>
 </div>
+
+
+
+
+
+
+
 <div style="position: absolute; right: 0; bottom: 0; max-width: 100%; padding: 16px" ng-show="messages != null">
     <div class="input-wrapper">
         <div class="input-header layout-row layout-align-center-center" style="padding: 16px">

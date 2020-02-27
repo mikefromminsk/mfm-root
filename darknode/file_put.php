@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/login.php";
 
 $path = get_required("path");
 $data = get("data");

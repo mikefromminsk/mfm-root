@@ -83,6 +83,7 @@ md-input-container > .md-errors-spacer {
 
 .md-button {
     margin: 0;
+    padding: 0;
     border-radius: 0;
     font-weight: 600;
 }

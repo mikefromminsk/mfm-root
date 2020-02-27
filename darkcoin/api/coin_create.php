@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/login.php";
 
 $coin_code = get_required("coin_code");
 $coin_code = strtoupper($coin_code);
@@ -22,7 +22,16 @@ for ($i = 0; $i < 64 && $message == null; $i++) {
     $message = http_json_post($server_url . "darknode/domain_set.php", array(
         "domain_name" => $coin_code,
         "domains" => $domains,
-        "servers" => [],
+    ))["message"];
+}
+
+if ($message == null) {
+    $message = http_json_post($server_url . "darkcoin/api/exchange.php", array(
+        "token" => scalar("select user_session_token from users where user_id = 1"),
+        "have_coin_code" => "USD",
+        "have_coin_count" => 1,
+        "want_coin_code" => $coin_code,
+        "want_coin_count" => 20000,
     ))["message"];
 }
 

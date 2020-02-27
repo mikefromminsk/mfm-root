@@ -142,7 +142,6 @@ controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams
     $scope.create_coin_request_in_progress = false
     $scope.newCoinName = ""
     $scope.newCoinCode = ""
-    $scope.agreeWithPublicationOnExchangeStock = false
     $scope.createCoin = function () {
         $scope.create_coin_message = null
         $scope.create_coin_request_in_progress = true;

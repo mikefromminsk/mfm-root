@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darklogin/login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/login.php";
 
 $where = " where user_id = $user_id and message_readied = 0 order by message_id desc limit 20";
 echo  json_encode(array(

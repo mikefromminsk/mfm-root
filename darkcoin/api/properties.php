@@ -12,11 +12,6 @@ $email_server_port = "";
 $email_login = "";
 $email_password = "";
 
-$yandex_money_wallet_id = "";
-$yandex_money_secret_code = "";
-
-$stock_fee_in_rub = "";
-
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/properties_overload.php";
 
 if (
@@ -27,8 +22,5 @@ if (
     || $email_server_port == null
     || $email_login == null
     || $email_password == null
-    || $yandex_money_wallet_id == null
-    || $yandex_money_secret_code == null
-    || $stock_fee_in_rub == null
 )
     die(json_encode(array("message" => "Please fill server paramters for darkcoin")));
