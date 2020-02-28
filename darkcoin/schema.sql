@@ -33,8 +33,8 @@ CREATE TABLE IF NOT EXISTS `domains` (
   `domain_name` varchar(256) COLLATE utf8_bin NOT NULL,
   `domain_name_hash` int(11) NOT NULL,
   `domain_prev_key` varchar(128) COLLATE utf8_bin DEFAULT NULL,
-  `domain_next_key_hash` varchar(64) CHARACTER SET utf8 NOT NULL,
-  `domain_next_key` varchar(128) COLLATE utf8_bin DEFAULT NULL,
+  `domain_key_hash` varchar(64) CHARACTER SET utf8 NOT NULL,
+  `domain_key` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `server_group_id` bigint(14) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   UNIQUE KEY `domain_name` (`domain_name`)

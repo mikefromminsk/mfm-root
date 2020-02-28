@@ -59,6 +59,8 @@ let pathToRootDir = window.location.origin + window.location.pathname
 if (pathToRootDir.endsWith("index.html"))
     pathToRootDir = pathToRootDir.substr(0, pathToRootDir.length - "index.html".length)
 
+$dark.init(pathToRootDir);
+
 app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http) {
 
     $scope.open = function (route) {
@@ -67,7 +69,7 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         let routeTemplate = "";
         for (let i = 1; i < params.length; i++)
             routeTemplate = routeTemplate + "/:arg" + (i - 1);
-        if (appName !== ""){
+        if (appName !== "") {
             app.routeProvider.when("/" + appName + routeTemplate, {
                 templateUrl: pathToRootDir + appName + "/index.html",
                 controller: appName,
@@ -82,45 +84,55 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         $location.path(route)
     };
 
-    $scope.token = store.get("user_session_token") || $routeParams.arg0;
+    $scope.token = store.get("user_session_token");
     $scope.login = function (delay) {
         setTimeout(function () {
             $mdDialog.show({
                 templateUrl: pathToRootDir + 'darkgui/login.html',
-                scope: $scope,
+                scope: $scope.$new(),
                 controller: function ($scope, $mdDialog) {
                     $scope.toggleLoginReg = true
-                    $scope.login = null
-                    $scope.password = null
-                    $scope.agreeWithTeems = null
+
+                    $scope.login = "x29a100@mail.ru"
+                    $scope.password = "123123123"
+
                     $scope.login_message = null
-                    $scope.login_request_in_progress = false;
+                    $scope.login_in_progress = false;
                     $scope.loginButton = function () {
-                        $scope.login_request_in_progress = true
+                        $scope.login_in_progress = true
                         store.clear()
-                        $http.post(pathToRootDir + "darkcoin/api/login_check.php", {
-                            token: $scope.token,
-                            user_login: $scope.login,
-                            user_password: $scope.password,
-                        }).then(function (response) {
-                            $scope.login_request_in_progress = false
-                            $scope.password = null
-                            $scope.user_login = response.data.user_login;
-                            $scope.token = response.data.user_session_token
-                            store.set("user_login", response.data.user_login)
-                            store.set("user_session_token", response.data.user_session_token)
-                            store.set("user_stock_token", response.data.user_stock_token)
-                            //updateData()
-                            //startTimer()
-                            $mdDialog.hide();
-                        }, function (response) {
-                            $scope.login_request_in_progress = false
-                            $scope.login_message = response.data.message
-                            if ($scope.agreeWithTeems && $scope.login_message.indexOf("verify"))
-                                $scope.toggleLoginReg = true;
+                        $dark.file_get($scope.login, null, function (data) {
+                            $scope.login_in_progress = false
+                            data = $dark.decode(data, $scope.password);
+                            try {
+                                let user = JSON.parse(data);
+                                store.set("user_email", user.email)
+                                $mdDialog.hide();
+                            } catch (e) {
+                                $scope.login_message = "password error"
+                            }
+                        }, function () {
+                            $scope.login_in_progress = false
+                            $scope.login_message = "user dosent exist"
                         })
                     }
 
+                    $scope.agreeWithTeems = false
+                    $scope.registration_message = null
+                    $scope.registration_in_progress = false
+                    $scope.registrationButton = function () {
+                        $scope.registration_in_progress = true
+                        store.clear()
+                        let user = $dark.encode(JSON.stringify({email: $scope.login}), $scope.password);
+                        $dark.file_put($scope.login, null, $scope.password, user, function () {
+                            $scope.registration_in_progress = false
+                            store.set("user_email", user.email)
+                            $mdDialog.hide();
+                        }, function (message) {
+                            $scope.registration_in_progress = false
+                            $scope.registration_message = message
+                        })
+                    }
                 },
             }).then(function (answer) {
                 $scope.status = 'You said the information was "' + answer + '".';

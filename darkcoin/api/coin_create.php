@@ -10,11 +10,11 @@ $coin_code = strtoupper($coin_code);
 for ($i = 0; $i < 64; $i++) {
     $domains = [];
     for ($j = 0; $j < 1024; $j++) {
-        $domain_next_key = random_id();
+        $domain_key = random_id();
         $domains[] = array(
             "domain_name" => uencode($coin_code . mb_convert_encoding('&#' . intval($i * 1024 + $j) . ';', 'UTF-8', 'HTML-ENTITIES')),
-            "domain_next_key_hash" => hash("sha256", $domain_next_key),
-            "domain_next_key" => $domain_next_key,
+            "domain_key_hash" => hash("sha256", $domain_key),
+            "domain_key" => $domain_key,
             "user_login" => $user["user_login"],
         );
     }

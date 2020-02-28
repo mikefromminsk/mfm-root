@@ -1,9 +1,10 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
 
-$path = get_required("path");
+$domain_name = get_required("domain_name");
+$path = get("path");
 
-$file = getFile($path);
+$file = getFile($domain_name, $path);
 
 if ($file["file_data"] == null) {
     header("Content-type: text/directory;application/json;charset=utf-8");
