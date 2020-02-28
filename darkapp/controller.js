@@ -1,8 +1,8 @@
-controller("darkapp", function ($scope, $timeout, $q, $http) {
+controller("darkapp", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams) {
 
-    $scope.token = store.get("user_session_token") || $routeParams.arg0;
     $scope.toggleCreateAppFragment = true
     $scope.toggleExplorerFragment = false
+
 
     $scope.files = [
         {file_name: "New Folder", file_size: 0},

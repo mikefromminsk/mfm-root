@@ -74,9 +74,19 @@ function domains_set($domain_prefix, $domains)
                 $success_domain_changed[] = $new_domain["domain_name"];
         }
     }
-
-
     return $success_domain_changed;
+}
+
+function domain_set($domain_name)
+{
+    $key = random_id();
+    $success = domains_set($domain_name, array(
+        "domain_name" => $domain_name,
+        "domain_next_key_hash" => hash("sha256", $key),
+    ));
+    if (sizeof($success) != 1)
+        error("domain cannot be set");
+    return $key;
 }
 
 function domain_get($domain_name)

@@ -59,7 +59,7 @@ let pathToRootDir = window.location.origin + window.location.pathname
 if (pathToRootDir.endsWith("index.html"))
     pathToRootDir = pathToRootDir.substr(0, pathToRootDir.length - "index.html".length)
 
-app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location) {
+app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http) {
 
     $scope.open = function (route) {
         let params = route.replace('\\', '/').split('/')
@@ -81,6 +81,55 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         document.title = appName
         $location.path(route)
     };
+
+    $scope.token = store.get("user_session_token") || $routeParams.arg0;
+    $scope.login = function (delay) {
+        setTimeout(function () {
+            $mdDialog.show({
+                templateUrl: pathToRootDir + 'darkgui/login.html',
+                scope: $scope,
+                controller: function ($scope, $mdDialog) {
+                    $scope.toggleLoginReg = true
+                    $scope.login = null
+                    $scope.password = null
+                    $scope.agreeWithTeems = null
+                    $scope.login_message = null
+                    $scope.login_request_in_progress = false;
+                    $scope.loginButton = function () {
+                        $scope.login_request_in_progress = true
+                        store.clear()
+                        $http.post(pathToRootDir + "darkcoin/api/login_check.php", {
+                            token: $scope.token,
+                            user_login: $scope.login,
+                            user_password: $scope.password,
+                        }).then(function (response) {
+                            $scope.login_request_in_progress = false
+                            $scope.password = null
+                            $scope.user_login = response.data.user_login;
+                            $scope.token = response.data.user_session_token
+                            store.set("user_login", response.data.user_login)
+                            store.set("user_session_token", response.data.user_session_token)
+                            store.set("user_stock_token", response.data.user_stock_token)
+                            //updateData()
+                            //startTimer()
+                            $mdDialog.hide();
+                        }, function (response) {
+                            $scope.login_request_in_progress = false
+                            $scope.login_message = response.data.message
+                            if ($scope.agreeWithTeems && $scope.login_message.indexOf("verify"))
+                                $scope.toggleLoginReg = true;
+                        })
+                    }
+
+                },
+            }).then(function (answer) {
+                $scope.status = 'You said the information was "' + answer + '".';
+            });
+        }, delay)
+    };
+
+    if ($scope.token == null)
+        $scope.login(1000);
 
     $scope.open($location.path().substr(1) || document.querySelector("meta[name='start-page']").getAttribute("content"));
 });
