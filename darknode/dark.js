@@ -17,6 +17,12 @@ const $dark = {
         }
         xhr.send(JSON.stringify(params));
     },
+    encode: function (str) {
+        return str;
+    },
+    decode: function (str) {
+        return str;
+    },
     escape: function (str) {
         str = str.split("/").join("%47");
     },
@@ -46,11 +52,8 @@ const $dark = {
             }, success, error);
         })
     },
-    encode: function (str) {
-        return str;
-    },
-    decode: function (str) {
-        return str;
+    similar: function (domain_name, success, error) {
+        $dark.post("darknode/similar.php", {domain_name: domain_name}, success, error);
     },
 };
 

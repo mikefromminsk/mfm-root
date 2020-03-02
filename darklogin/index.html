@@ -1,0 +1,47 @@
+<div class="layout-fill layout-align-center-center" style="background-color: black">
+    <div class="input-wrapper layout-column" ng-clock>
+        <div class="input-header layout-row layout-align-center">
+            <h3>{{toggleLoginReg ? "Authorization" : "Registration"}}</h3>
+        </div>
+        <div class="input-container layout-column" ng-show="toggleLoginReg == true">
+            <md-input-container>
+                <input type="email" ng-model="login" ng-required="true" placeholder="Email">
+            </md-input-container>
+            <md-input-container>
+                <input type="password" ng-model="password" ng-required="true" minlength="8" placeholder="Password">
+            </md-input-container>
+            <div class="div" ng-show="login_message" style="color: red;">{{login_message}}</div>
+            <div class="layout-row">
+                <md-button class="flex-40 md-raised" ng-click="toggleLoginReg = false"
+                           ng-disabled="login_in_progress">
+                    Sign Up
+                </md-button>
+                <div class="flex"></div>
+                <md-button class="flex-40 md-raised md-primary" ng-disabled="login_in_progress"
+                           ng-click="loginButton()">
+                    Sign In
+                    <md-progress-linear md-mode="query"
+                                        ng-disabled="!login_in_progress"></md-progress-linear>
+                </md-button>
+            </div>
+        </div>
+        <div class="input-container layout-column" ng-show="toggleLoginReg == false">
+            <md-input-container>
+                <input type="email" ng-model="login" ng-required="true" placeholder="Email">
+            </md-input-container>
+            <md-input-container>
+                <input type="password" ng-model="password" ng-required="true" minlength="8" placeholder="Password">
+            </md-input-container>
+            <md-checkbox ng-model="agreeWithTeems" class="md-align-top-left" required>
+                I agree with <a href="terms.html" target="_blank">the terms of use</a>
+            </md-checkbox>
+            <div class="div" ng-show="registration_message" style="color: red;">{{registration_message}}</div>
+            <md-button type="submit" ng-disabled="!agreeWithTeems && !registration_in_progress" class="md-raised"
+                       ng-click="registrationButton()">
+                Sign Up
+                <md-progress-linear md-mode="query" ng-disabled="!registration_in_progress"></md-progress-linear>
+            </md-button>
+        </div>
+    </div>
+
+</div>

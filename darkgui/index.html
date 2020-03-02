@@ -4,24 +4,63 @@
     <title>AngularTemplate</title>
     <meta name="start-page" content="darkapp"><!--start-page is a first loaded by angular-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" content="#000000"/>
     <link rel="stylesheet" href="/angular/css/angular-material.min.css">
     <link rel="stylesheet" href="/darkgui/basic.css">
 </head>
 <body ng-controller="MainController">
 <script src="/angular/js/angular.min.js"></script>
-<script src="/angular/js/angular-animate.min.js"></script><!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
-<script src="/angular/js/angular-aria.min.js"></script><!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
+<script src="/angular/js/angular-animate.min.js"></script>
+<!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
+<script src="/angular/js/angular-aria.min.js"></script>
+<!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
 <script src="/angular/js/angular-route.min.js"></script><!--angular-route for working with url-->
-<script src="/angular/js/angular-material.min.js"></script><!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
+<script src="/angular/js/angular-material.min.js"></script>
+<!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
 
 <!--user libraries-->
 <script src="/store/store.everything.min.js"></script><!--angular-main-controller for auto loading js scripts-->
 <script src="/darknode/dark.js"></script><!-- domain utils-->
 <script src="/darkgui/controller.js"></script><!--angular-main-controller for auto loading js scripts-->
-
-<div class="view-container">
-    <div ng-view class="view-frame"></div>
+<style>
+</style>
+<div class="layout-row layout-fill">
+    <div class="layout-row"  style="border-right: 1px solid #1c1c1c; position: absolute; top: 0; left: 0; z-index: 1; height: 100%; background-color: #444444;">
+        <div class="layout-column">
+            <div class="layout-row header" ng-click="domainSearchToggle = !domainSearchToggle">
+                <md-icon md-svg-src="img/search.svg"></md-icon>
+            </div>
+            <div class="header">Account</div>
+            <div class="header">PLay</div>
+        </div>
+        <div class="layout-column" ng-show="domainSearchToggle">
+            <div class="layout-column header">
+                <div class="layout-row flex" style="padding: 5px 16px 0 16px">
+                    <md-input-container class="flex">
+                        <label>Search</label>
+                        <input type="text" autocomplete="off" ng-model="searchText">
+                    </md-input-container>
+                </div>
+                <md-progress-linear md-mode="query" ng-disabled="!search_request_in_progress"></md-progress-linear>
+            </div>
+            <div class="layout-column" ng-repeat="item in domain_similar">
+                <md-content class="layout-row layout-align-start-center" md-ink-ripple
+                            ng-click="openApp(item)"
+                            style="padding: 24px 16px;">
+                    {{item.domain_name}}
+                    <div class="flex"></div>
+                    <md-button class="md-raised" style="background-color: lightgreen"
+                               ng-click="downloadApp(item); $event.stopPropagation();">
+                        Download
+                    </md-button>
+                </md-content>
+                <md-divider></md-divider>
+            </div>
+        </div>
+    </div>
+    <div class="view-container">
+        <div ng-view class="view-frame"></div>
+    </div>
 </div>
 </body>
 </html>
