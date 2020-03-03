@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AngularApp">
+<head>
+    <title>AngularTemplate</title>
+    <meta name="start-page" content="app"><!--start-page is a first loaded by angular-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000"/>
+    <link rel="stylesheet" href="/angular/css/angular-material.min.css">
+    <link rel="stylesheet" href="/main/basic.css">
+</head>
+<body ng-controller="MainController">
+<script src="/angular/js/angular.min.js"></script>
+<script src="/angular/js/angular-animate.min.js"></script>
+<!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
+<script src="/angular/js/angular-aria.min.js"></script>
+<!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
+<script src="/angular/js/angular-route.min.js"></script><!--angular-route for working with url-->
+<script src="/angular/js/angular-material.min.js"></script>
+<!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
+
+<!--user libraries-->
+<script src="/store/store.everything.min.js"></script><!--angular-main-controller for auto loading js scripts-->
+<script src="/node/dark.js"></script><!-- domain utils-->
+<script src="/main/controller.js"></script><!--angular-main-controller for auto loading js scripts-->
+<script src="/ace/ace.js"></script>
+
+<div class="layout-row layout-fill">
+    <div class="layout-column" style="min-width: 90px; border-right: 1px solid #3b3b3b">
+        <div class="layout-column flex">
+            <md-button class="header" ng-repeat="app in apps" ng-click="open(app)">
+                {{app}}
+            </md-button>
+        </div>
+        <md-button class="header" ng-click="open('search')">
+            Search
+        </md-button>
+    </div>
+    <div class="view-container layout-fill">
+        <div ng-view class="view-frame"></div>
+    </div>
+</div>
+</body>
+</html>

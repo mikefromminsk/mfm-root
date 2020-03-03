@@ -63,6 +63,8 @@ $dark.init(pathToRootDir);
 
 app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
 
+    $scope.apps = store.get("apps") || ["search", "app"];
+
     $scope.open = function (route) {
         let params = route.replace('\\', '/').split('/')
         let appName = params[0]
@@ -83,15 +85,6 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         document.title = appName
         $location.path(route)
     };
-
-    $scope.domain_similar = [];
-    $scope.searchText = ""
-    $scope.$watch(function () {
-        return $scope.searchText;
-    }, function () {
-        if ($scope.searchText !== "")
-            $scope.domain_similar = $dark.similar($scope.searchText)
-    });
 
     $scope.open($location.path().substr(1) || document.querySelector("meta[name='start-page']").getAttribute("content"));
 });

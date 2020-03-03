@@ -1,4 +1,4 @@
-controller("darkcoin", function ($scope, $window, $http, $interval, $routeParams) {
+controller("coin", function ($scope, $window, $http, $interval, $routeParams) {
     $scope.user_login = store.get("user_login");
     $scope.token = store.get("user_session_token") || $routeParams.arg0;
 

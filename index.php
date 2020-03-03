@@ -1,1 +1,1 @@
-<?php include $_SERVER["DOCUMENT_ROOT"] . "/darkgui/index.html";
+<?php include $_SERVER["DOCUMENT_ROOT"] . "/main/index.html";

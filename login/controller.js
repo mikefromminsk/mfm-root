@@ -1,4 +1,4 @@
-controller("darklogin", function ($scope) {
+controller("login", function ($scope) {
 
     $scope.token = store.get("user_session_token");
     $scope.login = function (delay) {

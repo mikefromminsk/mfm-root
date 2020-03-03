@@ -1,7 +1,6 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/messages_utils.php";
 
 $node_url = uencode($server_url . "node");
 

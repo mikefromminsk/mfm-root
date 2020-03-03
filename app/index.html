@@ -1,0 +1,111 @@
+<style>
+
+    .file-line {
+        font-weight: 600;
+        font-size: 18px;
+    }
+
+    .file-line:hover {
+        background: #3b3b3b;
+        text-decoration: underline;
+    }
+
+    .file_name {
+        padding-left: 24px;
+    }
+
+
+</style>
+
+<style>
+    .editor_parent {
+        position: relative;
+    }
+
+    .editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+
+
+<div class="layout-fill layout-row" ng-cloak>
+    <div class="layout-column flex">
+        <div class="layout-row layout-align-center-center header">
+            <img src="/{{app.domain_name}}/logo.png" alt=""
+                 style="width:60px; height: 60px; background: url(img/logo_default.jpg); background-size: 100% 100%;">
+            <h2 style="margin-left: 10px">{{app.domain_name}}</h2>
+        </div>
+        <div class="layout-row flex">
+            <div class="layout-column flex">
+                <div class="layout-row layout-align-center-center header">
+                    index.html
+                </div>
+                <div class="layout-column flex editor_parent">
+                    <div class="editor" id="html_editor"></div>
+                </div>
+            </div>
+            <md-content style="width: 40px; background-color: #666666" md-ink-ripple
+                        ng-click="editor_toggle = !editor_toggle">
+            </md-content>
+            <div class="layout-column flex" ng-show="!editor_toggle">
+                <div class="layout-row layout-align-center-center header">
+                    controller.js
+                </div>
+                <div class="layout-column flex editor_parent">
+                    <div class="editor" id="js_editor"></div>
+                </div>
+            </div>
+        </div>
+        <md-button class="md-raised md-primary header">
+            Save
+        </md-button>
+    </div>
+
+    <div class="layout-column flex-30 scrollable">
+        <div class="layout-row layout-align-center-center header">
+            <h2>{{path()}}</h2>
+        </div>
+        <div class="layout-column flex scrollable">
+            <div ng-repeat="file in files">
+                <md-content class="layout-column file-line" md-ink-ripple>
+                    <div class="layout-row" style="padding: 20px;">
+                        <md-icon md-svg-src="{{file.file_size == 0 ? 'img/folder.svg' : 'img/file.svg'}}"
+                                 ng-style="{'color': (file.file_size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
+                        <div class="file_name" style=" ">{{file.file_name}}</div>
+                        <div class="flex"></div>
+                        {{file.file_size == 0 ? "" : file.file_size}}
+                        <md-menu md-position-mode="target-right target">
+                            <md-button aria-label="Open demo menu" class="md-icon-button"
+                                       ng-click="$mdMenu.open($event)">
+                                <md-icon md-menu-origin md-svg-icon="img/menu.svg"></md-icon>
+                            </md-button>
+                            <md-menu-content width="4">
+                                <md-menu-item>
+                                    <md-button ng-click="delete(file)">
+                                        Delete
+                                    </md-button>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
+                    </div>
+                    <md-divider></md-divider>
+            </div>
+            </md-content>
+        </div>
+        <div class="layout-row">
+            <md-button class="md-raised md-primary header flex-50">
+                Upload file
+            </md-button>
+            <md-button class="md-raised md-primary header flex-50">
+                Create dir
+            </md-button>
+        </div>
+    </div>
+</div>
+
+
+

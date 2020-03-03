@@ -1,7 +1,18 @@
-controller("darkapp", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams) {
+controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams) {
 
     $scope.toggleCreateAppFragment = true
     $scope.toggleExplorerFragment = false
+
+
+    editor = ace.edit("js_editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/javascript");
+    editor.session.setUseSoftTabs(true)
+
+    editor = ace.edit("html_editor");
+    editor.setTheme("ace/theme/monokai");
+    editor.getSession().setMode("ace/mode/html");
+    editor.session.setUseSoftTabs(true)
 
 
     $scope.files = [

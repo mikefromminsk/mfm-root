@@ -10,7 +10,7 @@ const $dark = {
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200 && success != null)
-                    success(xhr.response);
+                    success(JSON.parse(xhr.response));
                 if (xhr.status !== 200 && error != null)
                     error();
             }
@@ -27,16 +27,16 @@ const $dark = {
         str = str.split("/").join("%47");
     },
     domain_get: function (domain_name, success, error) {
-        $dark.post("darknode/domain_get.php", {domain_name: domain_name}, success, error);
+        $dark.post("node/domain_get.php", {domain_name: domain_name}, success, error);
     },
     file_get: function (domain_name, path, success, error) {
-        $dark.post("darknode/file_get.php", {domain_name: domain_name, path: path}, success, error);
+        $dark.post("node/file_get.php", {domain_name: domain_name, path: path}, success, error);
     },
     file_put: function (domain_name, path, password, file_data, success, error) {
-        $dark.post("darknode/domain_get.php", {domain_name: domain_name}, function (data) {
+        $dark.post("node/domain_get.php", {domain_name: domain_name}, function (data) {
             let domain_key = sha256(data.domain_prev_key || "" + password);
             let domain_next_key_hash = sha256(domain_key + password);
-            $dark.post("darknode/file_put.php", {
+            $dark.post("node/file_put.php", {
                 domain_name: domain_name,
                 path: path,
                 domain_key: domain_key,
@@ -44,7 +44,7 @@ const $dark = {
                 data: file_data
             }, success, error);
         }, function () {
-            $dark.post("darknode/file_put.php", {
+            $dark.post("node/file_put.php", {
                 domain_name: domain_name,
                 path: path,
                 domain_next_key_hash: sha256(sha256(password)),
@@ -53,7 +53,7 @@ const $dark = {
         })
     },
     similar: function (domain_name, success, error) {
-        $dark.post("darknode/similar.php", {domain_name: domain_name}, success, error);
+        $dark.post("node/domain_similar.php", {domain_name: domain_name}, success, error);
     },
 };
 
