@@ -10,52 +10,38 @@ function domain_hash($domain_name, $fromIndex = 0)
     return $charsum;
 }
 
-function domain_set($domain_name, $domain_key, $domain_next_key_hash)
+function domain_set($domain_name, $domain_key, $domain_key_hash_next)
 {
-    $domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
-    if ($domain_key_hash != null) {
-        if (hash("sha256", $domain_key) == $domain_key_hash) {
+    $current_domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+    if ($current_domain_key_hash != null) {
+        $domain_key_hash = hash("sha256", $domain_key);
+        if ($domain_key_hash != $current_domain_key_hash)
+            return false;
+        if ($domain_key_hash != $domain_key_hash_next)
             updateList("domains", array(
                 "domain_prev_key" => $domain_key,
-                "domain_key_hash" => $domain_next_key_hash,
+                "domain_key_hash" => $domain_key_hash_next,
             ), "domain_name", $domain_name);
-        } else
-            error("domain_set error");
     } else {
         insertList("domains", array(
             "domain_name" => $domain_name,
             "domain_name_hash" => domain_hash($domain_name),
-            "domain_key_hash" => $domain_next_key_hash,
+            "domain_key_hash" => $domain_key_hash_next,
             "server_group_id" => rand(0, 1000000),
         ));
     }
+    return true;
 }
 
-function domains_set($domains)
+/*function domains_set($domains)
 {
     $success_domain_changed = [];
     foreach ($domains as $domain) {
-        $domain_name = $domain["domain_name"];
-        $current_domain = selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
-        if ($current_domain != null) {
-            if (hash("sha256", $domain["domain_key"]) == $current_domain["domain_key_hash"]) {
-                if (updateList("domains", array(
-                    "domain_prev_key" => $domain["domain_key"],
-                    "domain_key_hash" => $domain["domain_next_key_hash"],
-                ), "domain_name", $domain_name))
-                    $success_domain_changed[] = $domain_name;
-            }
-        } else {
-            if (insertList("domains", array(
-                "domain_name" => $domain_name,
-                "domain_name_hash" => domain_hash($domain_name),
-                "domain_key_hash" => $domain["domain_next_key_hash"],
-            )))
-                $success_domain_changed[] = $domain_name;
-        }
+        if (domain_set($domain["domain_name"], $domain["domain_key"], $domain["domain_next_key_hash"]))
+            $success_domain_changed[] = $domain["domain_name"];
     }
     return $success_domain_changed;
-}
+}*/
 
 function domain_get($domain_name)
 {

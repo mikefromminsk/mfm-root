@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/darkcoin/api/login.php";
 
 $have_coin_code = get_required("have_coin_code");

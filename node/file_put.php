@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 
 $domain_name = get_required("domain_name");
 $path = get("path");

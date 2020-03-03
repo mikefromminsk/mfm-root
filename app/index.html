@@ -33,11 +33,13 @@
 
 
 <div class="layout-fill layout-row" ng-cloak>
-    <div class="layout-column flex">
+    <form class="layout-column flex" ng-submit="save()">
         <div class="layout-row layout-align-center-center header">
-            <img src="/{{app.domain_name}}/logo.png" alt=""
+            <img src="/{{domain_name}}/logo.png" alt="" ng-click="uploadImage()"
                  style="width:60px; height: 60px; background: url(img/logo_default.jpg); background-size: 100% 100%;">
-            <h2 style="margin-left: 10px">{{app.domain_name}}</h2>
+            <md-input-container style="margin-left: 10px">
+                <input type="text" ng-model="domain_name" placeholder="App name" required>
+            </md-input-container>
         </div>
         <div class="layout-row flex">
             <div class="layout-column flex">
@@ -60,14 +62,15 @@
                 </div>
             </div>
         </div>
-        <md-button class="md-raised md-primary header">
+        <md-progress-linear md-mode="query" ng-disabled="!save_request_in_progress"></md-progress-linear>
+        <md-button type="submit" class="md-raised md-primary header" ng-disabled="save_request_in_progress">
             Save
         </md-button>
-    </div>
+    </form>
 
     <div class="layout-column flex-30 scrollable">
         <div class="layout-row layout-align-center-center header">
-            <h2>{{path()}}</h2>
+            <h2>{{}}</h2>
         </div>
         <div class="layout-column flex scrollable">
             <div ng-repeat="file in files">
@@ -92,15 +95,15 @@
                             </md-menu-content>
                         </md-menu>
                     </div>
-                    <md-divider></md-divider>
+                </md-content>
+                <md-divider></md-divider>
             </div>
-            </md-content>
         </div>
         <div class="layout-row">
-            <md-button class="md-raised md-primary header flex-50">
+            <md-button class="md-raised md-primary header flex" ng-click="uploadFile()">
                 Upload file
             </md-button>
-            <md-button class="md-raised md-primary header flex-50">
+            <md-button class="md-raised md-primary header flex">
                 Create dir
             </md-button>
         </div>

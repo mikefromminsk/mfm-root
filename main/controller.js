@@ -1,12 +1,12 @@
-let app = angular.module('AngularApp', [
+let angularApplication = angular.module('AngularApp', [
     'ngRoute',
     'ngMaterial',
     'ngAnimate',
 ]);
 
-app.config(function ($routeProvider, $controllerProvider, $mdThemingProvider) {
-    app.register = $controllerProvider.register;
-    app.routeProvider = $routeProvider;
+angularApplication.config(function ($routeProvider, $controllerProvider, $mdThemingProvider) {
+    angularApplication.register = $controllerProvider.register;
+    angularApplication.routeProvider = $routeProvider;
 
     $mdThemingProvider.theme('default')
         .primaryPalette('blue')
@@ -17,11 +17,11 @@ app.config(function ($routeProvider, $controllerProvider, $mdThemingProvider) {
 });
 
 function controller(controllerId, callback) {
-    app.register(controllerId, callback);
+    angularApplication.register(controllerId, callback);
 }
 
 function property(propertyName, propertyObject) {
-    app.factory(propertyName, function () {
+    angularApplication.factory(propertyName, function () {
         return propertyObject;
     });
 }
@@ -61,7 +61,7 @@ if (pathToRootDir.endsWith("index.html"))
 
 $dark.init(pathToRootDir);
 
-app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
+angularApplication.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
 
     $scope.apps = store.get("apps") || ["search", "app"];
 
@@ -72,7 +72,7 @@ app.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDi
         for (let i = 1; i < params.length; i++)
             routeTemplate = routeTemplate + "/:arg" + (i - 1);
         if (appName !== "") {
-            app.routeProvider.when("/" + appName + routeTemplate, {
+            angularApplication.routeProvider.when("/" + appName + routeTemplate, {
                 templateUrl: pathToRootDir + appName + "/index.html",
                 controller: appName,
                 resolve: loader(pathToRootDir + appName + "/controller.js")

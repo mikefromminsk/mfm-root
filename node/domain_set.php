@@ -1,7 +1,10 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/domain_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 
-$domains = get_required("domains");
+$domain_name = get_required("domain_name");
+$domain_key = get("domain_key");
+$domain_key_hash = get("domain_key_hash");
 
-domains_set($domains);
+if (!domain_set($domain_name, $domain_key, $domain_key_hash))
+    error("domain is not set");
