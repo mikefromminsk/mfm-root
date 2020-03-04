@@ -1,21 +1,41 @@
 const $dark = {
     server_url: null,
-    init: function (server_url) {
-        this.server_url = server_url;
+    store: {
+        items: {},
+        get: function (key) {
+            return this.items[key]
+        },
+        set: function (key, val) {
+            this.items[key] = val
+        }
     },
-    post: function (script, params, success, error) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", this.server_url + script, true);
-        xhr.setRequestHeader("Content-type", "application/json");
+    domain_store_prefix: "domain/",
+    init: function (server_url, store) {
+        this.server_url = server_url;
+        this.store = store || $dark.store;
+    },
+    request(script, success, error) {
+        let xhr = new XMLHttpRequest()
+        xhr.open("POST", this.server_url + script, true)
         xhr.onreadystatechange = function () {
             if (xhr.readyState === XMLHttpRequest.DONE) {
                 if (xhr.status === 200 && success != null)
-                    success((xhr.response != null && xhr.response !== "") ? JSON.parse(xhr.response) : null);
+                    success(xhr.response)
                 if (xhr.status !== 200 && error != null)
-                    error(xhr);
+                    error(xhr)
             }
         }
-        xhr.send(JSON.stringify(params));
+        return xhr;
+    },
+    file: function (script, params, success, error) {
+        let xhr = $dark.request(script, success, error)
+        xhr.setRequestHeader("Content-type", "application/json")
+        xhr.send(JSON.stringify(params))
+    },
+    json: function (script, params, success, error) {
+        this.file(script, params, function (data) {
+            success(data !== "" ? JSON.parse(data) : null)
+        }, error)
     },
     encode: function (str) {
         return str;
@@ -24,72 +44,87 @@ const $dark = {
         return str;
     },
     escape: function (str) {
-        return str.split("/").join("%47");
+        return str.split("/").join("%47")
     },
     random_key: function () {
         return "" + Math.floor(Math.random() * Math.floor(1000000000));
     },
+    domain_key_get: function (domain_name) {
+        return $dark.store.get(this.domain_store_prefix + domain_name)
+    },
+    domain_key_set: function (domain_name, domain_key) {
+        $dark.store.set(this.domain_store_prefix + domain_name, domain_key)
+    },
     domain_create: function (domain_name, success, error) {
-        let domain_key = $dark.random_key();
-        let domain_key_hash = $dark.sha256(domain_key)
-        $dark.post("node/domain_set.php", {domain_name: domain_name, domain_key: domain_key, domain_key_hash: domain_key_hash},
+        let domain_key = $dark.random_key()
+        $dark.json("node/domain_set.php", {
+                domain_name: domain_name,
+                domain_key: domain_key,
+                domain_key_hash: $dark.sha256(domain_key)
+            },
             function (data) {
-                let domains = store.get("have_domains") || {};
-                domains[domain_name] = {
-                    domain_name: domain_name,
-                    domain_key: domain_key,
-                }
-                store.set("have_domains", domains)
-                success(data);
-            }, error);
+                $dark.domain_key_set(domain_name, domain_key)
+                success(data)
+            }, error, true)
     },
     domain_get: function (domain_name, success, error) {
-        $dark.post("node/domain_get.php", {domain_name: domain_name}, success, error);
+        $dark.json("node/domain_get.php", {domain_name: domain_name}, success, error)
     },
     domain_set: function (domain_name, domain_key, domain_key_hash, success, error) {
-        $dark.post("node/domain_set.php", {domain_name: domain_name, domain_key: domain_key, domain_key_hash: domain_key_hash}, success, error);
+        $dark.json("node/domain_set.php", {
+            domain_name: domain_name,
+            domain_key: domain_key,
+            domain_key_hash: domain_key_hash
+        }, success, error)
+    },
+    dir_get: function (domain_name, path, success, error) {
+        $dark.json("node/file_get.php", {domain_name: domain_name, path: path}, success, error)
     },
     file_get: function (domain_name, path, success, error) {
-        $dark.post("node/file_get.php", {domain_name: domain_name, path: path}, success, error);
+        $dark.file("node/file_get.php", {domain_name: domain_name, path: path}, success, error)
     },
-    file_put: function (domain_name, path, password, file_data, success, error) {
-        $dark.post("node/domain_get.php", {domain_name: domain_name}, function (data) {
-            let domain_key = $dark.sha256(data.domain_prev_key || "" + password);
-            let domain_next_key_hash = $dark.sha256(domain_key + password);
-            $dark.post("node/file_put.php", {
-                domain_name: domain_name,
-                path: path,
-                domain_key: domain_key,
-                domain_next_key_hash: domain_next_key_hash,
-                data: file_data
-            }, success, error);
+    file_download: function (domain_name, path) {
+        let element = document.createElement('a');
+        element.setAttribute('href', this.server_url + "node/file_get.php?domain_name=" + domain_name + "&path=" + path);
+        element.setAttribute('download', path.split('/').reverse()[0]);
+        element.click();
+    },
+    file_put: function (domain_name, path, file_data, success, error) {
+        let domain_key = $dark.domain_key_get(domain_name)
+        let new_domain_key = $dark.random_key()
+        $dark.json("node/file_put.php", {
+            domain_name: domain_name,
+            path: path,
+            domain_key: domain_key,
+            domain_key_hash: $dark.sha256(new_domain_key),
+            data: file_data
         }, function () {
-            $dark.post("node/file_put.php", {
-                domain_name: domain_name,
-                path: path,
-                domain_next_key_hash: $dark.sha256($dark.sha256(password)),
-                data: file_data
-            }, success, error);
-        })
+            $dark.domain_key_set(domain_name, new_domain_key)
+            success()
+        }, error)
     },
-    upload: function (domain_name, path, domain_next_key_hash) {
-        var input = document.createElement('input');
-        input.type = 'file';
+    file_upload: function (domain_name, path, success, error) {
+        var input = document.createElement('input')
+        input.type = 'file'
         input.onchange = function (e) {
-            var file = e.target.files[0];
-            var formData = new FormData();
-            formData.append("domain_name", domain_name);
-            formData.append("path", path);
-            formData.append("domain_next_key_hash", domain_next_key_hash);
-            formData.append("userfile", file);
-            var request = new XMLHttpRequest();
-            request.open("POST", this.server_url + "/node/file_put.php");
-            request.send(formData);
+            let file = e.target.files[0]
+            let domain_key = $dark.domain_key_get(domain_name)
+            let new_domain_key = $dark.random_key()
+            var formData = new FormData()
+            formData.append("domain_name", domain_name)
+            formData.append("path", path + file.name)
+            formData.append("domain_key", domain_key)
+            formData.append("domain_key_hash", $dark.sha256(new_domain_key))
+            formData.append("userfile", file)
+            $dark.request("node/file_put.php", function () {
+                $dark.domain_key_set(domain_name, new_domain_key)
+                success()
+            }, error).send(formData)
         }
-        input.click();
+        input.click()
     },
     similar: function (domain_name, success, error) {
-        $dark.post("node/domain_similar.php", {domain_name: domain_name}, success, error);
+        $dark.json("node/domain_similar.php", {domain_name: domain_name}, success, error)
     },
     sha256: function (s) {
         var chrsz = 8;

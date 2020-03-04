@@ -22,7 +22,7 @@ $request = array(
     "stock_token" => $user["user_stock_token"],
     "have_coin_code" => $have_coin_code,
     "want_coin_code" => $want_coin_code,
-    "back_script_url" => $server_url . "darknode/domain_set.php",
+    "back_script_url" => $server_url . "node/domain_set.php",
     "back_user_login" => $user["user_login"],
 );
 

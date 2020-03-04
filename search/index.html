@@ -24,9 +24,14 @@
     <div class="layout-column flex">
         <div class="header layout-row layout-align-center-center">Desktop</div>
         <div class="layout-wrap flex" style="background-image: url(img/background.png); padding: 10px">
-            <md-button class="md-primary md-raised" style="width: 80px; height: 80px; margin: 10px" ng-repeat="app in apps">
-                {{app}}
-            </md-button>
+            <div class="layout-row">
+                <div class="layout-column layout-align-start-center" ng-repeat="appName in apps" style="margin: 10px">
+                    <md-button class="md-primary md-raised md-fab layout-column layout-align-center-center" ng-click="open('app/edit/' + appName)">
+                        <img src="/{{appName}}/icon.svg" onerror="this.src='/main/img/photo.svg'"/>
+                    </md-button>
+                    <div style="padding-top: 10px">{{appName}}</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

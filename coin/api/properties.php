@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/darknode/properties.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/node/properties.php";
 
 $hosting_minutes_for_one_usd = "";
 

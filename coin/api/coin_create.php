@@ -18,7 +18,7 @@ for ($i = 0; $i < 64; $i++) {
             "user_login" => $user["user_login"],
         );
     }
-    $message = http_json_post($server_url . "darknode/domain_set.php", array(
+    $message = http_json_post($server_url . "node/domain_set.php", array(
         "domain_name" => $coin_code,
         "domains" => $domains,
     ))["message"];

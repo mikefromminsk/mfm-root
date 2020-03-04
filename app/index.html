@@ -1,13 +1,14 @@
 <style>
 
     .file-line {
+        height: 60px;
         font-weight: 600;
         font-size: 18px;
+        padding-left: 16px;
     }
 
     .file-line:hover {
         background: #3b3b3b;
-        text-decoration: underline;
     }
 
     .file_name {
@@ -35,15 +36,15 @@
 <div class="layout-fill layout-row" ng-cloak>
     <form class="layout-column flex" ng-submit="save()">
         <div class="layout-row layout-align-center-center header">
-            <img src="/{{domain_name}}/logo.png" alt="" ng-click="uploadImage()"
-                 style="width:60px; height: 60px; background: url(img/logo_default.jpg); background-size: 100% 100%;">
-            <md-input-container style="margin-left: 10px">
-                <input type="text" ng-model="domain_name" placeholder="App name" required>
+            <md-input-container>
+                <label style="text-align: center" ng-show="mode == 'new'">App name</label>
+                <input style="text-align: center" type="text" ng-model="domain_name" ng-disabled="mode != 'new'"
+                       required autocomplete="off">
             </md-input-container>
         </div>
         <div class="layout-row flex">
             <div class="layout-column flex">
-                <div class="layout-row layout-align-center-center header">
+                <div class="layout-row layout-align-center-center input-header">
                     index.html
                 </div>
                 <div class="layout-column flex editor_parent">
@@ -54,7 +55,7 @@
                         ng-click="editor_toggle = !editor_toggle">
             </md-content>
             <div class="layout-column flex" ng-show="!editor_toggle">
-                <div class="layout-row layout-align-center-center header">
+                <div class="layout-row layout-align-center-center input-header">
                     controller.js
                 </div>
                 <div class="layout-column flex editor_parent">
@@ -74,27 +75,35 @@
         </div>
         <div class="layout-column flex scrollable">
             <div ng-repeat="file in files">
-                <md-content class="layout-column file-line" md-ink-ripple>
-                    <div class="layout-row" style="padding: 20px;">
-                        <md-icon md-svg-src="{{file.file_size == 0 ? 'img/folder.svg' : 'img/file.svg'}}"
-                                 ng-style="{'color': (file.file_size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
-                        <div class="file_name" style=" ">{{file.file_name}}</div>
-                        <div class="flex"></div>
-                        {{file.file_size == 0 ? "" : file.file_size}}
-                        <md-menu md-position-mode="target-right target">
-                            <md-button aria-label="Open demo menu" class="md-icon-button"
-                                       ng-click="$mdMenu.open($event)">
-                                <md-icon md-menu-origin md-svg-icon="img/menu.svg"></md-icon>
-                            </md-button>
-                            <md-menu-content width="4">
-                                <md-menu-item>
-                                    <md-button ng-click="delete(file)">
-                                        Delete
-                                    </md-button>
-                                </md-menu-item>
-                            </md-menu-content>
-                        </md-menu>
-                    </div>
+                <md-content class="layout-row layout-align-start-center file-line" md-ink-ripple>
+                    <md-icon md-svg-src="{{file.size == 0 ? 'img/folder.svg' : 'img/file.svg'}}"
+                             ng-style="{'color': (file.size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
+                    <div class="file_name" style=" ">{{file.name}}</div>
+                    <div class="flex"></div>
+                    {{fileSizeFormat(file.size)}}
+                    <md-menu md-position-mode="target-right target">
+                        <md-button aria-label="Open demo menu" class="md-icon-button"
+                                   ng-click="$mdMenu.open($event)">
+                            <md-icon md-menu-origin md-svg-icon="img/menu.svg"></md-icon>
+                        </md-button>
+                        <md-menu-content width="4">
+                            <md-menu-item>
+                                <md-button ng-click="download(file.name)">
+                                    Download
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="delete(file)">
+                                    Rename
+                                </md-button>
+                            </md-menu-item>
+                            <md-menu-item>
+                                <md-button ng-click="delete(file)">
+                                    Delete
+                                </md-button>
+                            </md-menu-item>
+                        </md-menu-content>
+                    </md-menu>
                 </md-content>
                 <md-divider></md-divider>
             </div>

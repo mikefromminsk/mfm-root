@@ -59,13 +59,25 @@ let pathToRootDir = window.location.origin + window.location.pathname
 if (pathToRootDir.endsWith("index.html"))
     pathToRootDir = pathToRootDir.substr(0, pathToRootDir.length - "index.html".length)
 
-$dark.init(pathToRootDir);
+$dark.init(pathToRootDir, store);
 
 angularApplication.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
 
-    $scope.apps = store.get("apps") || ["search", "app"];
+    $scope.apps = []
+    $scope.$watch(function () {
+        $scope.apps.splice(0, $scope.apps.length)
+        $scope.apps.push('search')
+        store.each(function (value, key) {
+            if (key.startsWith($dark.domain_store_prefix))
+                $scope.apps.push(key.substr($dark.domain_store_prefix.length))
+        })
+        return $scope.apps;
+    }, function (val) {
+
+    })
 
     $scope.open = function (route) {
+        if (route[0] === '/') route = route.substr(1)
         let params = route.replace('\\', '/').split('/')
         let appName = params[0]
         let routeTemplate = "";

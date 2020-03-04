@@ -82,6 +82,13 @@ md-input-container > .md-errors-spacer {
     padding: 0;
     border-radius: 0;
     font-weight: 600;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.md-button > img {
+    width: 24px;
+    height: 24px;
 }
 
 *:focus {
