@@ -86,11 +86,6 @@ md-input-container > .md-errors-spacer {
     line-height: 16px;
 }
 
-.md-button > img {
-    width: 24px;
-    height: 24px;
-}
-
 *:focus {
     outline: none;
     border: 0;

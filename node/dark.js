@@ -1,5 +1,5 @@
 const $dark = {
-    domain_store_prefix: "domain/",
+    domain_store_prefix: "domain:",
     server_url: null,
     store: {
         get: function (key) {
@@ -122,7 +122,7 @@ const $dark = {
             formData.append("domain_key", domain_key)
             formData.append("domain_key_hash", $dark.sha256(new_domain_key))
             formData.append("userfile", file)
-            $dark.request("node/file_put.php", function () {
+            $dark.request("node/file_set.php", function () {
                 $dark.domain_key_set(domain_name, new_domain_key)
                 success()
             }, error).send(formData)

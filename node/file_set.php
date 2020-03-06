@@ -8,8 +8,8 @@ $domain_key = get("domain_key");
 $domain_key_hash = get("domain_key_hash");
 $data = get("data");
 
-if ($data == null && (sizeof($_FILES) == 0))
-    error("Data is empty" . $data);
+/*if ($data == null && (sizeof($_FILES) == 0))
+    error("Data is empty" . $data);*/
 
 domain_set($domain_name, $domain_key, $domain_key_hash);
 
@@ -21,6 +21,7 @@ if (strlen($filemeta["file_data"]) == MAX_SMALL_DATA_LENGTH
         error("file cannot be replaced");
 
 if ($data != null) {
+    // issue with images in json
     if (strlen($data) >= MAX_SMALL_DATA_LENGTH) {
         $hash = hash(HASH_ALGO, $data);
         $filemeta_size_hex = sprintf("%0" . FILE_SIZE_HEX_LENGTH . "X", strlen($data));

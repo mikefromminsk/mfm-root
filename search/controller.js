@@ -1,5 +1,10 @@
 controller("search", function ($scope) {
 
+    $scope.apps = $dark.store.keys()
+    $scope.appIsMine = function (appName) {
+        return $dark.domain_key_get(appName) != null
+    }
+
     $scope.searchText = null
     $scope.$watch(function () {
         return $scope.searchText;

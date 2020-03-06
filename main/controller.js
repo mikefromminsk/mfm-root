@@ -63,8 +63,6 @@ $dark.init(pathToRootDir);
 
 angularApplication.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
 
-    $scope.apps = $dark.store.keys()
-
     $scope.open = function (route) {
         if (route[0] === '/') route = route.substr(1)
         let params = route.replace('\\', '/').split('/')
@@ -74,9 +72,9 @@ angularApplication.controller('MainController', function ($rootScope, $scope, $m
             routeTemplate = routeTemplate + "/:arg" + (i - 1);
         if (appName !== "") {
             angularApplication.routeProvider.when("/" + appName + routeTemplate, {
-                templateUrl: pathToRootDir + appName + "/index.html",
+                templateUrl: pathToRootDir + "node/file_get.php?domain_name=" + appName + "&path=index.html",
                 controller: appName,
-                resolve: loader(pathToRootDir + appName + "/controller.js")
+                resolve: loader(pathToRootDir + "node/file_get.php?domain_name=" + appName + "&path=controller.js")
             });
             // set global path for all urls
             if (document.getElementsByTagName("base").length === 0)

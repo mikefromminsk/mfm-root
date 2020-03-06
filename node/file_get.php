@@ -5,9 +5,8 @@ $domain_name = get_required("domain_name");
 $path = get("path");
 
 $file = file_get($domain_name, $path);
-
 if ($file["file_data"] != null) {
-    header("Content-type: " . mime_content_type(meta_data($file["file_name"])));
+    header("Content-type: " . get_mime_type(meta_data($file["file_name"])));
     echo meta_data($file["file_data"]);
 } else {
     header("Content-type: text/directory;application/json;charset=utf-8");
@@ -17,8 +16,12 @@ if ($file["file_data"] != null) {
         $result[] = array(
             "name" => meta_data($child["file_name"]),
             "size" => meta_size($child["file_data"]),
-            "data" => $child["file_data"],
         );
+    usort($result, function ($a, $b) {
+        if ($a["size"] == 0 && $b["size"] != 0) return -1;
+        if ($a["size"] != 0 && $b["size"] == 0) return 1;
+        return strcmp($a["name"], $b["name"]);
+    });
     echo json_encode($result);
 }
 

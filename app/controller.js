@@ -1,4 +1,4 @@
-controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams) {
+controller("app", function ($rootScope, $scope, $timeout, $q, $http, $mdDialog, $routeParams) {
 
     $scope.mode = $routeParams.arg0 || "new";
     $scope.domain_name = $scope.mode === "new" ? null : $routeParams.arg1
@@ -44,10 +44,9 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
             $scope.path.push(file.name)
             get_files()
         } else {
-            $scope.download(file.name)
+            $dark.file_download($scope.domain_name, file.name)
         }
     }
-
 
     $scope.fileDelete = function (file) {
         let pathClone = [...$scope.path]
@@ -57,18 +56,22 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
         });
     }
 
+    $scope.fileDownload = function (filename) {
+        $dark.file_download($scope.domain_name, filename)
+    }
+
     $scope.fileBack = function (file) {
         $scope.path.pop()
         get_files()
     }
 
     $scope.save_request_in_progress = false
-    $scope.save = function () {
+    $scope.saveApp = function () {
         $scope.save_request_in_progress = true
         if ($scope.mode === "new") {
             $dark.domain_create($scope.domain_name, function () {
                 $scope.mode = "edit"
-                $scope.apps = $dark.store.keys();
+                $rootScope.apps = $dark.store.keys()
                 saveIndexAndController()
             }, function () {
                 $scope.save_request_in_progress = false
@@ -108,7 +111,19 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
             return (size / 1048576).toFixed(2) + " Mb"
     }
 
-    $scope.download = function (filename) {
-        $dark.file_download($scope.domain_name, filename)
+    $scope.dirCreate = function (ev) {
+        let directoryDialog = $mdDialog.prompt()
+            .title('Create new directory')
+            .placeholder('Title')
+            .targetEvent(ev)
+            .required(true)
+            .ok('Submit')
+            .cancel('Cancel');
+
+        $mdDialog.show(directoryDialog).then(function(title) {
+            $dark.file_set($scope.domain_name, $scope.path.join("/") + "/" + title, null, function () {
+                get_files()
+            })
+        });
     }
 })

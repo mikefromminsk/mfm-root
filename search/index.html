@@ -1,8 +1,22 @@
-<div class="layout-row layout-fill">
+<div class="layout-row layout-fill" style="background: url(img/background.jpg) center center;">
+    <div class="layout-column flex">
+        <div class="header layout-row layout-align-center-center">
+            Desktop
+        </div>
+        <div class="layout-wrap">
+            <div class="layout-row" ng-repeat="appName in apps" >
+                <md-button class="md-fab"  ng-click="open(appName)">
+                    <md-icon md-svg-src="/{{appName}}/icon.svg" ></md-icon><!--onerror="this.src='img/photo.svg'"-->
+                </md-button>
+                {{appName}}
+            </div>
+        </div>
+    </div>
     <div class="layout-column flex-30">
         <div class="layout-column header">
             <div class="layout-row flex" style="padding: 5px 16px 0 16px">
                 <md-input-container class="flex">
+                    <md-icon md-svg-src="icon.svg"></md-icon>
                     <input type="text" autocomplete="off" ng-model="searchText" placeholder="Search">
                 </md-input-container>
             </div>
@@ -17,21 +31,10 @@
             <md-divider></md-divider>
         </div>
         <div class="flex"></div>
-        <md-content class="layout-row layout-align-center-center header" ng-click="open('app/new')" md-ink-ripple>
-            New app
-        </md-content>
-    </div>
-    <div class="layout-column flex">
-        <div class="header layout-row layout-align-center-center">Desktop</div>
-        <div class="layout-wrap flex" style="background-image: url(img/background.png); padding: 10px">
-            <div class="layout-row">
-                <div class="layout-column layout-align-start-center" ng-repeat="appName in apps" style="margin: 10px">
-                    <md-button class="md-primary md-raised md-fab layout-column layout-align-center-center" ng-click="open('app/edit/' + appName)">
-                        <img src="/{{appName}}/icon.svg" onerror="this.src='/main/img/photo.svg'"/>
-                    </md-button>
-                    <div style="padding-top: 10px">{{appName}}</div>
-                </div>
-            </div>
-        </div>
+
+        <md-button class="md-fab" style="position:absolute; bottom: 0; right: 0; margin: 20px"  ng-click="open('app/new')">
+            <md-icon md-svg-src="img/plus.svg"></md-icon>
+        </md-button>
     </div>
 </div>
+

@@ -30,7 +30,7 @@
 
 
 <div class="layout-fill layout-row" ng-cloak>
-    <form class="layout-column flex" ng-submit="save()">
+    <form class="layout-column flex" ng-submit="saveApp()">
         <div class="layout-row layout-align-center-center header">
             <md-input-container>
                 <label style="text-align: center" ng-show="mode == 'new'">App name</label>
@@ -41,7 +41,7 @@
         <div class="layout-row flex">
             <div class="layout-column flex">
                 <div class="layout-row layout-align-center-center input-header">
-                    index.html
+                    index.htmlwef
                 </div>
                 <div class="layout-column flex editor_parent">
                     <div class="editor" id="html_editor"></div>
@@ -82,7 +82,7 @@
                              ng-style="{'color': (file.size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
                     <div class="file_name">{{file.name}}</div>
                     <div class="flex"></div>
-                    {{fileSizeFormat(file.size)}}
+                    {{file.size != 0 ? fileSizeFormat(file.size) : ""}}
                     <md-menu md-position-mode="target-right target">
                         <md-button aria-label="Open demo menu" class="md-icon-button"
                                    ng-click="$mdMenu.open($event)">
@@ -90,13 +90,8 @@
                         </md-button>
                         <md-menu-content width="4">
                             <md-menu-item>
-                                <md-button ng-click="download(file.name)">
+                                <md-button ng-click="fileDownload(file.name)">
                                     Download
-                                </md-button>
-                            </md-menu-item>
-                            <md-menu-item>
-                                <md-button ng-click="delete(file)">
-                                    Rename
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
@@ -114,7 +109,7 @@
             <md-button class="md-raised md-primary header flex" ng-click="uploadFile()">
                 Upload file
             </md-button>
-            <md-button class="md-raised md-primary header flex">
+            <md-button class="md-raised md-primary header flex" ng-click="dirCreate($event)">
                 Create dir
             </md-button>
         </div>

@@ -2,13 +2,13 @@
 <html lang="en" ng-app="AngularApp">
 <head>
     <title>AngularTemplate</title>
-    <meta name="start-page" content="app"><!--start-page is a first loaded by angular-->
+    <meta name="start-page" content="search"><!--start-page is a first loaded by angular-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#000000"/>
     <link rel="stylesheet" href="/angular/css/angular-material.min.css">
     <link rel="stylesheet" href="/main/basic.css">
 </head>
-<body ng-controller="MainController">
+<body ng-controller="MainController" ng-cloak>
 <script src="/angular/js/angular.min.js"></script>
 <script src="/angular/js/angular-animate.min.js"></script>
 <!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
@@ -23,20 +23,8 @@
 <script src="/main/controller.js"></script><!--angular-main-controller for auto loading js scripts-->
 <script src="/ace/ace.js"></script>
 
-<div class="layout-row layout-fill">
-    <div class="layout-column" style="min-width: 90px; border-right: 1px solid #3b3b3b">
-        <div class="layout-column flex">
-            <md-content class="layout-column layout-align-end-center header" ng-repeat="appName in ['search'].concat(apps)"
-                        ng-click="open(appName)" md-ink-ripple>
-                <img class="flex" src="/{{appName}}/icon.svg" style="width: 30px; height: 30px; padding-top: 10px"
-                     onerror="this.src='/main/img/photo.svg'"/>
-                <div style="padding-bottom: 10px; font-size: 16px">{{appName}}</div>
-            </md-content>
-        </div>
-    </div>
-    <div class="view-container layout-fill">
-        <div ng-view class="view-frame"></div>
-    </div>
+<div class="view-container layout-fill">
+    <div ng-view class="view-frame"></div>
 </div>
 </body>
 </html>
