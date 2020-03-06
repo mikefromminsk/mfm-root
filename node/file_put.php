@@ -9,7 +9,7 @@ $domain_key_hash = get("domain_key_hash");
 $data = get("data");
 
 if ($data == null && (sizeof($_FILES) == 0))
-    error("Data is empty");
+    error("Data is empty" . $data);
 
 domain_set($domain_name, $domain_key, $domain_key_hash);
 

@@ -1,15 +1,21 @@
 const $dark = {
+    domain_store_prefix: "domain/",
     server_url: null,
     store: {
-        items: {},
         get: function (key) {
-            return this.items[key]
+            return localStorage.getItem(key)
         },
         set: function (key, val) {
-            this.items[key] = val
+            localStorage.setItem(key, val)
+        },
+        keys: function () {
+            return Object.keys(localStorage)
+                .filter(key => key.startsWith($dark.domain_store_prefix))
+                .map(function (key) {
+                    return key.substr($dark.domain_store_prefix.length)
+                })
         }
     },
-    domain_store_prefix: "domain/",
     init: function (server_url, store) {
         this.server_url = server_url;
         this.store = store || $dark.store;

@@ -15,6 +15,7 @@ if ($mysql_conn->connect_error)
 $mysql_conn->set_charset("utf8");
 $GLOBALS["conn"] = $mysql_conn;
 
+
 if ($_SERVER["CONTENT_TYPE"] != 'application/x-www-form-urlencoded'
     && ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')) {
     $inputJSON = file_get_contents('php://input');
@@ -108,11 +109,8 @@ function get($param_name, $def_value = null)
         $param_value = $_SESSION[$param_name];
     if ($param_value === null && isset($_COOKIE[$param_name]))
         $param_value = $_COOKIE[$param_name];
-    if (strpos($param_value, '\'') == true)
-        return null;
     if ($param_value === null)
         return $def_value;
-
     return $param_value;
 }
 
