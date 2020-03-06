@@ -95,10 +95,10 @@ const $dark = {
         element.setAttribute('download', path.split('/').reverse()[0]);
         element.click();
     },
-    file_put: function (domain_name, path, file_data, success, error) {
+    file_set: function (domain_name, path, file_data, success, error) {
         let domain_key = $dark.domain_key_get(domain_name)
         let new_domain_key = $dark.random_key()
-        $dark.json("node/file_put.php", {
+        $dark.json("node/file_set.php", {
             domain_name: domain_name,
             path: path,
             domain_key: domain_key,
@@ -128,6 +128,13 @@ const $dark = {
             }, error).send(formData)
         }
         input.click()
+    },
+    file_delete: function (domain_name, path, success, error) {
+        $dark.json("node/file_delete.php", {
+            domain_name: domain_name,
+            domain_key: $dark.domain_key_get(domain_name),
+            path: path,
+        }, success, error);
     },
     similar: function (domain_name, success, error) {
         $dark.json("node/domain_similar.php", {domain_name: domain_name}, success, error)

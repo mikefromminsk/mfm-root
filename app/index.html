@@ -15,10 +15,6 @@
         padding-left: 24px;
     }
 
-
-</style>
-
-<style>
     .editor_parent {
         position: relative;
     }
@@ -71,14 +67,20 @@
 
     <div class="layout-column flex-30 scrollable">
         <div class="layout-row layout-align-center-center header">
-            <h2>{{}}</h2>
+            <h2>{{path.join('/')}}</h2>
         </div>
         <div class="layout-column flex scrollable">
+            <md-button class="file-line" md-ink-ripple
+                       ng-click="fileBack()">
+                <md-icon md-svg-src="img/up.svg" style="color: white"></md-icon>
+            </md-button>
+            <md-divider></md-divider>
             <div ng-repeat="file in files">
-                <md-content class="layout-row layout-align-start-center file-line" md-ink-ripple>
+                <md-content class="layout-row layout-align-start-center file-line" md-ink-ripple
+                            ng-click="fileOpen(file)">
                     <md-icon md-svg-src="{{file.size == 0 ? 'img/folder.svg' : 'img/file.svg'}}"
                              ng-style="{'color': (file.size == 0 ? 'white' : '#b0b0b0')}"></md-icon>
-                    <div class="file_name" style=" ">{{file.name}}</div>
+                    <div class="file_name">{{file.name}}</div>
                     <div class="flex"></div>
                     {{fileSizeFormat(file.size)}}
                     <md-menu md-position-mode="target-right target">
@@ -98,7 +100,7 @@
                                 </md-button>
                             </md-menu-item>
                             <md-menu-item>
-                                <md-button ng-click="delete(file)">
+                                <md-button ng-click="fileDelete(file)">
                                     Delete
                                 </md-button>
                             </md-menu-item>

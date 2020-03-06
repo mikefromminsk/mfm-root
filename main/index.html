@@ -26,7 +26,7 @@
 <div class="layout-row layout-fill">
     <div class="layout-column" style="min-width: 90px; border-right: 1px solid #3b3b3b">
         <div class="layout-column flex">
-            <md-content class="layout-column layout-align-end-center header" ng-repeat="appName in apps"
+            <md-content class="layout-column layout-align-end-center header" ng-repeat="appName in ['search'].concat(apps)"
                         ng-click="open(appName)" md-ink-ripple>
                 <img class="flex" src="/{{appName}}/icon.svg" style="width: 30px; height: 30px; padding-top: 10px"
                      onerror="this.src='/main/img/photo.svg'"/>

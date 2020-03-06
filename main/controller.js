@@ -63,11 +63,7 @@ $dark.init(pathToRootDir);
 
 angularApplication.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
 
-    $scope.$watch(function () {
-        return ['search'].concat($dark.store.keys());
-    }, function (val) {
-        $scope.apps = val
-    })
+    $scope.apps = $dark.store.keys()
 
     $scope.open = function (route) {
         if (route[0] === '/') route = route.substr(1)

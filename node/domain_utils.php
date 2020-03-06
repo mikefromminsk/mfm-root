@@ -85,7 +85,7 @@ define("HASH_ALGO", "sha256");
 define("HASH_LENGTH", 64);
 define("MAX_SMALL_DATA_LENGTH", HASH_LENGTH + FILE_SIZE_HEX_LENGTH);
 
-function getFile($domain_name, $path, $mkdirs = false)
+function file_get($domain_name, $path, $mkdirs = false)
 {
     $file_id = scalar("select server_group_id from domains where domain_name = '" . uencode($domain_name) . "'");
     if ($file_id == null)
@@ -112,7 +112,25 @@ function getFile($domain_name, $path, $mkdirs = false)
     return selectMap("select * from files where file_id = $file_id");
 }
 
-function getData($hash_or_data)
+function file_delete($domain_name, $path, $domain_key)
+{
+    function file_delete_rec($domain_name, $path){
+        $file = file_get($domain_name, $path);
+        if ($file["file_data"] == null) {
+            $sub_names = selectList("select file_name from files where file_parent_id = " . $file["file_id"]);
+            foreach ($sub_names as $sub_name)
+                file_delete_rec($domain_name, $path . "/" . meta_data($sub_name));
+        }
+        query("delete from files where file_id = " . $file["file_id"]);
+    }
+    $domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+    if ($domain_key_hash == hash("sha256", $domain_key))
+        file_delete_rec($domain_name, $path);
+    else
+        error("access denied");
+}
+
+function meta_data($hash_or_data)
 {
     if (strlen($hash_or_data) == MAX_SMALL_DATA_LENGTH) {
         $hash = substr($hash_or_data, FILE_SIZE_HEX_LENGTH);
@@ -121,7 +139,7 @@ function getData($hash_or_data)
     return $hash_or_data;
 }
 
-function getSize($hash_or_data)
+function meta_size($hash_or_data)
 {
     if (strlen($hash_or_data) == MAX_SMALL_DATA_LENGTH)
         return hexdec(substr($hash_or_data, 0, FILE_SIZE_HEX_LENGTH));

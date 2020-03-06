@@ -13,7 +13,7 @@ if ($data == null && (sizeof($_FILES) == 0))
 
 domain_set($domain_name, $domain_key, $domain_key_hash);
 
-$filemeta = getFile($domain_name, $path, true);
+$filemeta = file_get($domain_name, $path, true);
 
 if (strlen($filemeta["file_data"]) == MAX_SMALL_DATA_LENGTH
     && scalar("select count(*) from files where file_data = '" . $filemeta["file_data"] . "'") == 1)

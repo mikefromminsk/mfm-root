@@ -40,7 +40,7 @@ controller("login", function ($scope) {
                         $scope.registration_in_progress = true
                         store.clear()
                         let user = $dark.encode(JSON.stringify({email: $scope.login}), $scope.password);
-                        $dark.file_put($scope.login, null, $scope.password, user, function () {
+                        $dark.file_set($scope.login, null, $scope.password, user, function () {
                             $scope.registration_in_progress = false
                             store.set("user_email", user.email)
                             $mdDialog.hide();

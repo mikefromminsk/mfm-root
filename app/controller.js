@@ -3,6 +3,7 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
     $scope.mode = $routeParams.arg0 || "new";
     $scope.domain_name = $scope.mode === "new" ? null : $routeParams.arg1
     $scope.domain_name_focus = false
+    $scope.path = []
     $scope.files = null
 
     let js_editor = ace.edit("js_editor");
@@ -31,15 +32,35 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
         get_files()
     }
 
-    function get_files(){
-        $dark.dir_get($scope.domain_name, "", function (files) {
+    function get_files() {
+        $dark.dir_get($scope.domain_name, $scope.path.join("/"), function (files) {
             $scope.files = files
             $scope.$apply()
         })
     }
 
-    $scope.file_path = ""
+    $scope.fileOpen = function (file) {
+        if (file.size === 0) {
+            $scope.path.push(file.name)
+            get_files()
+        } else {
+            $scope.download(file.name)
+        }
+    }
 
+
+    $scope.fileDelete = function (file) {
+        let pathClone = [...$scope.path]
+        pathClone.push(file.name)
+        $dark.file_delete($scope.domain_name, pathClone.join("/"), function () {
+            get_files()
+        });
+    }
+
+    $scope.fileBack = function (file) {
+        $scope.path.pop()
+        get_files()
+    }
 
     $scope.save_request_in_progress = false
     $scope.save = function () {
@@ -47,6 +68,7 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
         if ($scope.mode === "new") {
             $dark.domain_create($scope.domain_name, function () {
                 $scope.mode = "edit"
+                $scope.apps = $dark.store.keys();
                 saveIndexAndController()
             }, function () {
                 $scope.save_request_in_progress = false
@@ -57,10 +79,10 @@ controller("app", function ($scope, $timeout, $q, $http, $mdDialog, $routeParams
     }
 
     function saveIndexAndController() {
-        $dark.file_put($scope.domain_name, "controller.js", js_editor.getValue(), function () {
-            $dark.file_put($scope.domain_name, "index.html", html_editor.getValue(), function () {
+        $dark.file_set($scope.domain_name, "controller.js", js_editor.getValue(), function () {
+            $dark.file_set($scope.domain_name, "index.html", html_editor.getValue(), function () {
                 $scope.save_request_in_progress = false
-                $scope.$apply();
+                get_files()
             }, function () {
                 $scope.save_request_in_progress = false
                 $scope.$apply();
