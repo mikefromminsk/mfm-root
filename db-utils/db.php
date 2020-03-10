@@ -8,7 +8,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/properties.php";
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;
 if ($mysql_conn == null)
-    $mysql_conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+    $mysql_conn = new mysqli("localhost", $db_user, $db_pass, $db_name);
 
 if ($mysql_conn->connect_error)
     die("Connection failed: " . $mysql_conn->connect_error . " check properties.php file");
@@ -366,6 +366,8 @@ function utf8ize($mixed)
 
 function http_json_post($url, $data, $uencode = true)
 {
+    if (strpos($url, "http://") === 0)
+        $url = "http://" . $url;
     if ($uencode)
         $data = utf8ize($data);
     $data_string = json_encode($data);

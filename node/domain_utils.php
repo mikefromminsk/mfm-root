@@ -14,34 +14,36 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next)
 {
     if ($domain_key_hash_next == null)
         return false;
-    $current_domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
-    if ($current_domain_key_hash != null) {
+    $domain = selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
+    if ($domain != null) {
         $domain_key_hash = hash("sha256", $domain_key);
-        if ($domain_key_hash != $current_domain_key_hash)
+        if ($domain_key_hash != $domain["domain_key_hash"])
             return false;
         if ($domain_key_hash == $domain_key_hash_next)
             return false;
         updateList("domains", array(
             "domain_prev_key" => $domain_key,
             "domain_key_hash" => $domain_key_hash_next,
+            "domain_set_time" => time(),
         ), "domain_name", $domain_name);
+        return $domain["server_group_id"];
     } else {
         $similar = domain_similar($domain_name);
-        $server_group_id = rand(0, 1000000);
+        $server_group_id = null;
         if (sizeof($similar) > 0 && levenshtein($domain_name, $similar[0]["domain_name"]) == 1)
             $server_group_id = $similar[0]["server_group_id"];
-
         insertList("domains", array(
             "domain_name" => $domain_name,
             "domain_name_hash" => domain_hash($domain_name),
             "domain_key_hash" => $domain_key_hash_next,
             "server_group_id" => $server_group_id,
+            "domain_set_time" => time(),
         ));
         insertList("files", array(
             "file_id" => $server_group_id,
         ));
+        return $server_group_id;
     }
-    return true;
 }
 
 function domain_get($domain_name)
