@@ -1,10 +1,7 @@
 <?php
 
+include_once $_SERVER["DOCUMENT_ROOT"] . "/node/init_shema.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
-
-query("delete from domains");
-query("delete from files");
-query("delete from servers");
 
 function file_list_rec($dir, &$ignore_list, &$results = array())
 {

@@ -26,7 +26,11 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next)
             "domain_key_hash" => $domain_key_hash_next,
         ), "domain_name", $domain_name);
     } else {
+        $similar = domain_similar($domain_name);
         $server_group_id = rand(0, 1000000);
+        if (sizeof($similar) > 0 && levenshtein($domain_name, $similar[0]["domain_name"]) == 1)
+            $server_group_id = $similar[0]["server_group_id"];
+
         insertList("domains", array(
             "domain_name" => $domain_name,
             "domain_name_hash" => domain_hash($domain_name),
@@ -40,16 +44,6 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next)
     return true;
 }
 
-/*function domains_set($domains)
-{
-    $success_domain_changed = [];
-    foreach ($domains as $domain) {
-        if (domain_set($domain["domain_name"], $domain["domain_key"], $domain["domain_next_key_hash"]))
-            $success_domain_changed[] = $domain["domain_name"];
-    }
-    return $success_domain_changed;
-}*/
-
 function domain_get($domain_name)
 {
     return selectMap("select domain_name, domain_prev_key, domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
@@ -58,7 +52,7 @@ function domain_get($domain_name)
 function domain_similar($domain_name)
 {
     $domain_name_hash = domain_hash($domain_name);
-    return select("select domain_name, domain_prev_key, domain_key_hash from domains "
+    return select("select domain_name, domain_prev_key, domain_key_hash, server_group_id from domains "
         . " where domain_name_hash > " . ($domain_name_hash - 32768) . " and domain_name_hash < " . ($domain_name_hash + 32768)
         . " order by ABS(domain_name_hash - $domain_name_hash)  limit 5");
 }

@@ -3,7 +3,8 @@ error_reporting(1);
 
 header("Content-type: application/json;charset=utf-8");
 
-include_once "properties.php";
+// path to local properties
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/properties.php";
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;
 if ($mysql_conn == null)
@@ -378,7 +379,7 @@ function http_json_post($url, $data, $uencode = true)
     );
     $result = curl_exec($ch);
     curl_close($ch);
-    return json_decode($result, true);
+    return is_string($result) ? json_decode($result, true) : $result;
 }
 
 function http_json_get($url)
