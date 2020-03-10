@@ -3,7 +3,7 @@ error_reporting(1);
 
 header("Content-type: application/json;charset=utf-8");
 
-// path to local properties
+//include_once "properties.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/properties.php";
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;

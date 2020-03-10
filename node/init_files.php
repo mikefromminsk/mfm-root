@@ -25,11 +25,14 @@ function file_list_rec($dir, &$ignore_list, &$results = array())
 
 $ignore_list = explode("\r\n", file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.gitignore"));
 $rootfiles = scandir($_SERVER["DOCUMENT_ROOT"]);
+
+$apps_password = random_id();
+
 foreach ($rootfiles as $app_name) {
     $path = $_SERVER["DOCUMENT_ROOT"] . "/" . $app_name;
     if (($app_name != "." && $app_name != "..") && !in_array($app_name, $ignore_list) && is_dir($path)) {
-        $domain_key = random_id();
-        domain_set($app_name, null, hash("sha256", $domain_key));
+
+        domain_set($app_name, null, hash("sha256", $apps_password));
         $app_files = file_list_rec($path, $ignore_list);
         foreach ($app_files as $app_file) {
             $local_path = substr($app_file, strlen($_SERVER["DOCUMENT_ROOT"]) + 1);
@@ -49,3 +52,4 @@ foreach ($rootfiles as $app_name) {
         }
     }
 }
+echo $apps_password;

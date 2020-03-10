@@ -9,7 +9,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 
 $domains = get("domains");
 $servers = get("servers");
-$server_url = "http://$db_host/";
+$server_url = "http://$host_name/";
 
 if ($domains != null) {
     $group_assoc = array();

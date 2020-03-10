@@ -4,6 +4,7 @@ $db_host = "";
 $db_name = "";
 $db_user = "";
 $db_pass = "";
+$host_name = "";
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/properties_overload.php";
 
