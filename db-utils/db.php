@@ -364,21 +364,21 @@ function utf8ize($mixed)
     return $mixed;
 }
 
-function http_json_post($url, $data, $uencode = true)
+function http_json_post($url, $data, $headers = array())
 {
     if (strpos($url, "http://") === 0)
         $url = "http://" . $url;
-    if ($uencode)
+    //if ($uencode)
         $data = utf8ize($data);
     $data_string = json_encode($data);
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array_merge($headers, array(
             'Content-Type: application/json',
             'Content-Length: ' . strlen($data_string))
-    );
+    ));
     $result = curl_exec($ch);
     curl_close($ch);
     return is_string($result) ? json_decode($result, true) : $result;

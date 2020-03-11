@@ -2,6 +2,8 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
 
+define("HASH_ALGO", "sha256");
+
 function domain_hash($domain_name, $fromIndex = 0)
 {
     $charsum = 0;
@@ -10,45 +12,70 @@ function domain_hash($domain_name, $fromIndex = 0)
     return $charsum;
 }
 
-function domain_set($domain_name, $domain_key, $domain_key_hash_next)
+function domain_check($domain_name, $domain_key)
+{
+    $domain = domain_get($domain_name);
+    if ($domain != null) {
+        /*if ($domain_key_hash == $domain_key_hash_next)
+                return false;*/
+        $domain_key_hash = hash(HASH_ALGO, hash(HASH_ALGO, $domain_key) . $domain["server_repo_hash"]);
+        if ($domain_key_hash != $domain["domain_key_hash"])
+            return false;
+    }
+    return $domain;
+}
+
+function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_repo_hash)
 {
     if ($domain_key_hash_next == null)
         return false;
-    $domain = selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
-    if ($domain != null) {
-        $domain_key_hash = hash("sha256", $domain_key);
-        if ($domain_key_hash != $domain["domain_key_hash"])
-            return false;
-        if ($domain_key_hash == $domain_key_hash_next)
-            return false;
-        updateList("domains", array(
-            "domain_prev_key" => $domain_key,
-            "domain_key_hash" => $domain_key_hash_next,
-            "domain_set_time" => time(),
-        ), "domain_name", $domain_name);
-        return $domain["server_group_id"];
-    } else {
-        $similar = domain_similar($domain_name);
-        $server_group_id = null;
-        if (sizeof($similar) > 0 && levenshtein($domain_name, $similar[0]["domain_name"]) == 1)
-            $server_group_id = $similar[0]["server_group_id"];
-        insertList("domains", array(
-            "domain_name" => $domain_name,
-            "domain_name_hash" => domain_hash($domain_name),
-            "domain_key_hash" => $domain_key_hash_next,
-            "server_group_id" => $server_group_id,
-            "domain_set_time" => time(),
-        ));
-        insertList("files", array(
-            "file_id" => $server_group_id,
-        ));
-        return $server_group_id;
+
+    $domain = domain_check($domain_name, $domain_key);
+
+    if ($domain !== false){
+        if ($domain != null) {
+            updateList("domains", array(
+                "domain_prev_key" => $domain_key,
+                "domain_key_hash" => $domain_key_hash_next,
+                "server_repo_hash" => $server_repo_hash,
+                "domain_set_time" => time(),
+            ), "domain_name", $domain_name);
+            return $domain["server_group_id"];
+        } else {
+            $similar = domain_similar($domain_name);
+            $server_group_id = random_id();
+            if (sizeof($similar) > 0 && levenshtein($domain_name, $similar[0]["domain_name"]) == 1)
+                $server_group_id = $similar[0]["server_group_id"];
+            /*else // add self
+                insertList("servers", array( ));*/
+            /*
+             * if (scalar("select count(*) from servers where server_group_id = $server_group_id "
+                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
+            insertList("servers", array(
+                "server_group_id" => $server_group_id,
+                "server_host_name" => $server["server_host_name"],
+                "server_reg_time" => time(),
+            ));
+        }
+
+             * */
+            insertList("domains", array(
+                "domain_name" => $domain_name,
+                "domain_name_hash" => domain_hash($domain_name),
+                "domain_key_hash" => $domain_key_hash_next,
+                "server_repo_hash" => $server_repo_hash,
+                "server_group_id" => $server_group_id,
+                "domain_set_time" => time(),
+            ));
+            return $server_group_id;
+        }
     }
+    return false;
 }
 
 function domain_get($domain_name)
 {
-    return selectMap("select domain_name, domain_prev_key, domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+    return selectMap("select domain_name, domain_prev_key, domain_key_hash, server_group_id, server_repo_hash from domains where domain_name = '" . uencode($domain_name) . "'");
 }
 
 function domain_similar($domain_name)
@@ -59,93 +86,34 @@ function domain_similar($domain_name)
         . " order by ABS(domain_name_hash - $domain_name_hash)  limit 5");
 }
 
-function getListFromStart($domain_prefix, $count, $user_id = null, $to_user_login = null)
+function domain_repo_get($server_group_id)
 {
-    if ($user_id != null) {
-        $where = "where user_id = $user_id and domain_name like '$domain_prefix%' limit $count";
-        $domains = select("select domain_name, domain_key_hash, domain_key from domains $where");
-        if ($user_id != null)
-            update("update domains set user_id = null $where");
-    } else {
-        $domains = select("select domain_name, domain_key_hash from domains where domain_name like '$domain_prefix%' limit $count");
+    $files = select("select file_path, file_hash from files where server_group_id = $server_group_id order by file_path");
+    $repo = array();
+    foreach ($files as $file)
+        $repo[$file["file_path"]] = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $file["file_hash"]);
+    return sizeof($repo) == 0 ? null : json_encode($repo);
+}
+
+function domain_repo_set($server_group_id, $files)
+{
+    query("delete from files where server_group_id = $server_group_id");
+    foreach ($files as $file_path => $file_data) {
+        $hash = hash(HASH_ALGO, $file_data);
+        file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash, $file_data);
+        insertList("files", array(
+             "server_group_id" => $server_group_id,
+             "file_path" => $file_path,
+             "file_hash" => $hash,
+        ));
     }
-    if ($to_user_login != null)
-        foreach ($domains as $domain)
-            $domain["user_login"] = $to_user_login;
-    return $domains;
 }
 
-
-define("FILE_SIZE_HEX_LENGTH", 8);
-define("HASH_ALGO", "sha256");
-define("HASH_LENGTH", 64);
-define("MAX_SMALL_DATA_LENGTH", HASH_LENGTH + FILE_SIZE_HEX_LENGTH);
-
-function file_get($domain_name, $path, $mkdirs = false)
+function get_mime_type($filename)
 {
-    $file_id = scalar("select server_group_id from domains where domain_name = '" . uencode($domain_name) . "'");
-    if ($file_id == null)
-        error("domain doesnt exist");
-
-    if ($path[0] == "/") $path = substr($path, 1);
-    if ($path != null) {
-        $path_items = explode("/", $path);
-        foreach ($path_items as $file_name) {
-            $file_name = str_replace("%47", "/", $file_name);
-            $next_file_id = scalar("select file_id from files where file_parent_id = $file_id and file_name = '" . uencode($file_name) . "'");
-            if ($next_file_id == null) {
-                if ($mkdirs) {
-                    $next_file_id = insertListAndGetId("files", array(
-                        "file_parent_id" => $file_id,
-                        "file_name" => $file_name,
-                    ));
-                } else
-                    error("file doesnt exist");
-            }
-            $file_id = $next_file_id;
-        }
-    }
-    return selectMap("select * from files where file_id = $file_id");
-}
-
-function file_delete($domain_name, $path, $domain_key)
-{
-    function file_delete_rec($domain_name, $path){
-        $file = file_get($domain_name, $path);
-        if ($file["file_data"] == null) {
-            $sub_names = selectList("select file_name from files where file_parent_id = " . $file["file_id"]);
-            foreach ($sub_names as $sub_name)
-                file_delete_rec($domain_name, $path . "/" . meta_data($sub_name));
-        }
-        query("delete from files where file_id = " . $file["file_id"]);
-    }
-    $domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
-    if ($domain_key_hash == hash("sha256", $domain_key))
-        file_delete_rec($domain_name, $path);
-    else
-        error("access denied");
-}
-
-function meta_data($hash_or_data)
-{
-    if (strlen($hash_or_data) == MAX_SMALL_DATA_LENGTH) {
-        $hash = substr($hash_or_data, FILE_SIZE_HEX_LENGTH);
-        return file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash);
-    }
-    return $hash_or_data;
-}
-
-function meta_size($hash_or_data)
-{
-    if (strlen($hash_or_data) == MAX_SMALL_DATA_LENGTH)
-        return hexdec(substr($hash_or_data, 0, FILE_SIZE_HEX_LENGTH));
-    return strlen($hash_or_data);
-}
-
-function get_mime_type($filename) {
-    $idx = explode( '.', $filename );
+    $idx = explode('.', $filename);
     $count_explode = count($idx);
-    $idx = strtolower($idx[$count_explode-1]);
+    $idx = strtolower($idx[$count_explode - 1]);
 
     $mimet = array(
         'txt' => 'text/plain',
@@ -206,7 +174,7 @@ function get_mime_type($filename) {
         'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
     );
 
-    if (isset( $mimet[$idx] )) {
+    if (isset($mimet[$idx])) {
         return $mimet[$idx];
     } else {
         return 'application/octet-stream';
