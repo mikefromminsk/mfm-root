@@ -3,12 +3,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 
 $domain_name = get_required("domain_name");
 $path = get("path");
-$file_hash = get("file_hash");
-
-if ($file_hash != null) {
-    readfile($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $file_hash);
-    die();
-}
 
 $path = trim($path, "/");
 
@@ -19,7 +13,7 @@ if ($path == null) {
     if (strpos($accept, "text/html") !== false) {
         $path = "index.html";
     } else if (strpos($accept, "application/repo") !== false) {
-        die(domain_repo($domain["server_group_id"]));
+        die(domain_repo_get($domain["server_group_id"]));
     } else {
         //text/directory
     }

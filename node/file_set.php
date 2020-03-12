@@ -56,6 +56,9 @@ if (sizeof($_FILES) != 0) {
 
 $repo = domain_repo_get($server_group_id);
 
-$domain_repo_hash = $repo != null ? hash(HASH_ALGO, $repo) : null;
+$server_repo_hash = $repo != null ? hash(HASH_ALGO, $repo) : null;
 
-$server_group_id = domain_set($domain_name, $domain_key, $domain_key_hash, $domain_repo_hash);
+$server_group_id = domain_set($domain_name, $domain_key, $domain_key_hash, $server_repo_hash);
+
+update("update servers set server_repo_hash = '" . uencode($server_repo_hash) . "'"
+    . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "'");

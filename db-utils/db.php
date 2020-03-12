@@ -21,6 +21,7 @@ if ($_SERVER["CONTENT_TYPE"] != 'application/x-www-form-urlencoded'
     && ($_SERVER['REQUEST_METHOD'] == 'POST' || $_SERVER['REQUEST_METHOD'] == 'PUT')) {
     $inputJSON = file_get_contents('php://input');
     $inputParams = json_decode($inputJSON, true);
+    //file_put_contents("sef", $inputParams);
     foreach ($inputParams as $key => $value)
         $_POST[$key] = $value;
 }
@@ -364,12 +365,12 @@ function utf8ize($mixed)
     return $mixed;
 }
 
-function http_json_post($url, $data, $headers = array())
+function http_post($url, $data, $headers = array())
 {
     if (strpos($url, "http://") === 0)
         $url = "http://" . $url;
     //if ($uencode)
-        $data = utf8ize($data);
+    $data = utf8ize($data);
     $data_string = json_encode($data);
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -381,6 +382,12 @@ function http_json_post($url, $data, $headers = array())
     ));
     $result = curl_exec($ch);
     curl_close($ch);
+    return $result;
+}
+
+function http_json_post($url, $data, $headers = array())
+{
+    $result = http_post($url, $data, $headers);
     return is_string($result) ? json_decode($result, true) : $result;
 }
 

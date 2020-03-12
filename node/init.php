@@ -37,7 +37,7 @@ if ($user == $db_user && $pass == $db_pass) {
     query("CREATE TABLE IF NOT EXISTS `servers` (
   `server_group_id` bigint(14) NOT NULL,
   `server_host_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `server_repo_hash` int(11) DEFAULT NULL,
+  `server_repo_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `server_set_time` int(11) NOT NULL,
   `server_sync_tyme` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
@@ -98,25 +98,11 @@ if ($user == $db_user && $pass == $db_pass) {
             $success = domain_set($app_name, "init", hash(HASH_ALGO, hash(HASH_ALGO, $apps_password) . $server_repo_hash), $server_repo_hash);
             if ($success === false)
                 error("doddd");
+
+            /*update("update servers set server_repo_hash = '" . uencode($server_repo_hash) . "'"
+                . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "'");*/
         }
     }
 
-    echo "apps_pass: $apps_password";
-
-    if ($domain_name != null && $domain_prev_key != null && $domain_key_hash != null && $server_host_name != null) {
-        $server_group_id = random_id();
-        http_json_post($server_host_name, array(
-            "domains" => [array(
-                "domain_name" => $domain_name,
-                "domain_prev_key" => $domain_prev_key,
-                "domain_key_hash" => $domain_key_hash,
-                "server_group_id" => $server_group_id,
-            )],
-            "servers" => [array(
-                "server_group_id" => $server_group_id,
-                "server_host_name" => $server_host_name,
-            )]
-        ));
-    }
-
+    echo $apps_password;
 }

@@ -32,7 +32,7 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
 
     $domain = domain_check($domain_name, $domain_key);
 
-    if ($domain !== false){
+    if ($domain !== false) {
         if ($domain != null) {
             updateList("domains", array(
                 "domain_prev_key" => $domain_key,
@@ -40,25 +40,21 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "server_repo_hash" => $server_repo_hash,
                 "domain_set_time" => time(),
             ), "domain_name", $domain_name);
+
             return $domain["server_group_id"];
         } else {
             $similar = domain_similar($domain_name);
-            $server_group_id = random_id();
             if (sizeof($similar) > 0 && levenshtein($domain_name, $similar[0]["domain_name"]) == 1)
                 $server_group_id = $similar[0]["server_group_id"];
-            /*else // add self
-                insertList("servers", array( ));*/
-            /*
-             * if (scalar("select count(*) from servers where server_group_id = $server_group_id "
-                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
-            insertList("servers", array(
-                "server_group_id" => $server_group_id,
-                "server_host_name" => $server["server_host_name"],
-                "server_reg_time" => time(),
-            ));
-        }
-
-             * */
+            else {
+                $server_group_id = random_key("servers", "server_group_id");
+                insertList("servers", array(
+                    "server_group_id" => $server_group_id,
+                    "server_host_name" => $GLOBALS["host_name"],
+                    "server_repo_hash" => $server_repo_hash,
+                    "server_set_time" => time(),
+                ));
+            }
             insertList("domains", array(
                 "domain_name" => $domain_name,
                 "domain_name_hash" => domain_hash($domain_name),
@@ -102,9 +98,9 @@ function domain_repo_set($server_group_id, $files)
         $hash = hash(HASH_ALGO, $file_data);
         file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash, $file_data);
         insertList("files", array(
-             "server_group_id" => $server_group_id,
-             "file_path" => $file_path,
-             "file_hash" => $hash,
+            "server_group_id" => $server_group_id,
+            "file_path" => $file_path,
+            "file_hash" => $hash,
         ));
     }
 }
