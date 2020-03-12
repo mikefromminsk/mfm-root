@@ -34,23 +34,19 @@ foreach ($domains as $domain) {
 }
 //set servers
 foreach ($servers as $server)
-    if ($server["server_host_name"] != $host_name) {
-        $server_group_id = $group_assoc[$server["server_group_id"]];
-        if ($server_group_id != null) {
-            if (scalar("select count(*) from servers where server_group_id = $server_group_id "
-                    . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
-                insertList("servers", array(
-                    "server_group_id" => $server_group_id,
-                    "server_repo_hash" => $server["server_repo_hash"],
-                    "server_host_name" => $server["server_host_name"],
-                    "server_set_time" => time(),
-                ));
-            }
+    if ($server["server_host_name"] != $host_name && $group_assoc[$server["server_group_id"]] != null) {
+        if (scalar("select count(*) from servers where server_group_id = " . $group_assoc[$server["server_group_id"]]
+                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
+            insertList("servers", array(
+                "server_group_id" => $server_group_id,
+                "server_repo_hash" => $server["server_repo_hash"],
+                "server_host_name" => $server["server_host_name"],
+                "server_set_time" => time(),
+            ));
         }
     }
 //retrace
 foreach ($group_assoc as $key => $server_group_id) {
-
     $self_server_repo_hash = scalar("select server_repo_hash from servers where server_group_id = $server_group_id "
         . " and server_host_name = '" . uencode($host_name) . "'");
 
@@ -62,12 +58,12 @@ foreach ($group_assoc as $key => $server_group_id) {
 
         $repo = http_post($server_host_name . "/node/file_get.php", array(
             "domain_name" => $domain["domain_name"],
-        ), array("Accept: application/repo"));
+        ));
 
-        file_put_contents("wewwww", $repo);
+        file_put_contents("wewwww", hash(HASH_ALGO, $repo) . " " . $domain["server_repo_hash"]);
 
-        if (hash(HASH_ALGO, json_encode($repo)) == $domain["server_repo_hash"]) {
-            domain_repo_set($server_group_id, $repo);
+        if (hash(HASH_ALGO, $repo) == $domain["server_repo_hash"]) {
+            domain_repo_set($server_group_id, json_decode($repo));
             update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
                 . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "' ");
         }

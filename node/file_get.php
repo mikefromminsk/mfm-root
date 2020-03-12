@@ -12,17 +12,14 @@ if ($path == null) {
     $accept = getallheaders()["Accept"];
     if (strpos($accept, "text/html") !== false) {
         $path = "index.html";
-    } else if (strpos($accept, "application/repo") !== false) {
-        die(domain_repo_get($domain["server_group_id"]));
     } else {
-        //text/directory
+        die(domain_repo_get($domain["server_group_id"]));
     }
 }
 
 if ($path != null)
     $file = selectMap("select * from files where server_group_id = " . $domain["server_group_id"]
-        . " and file_path = '" . uencode($path) . "'"
-        . ($file_hash != null ? " and file_hash = '$file_hash'" : ""));
+        . " and file_path = '" . uencode($path) . "'");
 
 if ($file != null) {
     header("Content-type: " . get_mime_type(basename($file["file_path"])));
