@@ -4,7 +4,10 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 $domains = get("domains");
 $servers = get("servers");
 
-$domain_name = get("domain_name");
+file_put_contents("wefwe", json_encode($domains));
+file_put_contents("w2efwe", json_encode($servers));
+
+/*$domain_name = get("domain_name");
 $domain_key = get("domain_key");
 $server_host_name = get("server_host_name");
 if ($domain_name != null && $domain_key != null && $server_host_name != null) {
@@ -15,9 +18,9 @@ if ($domain_name != null && $domain_key != null && $server_host_name != null) {
     $servers = [array(
         "server_group_id" => $domain["server_group_id"],
         "server_host_name" => $server_host_name,
-        "server_repo_hash" => $domain["server_repo_hash"],
+        "server_repo_hash" => null,
     )];
-}
+}*/
 
 if ($domains == null)
     error("domains are null");
@@ -30,20 +33,21 @@ foreach ($domains as $domain) {
         $group_assoc[$domain["server_group_id"]] = $server_group_id;
 }
 //set servers
-foreach ($servers as $server) {
-    $server_group_id = $group_assoc[$server["server_group_id"]];
-    if ($server_group_id != null) {
-        if (scalar("select count(*) from servers where server_group_id = $server_group_id "
-                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
-            insertList("servers", array(
-                "server_group_id" => $server_group_id,
-                "server_repo_hash" => $server["server_repo_hash"],
-                "server_host_name" => $server["server_host_name"],
-                "server_set_time" => time(),
-            ));
+foreach ($servers as $server)
+    if ($server["server_host_name"] != $host_name) {
+        $server_group_id = $group_assoc[$server["server_group_id"]];
+        if ($server_group_id != null) {
+            if (scalar("select count(*) from servers where server_group_id = $server_group_id "
+                    . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
+                insertList("servers", array(
+                    "server_group_id" => $server_group_id,
+                    "server_repo_hash" => $server["server_repo_hash"],
+                    "server_host_name" => $server["server_host_name"],
+                    "server_set_time" => time(),
+                ));
+            }
         }
     }
-}
 //retrace
 foreach ($group_assoc as $key => $server_group_id) {
 
@@ -59,6 +63,8 @@ foreach ($group_assoc as $key => $server_group_id) {
         $repo = http_post($server_host_name . "/node/file_get.php", array(
             "domain_name" => $domain["domain_name"],
         ), array("Accept: application/repo"));
+
+        file_put_contents("wewwww", $repo);
 
         if (hash(HASH_ALGO, json_encode($repo)) == $domain["server_repo_hash"]) {
             domain_repo_set($server_group_id, $repo);

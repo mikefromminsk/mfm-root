@@ -38,7 +38,9 @@ foreach ($server_host_names as $server_host_name) {
 
     $servers = [];
     foreach ($groups_in_request as $group) {
-        $servers = array_merge($servers, select("select server_group_id, server_host_name, server_repo_hash from servers where server_group_id = " . $group["server_group_id"]
+        $servers = array_merge($servers, select("select server_group_id, server_host_name, server_repo_hash from servers "
+            . " where server_group_id = " . $group["server_group_id"]
+            . " and server_host_name <> '" . uencode($server_host_name) . "'"
             . ($group["server_sync_time"] != null ? " and server_set_time > " . $group["server_sync_time"] : "")));
     }
 
@@ -48,8 +50,8 @@ foreach ($server_host_names as $server_host_name) {
             "servers" => $servers
         );
         $response = http_json_post($server_host_name . "/node/sync_receive.php", $request);
-        echo json_encode_readable($request);
-        if ($response !== false) {
+
+        if ($response != null && $response !== false) {
             foreach ($groups_in_request as $group) {
                 update("update servers set server_sync_time = " . $group["max_domain_set_time"]
                     . " where server_group_id = " . $group["server_group_id"] . " and server_host_name = '" . uencode($server_host_name) . "'");

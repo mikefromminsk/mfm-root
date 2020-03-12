@@ -51,7 +51,6 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 insertList("servers", array(
                     "server_group_id" => $server_group_id,
                     "server_host_name" => $GLOBALS["host_name"],
-                    "server_repo_hash" => $server_repo_hash,
                     "server_set_time" => time(),
                 ));
             }
