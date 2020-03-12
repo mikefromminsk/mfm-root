@@ -4,9 +4,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 $domains = get("domains");
 $servers = get("servers");
 
-file_put_contents("wefwe", json_encode($domains));
-file_put_contents("w2efwe", json_encode($servers));
-
 /*$domain_name = get("domain_name");
 $domain_key = get("domain_key");
 $server_host_name = get("server_host_name");
