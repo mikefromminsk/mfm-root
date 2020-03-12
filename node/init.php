@@ -5,10 +5,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 
 $user = get_required("user");
 $pass = get_required("pass");
-$domain_name = get("domain_name");
-$domain_prev_key = get("domain_prev_key");
-$domain_key_hash = get("domain_key_hash");
-$server_host_name = get("server_host_name");
+$mode = get_required("mode");
 
 if ($user == $db_user && $pass == $db_pass) {
     query("DROP TABLE IF EXISTS `domains`;");
@@ -44,65 +41,69 @@ if ($user == $db_user && $pass == $db_pass) {
 
     mkdir("files");
     //scandir("files"); and remove all files
-    function file_list_rec($dir, &$ignore_list, &$results = array())
-    {
-        $files = scandir($dir);
-        foreach ($files as $key => $value) {
-            $path = realpath($dir . "/" . $value);
-            $path = str_replace("\\", "/", $path);
-            $ignore = false;
-            foreach ($ignore_list as $ignore_item)
-                $ignore = $ignore || (strpos($path, $ignore_item) !== false);
-            if ($ignore)
-                continue;
-            if (!is_dir($path)) {
-                $results[] = $path;
-            } else if ($value != "." && $value != "..") {
-                file_list_rec($path, $ignore_list, $results);
+
+    if ($mode != null) {
+
+        function file_list_rec($dir, &$ignore_list, &$results = array())
+        {
+            $files = scandir($dir);
+            foreach ($files as $key => $value) {
+                $path = realpath($dir . "/" . $value);
+                $path = str_replace("\\", "/", $path);
+                $ignore = false;
+                foreach ($ignore_list as $ignore_item)
+                    $ignore = $ignore || (strpos($path, $ignore_item) !== false);
+                if ($ignore)
+                    continue;
+                if (!is_dir($path)) {
+                    $results[] = $path;
+                } else if ($value != "." && $value != "..") {
+                    file_list_rec($path, $ignore_list, $results);
+                }
+            }
+            return $results;
+        }
+
+        $ignore_list = explode("\r\n", file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.gitignore"));
+        $rootfiles = scandir($_SERVER["DOCUMENT_ROOT"]);
+
+        $apps_password = random_id();
+
+        foreach ($rootfiles as $app_name) {
+            $path = $_SERVER["DOCUMENT_ROOT"] . "/" . $app_name;
+            if (($app_name != "." && $app_name != "..") && !in_array($app_name, $ignore_list) && is_dir($path)) {
+
+                $server_group_id = domain_set($app_name, null, hash(HASH_ALGO, hash(HASH_ALGO, "init")), null);
+                $app_files = file_list_rec($path, $ignore_list);
+
+                foreach ($app_files as $app_file) {
+                    $file_path = substr($app_file, strlen($_SERVER["DOCUMENT_ROOT"]) + 1);
+                    $path_items = explode("/", $file_path);
+                    $app_name = array_shift($path_items);
+                    $file_path = implode("/", $path_items);
+
+                    $hash = hash_file(HASH_ALGO, $app_file);
+
+                    copy($app_file, $_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash);
+
+                    insertList("files", array(
+                        "server_group_id" => $server_group_id,
+                        "file_path" => $file_path,
+                        "file_level" => substr_count($file_path, "/"),
+                        "file_size" => filesize($app_file),
+                        "file_hash" => $hash,
+                    ));
+                }
+                $server_repo_hash = hash(HASH_ALGO, json_encode(domain_repo_get($server_group_id)));
+                $success = domain_set($app_name, "init", hash(HASH_ALGO, hash(HASH_ALGO, $apps_password) . $server_repo_hash), $server_repo_hash);
+                if ($success === false)
+                    error("doddd");
+
+                update("update servers set server_repo_hash = '" . uencode($server_repo_hash) . "'"
+                    . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "'");
             }
         }
-        return $results;
+
+        echo $apps_password;
     }
-
-    $ignore_list = explode("\r\n", file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.gitignore"));
-    $rootfiles = scandir($_SERVER["DOCUMENT_ROOT"]);
-
-    $apps_password = random_id();
-
-    foreach ($rootfiles as $app_name) {
-        $path = $_SERVER["DOCUMENT_ROOT"] . "/" . $app_name;
-        if (($app_name != "." && $app_name != "..") && !in_array($app_name, $ignore_list) && is_dir($path)) {
-
-            $server_group_id = domain_set($app_name, null, hash(HASH_ALGO, hash(HASH_ALGO, "init")), null);
-            $app_files = file_list_rec($path, $ignore_list);
-
-            foreach ($app_files as $app_file) {
-                $file_path = substr($app_file, strlen($_SERVER["DOCUMENT_ROOT"]) + 1);
-                $path_items = explode("/", $file_path);
-                $app_name = array_shift($path_items);
-                $file_path = implode("/", $path_items);
-
-                $hash = hash_file(HASH_ALGO, $app_file);
-
-                copy($app_file, $_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash);
-
-                insertList("files", array(
-                    "server_group_id" => $server_group_id,
-                    "file_path" => $file_path,
-                    "file_level" => substr_count($file_path, "/"),
-                    "file_size" => filesize($app_file),
-                    "file_hash" => $hash,
-                ));
-            }
-            $server_repo_hash = hash(HASH_ALGO, json_encode(domain_repo_get($server_group_id)));
-            $success = domain_set($app_name, "init", hash(HASH_ALGO, hash(HASH_ALGO, $apps_password) . $server_repo_hash), $server_repo_hash);
-            if ($success === false)
-                error("doddd");
-
-            /*update("update servers set server_repo_hash = '" . uencode($server_repo_hash) . "'"
-                . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "'");*/
-        }
-    }
-
-    echo $apps_password;
 }
