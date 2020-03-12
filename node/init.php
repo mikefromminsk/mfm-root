@@ -94,7 +94,7 @@ if ($user == $db_user && $pass == $db_pass) {
                         "file_hash" => $hash,
                     ));
                 }
-                $server_repo_hash = hash(HASH_ALGO, json_encode(domain_repo_get($server_group_id)));
+                $server_repo_hash = hash(HASH_ALGO, domain_repo_get($server_group_id));
                 $success = domain_set($app_name, "init", hash(HASH_ALGO, hash(HASH_ALGO, $apps_password) . $server_repo_hash), $server_repo_hash);
                 if ($success === false)
                     error("doddd");

@@ -60,7 +60,7 @@ foreach ($group_assoc as $key => $server_group_id) {
             "domain_name" => $domain["domain_name"],
         ));
 
-        file_put_contents("wewwww", hash(HASH_ALGO, $repo) . " " . $domain["server_repo_hash"]);
+        file_put_contents("wewwww", $repo);
 
         if (hash(HASH_ALGO, $repo) == $domain["server_repo_hash"]) {
             domain_repo_set($server_group_id, json_decode($repo));
