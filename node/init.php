@@ -5,7 +5,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 
 $user = get_required("user");
 $pass = get_required("pass");
-$mode = get_required("mode");
+$mode = get("mode");
 
 if ($user == $db_user && $pass == $db_pass) {
     query("DROP TABLE IF EXISTS `domains`;");
