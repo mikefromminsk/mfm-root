@@ -14,7 +14,7 @@ if ($domain_name != null && $server_host_name != null) {
         ));
 }
 
-$server_host_names = selectList("select distinct server_host_name from servers where server_host_name <> '$host_name'");
+$server_host_names = selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'");
 
 define("MAX_DOMAIN_COUNT_IN_REQUEST", 1000);
 
@@ -45,13 +45,11 @@ foreach ($server_host_names as $server_host_name) {
     }
 
     if (sizeof($domains_in_request) > 0) {
-        $request = array(
+        $response = http_json_post($server_host_name . "/node/sync_receive.php", array(
             "domains" => $domains_in_request,
             "servers" => $servers
-        );
-        $response = http_json_post($server_host_name . "/node/sync_receive.php", $request);
-
-        if ($response != null && $response !== false) {
+        ));
+        if ($response !== false) {
             foreach ($groups_in_request as $group) {
                 update("update servers set server_sync_time = " . $group["max_domain_set_time"]
                     . " where server_group_id = " . $group["server_group_id"] . " and server_host_name = '" . uencode($server_host_name) . "'");
