@@ -36,7 +36,7 @@ if ($user == $db_user && $pass == $db_pass) {
   `server_host_name` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `server_repo_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `server_set_time` int(11) NOT NULL,
-  `server_sync_tyme` int(11) DEFAULT NULL
+  `server_sync_time` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 
     mkdir("files");

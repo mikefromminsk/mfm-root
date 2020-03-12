@@ -61,8 +61,9 @@ foreach ($group_assoc as $key => $server_group_id) {
         ));
 
         file_put_contents("wewwww", $repo);
+        file_put_contents("wewwww222", hash(HASH_ALGO, $repo) . " ". $domain["server_repo_hash"]);
 
-        if (hash(HASH_ALGO, $repo) == $domain["server_repo_hash"]) {
+        /*if (hash(HASH_ALGO, $repo) == $domain["server_repo_hash"])*/ {
             domain_repo_set($server_group_id, json_decode($repo));
             update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
                 . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "' ");
