@@ -4,21 +4,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 $domains = get("domains");
 $servers = get("servers");
 
-/*$domain_name = get("domain_name");
-$domain_key = get("domain_key");
-$server_host_name = get("server_host_name");
-if ($domain_name != null && $domain_key != null && $server_host_name != null) {
-    $domain = domain_get($domain_name);
-    $domain["domain_prev_key"] = $domain_key;
-    $domain["domain_key_hash"] = hash(HASH_ALGO, hash(HASH_ALGO, $domain_key) . $domain["server_repo_hash"]);
-    $domains = [$domain];
-    $servers = [array(
-        "server_group_id" => $domain["server_group_id"],
-        "server_host_name" => $server_host_name,
-        "server_repo_hash" => null,
-    )];
-}*/
-
 if ($domains == null)
     error("domains are null");
 
@@ -59,7 +44,24 @@ foreach ($group_assoc as $key => $server_group_id) {
 
 
         if (hash(HASH_ALGO, $repo) == $domain["server_repo_hash"]) {
-            domain_repo_set($server_group_id, json_decode($repo));
+            $repo = json_decode($repo);
+            query("delete from files where server_group_id = $server_group_id");
+            foreach ($repo as $file_path => $file_data) {
+                $hash = hash(HASH_ALGO, $file_data);
+                if ($domain["domain_name"] == "node") {
+                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/" . $file_path, $file_data);
+                } else {
+                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash, $file_data);
+                }
+                insertList("files", array(
+                    "server_group_id" => $server_group_id,
+                    "file_path" => $file_path,
+                    "file_level" => substr_count($file_path, "/"),
+                    "file_size" => sizeof($file_data),
+                    "file_hash" => $hash,
+                ));
+            }
+            domain_repo_set($server_group_id, );
             update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
                 . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "' ");
         }
