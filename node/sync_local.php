@@ -35,7 +35,7 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
         if ($domain == null) {
             $server_group_id = domain_set($app_name, null, domain_key_hash("init", null), null);
             foreach (file_list_rec($path, $ignore_list) as $file_absolute_path) {
-                $file_local_path = substr($file_absolute_path, strpos($file_absolute_path, "/", $_SERVER["DOCUMENT_ROOT"] + 1));
+                $file_local_path = substr($file_absolute_path, strpos($file_absolute_path, "/", strlen($_SERVER["DOCUMENT_ROOT"]) + 1) + 1);
                 $hash = hash_file(HASH_ALGO, $file_absolute_path);
                 copy($file_absolute_path, $_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash);
                 insertList("files", array(
@@ -53,7 +53,7 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
         } else {
             $repo = [];
             foreach (file_list_rec($path, $ignore_list) as $file_absolute_path) {
-                $file_local_path = substr($file_absolute_path, strpos($file_absolute_path, "/", $_SERVER["DOCUMENT_ROOT"] + 1));
+                $file_local_path = substr($file_absolute_path, strpos($file_absolute_path, "/", strlen($_SERVER["DOCUMENT_ROOT"]) + 1) + 1);
                 $repo[$file_local_path] = file_get_contents($file_absolute_path);
             }
             domain_repo_set($app_name, json_encode($repo));
