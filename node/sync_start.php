@@ -49,12 +49,13 @@ foreach ($server_host_names as $server_host_name) {
             "domains" => $domains_in_request,
             "servers" => $servers
         ));
-        if ($response !== false) {
+        echo json_encode($domains_in_request);
+        /*if ($response !== false) {
             foreach ($groups_in_request as $group) {
                 update("update servers set server_sync_time = " . $group["max_domain_set_time"]
                     . " where server_group_id = " . $group["server_group_id"] . " and server_host_name = '" . uencode($server_host_name) . "'");
             }
-        }
+        }*/
     }
 }
 

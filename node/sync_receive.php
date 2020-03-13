@@ -15,9 +15,10 @@ foreach ($domains as $domain) {
         $group_assoc[$domain["server_group_id"]] = $server_group_id;
 }
 //set servers
-foreach ($servers as $server)
+foreach ($servers as $server){
     if ($server["server_host_name"] != $host_name && $group_assoc[$server["server_group_id"]] != null) {
-        if (scalar("select count(*) from servers where server_group_id = " . $group_assoc[$server["server_group_id"]]
+        if (scalar("select count(*) from servers "
+                . " where server_group_id = " . $group_assoc[$server["server_group_id"]]
                 . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
             insertList("servers", array(
                 "server_group_id" => $server_group_id,
@@ -25,8 +26,13 @@ foreach ($servers as $server)
                 "server_host_name" => $server["server_host_name"],
                 "server_set_time" => time(),
             ));
+        } else if ($server["server_repo_hash"] != null) {
+            update("update servers set server_repo_hash = '".uencode($server["server_repo_hash"])."' "
+                . " where server_group_id = " . $group_assoc[$server["server_group_id"]]
+                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'");
         }
     }
+}
 //retrace
 foreach ($group_assoc as $key => $server_group_id) {
     $self_server_repo_hash = scalar("select server_repo_hash from servers where server_group_id = $server_group_id "
