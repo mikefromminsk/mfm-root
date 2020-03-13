@@ -48,6 +48,8 @@ foreach ($group_assoc as $key => $server_group_id) {
             "domain_name" => $domain["domain_name"],
         ));
 
+        file_put_contents("fifes", $repo_string);
+
         domain_repo_set($server_group_id, $repo_string);
     }
 }
