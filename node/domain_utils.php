@@ -90,6 +90,38 @@ function domain_repo_get($server_group_id)
     return sizeof($repo) == 0 ? null : json_encode($repo);
 }
 
+
+function domain_repo_set($app_name, $repo_string)
+{
+    $domain = domain_get($app_name);
+    if ($GLOBALS["host_name"] != null && $domain != null && hash(HASH_ALGO, $repo_string) == $domain["server_repo_hash"]) {
+        $repo_string = json_decode($repo_string);
+        query("delete from files where server_group_id = " . $domain["server_group_id"]);
+        foreach ($repo_string as $file_path => $file_data) {
+            $hash = hash(HASH_ALGO, $file_data);
+            if ($domain["domain_name"] == "node") {
+                file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/" . $file_path, $file_data);
+            } else {
+                file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash, $file_data);
+            }
+            insertList("files", array(
+                "server_group_id" => $domain["server_group_id"],
+                "file_path" => $file_path,
+                "file_level" => substr_count($file_path, "/"),
+                "file_size" => sizeof($file_data),
+                "file_hash" => $hash,
+            ));
+        }
+        update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
+            . " where server_group_id = " . $domain["server_group_id"] . " and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
+    }
+}
+
+function domain_key_hash($domain_key, $server_repo_hash)
+{
+    return hash(HASH_ALGO, hash(HASH_ALGO, $domain_key) . $server_repo_hash);
+}
+
 function get_mime_type($filename)
 {
     $idx = explode('.', $filename);

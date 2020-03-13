@@ -44,32 +44,10 @@ foreach ($group_assoc as $key => $server_group_id) {
         $server_host_name = scalar("select server_host_name from servers "
             . " where server_group_id = $server_group_id and server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "' limit 1");
 
-        $repo = http_post($server_host_name . "/node/file_get.php", array(
+        $repo_string = http_post($server_host_name . "/node/file_get.php", array(
             "domain_name" => $domain["domain_name"],
         ));
 
-
-        if (hash(HASH_ALGO, $repo) == $domain["server_repo_hash"]) {
-            $repo = json_decode($repo);
-            query("delete from files where server_group_id = $server_group_id");
-            foreach ($repo as $file_path => $file_data) {
-                $hash = hash(HASH_ALGO, $file_data);
-                if ($domain["domain_name"] == "node") {
-                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/" . $file_path, $file_data);
-                } else {
-                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash, $file_data);
-                }
-                insertList("files", array(
-                    "server_group_id" => $server_group_id,
-                    "file_path" => $file_path,
-                    "file_level" => substr_count($file_path, "/"),
-                    "file_size" => sizeof($file_data),
-                    "file_hash" => $hash,
-                ));
-            }
-            update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
-                . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "' ");
-        }
-
+        domain_repo_set($server_group_id, $repo_string);
     }
 }
