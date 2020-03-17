@@ -94,6 +94,13 @@ function error($error_message)
     die(json_encode_readable($result));
 }
 
+function array_to_map($array, $key){
+    $map = array();
+    foreach ($array as $item)
+        $map[$item[$key]] = $item;
+    return $map;
+}
+
 function uencode($param_value)
 {
     return mysqli_real_escape_string($GLOBALS["conn"], $param_value);
