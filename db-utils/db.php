@@ -439,16 +439,21 @@ function array_extend(array $a, array $b)
     return $a;
 }
 
-function getFiles($dir, &$results = array())
+function file_list_rec($dir, &$ignore_list, &$results = array())
 {
     $files = scandir($dir);
-
     foreach ($files as $key => $value) {
-        $path = realpath($dir . DIRECTORY_SEPARATOR . $value);
-        if (is_file($path)) {
+        $path = realpath($dir . "/" . $value);
+        $path = str_replace("\\", "/", $path);
+        $ignore = false;
+        foreach ($ignore_list as $ignore_item)
+            $ignore = $ignore || (strpos($path, $ignore_item) !== false);
+        if ($ignore)
+            continue;
+        if (!is_dir($path)) {
             $results[] = $path;
         } else if ($value != "." && $value != "..") {
-            getFiles($path, $results);
+            file_list_rec($path, $ignore_list, $results);
         }
     }
     return $results;

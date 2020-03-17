@@ -10,7 +10,7 @@ $data = get("data");
 
 $path = trim($path, "/");
 
-if ($data == null && (sizeof($_FILES) == 0))
+/*if ($data == null && (sizeof($_FILES) == 0))
     error("data is empty");
 
 $domain = domain_check($domain_name, $domain_key);
@@ -61,4 +61,4 @@ $server_repo_hash = $repo != null ? hash(HASH_ALGO, $repo) : null;
 $server_group_id = domain_set($domain_name, $domain_key, $domain_key_hash, $server_repo_hash);
 
 update("update servers set server_repo_hash = '" . uencode($server_repo_hash) . "'"
-    . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "'");
+    . " where server_group_id = $server_group_id and server_host_name = '" . uencode($host_name) . "'");*/

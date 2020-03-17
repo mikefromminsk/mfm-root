@@ -40,50 +40,41 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "server_repo_hash" => $server_repo_hash,
                 "domain_set_time" => time(),
             ), "domain_name", $domain_name);
-
-            return $domain["server_group_id"];
         } else {
-            $similar = domain_similar($domain_name);
-            if (sizeof($similar) > 0 && levenshtein($domain_name, $similar[0]["domain_name"]) == 1)
-                $server_group_id = $similar[0]["server_group_id"];
-            else {
-                $server_group_id = random_key("servers", "server_group_id");
-                insertList("servers", array(
-                    "server_group_id" => $server_group_id,
-                    "server_host_name" => $GLOBALS["host_name"],
-                    "server_set_time" => time(),
-                ));
-            }
+            insertList("servers", array(
+                "domain_name" => $domain_name,
+                "server_host_name" => $GLOBALS["host_name"],
+                "server_set_time" => time(),
+            ));
             insertList("domains", array(
                 "domain_name" => $domain_name,
                 "domain_name_hash" => domain_hash($domain_name),
                 "domain_key_hash" => $domain_key_hash_next,
                 "server_repo_hash" => $server_repo_hash,
-                "server_group_id" => $server_group_id,
                 "domain_set_time" => time(),
             ));
-            return $server_group_id;
         }
+        return true;
     }
     return false;
 }
 
 function domain_get($domain_name)
 {
-    return selectMap("select domain_name, domain_prev_key, domain_key_hash, server_group_id, server_repo_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+    return selectMap("select domain_name, domain_prev_key, domain_key_hash, server_repo_hash from domains where domain_name = '" . uencode($domain_name) . "'");
 }
 
 function domain_similar($domain_name)
 {
     $domain_name_hash = domain_hash($domain_name);
-    return select("select domain_name, domain_prev_key, domain_key_hash, server_group_id from domains "
+    return select("select domain_name, domain_prev_key, domain_key_hash from domains "
         . " where domain_name_hash > " . ($domain_name_hash - 32768) . " and domain_name_hash < " . ($domain_name_hash + 32768)
         . " order by ABS(domain_name_hash - $domain_name_hash)  limit 5");
 }
 
-function domain_repo_get($server_group_id)
+function domain_repo_get($domain_name)
 {
-    $files = select("select file_path, file_hash from files where server_group_id = $server_group_id order by file_path");
+    $files = select("select file_path, file_hash from files where domain_name = '" . uencode($domain_name) . "' order by file_path");
     $repo = array();
     foreach ($files as $file)
         $repo[$file["file_path"]] = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $file["file_hash"]);
@@ -91,21 +82,20 @@ function domain_repo_get($server_group_id)
 }
 
 
-function domain_repo_set($app_name, $repo_string)
+function domain_repo_set($domain_name, $repo_string)
 {
-    $domain = domain_get($app_name);
+    $domain = domain_get($domain_name);
     if ($GLOBALS["host_name"] != null && $domain != null && hash(HASH_ALGO, $repo_string) == $domain["server_repo_hash"]) {
+        query("delete from files where domain_name = '" . uencode($domain_name) . "'");
+
         $repo_string = json_decode($repo_string);
-        query("delete from files where server_group_id = " . $domain["server_group_id"]);
         foreach ($repo_string as $file_path => $file_data) {
             $hash = hash(HASH_ALGO, $file_data);
-            if ($domain["domain_name"] == "node") {
-                file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/" . $file_path, $file_data);
-            } else {
-                file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $hash, $file_data);
-            }
+
+            file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data);
+
             insertList("files", array(
-                "server_group_id" => $domain["server_group_id"],
+                "domain_name" => $domain_name,
                 "file_path" => $file_path,
                 "file_level" => substr_count($file_path, "/"),
                 "file_size" => sizeof($file_data),
@@ -113,7 +103,7 @@ function domain_repo_set($app_name, $repo_string)
             ));
         }
         update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
-            . " where server_group_id = " . $domain["server_group_id"] . " and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
+            . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
     }
 }
 

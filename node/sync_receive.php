@@ -8,48 +8,50 @@ if ($domains == null)
     error("domains are null");
 
 //set domains
-$group_assoc = array();
+$success_domains = [];
 foreach ($domains as $domain) {
-    $server_group_id = domain_set($domain["domain_name"], $domain["domain_prev_key"], $domain["domain_key_hash"], $domain["server_repo_hash"]);
-    if ($server_group_id !== false)
-        $group_assoc[$domain["server_group_id"]] = $server_group_id;
+    if (domain_set($domain["domain_name"], $domain["domain_prev_key"], $domain["domain_key_hash"], $domain["server_repo_hash"]) !== false)
+        $success_domains[] = $domain["domain_name"];
 }
+
 //set servers
-foreach ($servers as $server){
-    if ($server["server_host_name"] != $host_name && $group_assoc[$server["server_group_id"]] != null) {
+foreach ($servers as $server) {
+    if ($server["server_host_name"] != $host_name && in_array($server["domain_name"], $success_domains)) {
         if (scalar("select count(*) from servers "
-                . " where server_group_id = " . $group_assoc[$server["server_group_id"]]
+                . " where domain_name = '" . uencode($server["domain_name"]) . "' "
                 . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
             insertList("servers", array(
-                "server_group_id" => $server_group_id,
+                "domain_name" => $server["domain_name"],
                 "server_repo_hash" => $server["server_repo_hash"],
                 "server_host_name" => $server["server_host_name"],
                 "server_set_time" => time(),
             ));
         } else if ($server["server_repo_hash"] != null) {
-            update("update servers set server_repo_hash = '".uencode($server["server_repo_hash"])."' "
-                . " where server_group_id = " . $group_assoc[$server["server_group_id"]]
+            update("update servers set server_repo_hash = '" . uencode($server["server_repo_hash"]) . "' "
+                . " where domain_name = '" . uencode($server["domain_name"]) . "' "
                 . " and server_host_name = '" . uencode($server["server_host_name"]) . "'");
         }
     }
 }
-//retrace
-foreach ($group_assoc as $key => $server_group_id) {
-    $self_server_repo_hash = scalar("select server_repo_hash from servers where server_group_id = $server_group_id "
+
+//download last version
+foreach ($success_domains as $domain_name) {
+
+    $active_server_repo_hash = domain_get($domain_name)["server_repo_hash"];
+
+    $self_server_repo_hash = scalar("select server_repo_hash from servers "
+        . " where domain_name = '" . uencode($domain_name) . "' "
         . " and server_host_name = '" . uencode($host_name) . "'");
 
-    $domain = selectMap("select * from domains where server_group_id = $server_group_id order by domain_set_time desc limit 1");
-    if ($self_server_repo_hash != $domain["server_repo_hash"]) {
-
+    if ($self_server_repo_hash != $active_server_repo_hash) {
         $server_host_name = scalar("select server_host_name from servers "
-            . " where server_group_id = $server_group_id and server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "' limit 1");
+            . " where domain_name = '" . uencode($domain_name) . "' "
+            . " and server_repo_hash = '" . uencode($active_server_repo_hash) . "' limit 1");
 
         $repo_string = http_post($server_host_name . "/node/file_get.php", array(
             "domain_name" => $domain["domain_name"],
         ));
 
-        file_put_contents("fifes", $repo_string);
-
-        domain_repo_set($server_group_id, $repo_string);
+        domain_repo_set($domain_name, $repo_string);
     }
 }
