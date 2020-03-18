@@ -72,9 +72,9 @@ angularApplication.controller('MainController', function ($rootScope, $scope, $m
             routeTemplate = routeTemplate + "/:arg" + (i - 1);
         if (appName !== "") {
             angularApplication.routeProvider.when("/" + appName + routeTemplate, {
-                templateUrl: pathToRootDir + "node/file_get.php?domain_name=" + appName + "&path=index.html",
+                templateUrl: pathToRootDir + appName + "/index.html",
                 controller: appName,
-                resolve: loader(pathToRootDir + "node/file_get.php?domain_name=" + appName + "&path=controller.js")
+                resolve: loader(pathToRootDir + appName + "/controller.js")
             });
             // set global path for all urls
             if (document.getElementsByTagName("base").length === 0)

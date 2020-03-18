@@ -25,6 +25,7 @@ if ($_SERVER["CONTENT_TYPE"] != 'application/x-www-form-urlencoded'
     foreach ($inputParams as $key => $value)
         $_POST[$key] = $value;
 }
+
 // delete all usages of query !!!! rename to query without delete
 function query($sql, $show_query = false)
 {
