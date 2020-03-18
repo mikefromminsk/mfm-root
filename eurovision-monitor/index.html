@@ -1,24 +1,52 @@
-<div class="layout-fill layout-row layout-align-center" style="background-image: url(img/background.jpg); background-size: 100% 100%;">
-        <div class="scrollable" style="width: 600px; box-shadow: 0 0 50px white;">
-                <div class="layout-align-center-center" style="background-image: url(img/header.jpg); background-size: 100% 100%; height: 300px">
-                </div>
-                <h1 class="input-header layout-column layout-align-center-center"> Youtube Chart</h1>
-                <md-content class="layout-row" style="padding: 16px" md-ink-ripple ng-repeat="video in data.videos" ng-click="openYoutube(video.video_id)">
-                        <div>{{(data.videos.indexOf(video) + 1) + " "}}</div>
-                        <md-icon  style="padding: 0 16px" md-svg-icon="img/flags/{{video.video_country_code}}.svg"></md-icon>
-                        <div>{{video.video_name}}</div>
-                        <div class="flex"></div>
-                        <h4>{{views_round(video.video_views)}} views on </h4>
-                        <md-icon style="padding-left: 10px" md-svg-icon="img/youtube.svg"></md-icon>
-                </md-content>
-                <h1 class="input-header layout-column layout-align-center-center">Youtube Chart</h1>
-                <md-content class="layout-row" style="padding: 16px" md-ink-ripple ng-repeat="video in data.videos" ng-click="openYoutube(video.video_id)">
-                        <div>{{(data.videos.indexOf(video) + 1) + " "}}</div>
-                        <md-icon  style="padding: 0 16px" md-svg-icon="img/flags/{{video.video_country_code}}.svg"></md-icon>
-                        <div>{{video.video_name}}</div>
-                        <div class="flex"></div>
-                        <h4>{{views_round(video.video_views)}} views on </h4>
-                        <md-icon style="padding-left: 10px" md-svg-icon="img/youtube.svg"></md-icon>
-                </md-content>
+<style>
+    .icon  {
+        padding: 0 10px;
+        min-width: 20px;
+        min-height: 20px;
+        margin: 0;
+    }
+    .icon > svg {
+        min-width: 20px;
+        min-height: 20px;
+    }
+</style>
+<div class="layout-fill layout-row layout-align-center"
+     style="background-image: url(img/background.jpg); background-size: 100% 100%;">
+    <div class="scrollable" style="width: 600px; box-shadow: 0 0 50px white;">
+        <div class="layout-align-center-center"
+             style="background-image: url(img/header.jpg); background-size: 100% 100%; height: 300px">
         </div>
+        <h1 class="input-header layout-column layout-align-center-center">Youtube views chart</h1>
+        <md-content class="layout-row" style="padding: 16px" md-ink-ripple ng-repeat="video in data.videos"
+                    ng-click="openYoutube(video.video_id)">
+            <div>{{($index + 1) + " "}}</div>
+            <md-icon class="icon" md-svg-icon="img/flags/{{video.video_country_code}}.svg"></md-icon>
+            <div>{{video.video_name}}</div>
+            <div class="flex"></div>
+            <h4>{{views_round(video.video_views)}} views on </h4>
+            <md-icon style="padding-left: 10px" md-svg-icon="img/youtube.svg"></md-icon>
+        </md-content>
+        <h1 class="input-header layout-column layout-align-center-center">Like chart</h1>
+        <md-content class="layout-row" style="padding: 16px" md-ink-ripple
+                    ng-repeat="video in sortDataBy('video_likes')"
+                    ng-click="openYoutube(video.video_id)">
+            <div>{{($index + 1) + " "}}</div>
+            <md-icon class="icon" md-svg-icon="img/flags/{{video.video_country_code}}.svg"></md-icon>
+            <div>{{video.video_name}}</div>
+            <div class="flex"></div>
+            <h4>{{views_round(video.video_likes)}}</h4>
+            <md-icon style="padding-left: 10px" md-svg-icon="img/like.svg"></md-icon>
+        </md-content>
+        <h1 class="input-header layout-column layout-align-center-center">Dislike chart</h1>
+        <md-content class="layout-row" style="padding: 16px" md-ink-ripple
+                    ng-repeat="video in sortDataBy('video_dislikes')"
+                    ng-click="openYoutube(video.video_id)">
+            <div>{{($index + 1) + " "}}</div>
+            <md-icon class="icon" md-svg-icon="img/flags/{{video.video_country_code}}.svg"></md-icon>
+            <div>{{video.video_name}}</div>
+            <div class="flex"></div>
+            <h4>{{views_round(video.video_dislikes)}}</h4>
+            <md-icon style="padding-left: 10px" md-svg-icon="img/dislike.svg"></md-icon>
+        </md-content>
+    </div>
 </div>

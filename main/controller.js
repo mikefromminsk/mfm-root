@@ -85,5 +85,15 @@ angularApplication.controller('MainController', function ($rootScope, $scope, $m
         $location.path(route)
     };
 
-    $scope.open($location.path().substr(1) || document.querySelector("meta[name='start-page']").getAttribute("content"));
+    if ($location.path().substr(1) === "") {
+        if (location.hostname === "localhost" /* or is ip*/) {
+            $scope.open(document.querySelector("meta[name='localhost-start-page']").getAttribute("content"));
+        } else {
+            $scope.open(location.hostname.split(".").reverse()[1]);
+        }
+    } else {
+        $scope.open($location.path().substr(1));
+    }
+
+
 });

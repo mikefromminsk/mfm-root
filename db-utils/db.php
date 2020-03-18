@@ -399,15 +399,22 @@ function http_json_post($url, $data, $headers = array())
     return is_string($result) ? json_decode($result, true) : $result;
 }
 
-function http_json_get($url)
+function http_get($url)
 {
     $ch = curl_init();
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     $result = curl_exec($ch);
     curl_close($ch);
-    return json_decode($result, true);
+    return $result;
+}
+
+function http_json_get($url)
+{
+    $result = http_get($url);
+    return is_string($result) ? json_decode($result, true) : $result;
 }
 
 function redirect($url, $params = array(), $params_in_url = true)
