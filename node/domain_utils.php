@@ -87,13 +87,13 @@ function domain_repo_set($domain_name, $repo_path)
         error("host_name is not set");
     $zip = new ZipArchive();
     if ($zip->open($repo_path) == TRUE) {
-        $files = selectList("select file_path from files where domain_name = '" . uencode($domain_name) . "'");
+        $file_paths = selectList("select file_path from files where domain_name = '" . uencode($domain_name) . "'");
         query("delete from files where domain_name = '" . uencode($domain_name) . "'");
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $file_path = $zip->getNameIndex($i);
             $file_data = $zip->getFromName($file_path);
             if (file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data))
-                unset($files[array_search($file_path, $files)]);
+                unset($file_paths[array_search($file_path, $file_paths)]);
             $hash = hash(HASH_ALGO, $file_data);
             insertList("files", array(
                 "domain_name" => $domain_name,
@@ -103,8 +103,8 @@ function domain_repo_set($domain_name, $repo_path)
                 "file_hash" => $hash,
             ));
         }
-        foreach ($files as $file)
-            unlink($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/" . $file["file_path"]);
+        foreach ($file_paths as $file_path)
+            unlink($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path");
         update("update servers set server_repo_hash = '" . uencode(hash_file(HASH_ALGO, $repo_path)) . "'"
             . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
     }

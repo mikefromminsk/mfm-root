@@ -8,7 +8,7 @@ $server_host_name = get("server_host_name");
 // reg new hostname
 if ($domain_name != null && $server_host_name != null) {
     if (scalar("select count(*) from servers where domain_name = '" . uencode($domain_name) . "' "
-            . " and server_host_name = '" . uencode($server_host_name) . "'") == 0){
+            . " and server_host_name = '" . uencode($server_host_name) . "'") == 0) {
         insertList("servers", array(
             "domain_name" => $domain_name,
             "server_host_name" => $server_host_name
@@ -34,15 +34,10 @@ foreach (selectList("select distinct server_host_name from servers where server_
             "servers" => $servers_with_domains
         ));
 
-        echo json_encode(array(
-            "domains" => $domains_in_request,
-            "servers" => $servers_with_domains
-        ));
-
         if ($response !== false) {
             foreach ($domains_in_request as $domain)
                 update("update servers set server_sync_time = " . $domain["domain_set_time"]
-                    . " where domain_name = '".uencode($domain["domain_name"])."' and server_host_name = '" . uencode($server_host_name) . "'");
+                    . " where domain_name = '" . uencode($domain["domain_name"]) . "' and server_host_name = '" . uencode($server_host_name) . "'");
         }
     }
 }
