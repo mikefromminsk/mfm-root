@@ -36,7 +36,7 @@ foreach ($servers as $server) {
                 ), array(
                     "domain_name" => $server["domain_name"],
                     "server_host_name" => $server["server_host_name"]
-                ), null, true);
+                ));
         }
     }
 }
