@@ -93,18 +93,16 @@ function domain_repo_set($domain_name, $repo_path)
 
             for ($i = 0; $i < $zip->numFiles; $i++) {
                 $file_path = $zip->getNameIndex($i);
-                if (strpos($file_path, $domain_name) === 0) {
-                    $file_data = $zip->getFromName($file_path);
-                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data);
-                    $hash = hash(HASH_ALGO, $file_data);
-                    insertList("files", array(
-                        "domain_name" => $domain_name,
-                        "file_path" => $file_path,
-                        "file_level" => substr_count($file_path, "/"),
-                        "file_size" => strlen($file_data),
-                        "file_hash" => $hash,
-                    ));
-                }
+                $file_data = $zip->getFromName($file_path);
+                file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data);
+                $hash = hash(HASH_ALGO, $file_data);
+                insertList("files", array(
+                    "domain_name" => $domain_name,
+                    "file_path" => $file_path,
+                    "file_level" => substr_count($file_path, "/"),
+                    "file_size" => strlen($file_data),
+                    "file_hash" => $hash,
+                ));
             }
             update("update servers set server_repo_hash = '" . uencode($repo_hash) . "'"
                 . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
