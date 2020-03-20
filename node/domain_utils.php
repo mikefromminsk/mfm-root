@@ -85,7 +85,8 @@ function domain_repo_set($domain_name, $repo_path)
 {
     if ($GLOBALS["host_name"] == null)
         error("host_name is not set");
-    if (hash_file(HASH_ALGO, $repo_path) != scalar("select server_repo_hash from servers where server_host_name = '" . uencode($GLOBALS["host_name"]) . "'")) {
+    $repo_hash = hash_file(HASH_ALGO, $repo_path);
+    if ($repo_hash != scalar("select server_repo_hash from servers where server_host_name = '" . uencode($GLOBALS["host_name"]) . "'")) {
         $zip = new ZipArchive();
         if ($zip->open($repo_path) == TRUE) {
             query("delete from files where domain_name = '" . uencode($domain_name) . "'");
