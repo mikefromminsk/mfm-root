@@ -362,11 +362,11 @@ function http_json_put($url, $fields)
     return json_decode($result, true);
 }
 
-function utf8ize($mixed)
+function to_utf8($mixed)
 {
     if (is_array($mixed)) {
         foreach ($mixed as $key => $value)
-            $mixed[$key] = utf8ize($value);
+            $mixed[$key] = to_utf8($value);
     } elseif (is_string($mixed)) {
         return mb_convert_encoding($mixed, 'UTF-8', 'ISO-8859-1');
     }
@@ -378,7 +378,7 @@ function http_post($url, $data, $headers = array())
     if (strpos($url, "http://") === 0)
         $url = "http://" . $url;
     //if ($uencode)
-    $data = utf8ize($data);
+    $data = to_utf8($data);
     $data_string = json_encode($data);
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
@@ -401,6 +401,8 @@ function http_json_post($url, $data, $headers = array())
 
 function http_get($url)
 {
+    if (strpos($url, "http://") === 0)
+        $url = "http://" . $url;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
     curl_setopt($ch, CURLOPT_URL, $url);

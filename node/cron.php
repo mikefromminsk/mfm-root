@@ -10,8 +10,7 @@ if ($domain_name != null && $server_host_name != null) {
             . " and server_host_name = '" . uencode($server_host_name) . "'") == 0)
         insertList("servers", array(
             "domain_name" => $domain_name,
-            "server_host_name" => $server_host_name,
-            "server_set_time" => time()
+            "server_host_name" => $server_host_name
         ));
 }
 
@@ -25,11 +24,10 @@ foreach ($server_host_names as $server_host_name) {
         . " where t1.server_host_name = '" . uencode($server_host_name) . "'"
         . " and t2.domain_set_time >= t1.server_sync_time");
 
-    $servers_with_domains = select("select * from servers "
-        . " where domain_name in ('" . implode("','", array_column($domains_in_request, "domain_name")) . "')");
+    $servers_with_domains = select("select * from servers where domain_name in ('" . implode("','", array_column($domains_in_request, "domain_name")) . "')");
 
     if (sizeof($domains_in_request) > 0) {
-        $response = http_json_post($server_host_name . "/node/sync_receive.php", array(
+        $response = http_json_post($server_host_name . "/node/cron_receive.php", array(
             "domains" => $domains_in_request,
             "servers" => $servers_with_domains
         ));

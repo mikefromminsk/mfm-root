@@ -44,7 +44,6 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
             insertList("servers", array(
                 "domain_name" => $domain_name,
                 "server_host_name" => $GLOBALS["host_name"],
-                "server_set_time" => time(),
             ));
             insertList("domains", array(
                 "domain_name" => $domain_name,
@@ -74,36 +73,42 @@ function domain_similar($domain_name)
 
 function domain_repo_get($domain_name)
 {
-    $files = select("select file_path, file_hash from files where domain_name = '" . uencode($domain_name) . "' order by file_path");
+    $files = select("select * from files where domain_name = '" . uencode($domain_name) . "' order by file_path");
     $repo = array();
     foreach ($files as $file)
-        $repo[$file["file_path"]] = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/node/files/" . $file["file_hash"]);
-    return sizeof($repo) == 0 ? null : json_encode($repo);
+        $repo[$file["file_path"]] = file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/" . $file["domain_name"] . "/" . $file["file_path"]);
+    return sizeof($repo) == 0 ? null : json_encode(to_utf8($repo));
 }
 
 
-function domain_repo_set($domain_name, $repo_string)
+function domain_repo_set($domain_name, $repo_path)
 {
     $domain = domain_get($domain_name);
-    if ($GLOBALS["host_name"] != null && $domain != null && hash(HASH_ALGO, $repo_string) == $domain["server_repo_hash"]) {
-        query("delete from files where domain_name = '" . uencode($domain_name) . "'");
+    $repo_hash = hash_file(HASH_ALGO, $repo_path);
+    if ($GLOBALS["host_name"] != null && $repo_hash != $domain["server_repo_hash"]) {
 
-        $repo_string = json_decode($repo_string);
-        foreach ($repo_string as $file_path => $file_data) {
-            $hash = hash(HASH_ALGO, $file_data);
+        $zip = new ZipArchive();
+        if ($zip->open('test.zip') == TRUE) {
+            query("delete from files where domain_name = '" . uencode($domain_name) . "'");
 
-            file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data);
-
-            insertList("files", array(
-                "domain_name" => $domain_name,
-                "file_path" => $file_path,
-                "file_level" => substr_count($file_path, "/"),
-                "file_size" => sizeof($file_data),
-                "file_hash" => $hash,
-            ));
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $file_path = $zip->getNameIndex($i);
+                if (strpos($file_path, $domain_name) === 0) {
+                    $file_data = $zip->getFromName($file_path);
+                    file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data);
+                    $hash = hash(HASH_ALGO, $file_data);
+                    insertList("files", array(
+                        "domain_name" => $domain_name,
+                        "file_path" => $file_path,
+                        "file_level" => substr_count($file_path, "/"),
+                        "file_size" => strlen($file_data),
+                        "file_hash" => $hash,
+                    ));
+                }
+            }
+            update("update servers set server_repo_hash = '" . uencode($repo_hash) . "'"
+                . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
         }
-        update("update servers set server_repo_hash = '" . uencode($domain["server_repo_hash"]) . "', server_set_time = " . time()
-            . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
     }
 }
 

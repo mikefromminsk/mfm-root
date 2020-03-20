@@ -23,8 +23,7 @@ foreach ($servers as $server) {
             insertList("servers", array(
                 "domain_name" => $server["domain_name"],
                 "server_repo_hash" => $server["server_repo_hash"],
-                "server_host_name" => $server["server_host_name"],
-                "server_set_time" => time(),
+                "server_host_name" => $server["server_host_name"]
             ));
         } else if ($server["server_repo_hash"] != null) {
             update("update servers set server_repo_hash = '" . uencode($server["server_repo_hash"]) . "' "
@@ -48,9 +47,7 @@ foreach ($success_domains as $domain_name) {
             . " where domain_name = '" . uencode($domain_name) . "' "
             . " and server_repo_hash = '" . uencode($active_server_repo_hash) . "' limit 1");
 
-        $repo_string = http_post($server_host_name . "/node/file_get.php", array(
-            "domain_name" => $domain["domain_name"],
-        ));
+        $repo_string = http_get("$server_host_name/$domain_name/app.zip");
 
         domain_repo_set($domain_name, $repo_string);
     }
