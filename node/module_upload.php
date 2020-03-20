@@ -24,7 +24,7 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
 
         $zip = new ZipArchive();
         $zipPath = $_SERVER["DOCUMENT_ROOT"] . "/" . $app_name . "/app.zip";
-        $zip->open($zipPath, ZipArchive::CREATE);
+        $zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE );
         if ($domain == null) {
             foreach (file_list_rec($path, $local_ignore_list) as $file_absolute_path) {
                 $file_local_path = substr($file_absolute_path, strpos($file_absolute_path, "/", strlen($_SERVER["DOCUMENT_ROOT"]) + 1) + 1);
