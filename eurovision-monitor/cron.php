@@ -47,8 +47,6 @@ $videos = array(
 $response = http_json_get("https://www.googleapis.com/youtube/v3/videos?part=statistics&key=AIzaSyDS4NcpuaRv82o3sce2QSejsn6Xa-YeC8w"
     . "&id=" . implode(",", array_keys($videos)));
 
-echo json_encode_readable($response);
-
 foreach ($response["items"] as $youtube_video) {
     $video_id = $youtube_video["id"];
     $video = $videos[$video_id];

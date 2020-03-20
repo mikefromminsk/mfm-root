@@ -59,8 +59,6 @@ let pathToRootDir = window.location.origin + window.location.pathname
 if (pathToRootDir.endsWith("index.html"))
     pathToRootDir = pathToRootDir.substr(0, pathToRootDir.length - "index.html".length)
 
-$dark.init(pathToRootDir);
-
 angularApplication.controller('MainController', function ($rootScope, $scope, $mdSidenav, $mdDialog, $location, $routeParams, $http, $q) {
 
     $scope.open = function (route) {

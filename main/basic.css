@@ -128,7 +128,7 @@ a {
 }
 
 .scrollable::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 6px rgb(0, 0, 0);
 }
 
 .scrollable::-webkit-scrollbar-thumb {
@@ -136,9 +136,38 @@ a {
     outline: 1px solid #000000;
 }
 
-.md-divider {
+md-divider {
+    background-color: rgba(255, 255, 255, .1);
+    height: 1px
+}
+
+md-icon {
     margin: 0;
 }
-md-icon{
-    margin: 0;
+
+.ripple {
+    position: relative;
+    overflow: hidden;
+    transform: translate3d(0, 0, 0);
+}
+.ripple:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 15%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .5s, opacity 1s;
+}
+.ripple:active:after {
+    transform: scale(0, 0);
+    opacity: .2;
+    transition: 0s;
 }
