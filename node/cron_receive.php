@@ -56,8 +56,8 @@ foreach ($success_domains as $domain_name) {
             . " and server_repo_hash = '" . uencode($active_server_repo_hash) . "' limit 1");
 
         $repo_string = http_get("$server_host_name/$domain_name/app.zip");
-        file_put_contents("wfw", $repo_string);
-
-        domain_repo_set($domain_name, $repo_string);
+        $repo_path = $_SERVER["DOCUMENT_ROOT"] . "/$domain_name/app.zip";
+        file_put_contents($repo_path, $repo_string);
+        domain_repo_set($domain_name, $repo_path);
     }
 }
