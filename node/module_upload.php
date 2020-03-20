@@ -41,6 +41,8 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
             $zip->close();
             $server_repo_hash = hash_file(HASH_ALGO, $zipPath);
             domain_set($app_name, null, domain_key_hash($domain_key, $server_repo_hash), $server_repo_hash);
+            update("update servers set server_repo_hash = '" . uencode($server_repo_hash) . "'"
+                . " where domain_name = '" . uencode($app_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
         } else {
             foreach (file_list_rec($path, $local_ignore_list) as $file_absolute_path) {
                 $file_local_path = substr($file_absolute_path, strpos($file_absolute_path, "/", strlen($_SERVER["DOCUMENT_ROOT"]) + 1) + 1);

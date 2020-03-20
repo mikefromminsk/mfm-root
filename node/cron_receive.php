@@ -16,6 +16,11 @@ foreach ($domains as $domain) {
 
 //set servers
 foreach ($servers as $server) {
+    /*file_put_contents("sef", json_encode(array(
+        "domains" => $domains,
+        "servers" => $servers
+    )));*/
+
     if ($server["server_host_name"] != $host_name && in_array($server["domain_name"], $success_domains)) {
         if (scalar("select count(*) from servers "
                 . " where domain_name = '" . uencode($server["domain_name"]) . "' "
@@ -26,9 +31,12 @@ foreach ($servers as $server) {
                 "server_host_name" => $server["server_host_name"]
             ));
         } else if ($server["server_repo_hash"] != null) {
-            update("update servers set server_repo_hash = '" . uencode($server["server_repo_hash"]) . "' "
-                . " where domain_name = '" . uencode($server["domain_name"]) . "' "
-                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'");
+            updateList("servers", array(
+                "server_repo_hash" => $server["server_repo_hash"]
+                ), array(
+                    "domain_name" => $server["domain_name"],
+                    "server_host_name" => $server["server_host_name"]
+                ));
         }
     }
 }

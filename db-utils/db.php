@@ -95,7 +95,8 @@ function error($error_message)
     die(json_encode_readable($result));
 }
 
-function array_to_map($array, $key){
+function array_to_map($array, $key)
+{
     $map = array();
     foreach ($array as $item)
         $map[$item[$key]] = $item;
@@ -206,27 +207,17 @@ function update($sql, $show_query = null)
 }
 
 // rename to update Map
-function updateList($table_name, $params, $primary_key, $primary_value, $show_query = false)
+function updateList($table_name, $set_params, $primary_key, $primary_value = null, $show_query = false)
 {
-    $params = array_filter($params, function ($value) {
-        return $value !== null;
-    });
-    $update_params = "";
-    foreach ($params as $param_name => $param_value)
-        if (is_string($param_value) && $param_value != "unix_timestamp()" && $param_value != "$param_name + 1")
-            $update_params .= "$param_name = '$param_value', ";
-        else
-            $update_params .= "$param_name = $param_value, ";
-    $update_params = rtrim($update_params, ", ");
-    $update_query = "update $table_name set $update_params ";
-    if (is_array($primary_value))
-        $update_query .= " where $primary_key  in ('" . implode("','", uencode($primary_value)) . "')";
-    else
-        $update_query .= " where $primary_key = " . (is_string($primary_value) ? "'" . uencode($primary_value) . "'" : $primary_value);
-    if ($update_params != "") {
-        return update($update_query, $show_query);
-    } else
-        return null;
+    $update_query = "update $table_name set ";
+    foreach ($set_params as $param_name => $param_value)
+        $update_query .= " $param_name = " . ($param_value !== null ? "null" : "'" . uencode($param_value) . "'") . ", ";
+    $update_query = rtrim($update_query, ", ");
+    $update_query .= " where ";
+    $where_params = is_array($primary_key) ? $primary_key : array($primary_key => $primary_value);
+    foreach ($where_params as $param_name => $param_value)
+        $update_query .= " $param_name " . ($param_value !== null ? "is null" : " = '" . uencode($param_value) . "'");
+    return update($update_query, $show_query);
 }
 
 function object_properties_to_number(&$object)
