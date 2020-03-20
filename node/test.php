@@ -5,10 +5,9 @@ echo json_encode($servers);
 array_shift($servers);
 //set servers
 foreach ($servers as $server) {
-    updateList("servers", array(
-        "server_repo_hash" => $server["server_repo_hash"]
-    ), array(
+    insertList("servers", array(
         "domain_name" => $server["domain_name"],
-        "server_host_name" => $server["server_host_name"]
-    ), null, true);
+        "server_host_name" => $server["server_host_name"],
+        "server_repo_hash" => $server["server_repo_hash"],
+    ), true);
 }
