@@ -4,14 +4,16 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 $domain_name = get("domain_name");
 $server_host_name = get("server_host_name");
 
+
 // reg new hostname
 if ($domain_name != null && $server_host_name != null) {
     if (scalar("select count(*) from servers where domain_name = '" . uencode($domain_name) . "' "
-            . " and server_host_name = '" . uencode($server_host_name) . "'") == 0)
+            . " and server_host_name = '" . uencode($server_host_name) . "'") == 0){
         insertList("servers", array(
             "domain_name" => $domain_name,
             "server_host_name" => $server_host_name
         ));
+    }
 }
 
 define("MAX_DOMAIN_COUNT_IN_REQUEST", 1000);
@@ -19,8 +21,9 @@ $server_host_names = selectList("select distinct server_host_name from servers w
 
 foreach ($server_host_names as $server_host_name) {
 
+
     $domains_in_request = select("select t2.* from servers t1 "
-        . " left join domains t2 where t2.domain_name = t1.domain_name "
+        . " left join domains t2 on t2.domain_name = t1.domain_name "
         . " where t1.server_host_name = '" . uencode($server_host_name) . "'"
         . " and t2.domain_set_time >= t1.server_sync_time");
 

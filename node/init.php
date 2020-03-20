@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `servers` (
   `domain_name` varchar(64) COLLATE utf8_bin NOT NULL,
   `server_host_name` varchar(256) CHARACTER SET utf8 NOT NULL,
   `server_repo_hash` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `server_sync_time` int(11) DEFAULT NULL
+  `server_sync_time` int(11) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 }
