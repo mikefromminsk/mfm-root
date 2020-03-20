@@ -87,6 +87,8 @@ function domain_repo_set($domain_name, $repo_path)
         error("host_name is not set");
     $zip = new ZipArchive();
     if ($zip->open($repo_path) == TRUE) {
+        foreach (select("select * from files where domain_name = '" . uencode($domain_name) . "'") as $file)
+            unlink($file["file_path"]);
         query("delete from files where domain_name = '" . uencode($domain_name) . "'");
         for ($i = 0; $i < $zip->numFiles; $i++) {
             $file_path = $zip->getNameIndex($i);
