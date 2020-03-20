@@ -88,7 +88,7 @@ function domain_repo_set($domain_name, $repo_path)
     if ($GLOBALS["host_name"] != null && $repo_hash != $domain["server_repo_hash"]) {
 
         $zip = new ZipArchive();
-        if ($zip->open('test.zip') == TRUE) {
+        if ($zip->open($repo_path) == TRUE) {
             query("delete from files where domain_name = '" . uencode($domain_name) . "'");
 
             for ($i = 0; $i < $zip->numFiles; $i++) {
