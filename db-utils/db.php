@@ -178,12 +178,8 @@ function insert($sql, $show_query = null)
 //rename to insertMap
 function insertList($table_name, $params, $show_query = false)
 {
-    $params = array_filter($params, function ($value) {
-        return $value !== null;
-    });
     foreach ($params as $param_name => $param_value)
-        if (is_string($param_value) && $param_value != "unix_timestamp()")
-            $params[$param_name] = "'" . uencode($param_value) . "'";
+        $params[$param_name] = $param_value === null ? "null" : "'" . uencode($param_value) . "'";
     $insert_query = "insert into $table_name (" . implode(",", array_keys($params)) . ") values (" . implode(",", array_values($params)) . ")";
     return insert($insert_query, $show_query);
 }
