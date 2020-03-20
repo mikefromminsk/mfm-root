@@ -211,12 +211,12 @@ function updateList($table_name, $set_params, $primary_key, $primary_value = nul
 {
     $update_query = "update $table_name set ";
     foreach ($set_params as $param_name => $param_value)
-        $update_query .= " $param_name = " . ($param_value !== null ? "null" : "'" . uencode($param_value) . "'") . ", ";
+        $update_query .= " $param_name = " . ($param_value === null ? "null" : "'" . uencode($param_value) . "'") . ", ";
     $update_query = rtrim($update_query, ", ");
-    $update_query .= " where ";
+    $update_query .= " where";
     $where_params = is_array($primary_key) ? $primary_key : array($primary_key => $primary_value);
     foreach ($where_params as $param_name => $param_value)
-        $update_query .= " $param_name " . ($param_value !== null ? "is null" : " = '" . uencode($param_value) . "'");
+        $update_query .= " $param_name " . ($param_value === null ? "is null" : "= '" . uencode($param_value) . "'");
     return update($update_query, $show_query);
 }
 
