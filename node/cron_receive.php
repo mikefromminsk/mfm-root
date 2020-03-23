@@ -8,11 +8,7 @@ if ($domains == null)
     error("domains are null");
 
 //set domains
-$success_domains = [];
-foreach ($domains as $domain) {
-    if (domain_set($domain["domain_name"], $domain["domain_prev_key"], $domain["domain_key_hash"], $domain["server_repo_hash"]) !== false)
-        $success_domains[] = $domain["domain_name"];
-}
+$success_domains = domains_set($domains, $servers);
 
 //return last domains
 $current_domains = array();
@@ -31,33 +27,6 @@ if (sizeof($current_domains) > 0)
         "domains" => $current_domains,
         "servers" => servers_get(array_column($current_domains, "domain_name")),
     ));
-
-//set servers
-foreach ($servers as $server) {
-    /*file_put_contents("sef", json_encode(array(
-        "domains" => $domains,
-        "servers" => $servers
-    )));*/
-
-    if ($server["server_host_name"] != $host_name && in_array($server["domain_name"], $success_domains)) {
-        if (scalar("select count(*) from servers "
-                . " where domain_name = '" . uencode($server["domain_name"]) . "' "
-                . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
-            insertList("servers", array(
-                "domain_name" => $server["domain_name"],
-                "server_host_name" => $server["server_host_name"],
-                "server_repo_hash" => $server["server_repo_hash"],
-            ));
-        } else if ($server["server_repo_hash"] != null) {
-            updateList("servers", array(
-                "server_repo_hash" => $server["server_repo_hash"]
-            ), array(
-                "domain_name" => $server["domain_name"],
-                "server_host_name" => $server["server_host_name"]
-            ));
-        }
-    }
-}
 
 //download last version
 foreach ($success_domains as $domain_name) {

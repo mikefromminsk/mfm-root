@@ -33,6 +33,8 @@ foreach (selectList("select distinct server_host_name from servers where server_
         ));
 
         if ($response !== false) {
+            domains_set($response["domains"], $response["servers"]);
+
             foreach ($domains_in_request as $domain)
                 update("update servers set server_sync_time = " . $domain["domain_set_time"]
                     . " where domain_name = '" . uencode($domain["domain_name"]) . "' and server_host_name = '" . uencode($server_host_name) . "'");

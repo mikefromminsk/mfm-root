@@ -42,9 +42,9 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "domain_set_time" => $domain_set_time,
             ), "domain_name", $domain_name);
             insertList("domain_keys", array(
-                "domain_name"=> $domain_name,
-                "domain_key_hash"=> $domain["domain_key_hash"],
-                "domain_key"=> $domain_key,
+                "domain_name" => $domain_name,
+                "domain_key_hash" => $domain["domain_key_hash"],
+                "domain_key" => $domain_key,
             ));
         } else {
             insertList("servers", array(
@@ -64,7 +64,38 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
     return false;
 }
 
-function servers_get($domain_names){
+function domains_set($domains, $servers)
+{
+    $success_domains = [];
+    foreach ($domains as $domain)
+        if (domain_set($domain["domain_name"], $domain["domain_prev_key"], $domain["domain_key_hash"], $domain["server_repo_hash"]) !== false)
+            $success_domains[] = $domain["domain_name"];
+
+    foreach ($servers as $server) {
+        if ($server["server_host_name"] != $GLOBALS["host_name"] && in_array($server["domain_name"], $success_domains)) {
+            if (scalar("select count(*) from servers "
+                    . " where domain_name = '" . uencode($server["domain_name"]) . "' "
+                    . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
+                insertList("servers", array(
+                    "domain_name" => $server["domain_name"],
+                    "server_host_name" => $server["server_host_name"],
+                    "server_repo_hash" => $server["server_repo_hash"],
+                ));
+            } else if ($server["server_repo_hash"] != null) {
+                updateList("servers", array(
+                    "server_repo_hash" => $server["server_repo_hash"]
+                ), array(
+                    "domain_name" => $server["domain_name"],
+                    "server_host_name" => $server["server_host_name"]
+                ));
+            }
+        }
+    }
+    return $success_domains;
+}
+
+function servers_get($domain_names)
+{
     return select("select * from servers where domain_name in ('" . implode("','", $domain_names) . "')");
 }
 
