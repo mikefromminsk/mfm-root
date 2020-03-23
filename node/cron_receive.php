@@ -24,8 +24,9 @@ foreach ($domains as $domain) {
     }
 }
 file_put_contents("receive", json_encode(array(
-    "domains" => $current_domains,
-    "servers" => servers_get(array_column($current_domains, "domain_name")),
+    "domains" => $domains,
+    "current_domains" => $current_domains,
+    "success_domains" => $success_domains,
 )));
 if (sizeof($current_domains) > 0)
     echo json_encode(array(
