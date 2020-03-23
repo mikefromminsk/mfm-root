@@ -33,13 +33,19 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
     $domain = domain_check($domain_name, $domain_key);
 
     if ($domain !== false) {
+        $domain_set_time = time();
         if ($domain != null) {
             updateList("domains", array(
                 "domain_prev_key" => $domain_key,
                 "domain_key_hash" => $domain_key_hash_next,
                 "server_repo_hash" => $server_repo_hash,
-                "domain_set_time" => time(),
+                "domain_set_time" => $domain_set_time,
             ), "domain_name", $domain_name);
+            insertList("keys", array(
+                "domain_name"=> $domain_name,
+                "domain_key_hash"=> $domain["domain_key_hash"],
+                "domain_key"=> $domain_key,
+            ));
         } else {
             insertList("servers", array(
                 "domain_name" => $domain_name,
@@ -50,12 +56,16 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "domain_name_hash" => domain_hash($domain_name),
                 "domain_key_hash" => $domain_key_hash_next,
                 "server_repo_hash" => $server_repo_hash,
-                "domain_set_time" => time(),
+                "domain_set_time" => $domain_set_time,
             ));
         }
         return true;
     }
     return false;
+}
+
+function servers_get($domain_names){
+    return select("select * from servers where domain_name in ('" . implode("','", $domain_names) . "')");
 }
 
 function domain_get($domain_name)

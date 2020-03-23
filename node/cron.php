@@ -27,11 +27,9 @@ foreach (selectList("select distinct server_host_name from servers where server_
 
     if (sizeof($domains_in_request) > 0) {
 
-        $servers_with_domains = select("select * from servers where domain_name in ('" . implode("','", array_column($domains_in_request, "domain_name")) . "')");
-
         $response = http_json_post($server_host_name . "/node/cron_receive.php", array(
             "domains" => $domains_in_request,
-            "servers" => $servers_with_domains
+            "servers" => servers_get(array_column($domains_in_request, "domain_name"))
         ));
 
         if ($response !== false) {

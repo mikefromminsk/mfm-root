@@ -14,6 +14,24 @@ foreach ($domains as $domain) {
         $success_domains[] = $domain["domain_name"];
 }
 
+//return last domains
+$current_domains = array();
+foreach ($domains as $domain) {
+    if (!in_array($domain["domain_name"], $success_domains)) {
+        $domain_key = scalar("select domain_key from keys where domain_name = " . $domain["domain_name"] . " and domain_key_hash = " . $domain["domain_key_hash"]);
+        if ($domain_key != null) {
+            $current_domain = domain_get($domain["domain_name"]);
+            $current_domain["domain_key"] = $domain_key;
+            $current_domains[] = $current_domain;
+        }
+    }
+}
+if (sizeof($current_domains) > 0)
+    echo json_encode(array(
+        "domains" => $current_domains,
+        "servers" => servers_get(array_column($current_domains, "domain_name")),
+    ));
+
 //set servers
 foreach ($servers as $server) {
     /*file_put_contents("sef", json_encode(array(
@@ -33,10 +51,10 @@ foreach ($servers as $server) {
         } else if ($server["server_repo_hash"] != null) {
             updateList("servers", array(
                 "server_repo_hash" => $server["server_repo_hash"]
-                ), array(
-                    "domain_name" => $server["domain_name"],
-                    "server_host_name" => $server["server_host_name"]
-                ));
+            ), array(
+                "domain_name" => $server["domain_name"],
+                "server_host_name" => $server["server_host_name"]
+            ));
         }
     }
 }
