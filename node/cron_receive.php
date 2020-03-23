@@ -18,7 +18,7 @@ foreach ($domains as $domain) {
             . "' and domain_key_hash = '" . uencode($domain["domain_key_hash"]) . "'");
         if ($domain_key != null) {
             $current_domain = domain_get($domain["domain_name"]);
-            $current_domain["domain_key"] = $domain_key;
+            $current_domain["domain_prev_key"] = $domain_key;
             $current_domains[] = $current_domain;
         }
     }

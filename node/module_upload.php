@@ -33,9 +33,9 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
         $server_repo_hash = hash_file(HASH_ALGO, $zipPath);
 
         if ($domain == null) {
-            domain_set($app_name, null, domain_key_hash($domain_next_key, $server_repo_hash), $server_repo_hash);
+            domain_set($app_name, null, hash(HASH_ALGO, $domain_next_key), $server_repo_hash);
         } else {
-            domain_set($app_name, $domain_key, domain_key_hash($domain_next_key, $server_repo_hash), $server_repo_hash);
+            domain_set($app_name, $domain_key, hash(HASH_ALGO, $domain_next_key), $server_repo_hash);
         }
 
         domain_repo_set($app_name, $zipPath);

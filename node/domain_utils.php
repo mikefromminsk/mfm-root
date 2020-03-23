@@ -18,7 +18,7 @@ function domain_check($domain_name, $domain_key)
     if ($domain != null) {
         /*if ($domain_key_hash == $domain_key_hash_next)
                 return false;*/
-        $domain_key_hash = hash(HASH_ALGO, hash(HASH_ALGO, $domain_key) . $domain["server_repo_hash"]);
+        $domain_key_hash = hash(HASH_ALGO, $domain_key);
         if ($domain_key_hash != $domain["domain_key_hash"])
             return false;
     }
@@ -149,11 +149,6 @@ function domain_repo_set($domain_name, $repo_path)
         update("update servers set server_repo_hash = '" . uencode(hash_file(HASH_ALGO, $repo_path)) . "'"
             . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
     }
-}
-
-function domain_key_hash($domain_key, $server_repo_hash)
-{
-    return hash(HASH_ALGO, hash(HASH_ALGO, $domain_key) . $server_repo_hash);
 }
 
 function get_mime_type($filename)
