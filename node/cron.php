@@ -33,6 +33,7 @@ foreach (selectList("select distinct server_host_name from servers where server_
         ));
 
         if ($response !== false) {
+            file_put_contents("wefw", json_encode($response));
             domains_set($response["domains"], $response["servers"]);
 
             foreach ($domains_in_request as $domain)
