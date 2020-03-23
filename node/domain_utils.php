@@ -41,7 +41,7 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "server_repo_hash" => $server_repo_hash,
                 "domain_set_time" => $domain_set_time,
             ), "domain_name", $domain_name);
-            insertList("keys", array(
+            insertList("domain_keys", array(
                 "domain_name"=> $domain_name,
                 "domain_key_hash"=> $domain["domain_key_hash"],
                 "domain_key"=> $domain_key,

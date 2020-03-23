@@ -18,7 +18,7 @@ foreach ($domains as $domain) {
 $current_domains = array();
 foreach ($domains as $domain) {
     if (!in_array($domain["domain_name"], $success_domains)) {
-        $domain_key = scalar("select domain_key from keys where domain_name = " . $domain["domain_name"] . " and domain_key_hash = " . $domain["domain_key_hash"]);
+        $domain_key = scalar("select domain_key from domain_keys where domain_name = " . $domain["domain_name"] . " and domain_key_hash = " . $domain["domain_key_hash"]);
         if ($domain_key != null) {
             $current_domain = domain_get($domain["domain_name"]);
             $current_domain["domain_key"] = $domain_key;
