@@ -33,19 +33,17 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
     $domain = domain_check($domain_name, $domain_key);
 
     if ($domain !== false) {
-        $domain_set_time = time();
         if ($domain != null) {
+            $time = time();
+            $domain_set_time = $domain["domain_set_time"] >= $time ? $domain["domain_set_time"] + 1 : $time;
             updateList("domains", array(
                 "domain_prev_key" => $domain_key,
                 "domain_key_hash" => $domain_key_hash_next,
                 "server_repo_hash" => $server_repo_hash,
                 "domain_set_time" => $domain_set_time,
             ), "domain_name", $domain_name);
-            insertList("domain_keys", array(
-                "domain_name" => $domain_name,
-                "domain_key_hash" => $domain["domain_key_hash"],
-                "domain_key" => $domain_key,
-            ));
+            $domain["domain_name"] .= $domain["domain_set_time"];
+            insertList("domains", $domain); // history
         } else {
             insertList("servers", array(
                 "domain_name" => $domain_name,
@@ -56,7 +54,7 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "domain_name_hash" => domain_hash($domain_name),
                 "domain_key_hash" => $domain_key_hash_next,
                 "server_repo_hash" => $server_repo_hash,
-                "domain_set_time" => $domain_set_time,
+                "domain_set_time" => time(),
             ));
         }
         return true;

@@ -37,12 +37,4 @@ CREATE TABLE IF NOT EXISTS `servers` (
   `server_sync_time` int(11) NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-    query("DROP TABLE IF EXISTS `domain_keys`;");
-    query("
-CREATE TABLE IF NOT EXISTS `domain_keys` (
-  `domain_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `domain_key_hash` varchar(64) NOT NULL,
-  `domain_key` varchar(64) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
-
 }
