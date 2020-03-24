@@ -4,7 +4,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
 $domain_name = get("domain_name");
 $server_host_name = get("server_host_name");
 
-
 // reg new hostname
 if ($domain_name != null && $server_host_name != null) {
     if (scalar("select count(*) from servers where domain_name = '" . uencode($domain_name) . "' "
@@ -15,31 +14,6 @@ if ($domain_name != null && $server_host_name != null) {
         ));
     }
 }
-
-//return last domains
-$current_domains = array();
-foreach ($domains as $domain) {
-    if (!in_array($domain["domain_name"], $success_domains)) {
-        $domain_key = scalar("select domain_key from domain_keys where domain_name = '" . uencode($domain["domain_name"]) . "' "
-            . " and domain_key_hash = '" . uencode($domain["domain_key_hash"]) . "'");
-        if ($domain_key != null) {
-            $current_domain = domain_get($domain["domain_name"]);
-            $current_domain["domain_prev_key"] = $domain_key;
-            $current_domains[] = $current_domain;
-        }
-    }
-}
-file_put_contents("receive", json_encode(array(
-    "domains" => $domains,
-    "current_domains" => $current_domains,
-    "success_domains" => $success_domains,
-)));
-
-if (sizeof($current_domains) > 0)
-    echo json_encode(array(
-        "domains" => $current_domains,
-        "servers" => servers_get(array_column($current_domains, "domain_name")),
-    ));
 
 foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'") as $server_host_name) {
 
@@ -56,7 +30,7 @@ foreach (selectList("select distinct server_host_name from servers where server_
         foreach ($domains as &$domain) $domain["domain_name"] = $server["domain_name"];
         $domains_in_request = array_merge($domains_in_request, $domains);
     }
-
+    echo json_encode($domains_in_request);
     if (sizeof($domains_in_request) > 0) {
 
         $request = array(

@@ -42,7 +42,7 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "server_repo_hash" => $server_repo_hash,
                 "domain_set_time" => $domain_set_time,
             ), "domain_name", $domain_name);
-            $domain["domain_name"] .= $domain["domain_set_time"];
+            $domain["domain_name"] .= substr(dechex((float) $domain["domain_set_time"]), 4);
             insertList("domains", $domain); // history
         } else {
             insertList("servers", array(
@@ -99,13 +99,13 @@ function servers_get($domain_names)
 
 function domain_get($domain_name)
 {
-    return selectMap("select domain_name, domain_prev_key, domain_key_hash, server_repo_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+    return selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
 }
 
 function domain_similar($domain_name)
 {
     $domain_name_hash = domain_hash($domain_name);
-    return select("select domain_name, domain_prev_key, domain_key_hash from domains "
+    return select("select * from domains "
         . " where domain_name_hash > " . ($domain_name_hash - 32768) . " and domain_name_hash < " . ($domain_name_hash + 32768)
         . " order by ABS(domain_name_hash - $domain_name_hash)  limit 5");
 }
