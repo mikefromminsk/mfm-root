@@ -10,7 +10,8 @@ if ($domain_name != null && $server_host_name != null) {
             . " and server_host_name = '" . uencode($server_host_name) . "'") == 0) {
         insertList("servers", array(
             "domain_name" => $domain_name,
-            "server_host_name" => $server_host_name
+            "server_host_name" => $server_host_name,
+            "server_reg_time" => time(),
         ));
     }
 }
