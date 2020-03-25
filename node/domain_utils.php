@@ -79,6 +79,7 @@ function domains_set($domains, $servers)
                     "domain_name" => $server["domain_name"],
                     "server_host_name" => $server["server_host_name"],
                     "server_repo_hash" => $server["server_repo_hash"],
+                    "server_reg_time" => time(),
                 ));
             } else if ($server["server_repo_hash"] != null) {
                 updateList("servers", array(
@@ -145,8 +146,8 @@ function domain_repo_set($domain_name, $repo_path)
         }
         foreach ($file_paths as $file_path)
             unlink($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path");
-        update("update servers set server_repo_hash = '" . uencode(hash_file(HASH_ALGO, $repo_path)) . "'"
-            . " where domain_name = '" . uencode($domain_name) . "' and server_host_name = '" . uencode($GLOBALS["host_name"]) . "' ");
+        updateList("servers", array("server_repo_hash" => hash_file(HASH_ALGO, $repo_path)),
+            array("domain_name" => $domain_name, "server_host_name" => $GLOBALS["host_name"]));
     }
 }
 
