@@ -26,11 +26,11 @@ foreach (selectList("select distinct server_host_name from servers where server_
     foreach ($servers as $server) {
         $domains = select("select * from domains where domain_name like '" . uencode($server["domain_name"]) . "%' "
             . " and domain_set_time > " . $server["server_sync_time"]
-            . " order by domain_set_time desc");
+            . " order by domain_set_time");
+
         foreach ($domains as &$domain) $domain["domain_name"] = $server["domain_name"];
         $domains_in_request = array_merge($domains_in_request, $domains);
     }
-    echo json_encode($domains_in_request);
     if (sizeof($domains_in_request) > 0) {
 
         $request = array(
@@ -38,13 +38,20 @@ foreach (selectList("select distinct server_host_name from servers where server_
             "servers" => servers_get(array_column($servers, "domain_name"))
         );
 
+        $start_time = microtime();
         $response = http_json_post($server_host_name . "/node/cron_receive.php", $request);
+        $ping_time = microtime() - $start_time;
 
         if ($response !== false) {
             domains_set($response["domains"], $response["servers"]);
             foreach ($domains_in_request as $domain)
-                update("update servers set server_sync_time = " . $domain["domain_set_time"]
-                    . " where domain_name = '" . uencode($domain["domain_name"]) . "' and server_host_name = '" . uencode($server_host_name) . "'");
+                updateList("servers", array(
+                    "server_sync_time" => $domain["domain_set_time"],
+                    "server_ping = (server_ping * 300 + $ping_time) / 301"
+                ), array(
+                    "server_host_name" => $server_host_name,
+                    "domain_name" => $domain["domain_name"],
+                ));
         }
     }
 }

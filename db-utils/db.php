@@ -175,15 +175,6 @@ function insert($sql, $show_query = null)
     return $success_or_error;
 }
 
-//rename to insertMap
-function insertList($table_name, $params, $show_query = false)
-{
-    foreach ($params as $param_name => $param_value)
-        $params[$param_name] = $param_value === null ? "null" : "'" . uencode($param_value) . "'";
-    $insert_query = "insert into $table_name (" . implode(",", array_keys($params)) . ") values (" . implode(",", array_values($params)) . ")";
-    return insert($insert_query, $show_query);
-}
-
 function insertListAndGetId($table_name, $params, $show_query = false)
 {
     $success = insertList($table_name, $params, $show_query);
@@ -202,17 +193,27 @@ function update($sql, $show_query = null)
     return query($sql, $show_query);
 }
 
+//rename to insertMap
+function insertList($table_name, $params, $show_query = false)
+{
+    foreach ($params as $param_name => $param_value)
+        $params[$param_name] = $param_value === null ? "null" : "'" . uencode($param_value) . "'";
+    // add uencode !!!!! s
+    $insert_query = "insert into $table_name (" . implode(",", array_keys($params)) . ") values (" . implode(",", array_values($params)) . ")";
+    return insert($insert_query, $show_query);
+}
+
 // rename to update Map
 function updateList($table_name, $set_params, $primary_key, $primary_value = null, $show_query = false)
 {
     $update_query = "update $table_name set ";
     foreach ($set_params as $param_name => $param_value)
-        $update_query .= " $param_name = " . ($param_value === null ? "null" : "'" . uencode($param_value) . "'") . ", ";
+        $update_query .= (is_numeric($param_name) ? $param_value : " $param_name = " . (is_null($param_value) ? "null" : "'" . uencode($param_value) . "'")) . ", ";
     $update_query = rtrim($update_query, ", ");
     $update_query .= " where";
     $where_params = is_array($primary_key) ? $primary_key : array($primary_key => $primary_value);
     foreach ($where_params as $param_name => $param_value)
-        $update_query .= " $param_name " . ($param_value === null ? "is null" : "= '" . uencode($param_value) . "'") . " and ";
+        $update_query .= (is_numeric($param_name) ? $param_value : " $param_name " . (is_null($param_value) ? "is null" : "= '" . uencode($param_value) . "'")) . " and ";
     $update_query = rtrim($update_query, " and ");
     return update($update_query, $show_query);
 }
