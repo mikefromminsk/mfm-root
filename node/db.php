@@ -3,8 +3,13 @@ error_reporting(1);
 
 header("Content-type: application/json;charset=utf-8");
 
-//include_once "properties.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/properties.php";
+include_once "properties.php";
+if (
+    $db_name == null
+    || $db_user == null
+    || $db_pass == null
+)
+    die(json_encode(array("message" => "Create properties.php with database connection parameters")));
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;
 if ($mysql_conn == null)
