@@ -34,13 +34,11 @@ foreach (selectList("select distinct server_host_name from servers where server_
     }
     if (sizeof($domains_in_request) > 0) {
 
-        $request = array(
+        $start_time = microtime();
+        $response = http_json_post($server_host_name . "/node/cron_receive.php", array(
             "domains" => $domains_in_request,
             "servers" => servers_get(array_column($servers, "domain_name"))
-        );
-
-        $start_time = microtime();
-        $response = http_json_post($server_host_name . "/node/cron_receive.php", $request);
+        ));
         $ping_time = microtime() - $start_time;
 
         if ($response !== false) {

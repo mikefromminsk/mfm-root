@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db-utils/db.php";
+include_once "db.php";
 
 define("HASH_ALGO", "sha256");
 
