@@ -23,7 +23,7 @@ foreach (selectList("select distinct server_host_name from servers where server_
         $start_time = microtime();
         $response = http_json_post($server_host_name . "/node/cron_receive.php", array(
             "domains" => $domains_in_request,
-            "servers" => servers_get(array_column($servers, "domain_name"))
+            "servers" => select("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')")
         ));
         $ping_time = microtime() - $start_time;
 

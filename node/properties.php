@@ -1,6 +1,6 @@
 <?php
 
-$host_name = "";
-$db_name = "";
-$db_user = "";
-$db_pass = "";
+$host_name = "localhost";
+$db_name = "darknode";
+$db_user = "root";
+$db_pass = "root";
