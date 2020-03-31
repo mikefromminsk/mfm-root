@@ -1,11 +1,14 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
+include_once "db.php";
 
 $user = get_required("user");
 $pass = get_required("pass");
+$domain_name = get("domain_name");
+$server_host_name = get("server_host_name");
 
 if ($user == $db_user && $pass == $db_pass) {
+
     query("DROP TABLE IF EXISTS `domains`;");
     query("
 CREATE TABLE IF NOT EXISTS `domains` (
@@ -29,4 +32,20 @@ CREATE TABLE IF NOT EXISTS `servers` (
   `server_reg_time` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
+
+    http_json_get("http://localhost/node/commit.php?domain_key=123&domain_next_key=abc&domain_name=search");
+    http_json_get("http://host1.com/node/init.php?domain_key=123&domain_next_key=abc&domain_name=search");
+
+}
+
+// reg new hostname
+if ($domain_name != null && $server_host_name != null) {
+    if (scalar("select count(*) from servers where domain_name = '" . uencode($domain_name) . "' "
+            . " and server_host_name = '" . uencode($server_host_name) . "'") == 0) {
+        insertList("servers", array(
+            "domain_name" => $domain_name,
+            "server_host_name" => $server_host_name,
+            "server_reg_time" => time(),
+        ));
+    }
 }

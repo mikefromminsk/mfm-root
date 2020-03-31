@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
+include_once "domain_utils.php";
 
 $domains = get("domains");
 $servers = get("servers");

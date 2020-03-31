@@ -1,20 +1,6 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
+include_once "domain_utils.php";
 
-$domain_name = get("domain_name");
-$server_host_name = get("server_host_name");
-
-// reg new hostname
-if ($domain_name != null && $server_host_name != null) {
-    if (scalar("select count(*) from servers where domain_name = '" . uencode($domain_name) . "' "
-            . " and server_host_name = '" . uencode($server_host_name) . "'") == 0) {
-        insertList("servers", array(
-            "domain_name" => $domain_name,
-            "server_host_name" => $server_host_name,
-            "server_reg_time" => time(),
-        ));
-    }
-}
 
 foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'") as $server_host_name) {
 

@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/node/domain_utils.php";
+include_once "domain_utils.php";
 
 $domain_name = get("domain_name");
 $domain_key = get_required("domain_key");
@@ -8,10 +8,6 @@ $domain_next_key = get("domain_next_key", $domain_key);
 
 $ignore_list = explode("\r\n", file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.gitignore"));
 $ignore_list[] = "app.zip";
-
-/*query("delete from files");
-query("delete from servers");
-query("delete from domains");*/
 
 foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
     if ($domain_name != null && $app_name != $domain_name) continue;
