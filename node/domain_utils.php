@@ -25,7 +25,7 @@ function domain_check($domain_name, $domain_key)
     return $domain;
 }
 
-function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_repo_hash)
+function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_repo_hash, $server_host = null)
 {
     if ($domain_key_hash_next == null)
         return false;
@@ -43,12 +43,13 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
                 "domain_set_time" => $domain_set_time,
             ), "domain_name", $domain_name);
             $domain["domain_name"] .= "_" . substr(dechex((float)$domain["domain_set_time"]), 4);
+            $domain["domain_name_hash"] = 0;
             insertList("domains", $domain); // history
         } else {
             insertList("servers", array(
                 "domain_name" => $domain_name,
                 "server_host_name" => $GLOBALS["host_name"],
-                "server_reg_time" => $time,
+                "domain_key_hash" => $domain_key_hash_next,
             ));
             insertList("domains", array(
                 "domain_name" => $domain_name,
@@ -63,40 +64,62 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
     return false;
 }
 
-function domains_set($domains, $servers)
+function domains_set($server_host_name, $domains, $servers)
 {
-    $success_domains = [];
+    $results = array();
     foreach ($domains as $domain)
-        if (domain_set($domain["domain_name"], $domain["domain_prev_key"], $domain["domain_key_hash"], $domain["server_repo_hash"]) !== false)
-            $success_domains[] = $domain["domain_name"];
-
-    foreach ($servers as $server) {
-        if ($server["server_host_name"] != $GLOBALS["host_name"] && in_array($server["domain_name"], $success_domains)) {
-            if (scalar("select count(*) from servers "
-                    . " where domain_name = '" . uencode($server["domain_name"]) . "' "
-                    . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
-                insertList("servers", array(
-                    "domain_name" => $server["domain_name"],
-                    "server_host_name" => $server["server_host_name"],
-                    "server_repo_hash" => $server["server_repo_hash"],
-                    "server_reg_time" => time(),
-                ));
-            } else if ($server["server_repo_hash"] != null) {
-                updateList("servers", array(
-                    "server_repo_hash" => $server["server_repo_hash"]
-                ), array(
-                    "domain_name" => $server["domain_name"],
-                    "server_host_name" => $server["server_host_name"]
-                ));
-            }
+        if ($results[$domain["domain_name"] !== false]) {
+            $results[$domain["domain_name"]] = domain_set($domain["domain_name"],
+                $domain["domain_prev_key"],
+                $domain["domain_key_hash"],
+                $domain["server_repo_hash"],
+                $server_host_name) === false ? $domain["domain_key_hash"] : true;
         }
+
+    foreach ($results as $domain_name => $success_or_error_key_hash) {
+        if ($success_or_error_key_hash === true) {
+            $domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+            foreach ($servers[$domain_name] as $server) {
+                if ($server["domain_key_hash"] == $domain_key_hash) {
+                    if (scalar("select count(*) from servers "
+                            . " where domain_name = '" . uencode($server["domain_name"]) . "' "
+                            . " and server_host_name = '" . uencode($server["server_host_name"]) . "'") == 0) {
+                        insertList("servers", array(
+                            "domain_name" => $domain_name,
+                            "server_host_name" => $server["server_host_name"],
+                            "domain_key_hash" => $server["domain_key_hash"],
+                            "server_repo_hash" => $server["server_repo_hash"],
+                        ));
+                    } else /*if ($server["server_repo_hash"] != null) */{
+                        updateList("servers", array(
+                            "domain_error_key_hash" => null,
+                            "domain_key_hash" => $server["domain_key_hash"],
+                            "server_repo_hash" => $server["server_repo_hash"]
+                        ), array(
+                            "domain_name" => $domain_name,
+                            "server_host_name" => $server["server_host_name"]
+                        ));
+                    }
+                }
+            }
+        } else {
+            updateList("servers", array(
+                "domain_error_key_hash" => $success_or_error_key_hash
+            ), array(
+                "domain_name" => $domain_name,
+                "server_host_name" => $server_host_name,
+                "domain_error_key_hash" => null,
+            ));
+        }
+
     }
-    return $success_domains;
+
+    return $results;
 }
 
 function domain_get($domain_name)
 {
-    return selectMap("select * from domains where domain_name = '" . uencode($domain_name) . "'");
+    return selectRow("select * from domains where domain_name = '" . uencode($domain_name) . "'");
 }
 
 function domain_similar($domain_name)
@@ -133,5 +156,25 @@ function domain_repo_set($domain_name, $repo_path)
             unlink($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path");
         updateList("servers", array("server_repo_hash" => hash_file(HASH_ALGO, $repo_path)),
             array("domain_name" => $domain_name, "server_host_name" => $GLOBALS["host_name"]));
+    }
+}
+
+function upgrade($domain_name)
+{
+    $active_server_repo_hash = domain_get($domain_name)["server_repo_hash"];
+
+    $self_server_repo_hash = scalar("select server_repo_hash from servers "
+        . " where domain_name = '" . uencode($domain_name) . "' "
+        . " and server_host_name = '" . uencode($GLOBALS["host_name"]) . "'");
+
+    if ($self_server_repo_hash != $active_server_repo_hash) {
+        $server_host_name = scalar("select server_host_name from servers "
+            . " where domain_name = '" . uencode($domain_name) . "' "
+            . " and server_repo_hash = '" . uencode($active_server_repo_hash) . "' limit 1");
+
+        $repo_string = http_get("$server_host_name/$domain_name/app.zip");
+        $repo_path = $_SERVER["DOCUMENT_ROOT"] . "/$domain_name/app.zip";
+        file_put_contents($repo_path, $repo_string);
+        domain_repo_set($domain_name, $repo_path);
     }
 }

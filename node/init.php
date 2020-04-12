@@ -25,17 +25,14 @@ CREATE TABLE IF NOT EXISTS `domains` (
 CREATE TABLE IF NOT EXISTS `servers` (
   `domain_name` varchar(64) COLLATE utf8_bin NOT NULL,
   `server_host_name` varchar(256) CHARACTER SET utf8 NOT NULL,
+  `domain_key_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `domain_error_key_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `server_repo_hash` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `server_sync_time` int(11) NOT NULL DEFAULT 0,
-  `server_ping` float NOT NULL DEFAULT 0,
-  `server_reg_time` int(11) NOT NULL
+  `server_ping` float NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-    http_json_get("http://localhost/node/commit.php?domain_name=node&domain_key=1&domain_next_key=2");
-    http_json_get("http://host1.com/node/init.php?user=root&pass=root&cron_server_host_name=localhost");
-    http_json_get("http://host2.com/node/init.php?user=root&pass=root&cron_server_host_name=localhost");
-    http_json_get("http://host3.com/node/init.php?user=root&pass=root&cron_server_host_name=localhost");
-    http_json_get("http://host3.com/node/init.php?user=root&pass=root&cron_server_host_name=localhost");
+    http_json_get("http://localhost/node/test.php?script=");
 }
 
 if (scalar("select count(*) from servers where domain_name = 'node' "
@@ -43,6 +40,5 @@ if (scalar("select count(*) from servers where domain_name = 'node' "
     insertList("servers", array(
         "domain_name" => "node",
         "server_host_name" => $server_host_name,
-        "server_reg_time" => time(),
     ));
 }

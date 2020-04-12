@@ -55,6 +55,15 @@ function select($sql, $show_query = false)
     return null;
 }
 
+function selectMapRows($sql, $column, $show_query = false)
+{
+    $table = select($sql, $show_query);
+    $res = array();
+    foreach ($table as $row)
+        $res[$row[$column]][] = $row;
+    return $res;
+}
+
 function selectList($sql, $show_query = false)
 {
     $result = query($sql, $show_query);
@@ -68,7 +77,7 @@ function selectList($sql, $show_query = false)
     return null;
 }
 
-function selectMap($sql, $show_query = false)
+function selectRow($sql, $show_query = false)
 {
     $result = select($sql, $show_query);
     if ($result != null)

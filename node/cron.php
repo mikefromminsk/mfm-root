@@ -2,7 +2,8 @@
 include_once "domain_utils.php";
 
 
-foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'") as $server_host_name) {
+foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'")
+         as $server_host_name) {
 
     $servers = select("select t1.* from servers t1 "
         . " left join domains t2 on t2.domain_name = t1.domain_name "
@@ -22,13 +23,14 @@ foreach (selectList("select distinct server_host_name from servers where server_
 
         $start_time = microtime();
         $response = http_json_post($server_host_name . "/node/cron_receive.php", array(
+            "server_host_name" => $host_name,
             "domains" => $domains_in_request,
-            "servers" => select("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')")
+            "servers" => selectMapRows("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')", "domain_name")
         ));
         $ping_time = microtime() - $start_time;
 
         if ($response !== false) {
-            domains_set($response["domains"], $response["servers"]);
+            domains_set($server_host_name, $response["domains"], $response["servers"]);
             foreach ($domains_in_request as $domain)
                 updateList("servers", array(
                     "server_sync_time" => $domain["domain_set_time"],
