@@ -56,7 +56,7 @@ function select($sql, $show_query = false)
     return null;
 }
 
-function selectMapRows($sql, $column, $show_query = false)
+function selectMapList($sql, $column, $show_query = false)
 {
     $table = select($sql, $show_query);
     $res = array();

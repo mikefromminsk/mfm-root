@@ -83,7 +83,7 @@ function domains_set($server_host_name, $domains, $servers)
 
     foreach ($results as $domain_name => $success_or_error_key_hash) {
         if ($success_or_error_key_hash === true) {
-            $domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "'");
+            $domain_key_hash = scalar("select domain_key_hash from domains where domain_name = '" . uencode($domain_name) . "' and archived = 0");
             foreach ($servers[$domain_name] as $server) {
                 if ($server["domain_key_hash"] == $domain_key_hash) {
                     if (scalar("select count(*) from servers "
@@ -124,15 +124,7 @@ function domains_set($server_host_name, $domains, $servers)
 
 function domain_get($domain_name)
 {
-    return selectRow("select * from domains where domain_name = '" . uencode($domain_name) . "'");
-}
-
-function domain_similar($domain_name)
-{
-    $domain_name_hash = domain_hash($domain_name);
-    return select("select * from domains "
-        . " where domain_name_hash > " . ($domain_name_hash - 32768) . " and domain_name_hash < " . ($domain_name_hash + 32768)
-        . " order by ABS(domain_name_hash - $domain_name_hash)  limit 5");
+    return selectRow("select * from domains where domain_name = '" . uencode($domain_name) . "' and archived = 0");
 }
 
 function domain_repo_set($domain_name, $repo_path)
@@ -175,15 +167,15 @@ function sync_request_data($server_host_name)
 
     $domains_in_request = array();
     foreach ($servers as $server) {
-        $domains = select("select * from domains where domain_name = '" . uencode($server["domain_name"]) . "' "
-            . " and domain_set_time > " . $server["server_sync_time"]
-            . " order by domain_set_time");
-        foreach ($domains as &$domain) $domain["domain_name"] = $server["domain_name"];
-        $domains_in_request = array_merge($domains_in_request, $domains);
+        $domains_in_request = array_merge($domains_in_request,
+            select("select * from domains where domain_name = '" . uencode($server["domain_name"]) . "' "
+                . " and domain_set_time > " . $server["server_sync_time"]
+                . " or domain_set_time = 0 "
+                . " order by domain_set_time"));
     }
     return array(
         "server_host_name" => $GLOBALS["host_name"],
         "domains" => $domains_in_request,
-        "servers" => selectMapRows("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')", "domain_name")
+        "servers" => selectMapList("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')", "domain_name")
     );
 }
