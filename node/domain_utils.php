@@ -18,8 +18,9 @@ function domain_check($domain_name, $domain_key)
     if ($domain != null) {
         /*if ($domain_key_hash == $domain_key_hash_next)
                 return false;*/
-        $domain_key_hash = hash(HASH_ALGO, $domain_key);
-        if ($domain_key_hash != $domain["domain_key_hash"])
+        if ($domain["domain_key_hash"] == null)
+            return $domain;
+        if ($domain["domain_key_hash"] != hash(HASH_ALGO, $domain_key))
             return false;
     }
     return $domain;
@@ -31,25 +32,29 @@ function domain_set($domain_name, $domain_key, $domain_key_hash_next, $server_re
         return false;
 
     $domain = domain_check($domain_name, $domain_key);
-
+    file_put_contents("domain_Set", json_encode_readable($domain));
     if ($domain !== false) {
-        $time = time();
+        $time = microtime(true);
         if ($domain != null) {
-            $domain_set_time = $domain["domain_set_time"] >= $time ? $domain["domain_set_time"] + 1 : $time;
-            updateList("domains", array(
+            updateList("domains", array("archived" => 1), array("domain_name" => $domain_name, "archived" => 0));
+            insertList("domains", array(
+                "domain_name" => $domain_name,
+                "domain_name_hash" => domain_hash($domain_name),
                 "domain_prev_key" => $domain_key,
                 "domain_key_hash" => $domain_key_hash_next,
                 "server_repo_hash" => $server_repo_hash,
-                "domain_set_time" => $domain_set_time,
-            ), "domain_name", $domain_name);
-            $domain["domain_name"] .= "_" . substr(dechex((float)$domain["domain_set_time"]), 4);
-            $domain["domain_name_hash"] = 0;
-            insertList("domains", $domain); // history
+                "domain_set_time" => $time,
+            ));
         } else {
             insertList("servers", array(
                 "domain_name" => $domain_name,
                 "server_host_name" => $GLOBALS["host_name"],
                 "domain_key_hash" => $domain_key_hash_next,
+            ));
+            insertList("domains", array(
+                "domain_name" => $domain_name,
+                "domain_set_time" => 0,
+                "archived" => 1,
             ));
             insertList("domains", array(
                 "domain_name" => $domain_name,
@@ -90,7 +95,7 @@ function domains_set($server_host_name, $domains, $servers)
                             "domain_key_hash" => $server["domain_key_hash"],
                             "server_repo_hash" => $server["server_repo_hash"],
                         ));
-                    } else /*if ($server["server_repo_hash"] != null) */{
+                    } else /*if ($server["server_repo_hash"] != null) */ {
                         updateList("servers", array(
                             "domain_error_key_hash" => null,
                             "domain_key_hash" => $server["domain_key_hash"],
@@ -132,28 +137,10 @@ function domain_similar($domain_name)
 
 function domain_repo_set($domain_name, $repo_path)
 {
-    if ($GLOBALS["host_name"] == null)
-        error("host_name is not set");
     $zip = new ZipArchive();
     if ($zip->open($repo_path) == TRUE) {
-        $file_paths = selectList("select file_path from files where domain_name = '" . uencode($domain_name) . "'");
-        query("delete from files where domain_name = '" . uencode($domain_name) . "'");
-        for ($i = 0; $i < $zip->numFiles; $i++) {
-            $file_path = $zip->getNameIndex($i);
-            $file_data = $zip->getFromName($file_path);
-            if (file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path", $file_data))
-                unset($file_paths[array_search($file_path, $file_paths)]);
-            $hash = hash(HASH_ALGO, $file_data);
-            insertList("files", array(
-                "domain_name" => $domain_name,
-                "file_path" => $file_path,
-                "file_level" => substr_count($file_path, "/"),
-                "file_size" => strlen($file_data),
-                "file_hash" => $hash,
-            ));
-        }
-        foreach ($file_paths as $file_path)
-            unlink($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/$file_path");
+        for ($i = 0; $i < $zip->numFiles; $i++)
+            file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/" . $zip->getNameIndex($i), $zip->getFromName($zip->getNameIndex($i)));
         updateList("servers", array("server_repo_hash" => hash_file(HASH_ALGO, $repo_path)),
             array("domain_name" => $domain_name, "server_host_name" => $GLOBALS["host_name"]));
     }
@@ -177,4 +164,26 @@ function upgrade($domain_name)
         file_put_contents($repo_path, $repo_string);
         domain_repo_set($domain_name, $repo_path);
     }
+}
+
+function sync_request_data($server_host_name)
+{
+    $servers = select("select t1.* from servers t1 "
+        . " left join domains t2 on t2.domain_name = t1.domain_name "
+        . " where t1.server_host_name = '" . uencode($server_host_name) . "'"
+        . " and t2.domain_set_time >= t1.server_sync_time");
+
+    $domains_in_request = array();
+    foreach ($servers as $server) {
+        $domains = select("select * from domains where domain_name = '" . uencode($server["domain_name"]) . "' "
+            . " and domain_set_time > " . $server["server_sync_time"]
+            . " order by domain_set_time");
+        foreach ($domains as &$domain) $domain["domain_name"] = $server["domain_name"];
+        $domains_in_request = array_merge($domains_in_request, $domains);
+    }
+    return array(
+        "server_host_name" => $GLOBALS["host_name"],
+        "domains" => $domains_in_request,
+        "servers" => selectMapRows("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')", "domain_name")
+    );
 }

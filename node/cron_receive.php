@@ -8,10 +8,9 @@ $servers = get("servers");
 if ($domains == null)
     error("domains are null");
 
-//set domains
-$success_domains = domains_set($server_host_name, $domains, $servers);
+domains_set($server_host_name, $domains, $servers);
 
-//download last version
-foreach ($success_domains as $domain_name) {
-    upgrade($domain_name);
-}
+$request = sync_request_data($server_host_name);
+file_put_contents("cron_receive.log", json_encode_readable($request));
+
+echo json_encode($request);

@@ -4,6 +4,7 @@ error_reporting(1);
 header("Content-type: application/json;charset=utf-8");
 
 include_once "properties.php";
+
 if (
     $db_name == null
     || $db_user == null
@@ -210,11 +211,11 @@ function update($sql, $show_query = null)
 //rename to insertMap
 function insertList($table_name, $params, $show_query = false)
 {
+    $insert_params = "";
     foreach ($params as $param_name => $param_value)
-        $params[$param_name] = $param_value === null ? "null" : "'" . uencode($param_value) . "'";
-    // add uencode !!!!! s
-    $insert_query = "insert into $table_name (" . implode(",", array_keys($params)) . ") values (" . implode(",", array_values($params)) . ")";
-    return insert($insert_query, $show_query);
+        $insert_params .= (is_numeric($param_value) ? $param_value : (is_null($param_value) ? "null" : "'" . uencode($param_value) . "'")) . ", ";
+    $insert_params = rtrim($insert_params, ", "); // !!! CHAR LSIT
+    return insert("insert into $table_name (" . implode(",", array_keys($params)) . ") values ($insert_params)", $show_query);
 }
 
 // rename to update Map
@@ -222,13 +223,13 @@ function updateList($table_name, $set_params, $primary_key, $primary_value = nul
 {
     $update_query = "update $table_name set ";
     foreach ($set_params as $param_name => $param_value)
-        $update_query .= (is_numeric($param_name) ? $param_value : " $param_name = " . (is_null($param_value) ? "null" : "'" . uencode($param_value) . "'")) . ", ";
-    $update_query = rtrim($update_query, ", ");
+        $update_query .= (is_numeric($param_name) ? $param_value : " $param_name = " . (is_numeric($param_value) ? $param_value :(is_null($param_value) ? "null" : "'" . uencode($param_value) . "'"))) . ", ";
+    $update_query = rtrim($update_query, ", ");// !!! CHAR LSIT
     $update_query .= " where";
     $where_params = is_array($primary_key) ? $primary_key : array($primary_key => $primary_value);
     foreach ($where_params as $param_name => $param_value)
-        $update_query .= (is_numeric($param_name) ? $param_value : " $param_name " . (is_null($param_value) ? "is null" : "= '" . uencode($param_value) . "'")) . " and ";
-    $update_query = rtrim($update_query, " and ");
+        $update_query .= (is_numeric($param_value) ? $param_value : " $param_name " . (is_null($param_value) ? "is null" : "= '" . uencode($param_value) . "'")) . " and ";
+    $update_query = rtrim($update_query, " and ");// !!! CHAR LSIT
     return update($update_query, $show_query);
 }
 
