@@ -56,22 +56,13 @@ function select($sql, $show_query = false)
     return null;
 }
 
-function arrayToWhere($where){
-    if ($where == null || sizeof($where) == 0) return "";
-    $sql = " where ";
-    foreach ($where as $param_name => $param_value)
-        $sql .= is_numeric($param_name) ? $param_value : ($param_name . (is_null($param_value) ? " is null" : " = " . is_numeric($param_value) ? $param_value : "'" . uencode($param_value) . "'")) . " and ";
-    return rtrim($sql, " and ");
-}
-
-function selectRowWhere($table, $where, $show_query = false)
+function scalar($sql, $show_query = false)
 {
-    return selectRow("select * from $table " . arrayToWhere($where), $show_query);
-}
-
-function selectWhere($table, $where, $show_query = false)
-{
-    return select("select * from $table " . arrayToWhere($where), $show_query);
+    $rows = select($sql, $show_query);
+    if (count($rows) > 0)
+        return array_shift($rows[0]);
+    else
+        return null;
 }
 
 function selectMapList($sql, $column, $show_query = false)
@@ -104,13 +95,28 @@ function selectRow($sql, $show_query = false)
     return null;
 }
 
-function scalar($sql, $show_query = false)
+function arrayToWhere($where){
+    if ($where == null || sizeof($where) == 0) return "";
+    $sql = " where ";
+    foreach ($where as $param_name => $param_value)
+        $sql .= is_numeric($param_name) ? $param_value :
+            ($param_name . (is_null($param_value) ? " is null" : " = " . (is_numeric($param_value) ? $param_value : "'" . uencode($param_value) . "'"))) . " and ";
+    return rtrim($sql, " and ");
+}
+
+function scalarWhere($table, $field, $where, $show_query = false)
 {
-    $rows = select($sql, $show_query);
-    if (count($rows) > 0)
-        return array_shift($rows[0]);
-    else
-        return null;
+    return scalar("select $field from $table " . arrayToWhere($where), $show_query);
+}
+
+function selectWhere($table, $where, $show_query = false)
+{
+    return select("select * from $table " . arrayToWhere($where), $show_query);
+}
+
+function selectRowWhere($table, $where, $show_query = false)
+{
+    return selectRow("select * from $table " . arrayToWhere($where), $show_query);
 }
 
 function table_exist($table_name)
@@ -223,7 +229,8 @@ function get_last_insert_id()
 
 function update($sql, $show_query = null)
 {
-    return query($sql, $show_query);
+    query($sql, $show_query);
+    return $GLOBALS["conn"]->affected_rows > 0;
 }
 
 //rename to insertMap

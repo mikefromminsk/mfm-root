@@ -10,7 +10,7 @@ $ignore_list = explode("\r\n", file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.
 $ignore_list[] = "app.zip";
 
 foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
-    if ($domain_name != null && $app_name != $domain_name) continue;
+    if ($app_name != null && $app_name != $domain_name) continue;
 
     $path = $_SERVER["DOCUMENT_ROOT"] . "/" . $app_name;
     if (($app_name != "." && $app_name != "..") && !in_array($app_name, $ignore_list) && is_dir($path)) {
@@ -25,9 +25,13 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
             $zip->addFile($file_absolute_path, $file_local_path);
         }
         $zip->close();
-        $server_repo_hash = hash_file(HASH_ALGO, $zipPath);
 
-        domain_set($app_name, $domain_key, hash(HASH_ALGO, $domain_next_key), $server_repo_hash);
+        domain_set($host_name, array(
+            "domain_name" => $domain_name,
+            "domain_prev_key" => $domain_key,
+            "domain_key_hash" => hash_sha56($domain_next_key),
+            "server_repo_hash" => hash_file(HASH_ALGO, $zipPath),
+        ));
 
         //domain_repo_set($app_name, $zipPath);
     }

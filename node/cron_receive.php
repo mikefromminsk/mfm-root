@@ -5,9 +5,10 @@ $server_host_name = get_required("server_host_name");
 $domains = get_required("domains");
 $servers = get("servers");
 
-domains_set($server_host_name, $domains, $servers);
-// check if this domain was in archive. and show new version
-$request = sync_request_data($server_host_name);
-file_put_contents("cron_receive.log", json_encode_readable($request));
+$response_domains = domains_set($server_host_name, $domains, $servers);
 
-echo json_encode($request);
+echo json_encode(array(
+    "server_host_name" => $host_name,
+    "domains" => $response_domains,
+    "servers" => servers(array_unique(array_column($response_domains, "domain_name"))),
+));

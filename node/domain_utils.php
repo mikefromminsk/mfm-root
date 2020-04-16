@@ -4,6 +4,11 @@ include_once "db.php";
 
 define("HASH_ALGO", "sha256");
 
+function hash_sha56($string)
+{
+    return $string == null ? null : hash(HASH_ALGO, $string);
+}
+
 function domain_hash($domain_name, $fromIndex = 0)
 {
     $charsum = 0;
@@ -14,39 +19,55 @@ function domain_hash($domain_name, $fromIndex = 0)
 
 function domain_set($server_host_name, $new_domain)
 {
-    $time = microtime(true);
+    $domain_name = $new_domain["domain_name"];
 
-    $domain_key_hash = $new_domain["domain_prev_key"] != null ? hash(HASH_ALGO, $new_domain["domain_prev_key"]) : null;
-
+    $domain_prev_key_hash = hash_sha56($new_domain["domain_prev_key"]);
     $updatePreviousResult = updateWhere("domains", array(
         "archived" => 1
     ), array(
-        "domain_name" => $new_domain["domain_name"],
+        "domain_name" => $domain_name,
         "archived" => 0,
-        "domain_key_hash" => $domain_key_hash,
+        "domain_key_hash" => $domain_prev_key_hash,
     ));
+
     if ($updatePreviousResult == true) {
         insertRow("domains", array(
-            "domain_name" => $new_domain["domain_name"],
-            "domain_name_hash" => domain_hash($new_domain["domain_name"]),
+            "domain_name" => $domain_name,
+            "domain_name_hash" => domain_hash($domain_name),
             "domain_prev_key" => $new_domain["domain_prev_key"],
             "domain_key_hash" => $new_domain["domain_key_hash"],
             "server_repo_hash" => $new_domain["server_repo_hash"],
-            "domain_set_time" => $time,
+            "domain_set_time" => microtime(true),
         ));
         return true;
     } else {
         $now_domain = selectRowWhere("domains", array(
-            "domain_name" => $new_domain["domain_name"],
-            "domain_key" => $new_domain["domain_prev_key"],
+            "domain_name" => $domain_name,
+            "domain_key_hash" => $domain_prev_key_hash,
         ));
-        if ($now_domain == null)
+        if ($now_domain == null) {
+            $prev_domain = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
+            if ($prev_domain == 0) {
+                insertRow("domains", array(
+                    "domain_name" => $domain_name,
+                    "domain_set_time" => microtime(true),
+                    "archived" => 1,
+                ));
+                insertRow("domains", array(
+                    "domain_name" => $domain_name,
+                    "domain_name_hash" => domain_hash($domain_name),
+                    "domain_key_hash" => $new_domain["domain_key_hash"],
+                    "server_repo_hash" => $new_domain["server_repo_hash"],
+                    "domain_set_time" => microtime(true),
+                ));
+                return true;
+            }
             return false;
-        else {
+        } else {
             if ($new_domain["domain_key_hash"] != $now_domain["domain_key_hash"])
                 consensus($server_host_name, $now_domain, $new_domain);
         }
-        return $new_domain;
+        return $now_domain;
     }
 }
 
@@ -55,8 +76,9 @@ function domains_set($server_host_name, $domains, $servers)
     $results = array();
     foreach ($domains as $domain) {
         $result = $results[$domain["domain_name"]];
-        if ($result == null || $result == true)
+        if ($result == null || $result == true) {
             $results[$domain["domain_name"]] = domain_set($server_host_name, $domain);
+        }
     }
 
     // add valid servers
@@ -91,14 +113,15 @@ function domains_set($server_host_name, $domains, $servers)
         }
 
 
-    $response = array();
-    foreach ($results as $result)
-        if (is_array($result))
-            $response = array_merge($response, selectWhere("domains", array(
-                "domain_name" => $results["domain_name"],
-                "domain_set_time >= " . $results["domain_set_time"],
+    $response_domains = array();
+    foreach ($results as $domain_name => $result)
+        if (is_array($result)) {
+            $response_domains = array_merge($response_domains, selectWhere("domains", array(
+                "domain_name" => $result["domain_name"],
+                "domain_set_time > " . $result["domain_set_time"],
             )));
-    return $results;
+        }
+    return $response_domains;
 }
 
 function consensus($server_host_name, $now_domain, $new_domain)
@@ -135,11 +158,6 @@ function consensus($server_host_name, $now_domain, $new_domain)
 }
 
 
-function domain_get($domain_name)
-{
-    return;
-}
-
 function domain_repo_set($domain_name, $repo_path)
 {
     $zip = new ZipArchive();
@@ -171,24 +189,12 @@ function upgrade($domain_name)
     }
 }
 
+function servers($domain_names)
+{
+    return selectMapList("select * from servers where domain_name in ('" . implode("','", $domain_names) . "')", "domain_name");
+}
+
 function sync_request_data($server_host_name)
 {
-    $servers = select("select t1.* from servers t1 "
-        . " left join domains t2 on t2.domain_name = t1.domain_name "
-        . " where t1.server_host_name = '" . uencode($server_host_name) . "'"
-        . " and t2.domain_set_time >= t1.server_sync_time");
 
-    $domains_in_request = array();
-    foreach ($servers as $server) {
-        $domains_in_request = array_merge($domains_in_request,
-            select("select * from domains where domain_name = '" . uencode($server["domain_name"]) . "' "
-                . " and domain_set_time > " . $server["server_sync_time"]
-                . " or domain_set_time = 0 "
-                . " order by domain_set_time"));
-    }
-    return array(
-        "server_host_name" => $GLOBALS["host_name"],
-        "domains" => $domains_in_request,
-        "servers" => selectMapList("select * from servers where domain_name in ('" . implode("','", array_column($servers, "domain_name")) . "')", "domain_name")
-    );
 }
