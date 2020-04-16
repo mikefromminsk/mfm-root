@@ -56,6 +56,24 @@ function select($sql, $show_query = false)
     return null;
 }
 
+function arrayToWhere($where){
+    if ($where == null || sizeof($where) == 0) return "";
+    $sql = " where ";
+    foreach ($where as $param_name => $param_value)
+        $sql .= is_numeric($param_name) ? $param_value : ($param_name . (is_null($param_value) ? " is null" : " = " . is_numeric($param_value) ? $param_value : "'" . uencode($param_value) . "'")) . " and ";
+    return rtrim($sql, " and ");
+}
+
+function selectRowWhere($table, $where, $show_query = false)
+{
+    return selectRow("select * from $table " . arrayToWhere($where), $show_query);
+}
+
+function selectWhere($table, $where, $show_query = false)
+{
+    return select("select * from $table " . arrayToWhere($where), $show_query);
+}
+
 function selectMapList($sql, $column, $show_query = false)
 {
     $table = select($sql, $show_query);
@@ -192,7 +210,7 @@ function insert($sql, $show_query = null)
 
 function insertListAndGetId($table_name, $params, $show_query = false)
 {
-    $success = insertList($table_name, $params, $show_query);
+    $success = insertRow($table_name, $params, $show_query);
     if ($success)
         return get_last_insert_id();
     return null;
@@ -209,7 +227,7 @@ function update($sql, $show_query = null)
 }
 
 //rename to insertMap
-function insertList($table_name, $params, $show_query = false)
+function insertRow($table_name, $params, $show_query = false)
 {
     $insert_params = "";
     foreach ($params as $param_name => $param_value)
@@ -218,19 +236,13 @@ function insertList($table_name, $params, $show_query = false)
     return insert("insert into $table_name (" . implode(",", array_keys($params)) . ") values ($insert_params)", $show_query);
 }
 
-// rename to update Map
-function updateList($table_name, $set_params, $primary_key, $primary_value = null, $show_query = false)
+function updateWhere($table_name, $set_params, $where, $show_query = false)
 {
-    $update_query = "update $table_name set ";
+    $set_params_string = "";
     foreach ($set_params as $param_name => $param_value)
-        $update_query .= (is_numeric($param_name) ? $param_value : " $param_name = " . (is_numeric($param_value) ? $param_value :(is_null($param_value) ? "null" : "'" . uencode($param_value) . "'"))) . ", ";
-    $update_query = rtrim($update_query, ", ");// !!! CHAR LSIT
-    $update_query .= " where";
-    $where_params = is_array($primary_key) ? $primary_key : array($primary_key => $primary_value);
-    foreach ($where_params as $param_name => $param_value)
-        $update_query .= (is_numeric($param_value) ? $param_value : " $param_name " . (is_null($param_value) ? "is null" : "= '" . uencode($param_value) . "'")) . " and ";
-    $update_query = rtrim($update_query, " and ");// !!! CHAR LSIT
-    return update($update_query, $show_query);
+        $set_params_string .= (is_numeric($param_name) ? $param_value : " $param_name = " . (is_numeric($param_value) ? $param_value : (is_null($param_value) ? "null" : "'" . uencode($param_value) . "'"))) . ", ";
+    $set_params_string = rtrim($set_params_string, ", "); // !!! CHAR LSIT
+    return update("update $table_name set $set_params_string " . arrayToWhere($where), $show_query);
 }
 
 function object_properties_to_number(&$object)
