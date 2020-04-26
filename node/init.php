@@ -2,9 +2,7 @@
 
 include_once "db.php";
 
-$user = get_required("user");
-$pass = get_required("pass");
-$master = get_required("master");
+//test user pass
 
 query("DROP TABLE IF EXISTS `domains`;");
 query("
@@ -29,13 +27,4 @@ CREATE TABLE IF NOT EXISTS `servers` (
   `server_sync_time` double NOT NULL DEFAULT 0,
   `server_ping` float NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
-
-// cron in self
-//http_json_get( "$host_name/node/cron.php?domain_name=node&server_host_name=$master");
-
-/*if ($_SERVER["HTTP_HOST"] == "localhost") {
-    http_json_get("localhost/node/commit.php?domain_name=node&domain_key=1&domain_next_key=2");
-
-    http_json_get("host1.com/node/init.php?user=root&pass=root&master=localhost");
-}*/
 

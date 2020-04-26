@@ -20,7 +20,7 @@ foreach (selectList("select distinct server_host_name from servers where server_
             . " order by domain_set_time"));
     }
 
-    $response = http_json_post($server_host_name . "/node/cron_receive.php", array(
+    $response = http_post_json($server_host_name . "/node/cron_receive.php", array(
         "server_host_name" => $host_name,
         "domains" => $domains,
         "servers" => servers(array_column($servers, "domain_name")),

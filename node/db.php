@@ -14,7 +14,7 @@ if (
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;
 if ($mysql_conn == null)
-    $mysql_conn = new mysqli("localhost", $db_user, $db_pass, $db_name);
+    $mysql_conn = new mysqli("localhost", $db_user, $db_pass, $db_name); // change localhost to $host_name
 
 if ($mysql_conn->connect_error)
     die("Connection failed: " . $mysql_conn->connect_error . " check properties.php file");
@@ -416,7 +416,7 @@ function http_post($url, $data, $headers = array())
     return $result;
 }
 
-function http_json_post($url, $data, $headers = array())
+function http_post_json($url, $data, $headers = array())
 {
     $result = http_post($url, $data, $headers);
     return is_string($result) ? json_decode($result, true) : $result;
@@ -436,7 +436,7 @@ function http_get($url)
     return $result;
 }
 
-function http_json_get($url)
+function http_get_json($url)
 {
     $result = http_get($url);
     return is_string($result) ? json_decode($result, true) : $result;
