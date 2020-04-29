@@ -21,10 +21,8 @@ query("
 CREATE TABLE IF NOT EXISTS `servers` (
   `domain_name` varchar(64) COLLATE utf8_bin NOT NULL,
   `server_host_name` varchar(256) CHARACTER SET utf8 NOT NULL,
-  `domain_key_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `error_key_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `server_repo_hash` varchar(64) COLLATE utf8_bin DEFAULT NULL,
-  `server_sync_time` double NOT NULL DEFAULT 0,
-  `server_ping` float NOT NULL DEFAULT 0
+  `server_sync_time` double NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 

@@ -1,7 +1,6 @@
 <?php
 
 include_once "domain_utils.php";
-
 foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'")
          as $server_host_name) {
 
@@ -20,21 +19,15 @@ foreach (selectList("select distinct server_host_name from servers where server_
             . " order by domain_set_time"));
     }
 
-    $response = http_post_json($server_host_name . "/node/cron_receive.php", array(
+    $request = array(
         "server_host_name" => $host_name,
         "domains" => $domains,
         "servers" => servers(array_column($servers, "domain_name")),
-    ));
+    );
+    $response = http_post_json($server_host_name . "/node/cron_receive.php", $request);
 
     $ping_time = microtime(true) - $start_time;
 
-    $error_domains = domains_set($server_host_name, $response["domains"], $response["servers"]);
-
-    die(json_encode( $response["domains"]));
-
-    updateWhere("servers", array(
-        "server_sync_time" => $start_time,
-        "server_ping = (server_ping * 300 + $ping_time) / 301"
-    ), array("server_host_name" => $server_host_name));
+    domains_set($server_host_name, $response["domains"], $response["servers"]);
 }
 

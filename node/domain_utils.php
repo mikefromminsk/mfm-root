@@ -17,13 +17,14 @@ function domain_hash($domain_name, $fromIndex = 0)
     return $charsum;
 }
 
-function domain_set($server_host_name, $new_domain)
+function domain_save($server_host_name, $new_domain)
 {
     $domain_name = $new_domain["domain_name"];
 
     $domain_prev_key_hash = hash_sha56($new_domain["domain_prev_key"]);
     $updatePreviousResult = updateWhere("domains", array(
-        "archived" => 1
+        "archived" => 1,
+        "domain_name_hash" => null,
     ), array(
         "domain_name" => $domain_name,
         "archived" => 0,
@@ -45,11 +46,14 @@ function domain_set($server_host_name, $new_domain)
             "domain_name" => $domain_name,
             "domain_key_hash" => $domain_prev_key_hash,
         ));
+
         if ($now_domain == null) {
-            $prev_domain = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
-            if ($prev_domain == 0) {
+            $prev_domain_count = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
+
+            if ($prev_domain_count == 0) {
                 insertRow("domains", array(
                     "domain_name" => $domain_name,
+                    "domain_name_hash" => domain_hash($domain_name),
                     "domain_set_time" => microtime(true),
                     "archived" => 1,
                 ));
@@ -62,6 +66,7 @@ function domain_set($server_host_name, $new_domain)
                 ));
                 return true;
             }
+
             return false;
         } else {
             if ($new_domain["domain_key_hash"] != $now_domain["domain_key_hash"])
@@ -71,90 +76,89 @@ function domain_set($server_host_name, $new_domain)
     }
 }
 
+
+function consensus($server_host_name, $now_domain, $new_domain)
+{
+    $domain_name = $now_domain["domain_name"];
+
+    updateWhere("servers", array(
+        "error_key_hash" => $new_domain["domain_key_hash"],
+    ), array(
+        "domain_name" => $domain_name,
+        "server_host_name" => $server_host_name,
+    ));
+
+    $servers_count = scalarWhere("servers", "count(*)", array("domain_name" => $domain_name));
+
+    $master_branch = selectRow("select error_key_hash, count(*) as error_group_sum from servers "
+        . " where domain_name = '" . uencode($domain_name) . "'"
+        . " and server_host_name <> '" . uencode($GLOBALS["host_name"]) . "'"
+        . " group by error_key_hash "
+        . " order by error_group_sum"
+        . " limit 1");
+
+    file_put_contents("sef.log", "wef" . json_encode($now_domain));
+    file_put_contents("sef2.log", "wef" . json_encode($new_domain));
+    if ($master_branch["error_group_sum"] / $servers_count > 0.5) { // change branch
+        updateWhere("servers", array("error_key_hash" => $now_domain["domain_key_hash"]),
+            array("domain_name" => $domain_name, "error_key_hash" => null));
+        updateWhere("servers", array("error_key_hash" => null),
+            array("domain_name" => $domain_name, "error_key_hash" => $master_branch["error_key_hash"]));
+        updateWhere("servers", array("error_key_hash" => null),
+            array("domain_name" => $domain_name, "server_host_name" => $GLOBALS["host_name"]));
+        query("delete from domains where domain_name = '" . uencode($domain_name) . "' "
+            . " and  domain_set_time > " . $now_domain["domain_set_time"]);
+        updateWhere("domains", array(
+            "domain_key_hash" => $master_branch["error_key_hash"],
+            "archived" => 0,
+            "domain_set_time" => microtime(true),
+        ), array(
+            "domain_name" => $domain_name,
+            "domain_key_hash" => $now_domain["domain_key_hash"],
+        ));
+    }
+}
+
+
+function domain_set($server_host_name, $domain_name, $domain_prev_key, $domain_key_hash, $server_repo_hash)
+{
+    domains_set($server_host_name, [array(
+        "domain_name" => $domain_name,
+        "domain_prev_key" => $domain_prev_key,
+        "domain_key_hash" => $domain_key_hash,
+        "server_repo_hash" => $server_repo_hash,
+    )], array($domain_name => [array(
+        "domain_name" => $domain_name,
+        "server_host_name" => $server_host_name,
+        "domain_key_hash" => $domain_key_hash,
+        "server_repo_hash" => $server_repo_hash,
+    )]));
+}
+
 function domains_set($server_host_name, $domains, $servers)
 {
     $results = array();
     foreach ($domains as $domain) {
         $result = $results[$domain["domain_name"]];
-        if ($result == null || $result == true) {
-            $results[$domain["domain_name"]] = domain_set($server_host_name, $domain);
-        }
+        if ($result == null || $result == true)
+            $results[$domain["domain_name"]] = domain_save($server_host_name, $domain);
     }
 
-    // add valid servers
     foreach ($results as $domain_name => $result)
-        if ($result == true) {
-            foreach ($servers[$domain_name] as $server_new) {
-                $server_now = selectRowWhere("servers", array(
-                    "domain_name" => $domain_name,
-                    "server_host_name" => $server_new["server_host_name"],
-                ));
-                if ($server_now == null) {
-                    insertRow("servers", array(
-                        "domain_name" => $domain_name,
-                        "server_host_name" => $server_new["server_host_name"],
-                        "domain_key_hash" => $server_new["domain_key_hash"],
-                        "server_repo_hash" => $server_new["server_repo_hash"],
-                    ));
-                } else {
-                    if ($server_now["error_key_hash"] == null) {
-                        updateWhere("servers", array(
-                            "domain_key_hash" => $server_new["domain_key_hash"],
-                            "server_repo_hash" => $server_new["server_repo_hash"]
-                        ), array(
-                            "domain_name" => $domain_name,
-                            "server_host_name" => $server_new["server_host_name"]
-                        ));
-                    } else {
-
-                    }
-                }
-            }
-        }
-
+        foreach ($servers[$domain_name] as $server_new)
+            if (scalarWhere("servers", "count(*)", array("domain_name" => $domain_name, "server_host_name" => $server_new["server_host_name"])) == 0)
+                insertRow("servers", array("domain_name" => $domain_name, "server_host_name" => $server_new["server_host_name"],));
 
     $response_domains = array();
     foreach ($results as $domain_name => $result)
         if (is_array($result)) {
-            $response_domains = array_merge($response_domains, selectWhere("domains", array(
-                "domain_name" => $result["domain_name"],
-                "domain_set_time > " . $result["domain_set_time"],
-            )));
+            $response_domains = array_merge($response_domains,
+                selectWhere("domains", array(
+                    "domain_name" => $result["domain_name"],
+                    "domain_set_time > " . $result["domain_set_time"],
+                )));
         }
     return $response_domains;
-}
-
-function consensus($server_host_name, $now_domain, $new_domain)
-{
-    updateWhere("servers", array(
-        "error_key_hash" => $new_domain["domain_key_hash"],
-    ), array(
-        "domain_name" => $now_domain["domain_name"],
-        "server_host_name" => $server_host_name,
-    ));
-    $main_key_hash = scalar("select error_key_hash, sum(server_ping) as ping_sum from servers "
-        . " where domain_name = '" . uencode($now_domain["domain_name"]) . "'"
-        . " group by error_key_hash"
-        . " order by ping_sum"
-        . " limit 1");
-    if ($main_key_hash != null) { // change branch
-        updateWhere("servers", array(
-            "error_key_hash" => $now_domain["domain_key_hash"]
-        ), array("error_key_hash" => null));
-        updateWhere("servers", array(
-            "error_key_hash" => null
-        ), array("error_key_hash" => $new_domain["domain_key_hash"]));
-        if ($now_domain["archived"] == 1)
-            query("delete from domains where domina_set_time > " . $now_domain["domain_set_time"]);
-        updateWhere("domains", array(
-            "domain_key_hash" => $main_key_hash,
-            "archived" => 0,
-            "domain_set_time" => microtime(true),
-        ), array(
-            "domain_name" => $now_domain["domain_name"],
-            "domain_key_hash" => $now_domain["domain_key_hash"],
-        ));
-    }
 }
 
 
