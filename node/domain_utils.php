@@ -42,12 +42,12 @@ function domain_save($server_host_name, $new_domain)
         ));
         return true;
     } else {
-        $now_domain = selectRowWhere("domains", array(
+        $prev_domain = selectRowWhere("domains", array(
             "domain_name" => $domain_name,
             "domain_key_hash" => $domain_prev_key_hash,
         ));
 
-        if ($now_domain == null) {
+        if ($prev_domain == null) {
             $prev_domain_count = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
 
             if ($prev_domain_count == 0) {
@@ -69,10 +69,12 @@ function domain_save($server_host_name, $new_domain)
 
             return false;
         } else {
-            if ($new_domain["domain_key_hash"] != $now_domain["domain_key_hash"])
-                consensus($server_host_name, $now_domain, $new_domain);
+            $now_domain = selectRowWhere("domains", array("domain_name" => $domain_name, "domain_prev_key" => $new_domain["domain_prev_key"]));
+            if ($now_domain["domain_key_hash"] != $new_domain["domain_key_hash"])
+                if (consensus($server_host_name, $now_domain, $new_domain) == true)
+                    return true;
         }
-        return $now_domain;
+        return $prev_domain;
     }
 }
 
@@ -97,26 +99,29 @@ function consensus($server_host_name, $now_domain, $new_domain)
         . " order by error_group_sum"
         . " limit 1");
 
-    file_put_contents("sef.log", "wef" . json_encode($now_domain));
-    file_put_contents("sef2.log", "wef" . json_encode($new_domain));
     if ($master_branch["error_group_sum"] / $servers_count > 0.5) { // change branch
+        $time = microtime(true);
+
         updateWhere("servers", array("error_key_hash" => $now_domain["domain_key_hash"]),
             array("domain_name" => $domain_name, "error_key_hash" => null));
-        updateWhere("servers", array("error_key_hash" => null),
+        updateWhere("servers", array("error_key_hash" => null, "server_sync_time" => $time),
             array("domain_name" => $domain_name, "error_key_hash" => $master_branch["error_key_hash"]));
         updateWhere("servers", array("error_key_hash" => null),
             array("domain_name" => $domain_name, "server_host_name" => $GLOBALS["host_name"]));
         query("delete from domains where domain_name = '" . uencode($domain_name) . "' "
             . " and  domain_set_time > " . $now_domain["domain_set_time"]);
+
         updateWhere("domains", array(
             "domain_key_hash" => $master_branch["error_key_hash"],
             "archived" => 0,
-            "domain_set_time" => microtime(true),
+            "domain_set_time" => $time,
         ), array(
             "domain_name" => $domain_name,
             "domain_key_hash" => $now_domain["domain_key_hash"],
         ));
+        return true;
     }
+    return false;
 }
 
 
