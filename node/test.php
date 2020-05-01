@@ -11,7 +11,7 @@ function sync_dir($dirname)
 
 function assertEquals($message, $val, $need)
 {
-    if ($val != $need || $val == null)
+    if ($val != $need)
         die("error $message val=$val need=$need");
     echo "good $message\n";
 }
@@ -45,5 +45,13 @@ assertEquals("test6", http_get_json("host2.com/node/scalar.php?sql=" . urlencode
 http_get("host3.com/node/upload.php?domain_name=node&domain_key=2&domain_next_key=4");
 assertEquals("test7", http_get_json("host3.com/node/scalar.php?sql=" . urlencode("select domain_key_hash from domains where domain_name = 'node' and archived = 0")), hash_sha56("4"));
 
-echo http_get("host1.com/node/cron.php");
+http_get("host1.com/node/cron.php");
 assertEquals("test8", http_get_json("host1.com/node/scalar.php?sql=" . urlencode("select domain_key_hash from domains where domain_name = 'node' and archived = 0")), hash_sha56("4"));
+http_get("host2.com/node/cron.php");
+assertEquals("test9", http_get_json("host2.com/node/scalar.php?sql=" . urlencode("select error_key_hash from servers where domain_name = 'node' and server_host_name = 'host1.com'")), null);
+http_get("host3.com/node/cron.php");
+assertEquals("test10", http_get_json("host3.com/node/scalar.php?sql=" . urlencode("select error_key_hash from servers where domain_name = 'node' and server_host_name = 'host1.com'")), null);
+
+http_get("host2.com/node/commit.php?domain_name=node&domain_key=4&domain_next_key=5");
+echo http_get("host2.com/node/cron.php");
+assertEquals("test10", http_get_json("host2.com/node/scalar.php?sql=" . urlencode("select error_key_hash from servers where domain_name = 'node' and server_host_name = 'host1.com'")), null);

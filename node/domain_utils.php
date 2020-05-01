@@ -44,13 +44,12 @@ function domain_save($server_host_name, $new_domain)
     } else {
         $prev_domain = selectRowWhere("domains", array(
             "domain_name" => $domain_name,
-            "domain_key_hash" => $domain_prev_key_hash,
-        ));
+            "domain_key_hash" => $domain_prev_key_hash));
 
         if ($prev_domain == null) {
-            $prev_domain_count = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
+            $domain_records_count = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
 
-            if ($prev_domain_count == 0) {
+            if ($domain_records_count == 0) {
                 insertRow("domains", array(
                     "domain_name" => $domain_name,
                     "domain_name_hash" => domain_hash($domain_name),
@@ -64,17 +63,35 @@ function domain_save($server_host_name, $new_domain)
                     "server_repo_hash" => $new_domain["server_repo_hash"],
                     "domain_set_time" => microtime(true),
                 ));
+                insertRow("servers", array(
+                    "domain_name" => $domain_name,
+                    "server_host_name" => $GLOBALS["host_name"],
+                    "server_repo_hash" => $new_domain["server_repo_hash"],
+                ));
                 return true;
             }
 
-            return false;
+            return false; // passwod error
         } else {
-            $now_domain = selectRowWhere("domains", array("domain_name" => $domain_name, "domain_prev_key" => $new_domain["domain_prev_key"]));
+
+            if ($new_domain["domain_key_hash"] == null and $new_domain["archived"] == 0)
+                return $prev_domain; // download request
+
+            $now_domain = selectRowWhere("domains", array(
+                "domain_name" => $domain_name,
+                "domain_prev_key" => $new_domain["domain_prev_key"]/*,
+                "domain_key_hash is not null"*/));
+
             if ($now_domain["domain_key_hash"] != $new_domain["domain_key_hash"])
                 if (consensus($server_host_name, $now_domain, $new_domain) == true)
-                    return true;
+                    return true; // change branch
+                else
+                    return $prev_domain; // collision
+
+            if ($now_domain["domain_key_hash"] == $new_domain["domain_key_hash"])
+                return true; // duplicate not the first
+
         }
-        return $prev_domain;
     }
 }
 
@@ -132,15 +149,10 @@ function domain_set($server_host_name, $domain_name, $domain_prev_key, $domain_k
         "domain_prev_key" => $domain_prev_key,
         "domain_key_hash" => $domain_key_hash,
         "server_repo_hash" => $server_repo_hash,
-    )], array($domain_name => [array(
-        "domain_name" => $domain_name,
-        "server_host_name" => $server_host_name,
-        "domain_key_hash" => $domain_key_hash,
-        "server_repo_hash" => $server_repo_hash,
-    )]));
+    )]);
 }
 
-function domains_set($server_host_name, $domains, $servers)
+function domains_set($server_host_name, $domains, $servers = null)
 {
     $results = array();
     foreach ($domains as $domain) {
@@ -149,20 +161,33 @@ function domains_set($server_host_name, $domains, $servers)
             $results[$domain["domain_name"]] = domain_save($server_host_name, $domain);
     }
 
-    foreach ($results as $domain_name => $result)
-        foreach ($servers[$domain_name] as $server_new)
-            if (scalarWhere("servers", "count(*)", array("domain_name" => $domain_name, "server_host_name" => $server_new["server_host_name"])) == 0)
-                insertRow("servers", array("domain_name" => $domain_name, "server_host_name" => $server_new["server_host_name"],));
+    foreach ($servers as $domain_name => $servers_by_domain)
+        foreach ($servers_by_domain as $new_server)
+            if ($new_server["server_host_name"] != $GLOBALS["host_name"]) {
+                $now_server = selectRowWhere("servers", array("domain_name" => $domain_name, "server_host_name" => $new_server["server_host_name"]));
+                if ($now_server == null)
+                    insertRow("servers", array("domain_name" => $domain_name, "server_host_name" => $new_server["server_host_name"], "server_repo_hash" => $new_server["server_repo_hash"]));
+                else if ($now_server["server_repo_hash"] == null ||
+                    scalarWhere("domains", "domain_set_time", array("domain_name" => $domain_name, "server_repo_hash" => $now_server["server_repo_hash"]))
+                    < scalarWhere("domains", "domain_set_time", array("domain_name" => $domain_name, "server_repo_hash" => $new_server["server_repo_hash"])))
+                    updateWhere("servers",
+                        array("server_repo_hash" => $new_server["server_repo_hash"]),
+                        array("domain_name" => $domain_name, "server_host_name" => $server_host_name));
+            }
 
     $response_domains = array();
-    foreach ($results as $domain_name => $result)
+    foreach ($results as $domain_name => $result) {
+        if ($result === true) {
+            updateWhere("servers",
+                array("server_sync_time" => microtime(true)),
+                array("domain_name" => $domain_name, "server_host_name" => $server_host_name));
+        }
         if (is_array($result)) {
             $response_domains = array_merge($response_domains,
-                selectWhere("domains", array(
-                    "domain_name" => $result["domain_name"],
-                    "domain_set_time > " . $result["domain_set_time"],
-                )));
+                selectWhere("domains", array("domain_name" => $result["domain_name"], "domain_set_time > " . $result["domain_set_time"],)));
         }
+    }
+
     return $response_domains;
 }
 

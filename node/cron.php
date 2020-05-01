@@ -20,18 +20,21 @@ foreach (selectList("select distinct server_host_name from servers where server_
     }
 
     $request = array(
+        "to_host_name" => $server_host_name,
         "server_host_name" => $host_name,
         "domains" => $domains,
         "servers" => servers(array_column($servers, "domain_name")),
     );
-   echo json_encode_readable($request);
+
+    echo json_encode_readable($request);
     $response = http_post_json($server_host_name . "/node/cron_receive.php", $request);
     echo json_encode_readable($response);
-    echo "\n\n";
-    echo "\n\n";
-    echo "\n\n";
-    $ping_time = microtime(true) - $start_time;
+    echo "\n\n\n\n\n\n";
 
-    domains_set($server_host_name, $response["domains"], $response["servers"]);
+    if ($response != null) {
+        updateWhere("servers", array("error_key_hash" => null), array("server_host_name" => $server_host_name));
+
+        domains_set($server_host_name, $response["domains"], $response["servers"]);
+    }
 }
 
