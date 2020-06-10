@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+<label for="file-input" style="border: 1px solid #ccc; padding: 6px 12px;"> Validate </label>
+<input type="file" id="file-input" style="display: none;"/>
+
+<script>
+
+    document.getElementById('file-input').addEventListener('change', validate, false);
+
+    function get(url, success, error) {
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.onload = function (e) {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    if (success != null)
+                        success();
+                } else {
+                    if (error != null)
+                        error();
+                }
+            }
+        };
+        xhr.onerror = error;
+        xhr.send(null);
+    }
+
+    function validate(e) {
+        let file = e.target.files[0];
+        if (!file)
+            return;
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            let content = e.target.result;
+            let obj = JSON.parse(content);
+
+        };
+        reader.readAsText(file);
+    }
+</script>
+</body>
+</html>
