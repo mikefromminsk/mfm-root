@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="libs/sha256.js"></script>
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+        }
+
+        .button {
+            padding: 12px;
+            cursor: pointer;
+            color: white;
+            background-color: #fe0000;
+            user-select: none;
+            border-radius: 25px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+<table valign="center" align="center" style="height: 100%">
+    <tr>
+        <td>
+            <label class="button" for="validate" style="background-color: darkturquoise"> Validate </label>
+            <input type="file" id="validate" style="display: none;"/>
+        </td>
+        <td>
+            <div class="button" id="generate" style="background-color: cornflowerblue"> Generator</div>
+        </td>
+    </tr>
+</table>
+
+<script>
+
+    document.getElementById('validate').addEventListener('change', readfile, false)
+    document.getElementById('generate').addEventListener('click', generate, false)
+
+    function validate(domains) {
+        post("/node/domains.php", {domains: domains}, function (data) {
+            console.log(data)
+        })
+    }
+
+    function randomStr(length) {
+        let result = '';
+        let characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let charactersLength = characters.length;
+        for (let i = 0; i < length; i++)
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        return result;
+    }
+
+    function generate() {
+        var name = "token" //prompt("type new token name")
+        if (name != null && name !== ""){
+            var domains = []
+            var domain_keys = []
+            for (let i = 0; i < 100; i++) {
+                let domain_name = name + (i + 0x100).toString(16).substring(1).toUpperCase()
+                let domain_key = randomStr(64)
+                let domain_key_hash = sha256(domain_key)
+                domains.push({
+                    domain_name: domain_name,
+                    domain_key_hash: domain_key_hash
+                })
+                domain_keys.push({
+                    domain_name: domain_name,
+                    domain_prev_key: domain_key
+                })
+            }
+            validate(domains)
+            download(JSON.stringify(domain_keys), name + '.json', 'application/json')
+        }
+    }
+
+</script>
+</body>
+</html>
