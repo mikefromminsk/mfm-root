@@ -1,15 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Wallet</title>
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/flex.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vue.js"></script>
 </head>
-<body>
-<input type="text" style="width:100px">
-wevwevwevwe
-<h1>sfwefwe</h1>
+<body style="background-color: #eeeeee" class="col fill">
+<div class="row align-center-center flex">
+    <div class="col inputs" id="login">
+        <div class="row align-center-center">
+            <h2>Please Login</h2>
+        </div>
+        <form v-on:submit.prevent="sendEmailCode">
+            Step 1:
+            <div class="row">
+                <input class="flex" type="text" v-model="email" required placeholder="Email">
+                <input class="flex-40" type="submit" value="Send code">
+            </div>
+        </form>
+        <div>
+            Step 2:
+            <div class="row">
+                <input class="flex" type="text" v-model="code" required placeholder="Code"
+                       :disabled="code == ''">
+                <input class="flex-40" type="submit" value="Login" :disabled="code == ''">
+            </div>
+        </div>
+    </div>
+</div>
 </body>
+
+<script>
+    new Vue({
+        el: "#login",
+        data: {
+            email: "",
+            code: "",
+        },
+        methods: {
+            sendEmailCode() {
+                this.code = 2222
+            }
+
+        }
+    })
+</script>
+
 </html>
