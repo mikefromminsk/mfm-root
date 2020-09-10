@@ -1,4 +1,3 @@
-
 function post(url, params, success, error) {
     const xhr = new XMLHttpRequest()
     xhr.open("POST", url, true)
