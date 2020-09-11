@@ -5,7 +5,10 @@
     <title>Wallet</title>
     <link rel="stylesheet" href="css/flex.css">
     <link rel="stylesheet" href="css/main.css">
-    <script src="js/vue.js"></script>
+    <script src="js/lib/vue.js"></script>
+    <script src="js/lib/store.legacy.min.js"></script>
+    <script src="js/lib/http.js"></script>
+    <script src="js/main.js"></script>
 </head>
 <body style="background-color: #eeeeee" class="col fill">
 <div class="row align-center-center flex">
@@ -14,20 +17,13 @@
             <h2>Please Login</h2>
         </div>
         <form v-on:submit.prevent="sendEmailCode">
-            Step 1:
             <div class="row">
-                <input class="flex" type="text" v-model="email" required placeholder="Email">
-                <input class="flex-40" type="submit" value="Send code">
+                <input class="flex" type="text" v-model="email" required placeholder="Email" :disabled="login_requesting || login_success">
+                <input class="flex-40" type="submit" value="Send code" :disabled="login_requesting || login_success ">
             </div>
+            <h4 v-if="login_success">Please check {{email}}</h4>
+            <h4 v-if="login_error" style="color: red">Request error</h4>
         </form>
-        <div>
-            Step 2:
-            <div class="row">
-                <input class="flex" type="text" v-model="code" required placeholder="Code"
-                       :disabled="code == ''">
-                <input class="flex-40" type="submit" value="Login" :disabled="code == ''">
-            </div>
-        </div>
     </div>
 </div>
 </body>
@@ -36,12 +32,23 @@
     new Vue({
         el: "#login",
         data: {
-            email: "",
-            code: "",
+            email: "x29a100@mail.ru",
+            login_success: false,
+            login_error: false,
+            login_requesting: false,
         },
         methods: {
             sendEmailCode() {
-                this.code = 2222
+                this.login_requesting = true
+                post("login.php", {email: this.email}, (data) => {
+                    this.login_success = true
+                    this.login_error = false
+                    this.login_requesting = false
+                }, () => {
+                    this.login_success = false
+                    this.login_error = true
+                    this.login_requesting = false
+                })
             }
 
         }

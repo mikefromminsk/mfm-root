@@ -20,7 +20,7 @@ if (
 function send($Subject, $Body, $Receivers){
     $mail = new PHPMailer(true);
     $mail->IsSMTP();
-    $mail->SMTPDebug = 1;
+    $mail->SMTPDebug = 0;
     $mail->SMTPAuth = true;
     $mail->SMTPSecure = "ssl";
     $mail->Host = "smtp.gmail.com";

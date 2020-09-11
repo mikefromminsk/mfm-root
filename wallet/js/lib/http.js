@@ -1,11 +1,18 @@
-function post(url, params, success, error) {
+var httpRequestBasePath = ""
+var httpRequestHeaders = {}
+
+function postString(url, params, success, error) {
     const xhr = new XMLHttpRequest()
-    xhr.open("POST", url, true)
+    xhr.open("POST", httpRequestBasePath + url, true)
+    if (httpRequestHeaders != null)
+        for (let key in httpRequestHeaders)
+            if (httpRequestHeaders.hasOwnProperty(key))
+                xhr.setRequestHeader(key, httpRequestHeaders[key]);
     xhr.onload = function (e) {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 if (success != null)
-                    success(JSON.parse(xhr.response));
+                    success(xhr.response);
             } else {
                 if (error != null)
                     error();
@@ -14,6 +21,13 @@ function post(url, params, success, error) {
     };
     xhr.onerror = error
     xhr.send(JSON.stringify(params))
+}
+
+
+function post(url, params, success, error) {
+    postString(url, params, function (data) {
+        success(data !== "" ? JSON.parse(data) : null)
+    }, error)
 }
 
 function download(data, filename, type) {
