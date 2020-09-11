@@ -1,5 +1,5 @@
 
-httpRequestBasePath = "api/";
+httpRequestBasePath = "api/"
 
 const urlParams = new URLSearchParams(window.location.search)
 if (urlParams.get("token") != null)
@@ -8,3 +8,4 @@ if (urlParams.get("token") != null)
 if (store.get("token") != null)
     httpRequestHeaders["token"] = store.get("token")
 
+var app = angular.module('myApp', []);
