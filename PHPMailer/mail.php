@@ -45,6 +45,8 @@ function send($Subject, $Body, $Receivers){
 
     $mail->Subject = $Subject;
     $mail->Body = $Body;
-
-    return $mail->send();
+    $success = $mail->send();
+    if (!$success && $mail->SMTPDebug == 1)
+        echo "check google option at https://myaccount.google.com/lesssecureapps";
+    return $success;
 }
