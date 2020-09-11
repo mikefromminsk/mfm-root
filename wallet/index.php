@@ -6,7 +6,7 @@
     <script src="controllers/login.js"></script>
 </head>
 
-<body style="background-color: #eeeeee" class="col fill" ng-app="myApp" ng-controller="myCtrl">
+<body style="background-color: #eeeeee" class="col fill" ng-app="myApp" ng-controller="login">
 <div class="row align-center-center flex">
     <div class="col inputs" id="login">
         <div class="row align-center-center">

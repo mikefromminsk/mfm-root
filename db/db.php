@@ -458,6 +458,8 @@ function redirect($url, $params = array(), $params_in_url = true)
             foreach ($params as $key => $value)
                 $redirect_script .= '<input type="hidden" name="' . htmlentities($key) . '" value="' . htmlentities(json_encode($value)) . '">';
         $redirect_script .= '</form><script>document.getElementById("redirect").submit();</script></body></html>';
+        header("Content-type: text/html;charset=utf-8");
+        header("Location: $url");
         die($redirect_script);
     }
 }
