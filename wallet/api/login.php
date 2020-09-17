@@ -12,7 +12,7 @@ $success = updateWhere("users", array("user_token" => $new_token), array("user_e
 if (!$success)
     insertRow("users", array("user_email" => $email, "user_token" => $new_token));
 
-$login_url = "$base_url/wallet?token=$new_token";
+$login_url = "$base_url/wallet/buy.php?token=$new_token";
 $message = "<a href='$login_url'>$login_url</a>";
 
 if (send("New Access token", $message, $email) == false)

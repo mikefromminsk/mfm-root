@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <?php include_once "head.html" ?>
+    <?php include_once "head.php" ?>
     <title>Wallet</title>
-    <script src="controllers/login.js"></script>
+    <script src="controllers/login.js?<?=time()?>"></script>
 </head>
-<body style="background-color: #eeeeee" class="col fill" ng-app="myApp" ng-controller="login">
+<body style="background-color: #eeeeee" class="col fill" ng-controller="login">
 <div class="row align-center-center flex">
     <div class="col inputs" id="login">
         <div class="row align-center-center">
             <h2>Please Login</h2>
         </div>
-        <form ng-submit="sendEmailCode($event)">
+        <form ng-submit="sendEmailCode()">
             <div class="row">
                 <input class="flex" type="text" ng-model="email" required placeholder="Email"
                        ng-disabled="login_requesting || login_success">

@@ -9,4 +9,5 @@ var config = {
     }
 }
 
+document.documentElement.setAttribute("ng-app", "myApp")
 var app = angular.module('myApp', []);

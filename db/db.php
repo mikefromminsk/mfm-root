@@ -161,6 +161,8 @@ function get($param_name, $def_value = null)
         $param_value = $_SESSION[$param_name];
     if ($param_value === null && isset($_COOKIE[$param_name]))
         $param_value = $_COOKIE[$param_name];
+    if ($param_value === null && isset(getallheaders()[$param_name]))
+        $param_value = getallheaders()[$param_name];
     if ($param_value === null)
         return $def_value;
     return $param_value;

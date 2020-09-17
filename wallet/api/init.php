@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS `actions` (
   PRIMARY KEY (`action_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-
 query("DROP TABLE IF EXISTS `users`;");
 query("
 CREATE TABLE IF NOT EXISTS `users` (
@@ -24,3 +23,24 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_token` varchar(64) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+
+
+insertRow("users", array(
+    "user_id" => 1,
+    "user_email" => "darkcoin.store2@gmail.com",
+    "user_token" => "123",
+));
+insertRow("users", array(
+    "user_id" => 2,
+    "user_email" => "darkcoin.store2@gmail.com",
+    "user_token" => 321,
+));
+
+insertRow("actions", array(
+    "action_amount" => 123,
+    "action_currency" => "RUB",
+    "action_complete" => "0",
+    "action_datetime" => time(),
+    "user_sender" => 2,
+    "user_receiver" => 1,
+));
