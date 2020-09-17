@@ -11,7 +11,7 @@ if (
     die(json_encode(array("message" => "Create properties.php with email parameters")));
 
 spl_autoload_register(function ($class_name) {
-    include $class_name . ".php";
+    include_once $_SERVER["DOCUMENT_ROOT"] . "/". str_replace("\\", "/", $class_name) . ".php";
 });
 
 use PHPMailer\PHPMailer;
