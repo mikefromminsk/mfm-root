@@ -1,13 +1,6 @@
 <?php
 
-
-spl_autoload_register(function ($class_name) {
-    include $class_name . ".php";
-});
-
-use PHPMailer\PHPMailer;
-use PHPMailer\Exception;
-use PHPMailer\SMTP;
+include_once "properties.php";
 
 if (
     $email_addr == null
@@ -16,6 +9,14 @@ if (
     || $email_name == null
 )
     die(json_encode(array("message" => "Create properties.php with email parameters")));
+
+spl_autoload_register(function ($class_name) {
+    include $class_name . ".php";
+});
+
+use PHPMailer\PHPMailer;
+use PHPMailer\Exception;
+use PHPMailer\SMTP;
 
 function send($Subject, $Body, $Receivers){
     $mail = new PHPMailer(true);
