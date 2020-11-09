@@ -3,13 +3,10 @@ error_reporting(1);
 
 header("Content-type: application/json;charset=utf-8");
 
-include_once "properties.php";
+if ($db_name == null || $db_user == null  || $db_pass == null)
+    include_once "properties.php";
 
-if (
-    $db_name == null
-    || $db_user == null
-    || $db_pass == null
-)
+if ($db_name == null || $db_user == null || $db_pass == null)
     die(json_encode(array("message" => "Create properties.php with database connection parameters")));
 
 $mysql_conn = isset($GLOBALS["conn"]) ? $GLOBALS["conn"] : null;
@@ -218,14 +215,6 @@ function insert($sql, $show_query = null)
     return $success_or_error;
 }
 
-function insertListAndGetId($table_name, $params, $show_query = false)
-{
-    $success = insertRow($table_name, $params, $show_query);
-    if ($success)
-        return get_last_insert_id();
-    return null;
-}
-
 function get_last_insert_id()
 {
     return mysqli_insert_id($GLOBALS["conn"]);
@@ -245,6 +234,14 @@ function insertRow($table_name, $params, $show_query = false)
         $insert_params .= (is_numeric($param_value) ? $param_value : (is_null($param_value) ? "null" : "'" . uencode($param_value) . "'")) . ", ";
     $insert_params = rtrim($insert_params, ", "); // !!! CHAR LSIT
     return insert("insert into $table_name (" . implode(",", array_keys($params)) . ") values ($insert_params)", $show_query);
+}
+
+function insertRowAndGetId($table_name, $params, $show_query = false)
+{
+    $success = insertRow($table_name, $params, $show_query);
+    if ($success)
+        return get_last_insert_id();
+    return null;
 }
 
 function updateWhere($table_name, $set_params, $where, $show_query = false)
