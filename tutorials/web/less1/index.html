@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../../../angular/css/angular-material.min.css">
+
+    <script src="../../../angular/js/angular.min.js"></script>
+    <!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
+    <script src="../../../angular/js/angular-animate.min.js"></script>
+    <!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
+    <script src="../../../angular/js/angular-aria.min.js"></script>
+    <!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
+    <script src="../../../angular/js/angular-material.min.js"></script>
+    <link rel="stylesheet" href="../../../flex/flex.css">
+</head>
+<body class="col" ng-app="AngularApp" ng-controller="MyController">
+
+<div class="row">
+    <md-button ng-click="update()">Update</md-button>
+</div>
+
+<div ng-show="base">{{base}}</div>
+
+<div class="col" style="width: 400px">
+    <div class="row" ng-repeat="(key, rate) in rates">
+        <div class="flex-50">
+            {{key}}
+        </div>
+        <div>
+            {{rate}}
+        </div>
+    </div>
+</div>
+
+<script>
+    angular.module('AngularApp', ['ngMaterial'])
+        .controller("MyController", function ($scope, $http) { // angular 1.8 $http
+
+            $scope.update = function () {
+                $http({
+                    method: 'GET',
+                    url: 'https://api.ratesapi.io/api/latest?base=USD'
+                }).then(function (response) {
+                    console.log(response)
+                    $scope.date = response.data.date
+                    $scope.base = response.data.base
+                    $scope.rates = response.data.rates
+                })
+            }
+
+        })
+</script>
+</body>
+</html>

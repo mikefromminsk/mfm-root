@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../../../angular/css/angular-material.min.css">
+
+    <script src="../../../angular/js/angular.min.js"></script>
+    <!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
+    <script src="../../../angular/js/angular-animate.min.js"></script>
+    <!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
+    <script src="../../../angular/js/angular-aria.min.js"></script>
+    <!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
+    <script src="../../../angular/js/angular-material.min.js"></script>
+    <link rel="stylesheet" href="../../../flex/flex.css">
+</head>
+<body class="col" ng-app="AngularApp" ng-controller="MyController">
+
+<div class="row">
+    <input ng-model="input_number" type="text">
+    <md-button ng-click="update()" ng-disabled="update_processing">Update</md-button>
+</div>
+
+<script>
+    angular.module('AngularApp', ['ngMaterial'])
+        .controller("MyController", function ($scope, $http) { // angular 1.8 $http
+
+            $scope.input_number = 0;
+
+            $scope.update = function () {
+                $scope.update_processing = true
+                $http({
+                    method: 'POST',
+                    url: 'api_test.php',
+                    data: {
+                        number: $scope.input_number
+                    },
+                }).then(function (response) {
+                    alert(response.data.result)
+                    setInterval(function () {
+                        $scope.update_processing = false
+                        $scope.$apply()
+                    }, 1000)
+                }, function () {
+                    $scope.update_processing = false
+                    alert("error")
+                })
+            }
+
+        })
+</script>
+</body>
+</html>

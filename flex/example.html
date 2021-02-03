@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="flex.css">
+    <style>
+        .rect {
+            width: 50px;
+            height: 50px;
+            background-color: #454545;
+            margin: 5px;
+        }
+
+        .yellow {
+            background-color: #d7d722;
+        }
+
+        .green{
+            background-color: yellowgreen;
+        }
+    </style>
+</head>
+<body class="col">
+<div class="row yellow">
+    <div class="rect"></div>
+    <div class="rect"></div>
+    <div class="rect"></div>
+    <div class="rect"></div>
+</div>
+<div class="row align-center green">
+    <div class="rect"></div>
+    <div class="rect"></div>
+</div>
+<div class="row align-end yellow">
+    <div class="rect"></div>
+    <div class="rect"></div>
+</div>
+<div class="row align-start green">
+    <div class="rect"></div>
+    <div class="rect"></div>
+</div>
+<div class="row yellow">
+    <div class="rect flex"></div>
+</div>
+<div class="row ">
+    <div class="green flex row align-center">
+        <div class="rect"></div>
+    </div>
+    <div class="yellow flex row align-center">
+        <div class="rect"></div>
+    </div>
+</div>
+<div class="row ">
+    <div class="yellow flex row align-center-center" style="height: 200px">
+        <div class="rect"></div>
+        <div class="rect"></div>
+    </div>
+    <div class="green flex row align-center-center"  style="height: 200px">
+        <div class="rect"></div>
+        <div class="rect"></div>
+        <div class="rect"></div>
+        <div class="rect"></div>
+        <div class="rect"></div>
+    </div>
+</div>
+
+<div class="row yellow">
+    <div class="rect flex"></div>
+    <div class="rect flex"></div>
+    <div class="rect flex"></div>
+</div>
+
+<div class="row yellow">
+    <div class="rect flex-20"></div>
+    <div class="rect flex"></div>
+    <div class="rect flex"></div>
+</div>
+<div class="row yellow align-center">
+    <div class="rect flex-20"></div>
+    <div class="rect flex-50"></div>
+    <div class="rect flex-10"></div>
+</div>
+</body>
+</html>

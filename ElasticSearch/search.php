@@ -2,16 +2,12 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/properties.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
+include_once "utils.php";
 
 
 $text = get_required("q");
 
 $response = array();
-
-function utf_split($word)
-{
-    return preg_split('//u', $word, null, PREG_SPLIT_NO_EMPTY);
-}
 
 function search($word, $mode)
 {
@@ -37,5 +33,5 @@ $chars_search = search($chars, "chars");
 if ($text_search != null)
     die(json_encode($text_search));
 
-die(json_encode($response));
+die( json_encode($response));
 
