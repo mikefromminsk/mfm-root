@@ -1,12 +1,11 @@
 <?php
 
-include_once "db.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
 //test user pass
 
 query("DROP TABLE IF EXISTS `domains`;");
-query("
-CREATE TABLE IF NOT EXISTS `domains` (
+query("CREATE TABLE IF NOT EXISTS `domains` (
   `domain_name` varchar(64) COLLATE utf8_bin NOT NULL,
   `domain_prev_key` varchar(128) COLLATE utf8_bin DEFAULT NULL,
   `domain_key_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
@@ -16,11 +15,21 @@ CREATE TABLE IF NOT EXISTS `domains` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 query("DROP TABLE IF EXISTS `servers`;");
-query("
-CREATE TABLE IF NOT EXISTS `servers` (
+query("CREATE TABLE IF NOT EXISTS `servers` (
   `domain_name` varchar(64) COLLATE utf8_bin NOT NULL,
   `server_host_name` varchar(256) CHARACTER SET utf8 NOT NULL,
   `error_key_hash` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `server_repo_hash` varchar(64) COLLATE utf8_bin DEFAULT NULL,
   `server_sync_time` double NOT NULL DEFAULT 0
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+
+
+query("DROP TABLE IF EXISTS `data`;");
+query("CREATE TABLE IF NOT EXISTS `data` (
+  `data_id` int(11) NOT NULL AUTO_INCREMENT,
+  `data_parent_id` int(11) DEFAULT NULL,
+  `data_key` varchar(64) COLLATE utf8_bin NOT NULL,
+  `data_type` int(1) NOT NULL,
+  `data_value` varchar(4096) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`data_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");

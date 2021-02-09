@@ -1,6 +1,6 @@
 <?php
 
-include_once "db.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
 define("HASH_ALGO", "sha256");
 
@@ -229,4 +229,155 @@ function domain_put($domain_name, $old_password, $new_password, $filepath)
 function domain_get_list($prefix, $offset = 0, $count = 10)
 {
     return select("select * from domains where archived = 0 and domain_name like '$prefix%' order by domain_set_time limit $offset, $count");
+}
+
+function data_id($key, $create = false)
+{
+    $keys = array_merge([explode('/', dirname($_SERVER['PHP_SELF']))[1]], explode(".", $key));
+    $data_id = null;
+    foreach ($keys as $key) {
+        $start = strpos($key, "[");
+        $end = strpos($key, "]");
+        $data_parent_id = $data_id;
+        if ($start !== false && $end !== false && $start < $end) {
+
+        } else {
+            $data_id = selectRowWhere("data", array(
+                "data_parent_id" => $data_parent_id,
+                "data_key" => $key,
+            ))["data_id"];
+        }
+        if ($data_id == null) {
+            if ($create == true) {
+                $data_id = insertRowAndGetId("data", array(
+                    "data_parent_id" => $data_parent_id,
+                    "data_key" => $key,
+                    "data_type" => DATA_MAP,
+                ));
+            } else {
+                break;
+            }
+        }
+    }
+    return $data_id;
+}
+
+function data_convert_type($type, $string)
+{
+
+}
+
+function data_get_value($data)
+{
+    if (is_numeric($data))
+        $data = selectRowWhere("data", array("data_id" => $data));
+    if ($data["data_type"] == DATA_BOOL) {
+        $result = boolval($data["data_value"]);
+    } else if ($data["data_type"] == DATA_NUMBER) {
+        $result = doubleval($data["data_value"]);
+    } else if ($data["data_type"] == DATA_STRING) {
+        $result = $data["data_value"];
+    } else if ($data["data_type"] == DATA_ARRAY) {
+        $result = [];
+        $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key + 0");
+        foreach ($children as $child)
+            $result[] = data_get_value($child);
+    } else if ($data["data_type"] == DATA_MAP) {
+        $children = selectWhere("data", array("data_parent_id" => $data["data_id"]));
+        foreach ($children as $child)
+            $result[$child["data_key"]] = data_get_value($child);
+    } else {
+        $result = null;
+    }
+    return $result;
+}
+
+function is_assoc(array $arr)
+{
+    if (array() === $arr) return false;
+    return array_keys($arr) !== range(0, count($arr) - 1);
+}
+
+define("DATA_MAP", 0);
+define("DATA_ARRAY", 1);
+define("DATA_STRING", 2);
+define("DATA_NUMBER", 3);
+define("DATA_BOOL", 4);
+define("DATA_NULL", 5);
+
+function data_set_value($data_id, &$result)
+{
+    if (is_numeric($result) && !is_string($result)) {
+        updateWhere("data", array("data_type" => DATA_NUMBER, "data_value" => $result), array("data_id" => $data_id));
+    } else if (is_bool($result)) {
+        updateWhere("data", array("data_type" => DATA_BOOL, "data_value" => $result), array("data_id" => $data_id));
+    } else if (is_null($result)) {
+        updateWhere("data", array("data_type" => DATA_NULL, "data_value" => $result), array("data_id" => $data_id));
+    } else if (is_string($result)) {
+        updateWhere("data", array("data_type" => DATA_STRING, "data_value" => $result), array("data_id" => $data_id));
+    } else if (is_array($result)) {
+        if (is_assoc($result)) {
+            updateWhere("data", array("data_type" => DATA_MAP, "data_value" => null), array("data_id" => $data_id));
+        } else {
+            updateWhere("data", array("data_type" => DATA_ARRAY, "data_value" => null), array("data_id" => $data_id));
+        }
+        foreach ($result as $key => $value) {
+            $child_data_id = insertRowAndGetId("data", array(
+                "data_parent_id" => $data_id,
+                "data_key" => $key,
+                "data_type" => DATA_NULL,
+            ));
+            data_set_value($child_data_id, $value);
+        }
+    }
+}
+
+function data_get($key)
+{
+    $data_id = data_id($key);
+    if ($data_id != null)
+        return data_get_value($data_id);
+    return null;
+}
+
+function data_set($key, $value)
+{
+    $data_id = data_id($key);
+    if ($data_id != null)
+        return updateWhere("data", array("data_value" => $value), array("data_id" => $data_id));
+    return false;
+}
+
+function data_delete_children($data_id)
+{
+    echo 1;
+    $children = selectListWhere("data", "data_id", array(
+        "data_parent_id" => $data_id
+    ), true);
+
+    echo 1;
+    foreach ($children as $child_data_id) {
+        data_delete_children($child_data_id);
+        query("delete from data where data_id = $child_data_id");
+    }
+}
+
+function data_delete($key)
+{
+    $data_id = data_id($key);
+    data_delete_children($data_id);
+    query("delete from data where data_id = $data_id");
+}
+
+function data_put($key, $value)
+{
+    $data_id = data_id($key, true);
+    data_delete_children($data_id);
+    data_set_value($data_id, $value);
+    return $data_id;
+}
+
+function request($server_id, $params, $data)
+{
+
 }
