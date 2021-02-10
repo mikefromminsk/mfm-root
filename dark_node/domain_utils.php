@@ -350,12 +350,11 @@ function data_set($key, $value)
 
 function data_delete_children($data_id)
 {
-    echo 1;
+    // TODO doesnt work
     $children = selectListWhere("data", "data_id", array(
         "data_parent_id" => $data_id
     ), true);
 
-    echo 1;
     foreach ($children as $child_data_id) {
         data_delete_children($child_data_id);
         query("delete from data where data_id = $child_data_id");
@@ -375,9 +374,4 @@ function data_put($key, $value)
     data_delete_children($data_id);
     data_set_value($data_id, $value);
     return $data_id;
-}
-
-function request($server_id, $params, $data)
-{
-
 }
