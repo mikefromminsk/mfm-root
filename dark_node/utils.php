@@ -333,7 +333,7 @@ function data_set_value($data_id, &$result)
     }
 }
 
-function data_get($key)
+function data_get($key, $pass)
 {
     $data_id = data_id($key);
     if ($data_id != null)
@@ -341,7 +341,7 @@ function data_get($key)
     return null;
 }
 
-function data_set($key, $value)
+function data_set($key, $pass, $value)
 {
     $data_id = data_id($key);
     if ($data_id != null)
@@ -369,7 +369,7 @@ function data_delete($key)
     query("delete from data where data_id = $data_id");
 }
 
-function data_put($key, $value)
+function data_put($key, $pass, $value)
 {
     $data_id = data_id($key, true);
     data_delete_children($data_id);
