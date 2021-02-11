@@ -1,6 +1,6 @@
 <?php
 
-include_once "domain_utils.php";
+include_once "utils.php";
 
 $domain_name = get_required("domain_name");
 $domain_key = get_required("domain_key");

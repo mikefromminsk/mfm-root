@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/domain_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
 
 foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'")
          as $server_host_name) {

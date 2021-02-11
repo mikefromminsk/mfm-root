@@ -6,7 +6,7 @@ $scalar = get("scalar");
 if ($scalar != null)
     die(json_encode(scalar($scalar)));
 
-include_once "domain_utils.php";
+include_once "utils.php";
 
 function sync_dir($dirname)
 {

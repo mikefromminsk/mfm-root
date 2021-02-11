@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/domain_utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
 
 $search = get_required("search");
 $offset = get_int("offset", 0);
