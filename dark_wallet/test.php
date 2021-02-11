@@ -8,9 +8,15 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/init.php";
 
 // generate pot coin_generate.php login admin
+http_get("localhost/dark_wallet/coin_generate.php?token=$admin_token&domain_name=POT&domain_postfix_length=2");
+
 // reg user reg.php
+http_get("localhost/dark_wallet/reg.php?login=user&password_token=" . hash("sha256", 123));
+
 // buy pots payment_start.php
+
 // save pots payment_finish.php
+
 
 // pay pot to friends coin_generate.php
 
@@ -20,3 +26,5 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/init.php";
 // reg receiver_user remote  reg.php
 // user validate and download 10 tet local wallet_download.php
 // remote_user upload 10 tet remote wallet_upload.php
+
+
