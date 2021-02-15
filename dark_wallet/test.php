@@ -1,17 +1,17 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
-
 
 // reg admin
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/init.php";
 
 // generate pot coin_generate.php login admin
-http_get("localhost/dark_wallet/coin_generate.php?token=$admin_token&domain_name=POT&domain_postfix_length=2");
+$res = http_get("localhost/dark_wallet/coin_generate.php?domain_name=POT&domain_postfix_length=0");
+
+echo $res;
 
 // reg user reg.php
-http_get("localhost/dark_wallet/reg.php?login=user&password_token=" . hash("sha256", 123));
+//http_get("localhost/dark_wallet/reg.php?login=user&password_token=" . hash("sha256", 123));
 
 // buy pots payment_start.php
 
