@@ -6,9 +6,15 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/init.php";
 
 // generate pot coin_generate.php login admin
-$res = http_get("localhost/dark_wallet/coin_generate.php?domain_name=POT&domain_postfix_length=0");
+$response = http_get("localhost/dark_wallet/coin_generate.php?domain_name=POT&domain_postfix_length=0");
 
-echo $res;
+$response = http_post("localhost/dark_wallet/coin_generate.php", array(
+    "domain_name" => "TET",
+    "domain_postfix_length" => "0",
+    "payment_keys" => $response["keys"],
+));
+
+echo ($response);
 
 // reg user reg.php
 //http_get("localhost/dark_wallet/reg.php?login=user&password_token=" . hash("sha256", 123));

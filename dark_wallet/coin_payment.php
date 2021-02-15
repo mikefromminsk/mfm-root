@@ -27,7 +27,7 @@ if ($domain_name != "POT") {
     }
     $payment_domains = domains_set($host_name, $payment_domains);
 
-    $payment_expire_time = time() + 1000 * 60 * 60 * 24 * 30;
+    $payment_expire_time = time() + 60 * 60 * 24 * 30;
 
     insertRow("payments", array(
         "payment_host" => "UNKNOWN",
