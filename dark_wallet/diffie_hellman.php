@@ -19,10 +19,10 @@ $mod = 17;
 $r1 = 4;
 $r2 = 3;
 
+$p1 = pow($base, $r1) % $mod;
+$p2 = pow($base, $r2) % $mod;
 
-$s1 = pow($base, $r1) % $mod;
-$s2 = pow($base, $r2) % $mod;
-$w1 = pow($s2, $r1) % $mod;
-$w2 = pow($s1, $r2) % $mod;
+$s1 = pow($p2, $r1) % $mod;
+$s2 = pow($p1, $r2) % $mod;
 
-echo json_encode($w1 . " " . $w2);
+echo json_encode($s1 . " " . $s2);

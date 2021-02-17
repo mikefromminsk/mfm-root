@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
 
 $domain_name = get("domain_name");
 $server_host_name = get("server_host_name");

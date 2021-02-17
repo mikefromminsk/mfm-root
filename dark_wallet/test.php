@@ -1,12 +1,15 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
 
 // reg admin
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_node/init.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/init.php";
 
 // generate pot coin_generate.php login admin
-$response = http_get("localhost/dark_wallet/coin_generate.php?domain_name=POT&domain_postfix_length=0");
+/*$response = http_post("localhost/dark_wallet/coin_generate.php", array(
+    "domain_name" => "POT",
+    "domain_postfix_length" => "0",
+));
 
 $response = http_post("localhost/dark_wallet/coin_generate.php", array(
     "domain_name" => "TET",
@@ -14,10 +17,25 @@ $response = http_post("localhost/dark_wallet/coin_generate.php", array(
     "payment_keys" => $response["keys"],
 ));
 
-echo ($response);
 
-// reg user reg.php
-//http_get("localhost/dark_wallet/reg.php?login=user&password_token=" . hash("sha256", 123));
+$response = http_post("localhost/dark_wallet/reg.php", array(
+    "login" => "user",
+    "password_token" => hash_sha56( 123),
+));*/
+
+/*$public1 = dh_public(3, 17, 22);
+echo json_encode($public1);
+
+$public2 = dh_public(3, 17, 2);
+echo json_encode($public2);
+
+
+$all_secret1 = dh_secret(17, 2, $public1);
+echo json_encode($all_secret1);
+
+$all_secret2 = dh_secret(17, 22, $public2);
+echo json_encode($all_secret2);*/
+
 
 // buy pots payment_start.php
 
