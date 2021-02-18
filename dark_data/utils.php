@@ -64,8 +64,9 @@ function data_id($key, $create = false)
 }
 
 
-function data_get_value($data)
+function data_get_value($data, $level)
 {
+    // TODO  level
     if (is_numeric($data))
         $data = selectRowWhere("data", array("data_id" => $data));
     if ($data["data_type"] == DATA_BOOL) {
@@ -75,14 +76,19 @@ function data_get_value($data)
     } else if ($data["data_type"] == DATA_STRING) {
         $result = $data["data_value"];
     } else if ($data["data_type"] == DATA_ARRAY) {
-        $result = [];
-        $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key + 0");
-        foreach ($children as $child)
-            $result[] = data_get_value($child);
+        $result = array();
+        if ($level != 0) {
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key + 0");
+            foreach ($children as $child)
+                $result[] = data_get_value($child, $level - 1);
+        }
     } else if ($data["data_type"] == DATA_MAP) {
-        $children = selectWhere("data", array("data_parent_id" => $data["data_id"]));
-        foreach ($children as $child)
-            $result[$child["data_key"]] = data_get_value($child);
+        $result = array();
+        if ($level != 0) {
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key + 0");
+            foreach ($children as $child)
+                $result[$child["data_key"]] = data_get_value($child, $level - 1);
+        }
     } else {
         $result = null;
     }
@@ -128,16 +134,15 @@ function data_set_value($data_id, &$result)
             $success = data_set_value($child_data_id, $value);
             if (!$success) break;
         }
-        return $success;
+        return $success ? $data_id : false;
     }
 }
 
-function data_get($key)
+function data_get($key, $level = 0)
 {
     $data_id = data_id($key);
-    if ($data_id != null) {
-        return data_get_value($data_id);
-    }
+    if ($data_id != null)
+        return data_get_value($data_id, $level);
     return null;
 }
 

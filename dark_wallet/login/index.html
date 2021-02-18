@@ -24,17 +24,30 @@
         <label>Login</label>
         <input type="text" ng-model="login">
     </md-input-container>
+    <md-input-container>
+        <label>Password</label>
+        <input type="text" ng-model="pass">
+    </md-input-container>
 
     <md-button class="md-raised" ng-click="click()">Show</md-button>
 
 </div>
 
 <script>
+
     angular.module("app", ['ngMaterial']).controller("controller", function ($scope) {
-        $scope.login = ""
+        $scope.login = "user"
+        $scope.pass = "123"
         $scope.click = function () {
-            alert($scope.login)
+            /*hash256($scope.pass, function (hash) {
+                darkdb("users").set($scope.login, {
+                    login: $scope.login,
+                    password_hash: hash
+                })
+            })*/
+            console.log(darkdb("users").login)
         }
+        $scope.click()
     })
 </script>
 

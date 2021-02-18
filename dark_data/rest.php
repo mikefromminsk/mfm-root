@@ -1,22 +1,22 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
-
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_data/utils.php";
 
 $method = $_SERVER['REQUEST_METHOD'];
 
 $path = get_required("path");
+$data = get("data");
+$level = get("level", 0);
 
-if ($_SERVER["REQUEST_METHOD"] == "GET"){
-    $response["data"] = data_get($path);
-
-} else if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $data = get("data");
+if ($data == null) {
+    $response["data"] = data_get($path, $level);
+} else {
     $response["success"] = data_put($path, $data);
+    $response["data"] = data_get($path, $level);
 }
 
 description("get data from inner db");
 
-echo json_encode($response);
+echo json_encode($response, JSON_FORCE_OBJECT);
 
 
