@@ -39,15 +39,14 @@
         $scope.login = "user"
         $scope.pass = "123"
         $scope.click = function () {
-            /*hash256($scope.pass, function (hash) {
+            hash256($scope.pass, function (hash) {
                 darkdb("users").set($scope.login, {
                     login: $scope.login,
                     password_hash: hash
                 })
-            })*/
-            console.log(darkdb("users").login)
+                console.log(darkdb("users")[$scope.login])
+            })
         }
-        $scope.click()
     })
 </script>
 
