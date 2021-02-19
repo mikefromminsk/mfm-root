@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <script src="/angular/js/angular.min.js"></script>
+    <script src="/angular/js/angular-animate.min.js"></script>
+    <script src="/angular/js/angular-aria.min.js"></script>
+    <script src="/angular/js/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/css/angular-material.min.css">
+    <link rel="stylesheet" href="/flex/flex.css">
+    <script src="/dark_data/utils.js"></script>
+
+
+    <style>
+        .tariff-block {
+            width: 250px;
+            background-color: #e2a544;
+            margin: 10px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="row align-center-center" ng-app="app" ng-controller="controller">
+
+<div class="col">
+    <div class="row align-center">
+        <md-input-container>
+            <label>Имя вашей криптовалюты</label>
+            <input type="text" ng-model="domain_name">
+        </md-input-container>
+    </div>
+    <div class="row">
+        <div class="col tariff-block">
+            <span>Tariff START</span>
+            <span>100 coins</span>
+            <span>3 servers</span>
+            <span>2 POT</span>
+            <md-button class="md-primary md-raised" ng-click="buy('100')">Buy</md-button>
+        </div>
+        <div class="col tariff-block">
+            <span>Tariff STANDART</span>
+            <span>10 000 coins</span>
+            <span>3 servers</span>
+            <span>20 POT</span>
+            <md-button class="md-primary md-raised" ng-click="buy('10000')">Buy</md-button>
+        </div>
+        <div class="col tariff-block">
+            <span>Tariff PRO</span>
+            <span>1 000 000 coins</span>
+            <span>3 servers</span>
+            <span>2000 POT</span>
+            <md-button class="md-primary md-raised" ng-click="buy('10000000')">Buy</md-button>
+        </div>
+    </div>
+</div>
+
+<script>
+    angular.module("app", ['ngMaterial']).controller("controller", function ($scope, $http) {
+        $scope.tariffs = [];
+        $scope.domain_name = "TET"
+        $http({
+            url: "tariffs.php"
+        }).then(function (response) {
+            $scope.tariffs = response.data.tariffs
+        })
+
+        $scope.buy = function (tariff) {
+
+            var url = new URL("/dark_wallet/payment/success")
+            url.set("payment_host", "yandex")
+            url.set("payment_currency", "usd")
+            url.set("payment_amount", "2")
+            url.set("domain_name", $scope.domain_name)
+            url.set("domain_postfix_length", "2")
+
+
+            location.href = "/dark_wallet/reg?redirect=" + encodeURIComponent("/dark_wallet/payment/success?tariff=" + tariff)
+        }
+    })
+</script>
+
+</body>
+</html>

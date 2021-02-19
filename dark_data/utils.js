@@ -1,5 +1,5 @@
 function hash256(message, success) {
-    return crypto.subtle.digest('SHA-256', new TextEncoder().encode(message)).then(function (bytearray) {
+    crypto.subtle.digest('SHA-256', new TextEncoder().encode(message)).then(function (bytearray) {
         const hashArray = Array.from(new Uint8Array(bytearray))
         const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
         success(hashHex)
@@ -7,7 +7,11 @@ function hash256(message, success) {
 }
 
 
-function darkdb(path, pass) {
+function db(path, pass, success) {
+
+    hash256(pass, function (hash) {
+        success(get_prop({}, path, hash))
+    })
 
     function http(params, success, error) {
         var xhr = new XMLHttpRequest();
@@ -28,7 +32,7 @@ function darkdb(path, pass) {
     }
 
 
-    function updateProps(root, props) {
+    function updateProps(root, props, hash) {
         for (let key in props)
             if (props.hasOwnProperty(key)) {
                 let value = props[key]
@@ -41,7 +45,7 @@ function darkdb(path, pass) {
                         get: function () {
                             let obj = {}
                             this[key] = obj
-                            return get_prop(obj, root._path + "." + key)
+                            return get_prop(obj, root._path + "." + key, hash)
                         }
                     })
                 }
@@ -49,23 +53,21 @@ function darkdb(path, pass) {
     }
 
 
-    function get_prop(root, path) {
+    function get_prop(root, path, hash) {
         root._path = path
 
         http({path: root._path, level: 1}, function (data) {
-            updateProps(root, data.data)
+            return updateProps(root, data.data, hash)
         })
         root.set = function (property, value) {
-            http({path: root._path + "." + property, level: 1, data: value}, function (data) {
-                updateProps(root, data.data)
+            let set_obj = null
+            http({path: root._path + "." + property, hash: hash, level: 1, data: value}, function (data) {
+                set_obj =  updateProps(root, data.data, hash)
             })
+            return set_obj
         }
         return root
     }
-
-    var root = {}
-    get_prop(root, path)
-    return root
 }
 
 

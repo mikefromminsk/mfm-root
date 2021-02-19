@@ -5,6 +5,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_data/utils.php";
 $method = $_SERVER['REQUEST_METHOD'];
 
 $path = get_required("path");
+$hash = get("hash");
 $data = get("data");
 $level = get("level", 0);
 

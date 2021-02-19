@@ -30,7 +30,7 @@ $success = updateWhere("actions", array(
     "action_amount" => $amount,
 ));
 
-if (!$success){
+if (!$success) {
     $admin_email = scalar("select user_email from users left join users where user_id = 1");
     send("Transaction failed", json_encode($_POST), $admin_email);
     error("action not found");

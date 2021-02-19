@@ -2,7 +2,7 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
 
-$payment_host = get_required("payment_host");
+$payment_host = get_required("payment_host"); // TODO change to payment_hub
 $payment_currency = get_required("payment_currency");
 $payment_amount = get_required("payment_amount");
 $domain_name = get_required("domain_name");
@@ -20,6 +20,4 @@ $payment_id = insertRowAndGetId("payments", array(
 
 data_add("users.$login.private.payments", $token, $payment_id);
 
-if ($payment_host == "yandex.ru" && $payment_currency == "RUB") {
-    include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/yandex_start.php";
-}
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/payment/$payment_host/start";

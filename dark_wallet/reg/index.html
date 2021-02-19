@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <script src="/angular/js/angular.min.js"></script>
-    <!--angular-animate for ngClass, ngHide, ngIf, ngInclude, ngMessage, ngMessages, ngModel, ngRepeat, ngShow, ngSwitch, ngView-->
     <script src="/angular/js/angular-animate.min.js"></script>
-    <!--angular-aria for ngModel, ngDisabled, ngRequired, ngChecked, ngReadonly, ngValue, ngShow, ngHide, ngDblclick, ngClick-->
     <script src="/angular/js/angular-aria.min.js"></script>
-    <!--angular-material for using material design. Docs: https://material.angularjs.org/ -->
     <script src="/angular/js/angular-material.min.js"></script>
     <link rel="stylesheet" href="/angular/css/angular-material.min.css">
-
     <link rel="stylesheet" href="/flex/flex.css">
-
     <script src="/dark_data/utils.js"></script>
 
 </head>
-<body ng-app="app" ng-controller="controller">
+<body class="row align-center-center" ng-app="app" ng-controller="controller">
 
 
-<div class="col" style="width: 300px">
+<div class="col" style="width: 300px; padding: 20px 10px 10px 10px; background-color: #ffdd5c">
     <md-input-container>
         <label>Login</label>
         <input type="text" ng-model="login">
@@ -28,9 +23,7 @@
         <label>Password</label>
         <input type="text" ng-model="pass">
     </md-input-container>
-
-    <md-button class="md-raised" ng-click="click()">Show</md-button>
-
+    <md-button class="md-raised" ng-click="click()">Reg</md-button>
 </div>
 
 <script>
@@ -38,13 +31,18 @@
     angular.module("app", ['ngMaterial']).controller("controller", function ($scope) {
         $scope.login = "user"
         $scope.pass = "123"
+
+        const params = new URLSearchParams(window.location.search)
+
         $scope.click = function () {
-            hash256($scope.pass, function (hash) {
-                darkdb("users").set($scope.login, {
-                    login: $scope.login,
-                    password_hash: hash
+            db("users", $scope.pass, function (users){
+                var reg = users.set($scope.login, {
+                    login: $scope.login
                 })
-                console.log(darkdb("users")[$scope.login])
+                /*if (reg != null)*/ {
+                    localStorage.setItem("pass", $scope.pass)
+                    location.href = params.get("redirect")
+                }
             })
         }
     })

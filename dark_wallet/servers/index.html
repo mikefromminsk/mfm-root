@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <script src="/angular/js/angular.min.js"></script>
+    <script src="/angular/js/angular-animate.min.js"></script>
+    <script src="/angular/js/angular-aria.min.js"></script>
+    <script src="/angular/js/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/css/angular-material.min.css">
+    <link rel="stylesheet" href="/flex/flex.css">
+    <script src="/dark_data/utils.js"></script>
+
+
+    <style>
+        .server-block {
+            height: 40px;
+            background-color: #e2a544;
+            border-bottom: 1px black solid;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body class="row align-center-center" ng-app="app" ng-controller="controller">
+
+<div class="col" style="width: 960px">
+    <div class="row">
+        {{payment.domain_name}}
+        {{progress + "%"}}
+    </div>
+    <div class="row server-block" ng-repeat="(host_name,tariffs) in servers">
+        {{server}}
+    </div>
+</div>
+
+<script>
+    angular.module("app", ['ngMaterial']).controller("controller", function ($scope, $http) {
+        var params = new URLSearchParams(location.search)
+        var payment_id = params.get("payment_id")
+        $scope.payment = null
+
+        $scope.progress = 0
+        $http({
+            url: "payment.php?payment_id=" + payment_id
+        }).then(function (response) {
+            $scope.payment = response.data.payment
+        })
+
+        $scope.servers = null;
+        $scope.domain_name = "TET"
+        $http({
+            url: "servers.php"
+        }).then(function (response) {
+            $scope.servers = response.data.servers
+            $scope.servers.forEach(function (host_name) {
+                $http({
+                    url: "https://" + host_name + "/dark_wallet/tariffs/tariffs.php"
+                }).then(function (response) {
+                    $scope.servers[host_name] = response.data.tariffs;
+                    start_payment(host_name)
+                })
+            })
+        })
+
+        function start_payment(host_name) {
+
+        }
+
+        $scope.buy = function (tariff) {
+
+            var url = new URL("/dark_wallet/payment/success")
+            url.set("payment_host", "yandex")
+            url.set("payment_currency", "usd")
+            url.set("payment_amount", "2")
+            url.set("domain_name", $scope.domain_name)
+            url.set("domain_postfix_length", "2")
+
+
+            location.href = "/dark_wallet/reg?redirect=" + encodeURIComponent("/dark_wallet/payment/success?tariff=" + tariff)
+        }
+    })
+</script>
+
+</body>
+</html>
