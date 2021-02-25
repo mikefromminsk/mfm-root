@@ -6,12 +6,31 @@ $scalar = get("scalar");
 if ($scalar != null)
     die(json_encode(scalar($scalar)));
 
-function sync_dir($dirname)
+function sync_dir($from, $to)
 {
-    foreach (scandir(".") as $filename)
-        if ($filename != "." && $filename != ".." && strpos($filename, ".php") !== false && $filename !== "properties.php")
-            file_put_contents("../../$dirname/dark_node/$filename", file_get_contents($filename));
+    foreach (scandir($from) as $filename) {
+        if ($filename != "." && $filename != ".."){
+
+            $from_filename = $from . "/" . $filename;
+            $to_filename = $to . "/" . $filename;
+            if (is_dir($from_filename)) {
+                if ($filename != ".git" && $filename != ".idea") {
+                    mkdir($to_filename);
+                    sync_dir($from_filename, $to_filename);
+                }
+            } else {
+                if (strpos($filename, ".php") !== false && strpos($to_filename, "db/properties.php") === false) {
+                    file_put_contents($to_filename, file_get_contents($from_filename));
+                }
+            }
+        }
+    }
 }
+
+sync_dir("..", "../../host1.com");
+sync_dir("..", "../../host2.com");
+sync_dir("..", "../../host3.com");
+
 
 function assertEquals($message, $val, $need)
 {
@@ -20,10 +39,7 @@ function assertEquals($message, $val, $need)
     echo "good $message\n";
 }
 
-sync_dir("host1.com");
-sync_dir("host2.com");
-sync_dir("host3.com");
-
+/*
 http_get("host1.com/dark_node/init.php");
 http_get("host1.com/dark_node/commit.php?domain_name=node&domain_next_key=1");
 http_get("host1.com/dark_node/commit.php?domain_name=node&domain_key=1&domain_next_key=2");
@@ -58,4 +74,4 @@ assertEquals("test10", http_get_json("host3.com/dark_node/test.php?scalar=" . ur
 
 http_get("host2.com/dark_node/commit.php?domain_name=node&domain_key=4&domain_next_key=5");
 echo http_get("host2.com/dark_node/cron.php");
-assertEquals("test10", http_get_json("host2.com/dark_node/test.php?scalar=" . urlencode("select error_key_hash from servers where domain_name = 'node' and server_host_name = 'host1.com'")), null);
+assertEquals("test10", http_get_json("host2.com/dark_node/test.php?scalar=" . urlencode("select error_key_hash from servers where domain_name = 'node' and server_host_name = 'host1.com'")), null);*/

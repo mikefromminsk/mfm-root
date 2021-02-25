@@ -1,7 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/properties.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/login.php";
 
 $domain_name = get_required("domain_name");
 $domain_postfix_length = get_int_required("domain_postfix_length");
