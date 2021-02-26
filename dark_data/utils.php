@@ -2,10 +2,13 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
-function data_id($key, $password, $create = false)
+function data_id($keys, $password, $create = false)
 {
+    if (is_string($keys))
+        $keys = explode(".", $keys);
     $app_name = explode('/', dirname($_SERVER['PHP_SELF']))[1];
-    $keys = array_merge([$app_name], explode(".", $key));
+    $keys = array_merge([$app_name], $keys);
+
     $data_id = null;
     foreach ($keys as $index => $key) {
         $start = strpos($key, "[");
@@ -18,6 +21,7 @@ function data_id($key, $password, $create = false)
                 "data_parent_id" => $data_parent_id,
                 "data_key" => $key,
             ));
+            echo json_encode($data);
             if ($data["data_password"] != null && $data["data_password"] != $password)
                 return null;
             $data_id = $data["data_id"];
@@ -27,7 +31,7 @@ function data_id($key, $password, $create = false)
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
-                    "data_password" => $index == sizeof($keys) ? $password : null,
+                    "data_password" => $index == sizeof($keys) - 1 ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
@@ -134,9 +138,9 @@ function data_delete_children($data_id)
     }
 }
 
-function data_put($key, $password, $value)
+function data_put($keys, $password, $value)
 {
-    $data_id = data_id($key, $password, true);
+    $data_id = data_id($keys, $password, true);
     data_delete_children($data_id);
     return data_set_value($data_id, $value);
 }
