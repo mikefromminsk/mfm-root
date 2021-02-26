@@ -2,13 +2,6 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/test.php";
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
-
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/properties.php";
-
-//reg admin
-
-// generate pot coin_generate.php login admin
 
 $admin_token = http_post("localhost/dark_wallet/reg.php", array(
     "login" => "admin",
@@ -41,18 +34,9 @@ $user1_token = http_post("localhost/dark_wallet/reg.php", array(
     "password" => "123",
 ))["token"];
 
-/*
-// buy pots payment_start.php
-$response = http_post("localhost/dark_wallet/payment/create.php", array(
-    "payment_id" => 123,
-    "token" => hash_sha56( 123),
-));
 
-
-// save pots payment_finish.php
-$response = http_post("localhost/dark_wallet/payment/success.php", array(
-    "payment_id" => 123,
-));*/
+// buy pots payment_start.php;
+// save pots payment_finish.php;
 
 $response = http_post("localhost/dark_wallet/send.php", array(
     "token" => $admin_token,

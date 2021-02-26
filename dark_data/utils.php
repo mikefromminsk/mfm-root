@@ -2,57 +2,32 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
-function cezar_encode($text, $shift)
+function data_id($key, $password, $create = false)
 {
-    $codeText = "";
-    $text = base64_encode($text);
-    for ($i = 0; $i < strlen($text); $i++)
-        $codeText .= chr(ord($text[$i]) + $shift % 255);
-    $codeText = base64_encode($codeText);
-    return $codeText;
-}
-
-function cezar_decode($codeText, $shift)
-{
-    $text = "";
-    $codeText = base64_decode($codeText);
-    for ($i = 0; $i < strlen($codeText); $i++)
-        $text .= chr(ord($codeText[$i]) - $shift % 255);
-    $text = base64_decode($text);
-    return $text;
-}
-
-function dh_public($base, $mod, $my_secret)
-{
-    return bcmod(bcpow($base, $my_secret), $mod);
-}
-
-function dh_secret($mod, $my_secret, $fiend_public)
-{
-    return bcmod(bcpow($fiend_public, $my_secret), $mod);
-}
-
-function data_id($key, $create = false)
-{
-    $keys = array_merge([explode('/', dirname($_SERVER['PHP_SELF']))[1]], explode(".", $key));
+    $app_name = explode('/', dirname($_SERVER['PHP_SELF']))[1];
+    $keys = array_merge([$app_name], explode(".", $key));
     $data_id = null;
-    foreach ($keys as $key) {
+    foreach ($keys as $index => $key) {
         $start = strpos($key, "[");
         $end = strpos($key, "]");
         $data_parent_id = $data_id;
         if ($start !== false && $end !== false && $start < $end) {
 
         } else {
-            $data_id = selectRowWhere("data", array(
+            $data = selectRowWhere("data", array(
                 "data_parent_id" => $data_parent_id,
                 "data_key" => $key,
-            ))["data_id"];
+            ));
+            if ($data["data_password"] != null && $data["data_password"] != $password)
+                return null;
+            $data_id = $data["data_id"];
         }
         if ($data_id == null) {
             if ($create == true) {
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
+                    "data_password" => $index == sizeof($keys) ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
@@ -120,9 +95,9 @@ function data_set_value($data_id, &$result)
         return updateWhere("data", array("data_type" => DATA_STRING, "data_value" => $result), array("data_id" => $data_id));
     } else if (is_array($result)) {
         if (is_assoc($result)) {
-             updateWhere("data", array("data_type" => DATA_MAP, "data_value" => null), array("data_id" => $data_id));
+            updateWhere("data", array("data_type" => DATA_MAP, "data_value" => null), array("data_id" => $data_id));
         } else {
-             updateWhere("data", array("data_type" => DATA_ARRAY, "data_value" => null), array("data_id" => $data_id));
+            updateWhere("data", array("data_type" => DATA_ARRAY, "data_value" => null), array("data_id" => $data_id));
         }
         $success = true;
         foreach ($result as $key => $value) {
@@ -138,9 +113,9 @@ function data_set_value($data_id, &$result)
     }
 }
 
-function data_get($key, $level = 0)
+function data_get($key, $password, $level = 0)
 {
-    $data_id = data_id($key);
+    $data_id = data_id($key, $password);
     if ($data_id != null)
         return data_get_value($data_id, $level);
     return null;
@@ -159,9 +134,9 @@ function data_delete_children($data_id)
     }
 }
 
-function data_put($key, $value)
+function data_put($key, $password, $value)
 {
-    $data_id = data_id($key, true);
+    $data_id = data_id($key, $password, true);
     data_delete_children($data_id);
     return data_set_value($data_id, $value);
 }
