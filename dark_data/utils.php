@@ -42,7 +42,7 @@ function data_id($keys, $password, $create = false)
 }
 
 
-function data_get_value($data, $level)
+function data_get_value($data, $level = 0)
 {
     // TODO  level
     if (is_numeric($data))
@@ -142,5 +142,14 @@ function data_put($keys, $password, $value)
     $data_id = data_id($keys, $password, true);
     data_delete_children($data_id);
     return data_set_value($data_id, $value);
+}
+
+function dataSelect($table, $index, $password) {
+    $data_id = data_id([$table, $index], $password);
+    return data_get_value($data_id);
+}
+
+function dataPut($table, $index, $password, $value) {
+    return data_put([$table, $index], $password, $value);
 }
 

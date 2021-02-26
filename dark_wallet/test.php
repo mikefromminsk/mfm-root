@@ -2,17 +2,22 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/test.php";
 
-
 $admin_token = http_post("localhost/dark_wallet/reg.php", array(
     "login" => "admin",
     "password" => "123",
 ))["token"];
 
-$keys = http_post("localhost/dark_wallet/coin_generate.php", array(
+assertNotEquals("admin_token", $admin_token, null);
+
+$keys = http_post_json("localhost/dark_wallet/coin_generate.php", array(
     "token" => $admin_token,
     "domain_name" => "POT",
     "domain_postfix_length" => "2",
 ))["keys"];
+
+assertEquals("pot coin_generate", sizeof($keys), 100);
+
+/*
 $keys = http_post("localhost/dark_wallet/income.php", array(
     "token" => $admin_token,
     "keys" => $keys,
@@ -102,6 +107,6 @@ $coins = http_post("localhost/dark_wallet/income.php", array(
     "token" => $user1_token,
     "keys" => $coins["income"]["user1"]["transaction123"]["keys"],
 ));
-
+*/
 
 

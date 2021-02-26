@@ -1,7 +1,8 @@
 <?php
 
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/init.php";
-
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_net/utils.php";
 
 
 function sync_dir($from, $to)
@@ -25,9 +26,9 @@ function sync_dir($from, $to)
     }
 }
 
-sync_dir("..", "../../host1.com");
+/*sync_dir("..", "../../host1.com");
 sync_dir("..", "../../host2.com");
-sync_dir("..", "../../host3.com");
+sync_dir("..", "../../host3.com");*/
 
 
 /*

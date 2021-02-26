@@ -10,9 +10,8 @@ description("user registration");
 
 $token = random_id();
 
-data_put("users.$login", $password);
-
-data_put("users.$login.token", $password, $token);
+dataPut("users", $login, $password, $token);
+dataPut("tokens", $token, $admin_password, $login);
 
 $response["token"] = $token;
 

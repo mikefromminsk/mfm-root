@@ -1,8 +1,6 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_net/preference.php";
-
 
 
 function http_json_put($url, $fields)
