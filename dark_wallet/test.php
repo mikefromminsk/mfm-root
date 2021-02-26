@@ -21,12 +21,12 @@ $keys = http_post("localhost/dark_wallet/coin_generate.php", array(
     "domain_postfix_length" => "2",
 ))["keys"];
 $keys = http_post("localhost/dark_wallet/wallet/income.php", array(
-    "keys" => $keys,
     "token" => $admin_token,
+    "keys" => $keys,
 ));
 
-foreach ($friends as $friend){
-    http_post("localhost/dark_wallet/payment/pot/success.php", array(
+foreach ($friends as $friend) {
+    http_post("localhost/dark_wallet/hosting.php", array(
         "domain_name" => "POT",
         "domain_postfix_length" => "2",
     ));
@@ -56,25 +56,29 @@ $response = http_post("localhost/dark_wallet/payment/success.php", array(
 
 $response = http_post("localhost/dark_wallet/wallet/send.php", array(
     "token" => $admin_token,
-    "receiver_login" => "user1",
+    "receiver" => "user1",
     "domain_name" => "POT",
     "count" => 10,
 ));
-$user1_pot_keys = http_post("localhost/dark_wallet/wallet/get.php", array(
+$coins = http_post("localhost/dark_wallet/wallet/coins.php", array(
     "token" => $user1_token,
-    "sender_login" => "admin",
-    "domain_name" => "POT",
+));
+$user1_pot_keys = $coins["income"]["admin"]["order123"]["keys"];
+$coins = http_post("localhost/dark_wallet/wallet/income.php", array(
+    "token" => $user1_token,
+    "keys" => $user1_pot_keys,
 ));
 
 
-$response = http_post("localhost/dark_wallet/coin_generate.php", array(
+
+
+$keys = http_post("localhost/dark_wallet/coin_generate.php", array(
     "domain_name" => "TET",
     "domain_postfix_length" => "2",
     "keys" => array_slice($user1_pot_keys, 0, 2),
-));
-$keys = http_post("localhost/dark_wallet/wallet/income.php", array(
+))["keys"];
+http_post("localhost/dark_wallet/wallet/income.php", array(
     "token" => $user1_token,
-    "sender" => "admin",
     "keys" => $keys,
 ));
 
@@ -84,13 +88,13 @@ $payment_keys = [
     array_slice($user1_pot_keys, 4, 2),
     array_slice($user1_pot_keys, 6, 2),
 ];
-for($i = 0; $i < 3; $i++){
+for($i = 0; $i < 3; $i++) {
     $friend = $friends[$i];
     $payment = $payment_keys[$i];
-    $response = http_post("$friend/dark_wallet/payment/pot/success.php", array(
+    $response = http_post("$friend/dark_wallet/payment/hosting.php", array(
         "domain_name" => "TET",
         "domain_postfix_length" => "2",
-        "payment_keys" => $payment,
+        "keys" => $payment,
     ));
 }
 
@@ -103,14 +107,16 @@ $user2_token = http_post("localhost/dark_wallet/reg.php", array(
 
 $response = http_post("localhost/dark_wallet/wallet/send.php", array(
     "token" => $user1_token,
-    "receiver_login" => "user2",
+    "receiver" => "user2",
     "domain_name" => "TET",
     "count" => 10,
 ));
-$user1_pot_keys = http_post("localhost/dark_wallet/wallet/get.php", array(
-    "token" => $user2_token,
-    "sender_login" => "user1",
-    "domain_name" => "POT",
+$coins = http_post("localhost/dark_wallet/wallet/coins.php", array(
+    "token" => $user1_token,
+));
+$coins = http_post("localhost/dark_wallet/wallet/income.php", array(
+    "token" => $user1_token,
+    "keys" => $coins["income"]["user1"]["transaction123"]["keys"],
 ));
 
 
