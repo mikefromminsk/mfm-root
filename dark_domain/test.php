@@ -2,9 +2,7 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/init.php";
 
-$scalar = get("scalar");
-if ($scalar != null)
-    die(json_encode(scalar($scalar)));
+
 
 function sync_dir($from, $to)
 {
@@ -31,13 +29,6 @@ sync_dir("..", "../../host1.com");
 sync_dir("..", "../../host2.com");
 sync_dir("..", "../../host3.com");
 
-
-function assertEquals($message, $val, $need)
-{
-    if ($val != $need)
-        die("error $message val=$val need=$need");
-    echo "good $message\n";
-}
 
 /*
 http_get("host1.com/dark_node/init.php");

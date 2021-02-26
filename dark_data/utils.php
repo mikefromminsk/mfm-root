@@ -21,7 +21,6 @@ function data_id($keys, $password, $create = false)
                 "data_parent_id" => $data_parent_id,
                 "data_key" => $key,
             ));
-            echo json_encode($data);
             if ($data["data_password"] != null && $data["data_password"] != $password)
                 return null;
             $data_id = $data["data_id"];
