@@ -10,7 +10,7 @@ define("DATA_NUMBER", 3);
 define("DATA_BOOL", 4);
 define("DATA_NULL", 5);
 
-function data_id($path_keys, $password, $create = false)
+function dataId($path_keys, $password, $create = false)
 {
     $keys[] = explode('/', dirname($_SERVER['PHP_SELF']))[1];
 
@@ -24,8 +24,9 @@ function data_id($path_keys, $password, $create = false)
             foreach (explode(".", $path_key) as $key)
                 $keys[] = $key;
     }
-
+    $password_checked = false;
     $data_id = null;
+
     foreach ($keys as $index => $key) {
         $push = strpos($key, "[]");
         $key = substr($key, 0, $push !== false ? $push : strlen($key));
@@ -36,8 +37,11 @@ function data_id($path_keys, $password, $create = false)
             "data_key" => $key,
         ));
 
-        if ($data["data_password"] != null && $data["data_password"] != $password)
-            return null;
+        if ($data["data_password"] != null) {
+            if ($data["data_password"] != $password)
+                return null;
+            $password_checked = true;
+        }
 
         $data_id = $data["data_id"];
 
@@ -46,7 +50,7 @@ function data_id($path_keys, $password, $create = false)
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
-                    "data_password" => $index == sizeof($keys) - 1  && $push === false ? $password : null,
+                    "data_password" => $password_checked === false && $index == sizeof($keys) - 1  && $push === false ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
@@ -66,7 +70,7 @@ function data_id($path_keys, $password, $create = false)
             $data_id = insertRowAndGetId("data", array(
                 "data_parent_id" => $data_id,
                 "data_key" => $children_count,
-                "data_password" => $index == sizeof($keys) - 1 ? $password : null,
+                "data_password" => $password_checked  === false && $index == sizeof($keys) - 1 ? $password : null,
                 "data_type" => DATA_MAP,
             ));
         }
@@ -77,7 +81,6 @@ function data_id($path_keys, $password, $create = false)
 
 function data_get_value($data, $level = 0)
 {
-    // TODO  level
     if (is_numeric($data))
         $data = selectRowWhere("data", array("data_id" => $data));
     if ($data["data_type"] == DATA_BOOL) {
@@ -112,7 +115,7 @@ function is_assoc(array $arr)
     return array_keys($arr) !== range(0, count($arr) - 1);
 }
 
-function data_set_value($data_id, &$result)
+function dataSetValue($data_id, &$result)
 {
     if (is_numeric($result) && !is_string($result)) {
         return updateWhere("data", array("data_type" => DATA_NUMBER, "data_value" => $result), array("data_id" => $data_id));
@@ -135,22 +138,14 @@ function data_set_value($data_id, &$result)
                 "data_key" => $key,
                 "data_type" => DATA_NULL,
             ));
-            $success = data_set_value($child_data_id, $value);
+            $success = dataSetValue($child_data_id, $value);
             if (!$success) break;
         }
         return $success ? $data_id : false;
     }
 }
 
-function data_get($key, $password, $level = 0)
-{
-    $data_id = data_id($key, $password);
-    if ($data_id != null)
-        return data_get_value($data_id, $level);
-    return null;
-}
-
-function data_delete_children($data_id)
+function dataDeleteChildren($data_id)
 {
     // TODO doesnt work
     $children = selectListWhere("data", "data_id", array(
@@ -158,30 +153,30 @@ function data_delete_children($data_id)
     ));
 
     foreach ($children as $child_data_id) {
-        data_delete_children($child_data_id);
+        dataDeleteChildren($child_data_id);
         query("delete from data where data_id = $child_data_id");
     }
 }
 
-function data_put($keys, $password, $value)
+function dataGet($table, $index, $password, $level = 0)
 {
-    $data_id = data_id($keys, $password, true);
-    data_delete_children($data_id);
-    return data_set_value($data_id, $value);
-}
-
-function dataSelect($table, $index, $password)
-{
-    $data_id = data_id([$table, $index], $password);
+    $data_id = dataId([$table, $index], $password, $level);
     return data_get_value($data_id);
 }
 
 function dataPut($table, $index, $password, $value)
 {
-    return data_put([$table, $index], $password, $value);
+    $data_id = dataId([$table, $index], $password, true);
+    dataDeleteChildren($data_id);
+    return dataSetValue($data_id, $value);
 }
 
 function dataPush($table, $index, $password, $value)
 {
-    return data_put([$table, $index . "[]"], $password, $value);
+    return dataPut($table, $index . "[]", $password, $value);
+}
+
+function dataCount($table, $password){
+    $data_id = dataId($table, $password);
+    return scalarWhere("data", "count(*)", array("data_parent_id" => $data_id));
 }

@@ -2,8 +2,8 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/login.php";
 
-$keys = get_required("keys");
-
 description("save tokens on server");
 
-dataPush();
+$response["wallet"] = dataGet("users.$login", "wallet", $token);
+
+echo json_encode($response);
