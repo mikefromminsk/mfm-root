@@ -25,8 +25,6 @@ function data_id($path_keys, $password, $create = false)
                 $keys[] = $key;
     }
 
-    echo json_encode($keys);
-
     $data_id = null;
     foreach ($keys as $index => $key) {
         $push = strpos($key, "[]");
@@ -38,7 +36,6 @@ function data_id($path_keys, $password, $create = false)
             "data_key" => $key,
         ));
 
-
         if ($data["data_password"] != null && $data["data_password"] != $password)
             return null;
 
@@ -49,7 +46,7 @@ function data_id($path_keys, $password, $create = false)
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
-                    "data_password" => $index == sizeof($keys) - 1 ? $password : null,
+                    "data_password" => $index == sizeof($keys) - 1  && $push === false ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
