@@ -2,29 +2,48 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
-function data_id($keys, $password, $create = false)
+
+define("DATA_MAP", 0);
+define("DATA_ARRAY", 1);
+define("DATA_STRING", 2);
+define("DATA_NUMBER", 3);
+define("DATA_BOOL", 4);
+define("DATA_NULL", 5);
+
+function data_id($path_keys, $password, $create = false)
 {
-    if (is_string($keys))
-        $keys = explode(".", $keys);
-    $app_name = explode('/', dirname($_SERVER['PHP_SELF']))[1];
-    $keys = array_merge([$app_name], $keys);
+    $keys[] = explode('/', dirname($_SERVER['PHP_SELF']))[1];
+
+    if (is_string($path_keys))
+        $path_keys = explode(".", $path_keys);
+
+    foreach ($path_keys as $path_key) {
+        if (strpos($path_key, ".") === false)
+            $keys[] = $path_key;
+        else
+            foreach (explode(".", $path_key) as $key)
+                $keys[] = $key;
+    }
+
+    echo json_encode($keys);
 
     $data_id = null;
     foreach ($keys as $index => $key) {
-        $start = strpos($key, "[");
-        $end = strpos($key, "]");
+        $push = strpos($key, "[]");
+        $key = substr($key, 0, $push !== false ? $push : strlen($key));
         $data_parent_id = $data_id;
-        if ($start !== false && $end !== false && $start < $end) {
 
-        } else {
-            $data = selectRowWhere("data", array(
-                "data_parent_id" => $data_parent_id,
-                "data_key" => $key,
-            ));
-            if ($data["data_password"] != null && $data["data_password"] != $password)
-                return null;
-            $data_id = $data["data_id"];
-        }
+        $data = selectRowWhere("data", array(
+            "data_parent_id" => $data_id,
+            "data_key" => $key,
+        ));
+
+
+        if ($data["data_password"] != null && $data["data_password"] != $password)
+            return null;
+
+        $data_id = $data["data_id"];
+
         if ($data_id == null) {
             if ($create == true) {
                 $data_id = insertRowAndGetId("data", array(
@@ -34,8 +53,25 @@ function data_id($keys, $password, $create = false)
                     "data_type" => DATA_MAP,
                 ));
             } else {
-                break;
+                return null;
             }
+        }
+
+        if ($push !== false) {
+            updateWhere("data", array(
+                "data_type" => DATA_ARRAY,
+            ), array(
+                "data_id" => $data_parent_id,
+            ));
+            $children_count = scalarWhere("data", "count(*)", array(
+                "data_parent_id" => $data_id,
+            ));
+            $data_id = insertRowAndGetId("data", array(
+                "data_parent_id" => $data_id,
+                "data_key" => $children_count,
+                "data_password" => $index == sizeof($keys) - 1 ? $password : null,
+                "data_type" => DATA_MAP,
+            ));
         }
     }
     return $data_id;
@@ -78,13 +114,6 @@ function is_assoc(array $arr)
     if (array() === $arr) return false;
     return array_keys($arr) !== range(0, count($arr) - 1);
 }
-
-define("DATA_MAP", 0);
-define("DATA_ARRAY", 1);
-define("DATA_STRING", 2);
-define("DATA_NUMBER", 3);
-define("DATA_BOOL", 4);
-define("DATA_NULL", 5);
 
 function data_set_value($data_id, &$result)
 {
@@ -144,12 +173,18 @@ function data_put($keys, $password, $value)
     return data_set_value($data_id, $value);
 }
 
-function dataSelect($table, $index, $password) {
+function dataSelect($table, $index, $password)
+{
     $data_id = data_id([$table, $index], $password);
     return data_get_value($data_id);
 }
 
-function dataPut($table, $index, $password, $value) {
+function dataPut($table, $index, $password, $value)
+{
     return data_put([$table, $index], $password, $value);
 }
 
+function dataPush($table, $index, $password, $value)
+{
+    return data_put([$table, $index . "[]"], $password, $value);
+}
