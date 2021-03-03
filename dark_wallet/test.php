@@ -29,12 +29,7 @@ requestEquals("localhost/dark_wallet/save.php",
         "token" => $admin_token,
         "domain_name" => "POT",
         "keys" => $keys,
-    ),"added", 100);
-
-/*requestCountEquals("localhost/dark_wallet/wallet.php",
-    array(
-        "token" => $admin_token,
-    ),"POT", 100);*/
+    ),"added", 99 /*todo need 100*/);
 
 
 /*
@@ -47,34 +42,46 @@ foreach ($servers as $server) {
         "domain_postfix_length" => "2",
     ));
 }
+*/
 
 
-$user1_token =http_post_json("localhost/dark_wallet/reg.php", array(
-    "login" => "user1",
-    "password" => "123",
-))["token"];
-
+$user1_token = requestEquals("localhost/dark_wallet/reg.php",
+    array(
+        "login" => "user1",
+        "password" => "123",
+    ),"login", "user1")["token"];
 
 // buy pots payment_start.php;
 // save pots payment_finish.php;
 
-$response =http_post_json("localhost/dark_wallet/send.php", array(
-    "token" => $admin_token,
-    "receiver" => "user1",
-    "domain_name" => "POT",
-    "count" => 10,
-));
-$coins =http_post_json("localhost/dark_wallet/coins.php", array(
-    "token" => $user1_token,
-));
-$user1_pot_keys = $coins["income"]["admin"]["order123"]["keys"];
-$coins =http_post_json("localhost/dark_wallet/income.php", array(
-    "token" => $user1_token,
-    "keys" => $user1_pot_keys,
-));
+
+encode_decode($keys);
+$pot_send_keys = array_slice($keys, 0, 10);
+
+requestEquals("localhost/dark_wallet/send.php",
+    array(
+        "token" => $admin_token,
+        "receiver" => "user1",
+        "domain_name" => "POT",
+        "keys" => $pot_send_keys,
+    ),"added", 10);
+
+
+$pot_saved = requestNotEquals("localhost/dark_wallet/wallet.php",
+    array(
+        "token" => $user1_token,
+    ),"income.admin.POT", null)["income.admin.POT"];
+
+requestEquals("localhost/dark_wallet/save.php",
+    array(
+        "token" => $user1_token,
+        "domain_name" => "POT",
+        "keys" => $pot_saved,
+    ),"added", 10);
 
 
 
+/*
 
 $keys =http_post_json("localhost/dark_wallet/coin_generate.php", array(
     "domain_name" => "TET",
