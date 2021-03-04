@@ -13,29 +13,25 @@ define("DATA_NULL", 5);
 function dataId($path_keys, $password, $create = false)
 {
     $keys[] = explode('/', dirname($_SERVER['PHP_SELF']))[1];
+    $keys = array_merge($keys, $path_keys);
 
-    if (is_string($path_keys))
-        $path_keys = explode(".", $path_keys);
-
-    foreach ($path_keys as $path_key) {
-        if (strpos($path_key, ".") === false)
-            $keys[] = $path_key;
-        else
-            foreach (explode(".", $path_key) as $key)
-                $keys[] = $key;
-    }
     $password_checked = false;
     $data_id = null;
 
     foreach ($keys as $index => $key) {
+
+
         $push = strpos($key, "[]");
         $key = substr($key, 0, $push !== false ? $push : strlen($key));
         $data_parent_id = $data_id;
 
         $data = selectRowWhere("data", array(
-            "data_parent_id" => $data_id,
+            "data_parent_id" => $data_parent_id,
             "data_key" => $key,
         ));
+
+        /*if ($GLOBALS["test"] != null && $index == 2)
+            die(json_encode($password));*/
 
         if ($data["data_password"] != null) {
             if ($data["data_password"] != $password)
@@ -50,7 +46,7 @@ function dataId($path_keys, $password, $create = false)
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
-                    "data_password" => $password_checked === false && $index == sizeof($keys) - 1  && $push === false ? $password : null,
+                    "data_password" => $password_checked === false && $index == sizeof($keys) - 1 && $push === false ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
@@ -70,19 +66,23 @@ function dataId($path_keys, $password, $create = false)
             $data_id = insertRowAndGetId("data", array(
                 "data_parent_id" => $data_id,
                 "data_key" => $children_count,
-                "data_password" => $password_checked  === false && $index == sizeof($keys) - 1 ? $password : null,
+                "data_password" => $password_checked === false && $index == sizeof($keys) - 1 ? $password : null,
                 "data_type" => DATA_MAP,
             ));
         }
+
     }
     return $data_id;
 }
 
 
-function data_get_value($data, $level = 0)
+function data_get_value($data, $level = -1)
 {
+    if ($data == null)
+        return null;
     if (is_numeric($data))
         $data = selectRowWhere("data", array("data_id" => $data));
+
     if ($data["data_type"] == DATA_BOOL) {
         $result = boolval($data["data_value"]);
     } else if ($data["data_type"] == DATA_NUMBER) {
@@ -92,14 +92,14 @@ function data_get_value($data, $level = 0)
     } else if ($data["data_type"] == DATA_ARRAY) {
         $result = array();
         if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key + 0");
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key");
             foreach ($children as $child)
                 $result[] = data_get_value($child, $level - 1);
         }
     } else if ($data["data_type"] == DATA_MAP) {
         $result = array();
         if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key + 0");
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key");
             foreach ($children as $child)
                 $result[$child["data_key"]] = data_get_value($child, $level - 1);
         }
@@ -117,6 +117,9 @@ function is_assoc(array $arr)
 
 function dataSetValue($data_id, &$result)
 {
+    if ($data_id == null)
+        return false;
+    dataDeleteChildren($data_id);
     if (is_numeric($result) && !is_string($result)) {
         return updateWhere("data", array("data_type" => DATA_NUMBER, "data_value" => $result), array("data_id" => $data_id));
     } else if (is_bool($result)) {
@@ -160,14 +163,15 @@ function dataDeleteChildren($data_id)
 
 function dataGet($table, $index, $password, $level = 0)
 {
-    $data_id = dataId([$table, $index], $password, $level);
+    $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
+    $data_id = dataId($params, $password, $level);
     return data_get_value($data_id);
 }
 
 function dataPut($table, $index, $password, $value)
 {
-    $data_id = dataId([$table, $index], $password, true);
-    dataDeleteChildren($data_id);
+    $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
+    $data_id = dataId($params, $password, true);
     return dataSetValue($data_id, $value);
 }
 
@@ -176,7 +180,8 @@ function dataPush($table, $index, $password, $value)
     return dataPut($table, $index . "[]", $password, $value);
 }
 
-function dataCount($table, $password){
+function dataCount($table, $password)
+{
     $data_id = dataId($table, $password);
     return scalarWhere("data", "count(*)", array("data_parent_id" => $data_id));
 }

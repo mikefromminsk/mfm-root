@@ -8,12 +8,10 @@ $keys = get_required("keys");
 
 description("send tokens to user");
 
-$receiver_token = dataGet("tokens", $receiver, $admin_password);
+dataId(["income"], $admin_token, true);
 
 $response["added"] = 0;
-
 foreach ($keys as $key => $value)
-    $response["added"] += dataPut("users.$receiver.income.$login.$domain_name", $key, $receiver_token, $value) ? 1 : 0;
-
+    $response["added"] += dataPut("income.$receiver.$login.$domain_name", $key, $admin_token, $value) ? 1 : 0;
 
 echo json_encode($response);

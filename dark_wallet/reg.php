@@ -10,11 +10,12 @@ description("user registration");
 
 $token = random_id();
 
-dataPut("users", $login, $password, $token);
+dataPut("users", $login, $token, null);
+
+dataId(["tokens"],  $admin_password, true);
 dataPut("tokens", $token, $admin_password, $login);
 
 $response["token"] = $token;
-$response["login"] = dataGet("tokens", $token, $admin_password);
 
 echo  json_encode($response);
 

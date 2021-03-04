@@ -9,7 +9,7 @@ $admin_token = requestNotEquals("localhost/dark_wallet/reg.php",
         "password" => "123",
     ),"token", null)["token"];
 
-$keys = requestCountEquals("localhost/dark_wallet/coin_generate.php",
+$keys = requestCount("localhost/dark_wallet/coin_generate.php",
     array(
         "token" => $admin_token,
         "domain_name" => "POT",
@@ -24,13 +24,12 @@ function encode_decode(&$keys)
 
 encode_decode($keys);
 
-requestEquals("localhost/dark_wallet/save.php",
+$result = requestEquals("localhost/dark_wallet/save.php",
     array(
         "token" => $admin_token,
         "domain_name" => "POT",
         "keys" => $keys,
-    ),"added", 99 /*todo need 100*/);
-
+    ),"added", 100 );
 
 /*
 
@@ -45,15 +44,14 @@ foreach ($servers as $server) {
 */
 
 
-$user1_token = requestEquals("localhost/dark_wallet/reg.php",
-    array(
-        "login" => "user1",
-        "password" => "123",
-    ),"login", "user1")["token"];
-
 // buy pots payment_start.php;
 // save pots payment_finish.php;
 
+$user1_token = requestNotEquals("localhost/dark_wallet/reg.php",
+    array(
+        "login" => "user1",
+        "password" => "123",
+    ),"token", null)["token"];
 
 encode_decode($keys);
 $pot_send_keys = array_slice($keys, 0, 10);
@@ -67,18 +65,19 @@ requestEquals("localhost/dark_wallet/send.php",
     ),"added", 10);
 
 
-$pot_saved = requestNotEquals("localhost/dark_wallet/wallet.php",
+$pot_received = requestCount("localhost/dark_wallet/account.php",
     array(
         "token" => $user1_token,
-    ),"income.admin.POT", null)["income.admin.POT"];
+    ),"income.admin.POT", 10)["income"]["admin"]["POT"];
+
+encode_decode($pot_received);
 
 requestEquals("localhost/dark_wallet/save.php",
     array(
         "token" => $user1_token,
         "domain_name" => "POT",
-        "keys" => $pot_saved,
+        "keys" => $pot_received,
     ),"added", 10);
-
 
 
 /*
