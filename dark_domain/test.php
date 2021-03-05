@@ -32,12 +32,12 @@ sync_dir("..", "../../host3.com");*/
 
 
 
-$keys = requestCount("localhost/dark_domain/hosting.php",
+$keys = requestEquals("localhost/dark_domain/hosting.php",
     array(
         "domain_name" => "POT",
-        "domain_postfix_length" => "2",
+        "domain_postfix_length" => 1,
         "keys" => array(),
-    ), "added", 100);
+    ), "errors", 0);
 
 
 function generate_domains($domain_name, $domain_postfix_length)
@@ -57,12 +57,12 @@ function generate_domains($domain_name, $domain_postfix_length)
     return array("keys" => $keys, "domains" => $domains);
 }
 
-$domains = generate_domains("POT", 2);
+$admin_domains = generate_domains("POT", 1);
 
-requestEquals("localhost/dark_domain/domains.php",
+requestCount("localhost/dark_domain/domains.php",
     array(
-        "domains" => $domains["domains"]
-    ), "added", 100);
+        "domains" => $admin_domains["domains"]
+    ), "bad_domains", 0);
 
 /*
 http_get("host1.com/dark_node/init.php");

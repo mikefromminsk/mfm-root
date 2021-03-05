@@ -6,7 +6,7 @@ $domains = get_required("domains");
 
 description("set domains");
 
-$response["domains"] = domains_set($host_name, $domains);
+$response["bad_domains"] = domains_set($host_name, $domains);
 
 echo json_encode($response);
 

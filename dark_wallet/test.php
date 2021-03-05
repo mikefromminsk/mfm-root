@@ -11,29 +11,21 @@ $admin_token = requestNotEquals("localhost/dark_wallet/reg.php",
 
 
 
-
-requestCount("localhost/dark_domain/domains.php",
-    array(
-        "domains" => $domains["domains"],
-    ), "domains", 100);
-
-
-$keys = $domains["keys"];
-
 function encode_decode(&$keys)
 {
     foreach ($keys as $key => $value)
         $keys[$key] = strrev($value);
 }
-
 encode_decode($keys);
+
+$keys = $admin_domains["keys"];
 
 $result = requestEquals("localhost/dark_wallet/save.php",
     array(
         "token" => $admin_token,
         "domain_name" => "POT",
         "keys" => $keys,
-    ), "added", 100);
+    ), "added", 10);
 
 /*
 

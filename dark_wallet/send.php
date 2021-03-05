@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/auth.php";
 
 $receiver = get_required("receiver");
 $domain_name = get_required_uppercase("domain_name");
