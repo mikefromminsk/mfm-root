@@ -10,16 +10,15 @@ define("DATA_NUMBER", 3);
 define("DATA_BOOL", 4);
 define("DATA_NULL", 5);
 
-function dataId($path_keys, $password, $create = true)
+function dataCreate($path_keys, $password, $create = true)
 {
     $keys[] = explode('/', dirname($_SERVER['PHP_SELF']))[1];
-    $keys = array_merge($keys, $path_keys);
+    $keys = array_merge($keys, !is_array($path_keys) ? [$path_keys] : $path_keys);
 
     $password_checked = false;
     $data_id = null;
 
     foreach ($keys as $index => $key) {
-
 
         $push = strpos($key, "[]");
         $key = substr($key, 0, $push !== false ? $push : strlen($key));
@@ -164,14 +163,14 @@ function dataDeleteChildren($data_id)
 function dataGet($table, $index, $password, $order = "", $offset = 0, $count = 1, $level = -1)
 {
     $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
-    $data_id = dataId($params, $password, false);
+    $data_id = dataCreate($params, $password, false);
     return data_get_value($data_id, $level, $order, $offset, $count);
 }
 
 function dataSet($table, $index, $password, $value)
 {
     $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
-    $data_id = dataId($params, $password);
+    $data_id = dataCreate($params, $password);
     return dataSetValue($data_id, $value);
 }
 
@@ -182,6 +181,6 @@ function dataAdd($table, $index, $password, $value)
 
 function dataCount($table, $password)
 {
-    $data_id = dataId($table, $password, false);
+    $data_id = dataCreate($table, $password, false);
     return scalarWhere("data", "count(*)", array("data_parent_id" => $data_id));
 }

@@ -1,17 +1,14 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_stock/login.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_stock/auth.php";
 
 //sale
 $from = get_required("from");
 $to = get_required("to");
 $price = get_required("price");
-$keys = get_required("keys");
+$count = get_required("count");
 
 description("create limit request");
-
-$keys_count = sizeof($keys);
-$opposite_rate = $keys_count / $price;
 
 /*http_post_json("//dark_wallet/save.php", array(
      "domain_name" => $from,
@@ -30,11 +27,7 @@ for ($offset = 0; sizeof($keys) > 0; $offset += $block) {
         break;
 }*/
 
-$response["satisfied"] = $keys_count - sizeof($keys);
-
-if (sizeof($keys))
-    $response["public"] = dataAdd("requests.$from.$to.$price",$login, $admin_token, sizeof($keys)) ? true : false;
-
+$response["limit"] = dataAdd("requests.$from.$to.$price", $login, $admin_token, $count) ? true : false;
 
 //calc rates
 //calc volume

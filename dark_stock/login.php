@@ -14,7 +14,7 @@ $password_hash = dataGet("users.$login", "password_hash", $admin_token);
 $response = array();
 if ($user_password_hash == $password_hash) {
     $response["token"] = random_id();
-    dataSet("tokens", $login, $admin_token, $response["token"]);
+    dataSet("tokens", $response["token"], $admin_token, $login);
 }
 
 echo json_encode($response);

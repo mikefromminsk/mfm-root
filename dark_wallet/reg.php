@@ -10,8 +10,8 @@ description("user registration");
 
 
 
-dataId("users",  $admin_token);
-dataId(["tokens"],  $admin_token);
+dataCreate("users",  $admin_token);
+dataCreate("tokens",  $admin_token);
 
 
 $token = random_id();

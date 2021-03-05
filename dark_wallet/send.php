@@ -8,7 +8,7 @@ $keys = get_required("keys");
 
 description("send tokens to user");
 
-dataId(["income"], $admin_token);
+dataCreate("income", $admin_token);
 
 $response["added"] = 0;
 foreach ($keys as $key => $value)
