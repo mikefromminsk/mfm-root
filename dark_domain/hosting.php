@@ -1,7 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_data/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/properties.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
 
 $keys = get_required("keys");
 $domain_name = get_required_uppercase("domain_name");
@@ -9,7 +8,7 @@ $domain_postfix_length = get_int_required("domain_postfix_length");
 
 description("hosting coin");
 
-if ($domain_name != "POT"){
+/*if ($domain_name != "POT"){
     $new_keys = array();
 
     $response["apply"] = 0;
@@ -22,8 +21,7 @@ if ($domain_name != "POT"){
         "domain_name" => "POT",
         "keys" => $new_keys
     ));
-}
-
+}*/
 
 
 $hosting_seconds = 1000000;
@@ -41,10 +39,10 @@ if ($payment_expire_time == null) {
         "hosting_expire_time" => $next_expire_time,
     ));
 
-    $response["added"] = 0;
+    $response["errors"] = 0;
     for ($i = 0; $i < pow(10, $domain_postfix_length); $i++) {
         $new_domain = $domain_name . sprintf("%0" . $domain_postfix_length . "d", $i);
-        $response["added"] += domain_set($host_name, $new_domain, null, null, null);
+        $response["errors"] += sizeof(domain_set($host_name, $new_domain, null, null, null));
     }
 } else {
     updateWhere("hosting", array(
@@ -54,7 +52,6 @@ if ($payment_expire_time == null) {
         "domain_postfix_length" => $domain_postfix_length,
     ));
 }
-
 
 
 echo json_encode($response);

@@ -15,7 +15,7 @@ function domain_save($server_host_name, $new_domain)
     $domain_name = $new_domain["domain_name"];
 
     $domain_prev_key_hash = hash_sha56($new_domain["domain_prev_key"]);
-    $updatePreviousResult = updateWhere("domains", array(
+    $updateLastDomain = updateWhere("domains", array(
         "archived" => 1,
     ), array(
         "domain_name" => $domain_name,
@@ -23,7 +23,7 @@ function domain_save($server_host_name, $new_domain)
         "domain_key_hash" => $domain_prev_key_hash,
     ));
 
-    if ($updatePreviousResult == true) {
+    if ($updateLastDomain == true) {
         insertRow("domains", array(
             "domain_name" => $domain_name,
             "domain_prev_key" => $new_domain["domain_prev_key"],
@@ -33,52 +33,45 @@ function domain_save($server_host_name, $new_domain)
         ));
         return true;
     } else {
-        $prev_domain = selectRowWhere("domains", array(
+        $last_domain = selectRowWhere("domains", array(
             "domain_name" => $domain_name,
-            "domain_key_hash" => $domain_prev_key_hash));
+            "archived" => 0
+        ));
 
-        if ($prev_domain == null) {
-            $domain_records_count = scalarWhere("domains", "count(*)", array("domain_name" => $domain_name));
-
-            if ($domain_records_count == 0) {
-                insertRow("domains", array(
-                    "domain_name" => $domain_name,
-                    "domain_set_time" => microtime(true),
-                    "archived" => 1,
-                ));
-                insertRow("domains", array(
-                    "domain_name" => $domain_name,
-                    "domain_key_hash" => $new_domain["domain_key_hash"],
-                    "server_repo_hash" => $new_domain["server_repo_hash"],
-                    "domain_set_time" => microtime(true),
-                ));
-                insertRow("servers", array(
-                    "domain_name" => $domain_name,
-                    "server_host_name" => $GLOBALS["host_name"],
-                    "server_repo_hash" => $new_domain["server_repo_hash"],
-                ));
-                return true;
-            }
-
-            return false; // passwod error
+        if ($last_domain == null) {
+            insertRow("domains", array(
+                "domain_name" => $domain_name,
+                "domain_set_time" => microtime(true),
+            ));
+            insertRow("servers", array(
+                "domain_name" => $domain_name,
+                "server_host_name" => $GLOBALS["host_name"],
+                "server_repo_hash" => $new_domain["server_repo_hash"],
+            ));
         } else {
 
-            if ($new_domain["domain_key_hash"] == null and $new_domain["archived"] == 0)
-                return $prev_domain; // download request
+            if ($last_domain[ "domain_key_hash"] == $domain_prev_key_hash) {
+                insertRow("domains", $new_domain);
+            } else {
+                return false;
+            }
+            /*if ($new_domain["domain_key_hash"] == null and $new_domain["archived"] == 0)
+                return $last_domain; // download request
 
             $now_domain = selectRowWhere("domains", array(
                 "domain_name" => $domain_name,
-                "domain_prev_key" => $new_domain["domain_prev_key"]/*,
-                "domain_key_hash is not null"*/));
+                "domain_prev_key" => $new_domain["domain_prev_key"],
+                //"domain_key_hash is not null"
+            ));
 
             if ($now_domain["domain_key_hash"] != $new_domain["domain_key_hash"])
                 if (consensus($server_host_name, $now_domain, $new_domain) == true)
                     return true; // change branch
                 else
-                    return $prev_domain; // collision
+                    return $last_domain; // collision
 
             if ($now_domain["domain_key_hash"] == $new_domain["domain_key_hash"])
-                return true; // duplicate not the first
+                return true; // duplicate not the first*/
 
         }
     }
@@ -163,7 +156,7 @@ function domains_set($server_host_name, $domains, $servers = null)
                         array("domain_name" => $domain_name, "server_host_name" => $server_host_name));
             }
 
-    $response_domains = array();
+    $bad_domains = array();
     foreach ($results as $domain_name => $result) {
         if ($result === true) {
             updateWhere("servers",
@@ -171,12 +164,12 @@ function domains_set($server_host_name, $domains, $servers = null)
                 array("domain_name" => $domain_name, "server_host_name" => $server_host_name));
         }
         if (is_array($result)) {
-            $response_domains = array_merge($response_domains,
+            $bad_domains = array_merge($bad_domains,
                 selectWhere("domains", array("domain_name" => $result["domain_name"], "domain_set_time > " . $result["domain_set_time"],)));
         }
     }
 
-    return $response_domains;
+    return $bad_domains;
 }
 
 

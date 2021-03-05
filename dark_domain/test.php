@@ -2,13 +2,13 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/init.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_net/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
 
 
 function sync_dir($from, $to)
 {
     foreach (scandir($from) as $filename) {
-        if ($filename != "." && $filename != ".."){
+        if ($filename != "." && $filename != "..") {
 
             $from_filename = $from . "/" . $filename;
             $to_filename = $to . "/" . $filename;
@@ -30,6 +30,39 @@ function sync_dir($from, $to)
 sync_dir("..", "../../host2.com");
 sync_dir("..", "../../host3.com");*/
 
+
+
+$keys = requestCount("localhost/dark_domain/hosting.php",
+    array(
+        "domain_name" => "POT",
+        "domain_postfix_length" => "2",
+        "keys" => array(),
+    ), "added", 100);
+
+
+function generate_domains($domain_name, $domain_postfix_length)
+{
+    $keys = array();
+    $domains = array();
+    for ($i = 0; $i < pow(10, $domain_postfix_length); $i++) {
+        $new_domain = $domain_name . sprintf("%0" . $domain_postfix_length . "d", $i);
+        $keys[$new_domain] = random_id();
+        $domains[] = array(
+            "domain_name" => $new_domain,
+            "domain_prev_key" => null,
+            "domain_key_hash" => hash_sha56($keys[$new_domain]),
+            "server_repo_hash" => null,
+        );
+    }
+    return array("keys" => $keys, "domains" => $domains);
+}
+
+$domains = generate_domains("POT", 2);
+
+requestEquals("localhost/dark_domain/domains.php",
+    array(
+        "domains" => $domains["domains"]
+    ), "added", 100);
 
 /*
 http_get("host1.com/dark_node/init.php");
