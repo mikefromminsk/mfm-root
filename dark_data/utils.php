@@ -29,9 +29,6 @@ function dataCreate($path_keys, $password, $create = true)
             "data_key" => $key,
         ));
 
-        /*if ($GLOBALS["test"] != null && $index == 2)
-            die(json_encode($password));*/
-
         if ($data["data_password"] != null) {
             if ($data["data_password"] != $password)
                 return null;
@@ -54,10 +51,14 @@ function dataCreate($path_keys, $password, $create = true)
         }
 
         if ($push !== false) {
+
+            /*if ($GLOBALS["test"] != null)
+                die(json_encode($keys));*/
+
             updateWhere("data", array(
                 "data_type" => DATA_ARRAY,
             ), array(
-                "data_id" => $data_parent_id,
+                "data_id" => $data_id,
             ));
             $children_count = scalarWhere("data", "count(*)", array(
                 "data_parent_id" => $data_id,
@@ -91,14 +92,14 @@ function data_get_value($data, $level = -1, $order = "", $offset = 0, $count = 1
     } else if ($data["data_type"] == DATA_ARRAY) {
         $result = array();
         if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by $order data_key limit $offset, $count");
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key $order limit $offset, $count");
             foreach ($children as $child)
                 $result[] = data_get_value($child, $level - 1);
         }
     } else if ($data["data_type"] == DATA_MAP) {
         $result = array();
         if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by $order data_key limit $offset, $count");
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key $order limit $offset, $count");
             foreach ($children as $child)
                 $result[$child["data_key"]] = data_get_value($child, $level - 1);
         }

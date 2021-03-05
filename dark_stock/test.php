@@ -26,9 +26,8 @@ requestEquals("localhost/dark_stock/limit.php",
         "count" => 2
     ),"limit", true);
 
-
-requestNotEquals("localhost/dark_stock/requests.php",
+requestEquals("localhost/dark_stock/requests.php",
     array(
         "from" => "TET",
         "to" => "POT",
-    ),"from", null);
+    ),"from.123.user1", 2);

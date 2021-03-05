@@ -27,7 +27,8 @@ for ($offset = 0; sizeof($keys) > 0; $offset += $block) {
         break;
 }*/
 
-$response["limit"] = dataAdd("requests.$from.$to.$price", $login, $admin_token, $count) ? true : false;
+$last_count = dataGet("requests.$from.$to.$price", $login, $admin_token);
+$response["limit"] = dataSet("requests.$from.$to.$price", $login, $admin_token, $count + $last_count) ? true : false;
 
 //calc rates
 //calc volume

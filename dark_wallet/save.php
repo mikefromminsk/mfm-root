@@ -9,8 +9,6 @@ description("save tokens on server");
 
 $response["added"] = 0;
 
-$GLOBALS["test"] = 1;
-
 foreach ($keys as $key => $value) {
     $response["added"] += dataSet("users.$login.wallet.$domain_name", $key, $token, $value) != null ? 1 : 0;
 }
