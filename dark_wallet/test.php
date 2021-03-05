@@ -27,19 +27,8 @@ $result = requestEquals("localhost/dark_wallet/save.php",
         "keys" => $keys,
     ), "added", 10);
 
-/*
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/properties.php";
-
-foreach ($servers as $server) {
-    http_post_json("$server/dark_wallet/hosting.php", array(
-        "domain_name" => "POT",
-        "domain_postfix_length" => "2",
-    ));
-}
-*/
-
-
+// buy pots tariffs.php;
 // buy pots payment_start.php;
 // save pots payment_finish.php;
 
@@ -78,17 +67,6 @@ requestEquals("localhost/dark_wallet/save.php",
 
 /*
 
-$keys =http_post_json("localhost/dark_wallet/coin_generate.php", array(
-    "domain_name" => "TET",
-    "domain_postfix_length" => "2",
-    "keys" => array_slice($user1_pot_keys, 0, 2),
-))["keys"];
-http_post("localhost/dark_wallet/wallet/income.php", array(
-    "token" => $user1_token,
-    "keys" => $keys,
-));
-
-
 $payment_keys = [
     array_slice($user1_pot_keys, 2, 2),
     array_slice($user1_pot_keys, 4, 2),
@@ -104,26 +82,6 @@ for($i = 0; $i < 3; $i++) {
     ));
 }
 
-
-
-$user2_token =http_post_json("localhost/dark_wallet/reg.php", array(
-    "login" => "user2",
-    "password" => "123",
-))["token"];
-
-$response =http_post_json("localhost/dark_wallet/send.php", array(
-    "token" => $user1_token,
-    "receiver" => "user2",
-    "domain_name" => "TET",
-    "count" => 10,
-));
-$coins =http_post_json("localhost/dark_wallet/coins.php", array(
-    "token" => $user1_token,
-));
-$coins =http_post_json("localhost/dark_wallet/income.php", array(
-    "token" => $user1_token,
-    "keys" => $coins["income"]["user1"]["transaction123"]["keys"],
-));
 */
 
 

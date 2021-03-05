@@ -31,3 +31,11 @@ requestEquals("localhost/dark_stock/requests.php",
         "from" => "TET",
         "to" => "POT",
     ),"from.123.user1", 2);
+
+
+//oposite request
+//rates
+//oposite request
+//requests
+//volume
+//deals
