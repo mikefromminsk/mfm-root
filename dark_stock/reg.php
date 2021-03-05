@@ -9,6 +9,7 @@ description("login on server");
 
 $user_password_hash = hash_sha56($password);
 
+
 dataId("users", $login, $admin_token);
 dataSet("users.$login", "password_hash", $admin_token, $user_password_hash);
 

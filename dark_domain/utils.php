@@ -3,12 +3,7 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_net/utils.php";
 
-define("HASH_ALGO", "sha256");
-
-function hash_sha56($string)
-{
-    return $string == null ? null : hash(HASH_ALGO, $string);
-}
+define("FILE_HASH_ALGO", "sha256");
 
 function domain_save($server_host_name, $new_domain)
 {
@@ -179,7 +174,7 @@ function domain_repo_set($domain_name, $repo_path)
     if ($zip->open($repo_path) == TRUE) {
         for ($i = 0; $i < $zip->numFiles; $i++)
             file_put_contents($_SERVER["DOCUMENT_ROOT"] . "/$domain_name/" . $zip->getNameIndex($i), $zip->getFromName($zip->getNameIndex($i)));
-        updateWhere("servers", array("server_repo_hash" => hash_file(HASH_ALGO, $repo_path)),
+        updateWhere("servers", array("server_repo_hash" => hash_file(FILE_HASH_ALGO, $repo_path)),
             array("domain_name" => $domain_name, "server_host_name" => $GLOBALS["host_name"]));
     }
 }
@@ -216,7 +211,7 @@ function domain_get($key, $index = 0)
 
 function domain_put($domain_name, $old_password, $new_password, $filepath)
 {
-    $repo_hash = ($filepath != null) ? hash_file(HASH_ALGO, $filepath) : null;
+    $repo_hash = ($filepath != null) ? hash_file(FILE_HASH_ALGO, $filepath) : null;
     return domain_set($GLOBALS["host_name"], $domain_name, $old_password, hash_sha56($new_password), $repo_hash);
 }
 

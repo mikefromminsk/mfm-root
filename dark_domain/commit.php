@@ -28,7 +28,7 @@ foreach (scandir($_SERVER["DOCUMENT_ROOT"]) as $app_name) {
         }
         $zip->close();
 
-        domain_set($host_name, $domain_name, $domain_key, hash_sha56($domain_next_key), hash_file(HASH_ALGO, $zipPath));
+        domain_set($host_name, $domain_name, $domain_key, hash_sha56($domain_next_key), hash_file(FILE_HASH_ALGO, $zipPath));
 
         //domain_repo_set($app_name, $zipPath);
     }
