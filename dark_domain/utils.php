@@ -125,12 +125,12 @@ function consensus($server_host_name, $now_domain, $new_domain)
 
 function domain_set($server_host_name, $domain_name, $domain_prev_key, $domain_key_hash, $server_repo_hash)
 {
-    return domains_set($server_host_name, [array(
+    return sizeof(domains_set($server_host_name, [array(
         "domain_name" => $domain_name,
         "domain_prev_key" => $domain_prev_key,
         "domain_key_hash" => $domain_key_hash,
         "server_repo_hash" => $server_repo_hash,
-    )]);
+    )])) == 0;
 }
 
 function domains_set($server_host_name, $domains, $servers = null)

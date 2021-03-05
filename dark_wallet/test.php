@@ -10,15 +10,15 @@ $admin_token = requestNotEquals("localhost/dark_wallet/reg.php",
     ), "token", null)["token"];
 
 
-
 function encode_decode(&$keys)
 {
     foreach ($keys as $key => $value)
         $keys[$key] = strrev($value);
 }
+
 encode_decode($keys);
 
-$keys = $admin_domains["keys"];
+$keys = $pot["keys"];
 
 $result = requestEquals("localhost/dark_wallet/save.php",
     array(

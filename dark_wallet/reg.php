@@ -8,12 +8,16 @@ $password = get_required("password");
 
 description("user registration");
 
+
+
+dataId("users",  $admin_token);
+dataId(["tokens"],  $admin_token);
+
+
 $token = random_id();
 
-dataPut("users", $login, $token, null);
-
-dataId(["tokens"],  $admin_password, true);
-dataPut("tokens", $token, $admin_password, $login);
+dataSet("users", $login, $token, null);
+dataSet("tokens", $token, $admin_token, $login);
 
 $response["token"] = $token;
 

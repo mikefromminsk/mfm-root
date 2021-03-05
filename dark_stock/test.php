@@ -12,7 +12,10 @@ $admin_token = requestNotEquals("localhost/dark_stock/reg.php",
 
 $admin_token = requestNotEquals("localhost/dark_stock/limit.php",
     array(
-        "login" => "admin",
-        "password" => "123",
+        "token" => $admin_token,
+        "from_domain_name" => "TET",
+        "to_domain_name" => "POT",
+        "price" => 123,
+        "keys" => array()
     ),"token", null)["token"];
 

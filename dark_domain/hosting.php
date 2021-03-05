@@ -8,20 +8,20 @@ $domain_postfix_length = get_int_required("domain_postfix_length");
 
 description("hosting coin");
 
-/*if ($domain_name != "POT"){
+if ($domain_name != "POT"){
     $new_keys = array();
 
     $response["apply"] = 0;
     foreach ($keys as $pot_domain_name => $pot_prev_key) {
         $new_keys[$pot_domain_name] = random_id();
-        $response["apply"] += domain_set($host_name, $pot_domain_name, $pot_prev_key, hash_sha56($new_keys[$pot_domain_name]), null);
+        $response["apply"] += domain_set($host_name, $pot_domain_name, $pot_prev_key, hash_sha56($new_keys[$pot_domain_name]), null) ? 1 : 0;
     }
 
     http_post_json("//dark_wallet/save.php", array(
         "domain_name" => "POT",
         "keys" => $new_keys
     ));
-}*/
+}
 
 
 $hosting_seconds = 1000000;
@@ -42,7 +42,7 @@ if ($payment_expire_time == null) {
     $response["errors"] = 0;
     for ($i = 0; $i < pow(10, $domain_postfix_length); $i++) {
         $new_domain = $domain_name . sprintf("%0" . $domain_postfix_length . "d", $i);
-        $response["errors"] += sizeof(domain_set($host_name, $new_domain, null, null, null));
+        $response["errors"] += domain_set($host_name, $new_domain, null, null, null) ? 0 : 1;
     }
 } else {
     updateWhere("hosting", array(

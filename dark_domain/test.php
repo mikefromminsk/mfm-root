@@ -32,14 +32,6 @@ sync_dir("..", "../../host3.com");*/
 
 
 
-$keys = requestEquals("localhost/dark_domain/hosting.php",
-    array(
-        "domain_name" => "POT",
-        "domain_postfix_length" => 1,
-        "keys" => array(),
-    ), "errors", 0);
-
-
 function generate_domains($domain_name, $domain_postfix_length)
 {
     $keys = array();
@@ -57,11 +49,40 @@ function generate_domains($domain_name, $domain_postfix_length)
     return array("keys" => $keys, "domains" => $domains);
 }
 
-$admin_domains = generate_domains("POT", 1);
+
+
+
+$keys = requestEquals("localhost/dark_domain/hosting.php",
+    array(
+        "domain_name" => "POT",
+        "domain_postfix_length" => 1,
+        "keys" => array(),
+    ), "errors", 0);
+
+$pot = generate_domains("POT", 1);
 
 requestCount("localhost/dark_domain/domains.php",
     array(
-        "domains" => $admin_domains["domains"]
+        "domains" => $pot["domains"]
+    ), "bad_domains", 0);
+
+
+
+
+$payment_keys = array_slice($pot["keys"], 0, 2);
+
+$keys = requestEquals("localhost/dark_domain/hosting.php",
+    array(
+        "domain_name" => "TET",
+        "domain_postfix_length" => 1,
+        "keys" => $payment_keys,
+    ), "errors", 0);
+
+$tet = generate_domains("TET", 1);
+
+requestCount("localhost/dark_domain/domains.php",
+    array(
+        "domains" => $tet["domains"]
     ), "bad_domains", 0);
 
 /*
