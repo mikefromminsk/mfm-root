@@ -23,4 +23,10 @@ query("CREATE TABLE IF NOT EXISTS `servers` (
   `server_sync_time` double NOT NULL DEFAULT 0
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
+query("DROP TABLE IF EXISTS `hosting`;");
+query("CREATE TABLE IF NOT EXISTS `hosting` (
+`domain_name` varchar(64) COLLATE utf8_bin NOT NULL,
+`domain_postfix_length` varchar(64) COLLATE utf8_bin NOT NULL,
+`hosting_expire_time` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 

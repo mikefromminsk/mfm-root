@@ -6,6 +6,8 @@ $domain_name = get("domain_name");
 $domain_key = get("domain_key");
 $domain_next_key = get("domain_next_key", $domain_key);
 
+description("commit");
+
 $ignore_list = explode("\r\n", file_get_contents($_SERVER["DOCUMENT_ROOT"] . "/.gitignore"));
 $ignore_list[] = "app.zip";
 

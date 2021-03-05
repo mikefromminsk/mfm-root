@@ -1,13 +1,12 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_data/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/properties.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/utils.php";
 
-$token = get_required("token");
+$login = get_required("login");
+$password = get_required("password");
 
-$login = dataGet("tokens", $token, $admin_token);
+description("login on server");
 
-if ($login == null)
-    error("login is not exist");
+$response["token"] = dataGet("users.$login", "token", $password);
 
+echo json_encode($response);

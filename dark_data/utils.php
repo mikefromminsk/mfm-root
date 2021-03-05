@@ -76,7 +76,7 @@ function dataId($path_keys, $password, $create = false)
 }
 
 
-function data_get_value($data, $level = -1)
+function data_get_value($data, $level = -1, $order = "", $offset = 0, $count = 10000)
 {
     if ($data == null)
         return null;
@@ -92,14 +92,14 @@ function data_get_value($data, $level = -1)
     } else if ($data["data_type"] == DATA_ARRAY) {
         $result = array();
         if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key");
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by $order data_key limit $offset, $count");
             foreach ($children as $child)
                 $result[] = data_get_value($child, $level - 1);
         }
     } else if ($data["data_type"] == DATA_MAP) {
         $result = array();
         if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key");
+            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by $order data_key limit $offset, $count");
             foreach ($children as $child)
                 $result[$child["data_key"]] = data_get_value($child, $level - 1);
         }
@@ -161,11 +161,11 @@ function dataDeleteChildren($data_id)
     }
 }
 
-function dataGet($table, $index, $password, $level = 0)
+function dataGet($table, $index, $password, $order = "", $offset = 0, $count = 1, $level = -1)
 {
     $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
-    $data_id = dataId($params, $password, $level);
-    return data_get_value($data_id);
+    $data_id = dataId($params, $password);
+    return data_get_value($data_id, $level, $order, $offset, $count);
 }
 
 function dataPut($table, $index, $password, $value)

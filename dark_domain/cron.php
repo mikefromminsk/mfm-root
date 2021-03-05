@@ -2,6 +2,8 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/utils.php";
 
+description("cron");
+
 foreach (selectList("select distinct server_host_name from servers where server_host_name <> '" . uencode($host_name) . "'")
          as $server_host_name) {
 

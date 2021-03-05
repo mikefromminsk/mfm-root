@@ -7,14 +7,44 @@ $admin_token = requestNotEquals("localhost/dark_wallet/reg.php",
     array(
         "login" => "admin",
         "password" => "123",
-    ),"token", null)["token"];
+    ), "token", null)["token"];
 
-$keys = requestCount("localhost/dark_wallet/coin_generate.php",
+$keys = requestCount("localhost/dark_wallet/hosting.php",
     array(
         "token" => $admin_token,
         "domain_name" => "POT",
         "domain_postfix_length" => "2",
-    ),"keys", 100)["keys"];
+        "keys" => array(),
+    ), "added", 100);
+
+
+function generate_domains($domain_name, $domain_postfix_length)
+{
+    $keys = array();
+    $domains = array();
+    for ($i = 0; $i < pow(10, $domain_postfix_length); $i++) {
+        $new_domain = $domain_name . sprintf("%0" . $domain_postfix_length . "d", $i);
+        $keys[$new_domain] = random_id();
+        $domains[] = array(
+            "domain_name" => $new_domain,
+            "domain_prev_key" => null,
+            "domain_key_hash" => hash_sha56($keys[$new_domain]),
+            "server_repo_hash" => null,
+        );
+    }
+    return array("keys" => $keys, "domains" => $domains);
+}
+
+$domains = generate_domains("POT", 2);
+
+
+requestCount("localhost/dark_domain/domains.php",
+    array(
+        "domains" => $domains["domains"],
+    ), "domains", 100);
+
+
+$keys = $domains["keys"];
 
 function encode_decode(&$keys)
 {
@@ -29,7 +59,7 @@ $result = requestEquals("localhost/dark_wallet/save.php",
         "token" => $admin_token,
         "domain_name" => "POT",
         "keys" => $keys,
-    ),"added", 100 );
+    ), "added", 100);
 
 /*
 
@@ -51,7 +81,7 @@ $user1_token = requestNotEquals("localhost/dark_wallet/reg.php",
     array(
         "login" => "user1",
         "password" => "123",
-    ),"token", null)["token"];
+    ), "token", null)["token"];
 
 encode_decode($keys);
 $pot_send_keys = array_slice($keys, 0, 10);
@@ -62,13 +92,13 @@ requestEquals("localhost/dark_wallet/send.php",
         "receiver" => "user1",
         "domain_name" => "POT",
         "keys" => $pot_send_keys,
-    ),"added", 10);
+    ), "added", 10);
 
 
 $pot_received = requestCount("localhost/dark_wallet/account.php",
     array(
         "token" => $user1_token,
-    ),"income.admin.POT", 10)["income"]["admin"]["POT"];
+    ), "income.admin.POT", 10)["income"]["admin"]["POT"];
 
 encode_decode($pot_received);
 
@@ -77,7 +107,7 @@ requestEquals("localhost/dark_wallet/save.php",
         "token" => $user1_token,
         "domain_name" => "POT",
         "keys" => $pot_received,
-    ),"added", 10);
+    ), "added", 10);
 
 
 /*
