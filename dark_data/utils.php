@@ -75,7 +75,7 @@ function dataCreate(array $path, $password, $create = true)
 }
 
 
-function data_get_value($data, $level = -1, $order = "", $offset = 0, $count = 10000)
+function data_get_value($data, $level = -1, $asc = null, $offset = 0, $count = 10000)
 {
     if ($data == null)
         return null;
@@ -88,22 +88,22 @@ function data_get_value($data, $level = -1, $order = "", $offset = 0, $count = 1
         $result = doubleval($data["data_value"]);
     } else if ($data["data_type"] == DATA_STRING) {
         $result = $data["data_value"];
-    } else if ($data["data_type"] == DATA_ARRAY) {
-        $result = array();
-        if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key $order limit $offset, $count");
-            foreach ($children as $child)
-                $result[] = data_get_value($child, $level - 1);
-        }
-    } else if ($data["data_type"] == DATA_MAP) {
-        $result = array();
-        if ($level != 0) {
-            $children = select("select * from data where data_parent_id = " . $data["data_id"] . " order by data_key $order limit $offset, $count");
-            foreach ($children as $child)
-                $result[$child["data_key"]] = data_get_value($child, $level - 1);
-        }
     } else {
-        $result = null;
+        $result = array();
+        if ($level != 0) {
+            $children = select("select * from data where data_parent_id = " . $data["data_id"]
+                . ($asc !== null ? " order by data_key " . ($asc ? "asc" : "desc") : "")
+                . " limit $offset, $count");
+            if ($data["data_type"] == DATA_ARRAY) {
+                foreach ($children as $child)
+                    $result[] = data_get_value($child, $level - 1);
+            } else if ($data["data_type"] == DATA_MAP) {
+
+                foreach ($children as $child)
+                    $result[$child["data_key"]] = data_get_value($child, $level - 1);
+            }
+
+        }
     }
     return $result;
 }
@@ -160,10 +160,22 @@ function dataDeleteChildren($data_id)
     }
 }
 
-function dataGet(array $path, $password, $order = "", $offset = 0, $count = 10000, $level = -1)
+function dataGet(array $path, $password, $asc = null, $offset = 0, $count = 10000, $level = -1)
 {
     $data_id = dataCreate($path, $password, false);
-    return data_get_value($data_id, $level, $order, $offset, $count);
+    return data_get_value($data_id, $level, $asc, $offset, $count);
+}
+
+function dataInc(array $path, $password, $inc_val)
+{
+    $last_val = dataGet($path, $password);
+    dataSet($path, $password, $last_val + $inc_val);
+}
+
+function dataDec(array $path, $password, $dec_val)
+{
+    $last_val = dataGet($path, $password);
+    dataSet($path, $password, $last_val - $dec_val);
 }
 
 function dataSet(array $path, $password, $value)
