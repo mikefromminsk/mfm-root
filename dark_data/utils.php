@@ -160,7 +160,7 @@ function dataDeleteChildren($data_id)
     }
 }
 
-function dataGet(array $path, $password, $order = "", $offset = 0, $count = 1, $level = -1)
+function dataGet(array $path, $password, $order = "", $offset = 0, $count = 10000, $level = -1)
 {
     $data_id = dataCreate($path, $password, false);
     return data_get_value($data_id, $level, $order, $offset, $count);

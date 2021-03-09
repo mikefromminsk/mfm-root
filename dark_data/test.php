@@ -24,6 +24,5 @@ assertEquals("data push", $value, "321");
 $data_id = dataSet(["login", "hrp", "test2"], "pass", "123");
 $data_id = dataSet(["login", "hrp", "test3"], "pass", "321");
 $value = dataGet(["login", "hrp"], "pass");
-echo json_encode($value);
 assertNotEquals("data get", $value["test2"], "123");
 assertNotEquals("data get", $value["test3"], "321");
