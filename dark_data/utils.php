@@ -10,15 +10,14 @@ define("DATA_NUMBER", 3);
 define("DATA_BOOL", 4);
 define("DATA_NULL", 5);
 
-function dataCreate($path_keys, $password, $create = true)
+function dataCreate(array $path, $password, $create = true)
 {
-    $keys[] = explode('/', dirname($_SERVER['PHP_SELF']))[1];
-    $keys = array_merge($keys, !is_array($path_keys) ? [$path_keys] : $path_keys);
+    array_unshift($path, explode('/', dirname($_SERVER['PHP_SELF']))[1]);
 
     $password_checked = false;
     $data_id = null;
 
-    foreach ($keys as $index => $key) {
+    foreach ($path as $index => $key) {
 
         $push = strpos($key, "[]");
         $key = substr($key, 0, $push !== false ? $push : strlen($key));
@@ -42,7 +41,7 @@ function dataCreate($path_keys, $password, $create = true)
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
-                    "data_password" => $password_checked === false && $index == sizeof($keys) - 1 && $push === false ? $password : null,
+                    "data_password" => $password_checked === false && $index == sizeof($path) - 1 && $push === false ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
@@ -66,7 +65,7 @@ function dataCreate($path_keys, $password, $create = true)
             $data_id = insertRowAndGetId("data", array(
                 "data_parent_id" => $data_id,
                 "data_key" => $children_count,
-                "data_password" => $password_checked === false && $index == sizeof($keys) - 1 ? $password : null,
+                "data_password" => $password_checked === false && $index == sizeof($path) - 1 ? $password : null,
                 "data_type" => DATA_MAP,
             ));
         }
@@ -161,27 +160,27 @@ function dataDeleteChildren($data_id)
     }
 }
 
-function dataGet($table, $index, $password, $order = "", $offset = 0, $count = 1, $level = -1)
+function dataGet(array $path, $password, $order = "", $offset = 0, $count = 1, $level = -1)
 {
-    $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
-    $data_id = dataCreate($params, $password, false);
+    $data_id = dataCreate($path, $password, false);
     return data_get_value($data_id, $level, $order, $offset, $count);
 }
 
-function dataSet($table, $index, $password, $value)
+function dataSet(array $path, $password, $value)
 {
-    $params = array_filter(array_merge(explode(".", $table), explode(".", $index)));
-    $data_id = dataCreate($params, $password);
+    $data_id = dataCreate($path, $password);
     return dataSetValue($data_id, $value);
 }
 
-function dataAdd($table, $index, $password, $value)
+function dataAdd(array $path, $password, $value)
 {
-    return dataSet($table, $index . "[]", $password, $value);
+    $last = array_pop($path) . "[]";
+    $path[] = $last;
+    return dataSet($path, $password, $value);
 }
 
-function dataCount($table, $password)
+function dataCount(array $path, $password)
 {
-    $data_id = dataCreate($table, $password, false);
+    $data_id = dataCreate($path, $password, false);
     return scalarWhere("data", "count(*)", array("data_parent_id" => $data_id));
 }

@@ -10,7 +10,7 @@ description("save tokens on server");
 $response["added"] = 0;
 
 foreach ($keys as $key => $value) {
-    $response["added"] += dataSet("users.$login.wallet.$domain_name", $key, $token, $value) != null ? 1 : 0;
+    $response["added"] += dataSet(["users", $login, "wallet", $domain_name, $key], $token, $value) != null ? 1 : 0;
 }
 
 echo json_encode($response);

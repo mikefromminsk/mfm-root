@@ -54,35 +54,35 @@ function generate_domains($domain_name, $domain_postfix_length)
 
 $keys = requestEquals("localhost/dark_domain/hosting.php",
     array(
-        "domain_name" => "POT",
+        "domain_name" => "HRP",
         "domain_postfix_length" => 1,
         "keys" => array(),
     ), "errors", 0);
 
-$pot = generate_domains("POT", 1);
+$hrp = generate_domains("HRP", 1);
 
 requestCount("localhost/dark_domain/domains.php",
     array(
-        "domains" => $pot["domains"]
+        "domains" => $hrp["domains"]
     ), "bad_domains", 0);
 
 
 
 
-$payment_keys = array_slice($pot["keys"], 0, 2);
+$payment_keys = array_slice($hrp["keys"], 0, 2);
 
 $keys = requestEquals("localhost/dark_domain/hosting.php",
     array(
-        "domain_name" => "TET",
+        "domain_name" => "PAIN",
         "domain_postfix_length" => 1,
         "keys" => $payment_keys,
     ), "errors", 0);
 
-$tet = generate_domains("TET", 1);
+$pain = generate_domains("PAIN", 1);
 
 requestCount("localhost/dark_domain/domains.php",
     array(
-        "domains" => $tet["domains"]
+        "domains" => $pain["domains"]
     ), "bad_domains", 0);
 
 /*

@@ -8,17 +8,17 @@ $domain_postfix_length = get_int_required("domain_postfix_length");
 
 description("hosting coin");
 
-if ($domain_name != "POT"){
+if ($domain_name != "HRP"){
     $new_keys = array();
 
     $response["apply"] = 0;
-    foreach ($keys as $pot_domain_name => $pot_prev_key) {
-        $new_keys[$pot_domain_name] = random_id();
-        $response["apply"] += domain_set($host_name, $pot_domain_name, $pot_prev_key, hash_sha56($new_keys[$pot_domain_name]), null) ? 1 : 0;
+    foreach ($keys as $hrp_domain_name => $hrp_prev_key) {
+        $new_keys[$hrp_domain_name] = random_id();
+        $response["apply"] += domain_set($host_name, $hrp_domain_name, $hrp_prev_key, hash_sha56($new_keys[$hrp_domain_name]), null) ? 1 : 0;
     }
 
     http_post_json("//dark_wallet/save.php", array(
-        "domain_name" => "POT",
+        "domain_name" => "HRP",
         "keys" => $new_keys
     ));
 }

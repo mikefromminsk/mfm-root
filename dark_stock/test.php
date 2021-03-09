@@ -12,26 +12,46 @@ $user1_token = requestNotEquals("localhost/dark_stock/reg.php",
 requestEquals("localhost/dark_stock/income.php",
     array(
         "login" => "user1",
-        "domain_name" => "TET",
-        "keys" => $tet["keys"],
+        "domain_name" => "PAIN",
+        "keys" => $pain["keys"],
     ),"added", 10);
 
-
-requestEquals("localhost/dark_stock/limit.php",
+/*requestEquals("localhost/dark_stock/limit.php",
     array(
         "token" => $user1_token,
-        "from" => "TET",
-        "to" => "POT",
-        "price" => 123,
+        "from" => "HRP",
+        "to" => "PAIN",
+        "price" => 50000,
         "count" => 2
+    ),"limit", true);*/
+
+$result = requestEquals("localhost/dark_stock/limit.php",
+    array(
+        "token" => $user1_token,
+        "from" => "PAIN",
+        "to" => "HRP",
+        "price" => 0.0001,
+        "count" => 10
     ),"limit", true);
 
-requestEquals("localhost/dark_stock/requests.php",
+/*requestEquals("localhost/dark_stock/limit.php",
     array(
-        "from" => "TET",
-        "to" => "POT",
+        "token" => $user1_token,
+        "from" => "PAIN",
+        "to" => "HRP",
+        "price" => 0.0002,
+        "count" => 4
+    ),"limit", true);
+
+
+$result = requestEquals("localhost/dark_stock/requests.php",
+    array(
+        "from" => "PAIN",
+        "to" => "HRP",
     ),"from.123.user1", 2);
 
+*/
+echo json_encode($result);
 
 //oposite request
 //rates

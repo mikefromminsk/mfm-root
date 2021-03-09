@@ -10,6 +10,8 @@ $count = get_required("count");
 
 description("create limit request");
 
+$response["price"] = $price;
+
 /*http_post_json("//dark_wallet/save.php", array(
      "domain_name" => $from,
      "keys" => $keys,
@@ -26,9 +28,10 @@ for ($offset = 0; sizeof($keys) > 0; $offset += $block) {
     if (sizeof($opposite) < $block)
         break;
 }*/
+//$response["opposite"] = dataGet("requests.$to.$from", $price, $admin_token, "ask", );
 
-$last_count = dataGet("requests.$from.$to.$price", $login, $admin_token);
-$response["limit"] = dataSet("requests.$from.$to.$price", $login, $admin_token, $count + $last_count) ? true : false;
+$last_count = dataGet(["requests", $from, $to, $price], $login, $admin_token);
+$response["limit"] = dataSet(["requests", $from, $to, $price], $login, $admin_token, $count + $last_count) ? true : false;
 
 //calc rates
 //calc volume

@@ -10,14 +10,14 @@ description("user registration");
 
 
 
-dataCreate("users",  $admin_token);
-dataCreate("tokens",  $admin_token);
+dataCreate(["users"],  $admin_token);
+dataCreate(["tokens"],  $admin_token);
 
 
 $token = random_id();
 
-dataSet("users", $login, $token, null);
-dataSet("tokens", $token, $admin_token, $login);
+dataSet(["users", $login], $token, null);
+dataSet(["tokens", $token], $admin_token, $login);
 
 $response["token"] = $token;
 
