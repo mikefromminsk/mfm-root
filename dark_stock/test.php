@@ -18,7 +18,6 @@ requestEquals("localhost/dark_stock/income.php",
 
 
 
-
 $result = requestEquals("localhost/dark_stock/limit.php",
     array("token" => $user1_token, "give" => "PAIN", "want" => "HRP", "give_count" => 1000, "want_count" => 1), "limit", true);
 $result = requestEquals("localhost/dark_stock/limit.php",
@@ -28,12 +27,27 @@ $result = requestEquals("localhost/dark_stock/limit.php",
 $result = requestEquals("localhost/dark_stock/limit.php",
     array("token" => $user1_token, "give" => "HRP", "want" => "PAIN", "give_count" => 1, "want_count" => 2000), "limit", true);
 
-echo json_encode($result);
+requestEquals("localhost/dark_stock/requests.php",
+    array(
+        "give" => "HRP",
+        "want" => "PAIN"
+    ), "limit", true);
 
 
-//oposite request
-//rates
-//oposite request
-//requests
-//volume
-//deals
+
+$hrp_received = requestEquals("localhost/dark_stock/output.php",
+    array(
+        "token" => $user1_token,
+        "domain_name" => "HRP",
+        "domain_name_postfix_length" => 2,
+    ), "limit", true);
+
+
+requestEquals("localhost/dark_wallet/save.php",
+    array(
+        "token" => $user1_token,
+        "domain_name" => "HRP",
+        "keys" => $hrp_received,
+    ), "added", 10);
+
+

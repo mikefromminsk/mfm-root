@@ -12,9 +12,8 @@ foreach ($keys as $name => $key) {
     $new_key = random_id();
     $valid = domain_set($host_name, $name, $key, $new_key, null);
     if ($valid) {
-        dataSet(["users", "admin", "wallet", $domain_name, $name], $admin_token, $key);
-        $count = dataGet(["users", $login, "wallet", $domain_name], $admin_token);
-        $response["added"] += dataSet(["users", $login, "wallet", $domain_name], $admin_token, $count + 1) ? 1 : 0;
+        dataSet(["store", $domain_name, $name], $admin_token, $key);
+        $response["added"] += dataInc(["users", $login, $domain_name], $admin_token, 1) ? 1 : 0;
     }
 }
 

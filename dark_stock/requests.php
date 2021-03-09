@@ -2,7 +2,12 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_stock/utils.php";
 
-$from = get_required("from");
-$to = get_required("to");
+$give = get_required("give");
+$want = get_required("want");
 
 description("req");
+
+$response["buy"] = dataGet(["requests", $give, $want], $admin_token, true, 0, 10);
+$response["sale"] = dataGet(["requests", $want, $give], $admin_token, true, 0, 10);
+
+echo json_encode($response);
