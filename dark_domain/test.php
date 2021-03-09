@@ -32,26 +32,6 @@ sync_dir("..", "../../host3.com");*/
 
 
 
-function generate_domains($domain_name, $domain_postfix_length)
-{
-    $keys = array();
-    $domains = array();
-    for ($i = 0; $i < pow(10, $domain_postfix_length); $i++) {
-        $new_domain = $domain_name . sprintf("%0" . $domain_postfix_length . "d", $i);
-        $keys[$new_domain] = random_id();
-        $domains[] = array(
-            "domain_name" => $new_domain,
-            "domain_prev_key" => null,
-            "domain_key_hash" => hash_sha56($keys[$new_domain]),
-            "server_repo_hash" => null,
-        );
-    }
-    return array("keys" => $keys, "domains" => $domains);
-}
-
-
-
-
 $keys = requestEquals("localhost/dark_domain/hosting.php",
     array(
         "domain_name" => "HRP",
@@ -59,7 +39,7 @@ $keys = requestEquals("localhost/dark_domain/hosting.php",
         "keys" => array(),
     ), "errors", 0);
 
-$hrp = generate_domains("HRP", 1);
+$hrp = domains_generate("HRP", 1);
 
 requestCount("localhost/dark_domain/domains.php",
     array(
@@ -68,22 +48,9 @@ requestCount("localhost/dark_domain/domains.php",
 
 
 
-
 $payment_keys = array_slice($hrp["keys"], 0, 2);
 
-$keys = requestEquals("localhost/dark_domain/hosting.php",
-    array(
-        "domain_name" => "PAIN",
-        "domain_postfix_length" => 1,
-        "keys" => $payment_keys,
-    ), "errors", 0);
-
-$pain = generate_domains("PAIN", 1);
-
-requestCount("localhost/dark_domain/domains.php",
-    array(
-        "domains" => $pain["domains"]
-    ), "bad_domains", 0);
+include_once $_SERVER["DOCUMENT_ROOT"] . "/paincoin/test.php";
 
 /*
 http_get("host1.com/dark_node/init.php");

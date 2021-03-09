@@ -219,3 +219,22 @@ function domain_get_list($prefix, $offset = 0, $count = 10)
 {
     return select("select * from domains where archived = 0 and domain_name like '$prefix%' order by domain_set_time limit $offset, $count");
 }
+
+
+function domains_generate($domain_name, $domain_postfix_length)
+{
+    $keys = array();
+    $domains = array();
+    for ($i = 0; $i < pow(10, $domain_postfix_length); $i++) {
+        $new_domain = $domain_name . sprintf("%0" . $domain_postfix_length . "d", $i);
+        $keys[$new_domain] = random_id();
+        $domains[] = array(
+            "domain_name" => $new_domain,
+            "domain_prev_key" => null,
+            "domain_key_hash" => hash_sha56($keys[$new_domain]),
+            "server_repo_hash" => null,
+        );
+    }
+    return array("keys" => $keys, "domains" => $domains);
+}
+

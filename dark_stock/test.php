@@ -35,12 +35,12 @@ requestEquals("localhost/dark_stock/requests.php",
 
 
 
-$hrp_received = requestEquals("localhost/dark_stock/output.php",
+$hrp_received = requestNotEquals("localhost/dark_stock/output.php",
     array(
         "token" => $user1_token,
         "domain_name" => "HRP",
-        "domain_name_postfix_length" => 2,
-    ), "limit", true);
+        "output_count" => 1000,
+    ), "keys", null);
 
 
 requestEquals("localhost/dark_wallet/save.php",
@@ -48,6 +48,6 @@ requestEquals("localhost/dark_wallet/save.php",
         "token" => $user1_token,
         "domain_name" => "HRP",
         "keys" => $hrp_received,
-    ), "added", 10);
+    ), "added", 1000);
 
 
