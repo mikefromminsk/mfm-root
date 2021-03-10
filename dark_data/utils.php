@@ -169,13 +169,13 @@ function dataGet(array $path, $password, $asc = null, $offset = 0, $count = 1000
 function dataInc(array $path, $password, $inc_val)
 {
     $last_val = dataGet($path, $password);
-    return dataSet($path, $password, $last_val + $inc_val);
+    return dataSet($path, $password, ($last_val ?: 0) + $inc_val);
 }
 
 function dataDec(array $path, $password, $dec_val)
 {
     $last_val = dataGet($path, $password);
-    return dataSet($path, $password, $last_val - $dec_val);
+    return dataSet($path, $password, ($last_val ?: 0) - $dec_val);
 }
 
 function dataSet(array $path, $password, $value)
