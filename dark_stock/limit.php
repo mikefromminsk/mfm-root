@@ -40,32 +40,30 @@ $opp_price = $want_count / $give_count;
 //$response["price"] = $price;
 $response["opp_price"] = $opp_price;
 
-if ($give_count < $want_count) {
-    $top_prices = dataGet(["requests", $want, $give], $admin_token, false, 0, 2);
-    $response["all"] = $top_prices;
+$top_prices = dataGet(["requests", $want, $give], $admin_token, $my_price > 1, 0, 2);
 
-    foreach ($top_prices as $price => $users) {
-        $price = floatval($price);
-        if ($price >= $opp_price) {
-            foreach ($users as $user_login => $request) {
-                $exchange_first_count = min($give_count, $request["want"]);
-                $exchange_second_count = $exchange_first_count * $price;
+foreach ($top_prices as $price_str => $users) {
 
-                dataDec(["users", $login, $give], $admin_token, $exchange_first_count);
-                dataInc(["users", $login, $want], $admin_token, $exchange_second_count);
+    $price = floatval($price_str);
+    if ($my_price > 1 && $price <= $opp_price || $my_price < 1 && $price >= $opp_price) {
+        foreach ($users as $user_login => $request) {
+            $exchange_first_count = min($give_count, $request["want"]);
+            $exchange_second_count = $exchange_first_count * $price;
 
-                dataInc(["users", $user_login, $give], $admin_token, $exchange_first_count);
-                dataDec(["users", $user_login, $want], $admin_token, $exchange_second_count);
+            dataDec(["users", $login, $give], $admin_token, $exchange_first_count);
+            dataInc(["users", $login, $want], $admin_token, $exchange_second_count);
 
-                $response["opp_users"][] = array(
-                    "user" => $user_login,
-                    "req_price" => $request,
-                    "exchange_first_count" => $exchange_first_count,
-                    "exchange_second_count" => $exchange_second_count,
-                );
+            dataInc(["users", $user_login, $give], $admin_token, $exchange_first_count);
+            dataDec(["users", $user_login, $want], $admin_token, $exchange_second_count);
 
-                $give_count -= $exchange_first_count;
+            if ($request["want"] == $exchange_first_count) {
+                dataDelete(["requests", $want, $give, $price_str, $user_login], $admin_token);
+                $count = dataCount(["requests", $want, $give, $price_str], $admin_token);
+                if ($count == 0)
+                    dataDelete(["requests", $want, $give, $price_str], $admin_token);
             }
+
+            $give_count -= $exchange_first_count;
         }
     }
 }

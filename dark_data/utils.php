@@ -147,18 +147,6 @@ function dataSetValue($data_id, &$result)
     }
 }
 
-function dataDeleteChildren($data_id)
-{
-    // TODO doesnt work
-    $children = selectListWhere("data", "data_id", array(
-        "data_parent_id" => $data_id
-    ));
-
-    foreach ($children as $child_data_id) {
-        dataDeleteChildren($child_data_id);
-        query("delete from data where data_id = $child_data_id");
-    }
-}
 
 function dataGet(array $path, $password, $asc = null, $offset = 0, $count = 10000, $level = -1)
 {
@@ -195,4 +183,24 @@ function dataCount(array $path, $password)
 {
     $data_id = dataCreate($path, $password, false);
     return scalarWhere("data", "count(*)", array("data_parent_id" => $data_id));
+}
+
+function dataDelete(array $path, $password)
+{
+    $data_id = dataCreate($path, $password, false);
+    dataDeleteChildren($data_id);
+    return query("delete from data where data_id = $data_id");
+}
+
+function dataDeleteChildren($data_id)
+{
+    // TODO doesnt work
+    $children = selectListWhere("data", "data_id", array(
+        "data_parent_id" => $data_id
+    ));
+
+    foreach ($children as $child_data_id) {
+        dataDeleteChildren($child_data_id);
+        query("delete from data where data_id = $child_data_id");
+    }
 }

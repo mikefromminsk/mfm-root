@@ -7,7 +7,7 @@ $want = get_required("want");
 
 description("req");
 
-$response["buy"] = dataGet(["requests", $give, $want], $admin_token, true, 0, 10);
-$response["sale"] = dataGet(["requests", $want, $give], $admin_token, true, 0, 10);
+$response["buy"] = dataGet(["requests", $give, $want], $admin_token, false, 0, 2);
+$response["sale"] = dataGet(["requests", $want, $give], $admin_token, true, 0, 2);
 
 echo json_encode($response);
