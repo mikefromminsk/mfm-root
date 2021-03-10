@@ -28,7 +28,6 @@ $opp_price = $want_count / $give_count;
 $top_prices = dataGet(["requests", $want, $give], $admin_token, $my_price > 1, 0, 2);
 
 foreach ($top_prices as $price_str => $users) {
-
     $price = floatval($price_str);
     if ($my_price > 1 && $price <= $opp_price || $my_price < 1 && $price >= $opp_price) {
         foreach ($users as $user_login => $request) {
