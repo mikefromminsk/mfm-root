@@ -19,26 +19,11 @@ $start_give_count = $give_count;
      "keys" => $keys,
 ));*/
 
-//sell buy
-//creates deals
-/*$block = 10;
-for ($offset = 0; sizeof($keys) > 0; $offset += $block) {
-    $opposite = dataGet("requests.$to", $from, $admin_token, "ask", 0, $block);
-    foreach ($opposite as $request) {
-
-    }
-    if (sizeof($opposite) < $block)
-        break;
-}*/
-
 
 $pair_name = pairName($give, $want);
 
 $my_price = $give_count / $want_count;
 $opp_price = $want_count / $give_count;
-
-//$response["price"] = $price;
-$response["opp_price"] = $opp_price;
 
 $top_prices = dataGet(["requests", $want, $give], $admin_token, $my_price > 1, 0, 2);
 
@@ -55,6 +40,8 @@ foreach ($top_prices as $price_str => $users) {
 
             dataInc(["users", $user_login, $give], $admin_token, $exchange_first_count);
             dataDec(["users", $user_login, $want], $admin_token, $exchange_second_count);
+
+            //creates deals
 
             if ($request["want"] == $exchange_first_count) {
                 dataDelete(["requests", $want, $give, $price_str, $user_login], $admin_token);
@@ -80,22 +67,6 @@ if ($give_count > 0) {
     $request["want"] += $want_count;
     $response["push_request"] = dataSet(["requests", $give, $want, $price_str, $login], $admin_token, $request) ? true : false;
 }
-
-
-/*$
-
-                $request_volume += $give_count_to_user;
-                dataAdd(["deals", $pair_name], $admin_token, array(
-                    "init" => array(
-                        "login" => $login,
-                        "give" => $give_count_to_user,
-                    ),
-                    "waiter" => array(
-                        "login" => $user_login,
-                        "have" => $give_count_to_user,
-                    ),
-                    "price" => $give_count_to_user,
-                ));*/
 
 /*
 //calc rates
