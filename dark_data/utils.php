@@ -187,7 +187,7 @@ function dataAdd(array $path, $password, $value)
 function dataCount(array $path, $password)
 {
     $data_id = dataCreate($path, $password, false);
-    return scalarWhere("data", "count(*)", array("data_parent_id" => $data_id));
+    return intval(scalarWhere("data", "count(*)", array("data_parent_id" => $data_id)));
 }
 
 function dataDelete(array $path, $password)

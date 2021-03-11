@@ -1,12 +1,15 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/paincoin/init.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/test.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/paincoin/init.php";
 
 $email = "x29a100@mail.ru";
+
+
+//die(json_encode(dataGet(["store"], 123, true, 0, 5)));
+
 $request = requestNotNull("localhost/paincoin/pain.php",
     array("text" => "I am bad person", "email" => $email), "request")["request"];
-
 
 $approve = requestEquals("localhost/paincoin/approve.php",
     array("request_id" => $request["request_id"],), "promo_count", 5);
