@@ -11,7 +11,9 @@ description("input pain message");
 
 $request_id = random_id();
 
-$response["success"] = dataAdd(["requests", $request_id], $admin_token, array(
+dataCreate(["requests"], $admin_token);
+$response["success"] = dataSet(["requests", $request_id], $admin_token, array(
+    "request_id" => $request_id,
     "text" => $text,
     "email" => $email,
 )) ? true : false;
@@ -22,8 +24,7 @@ telegramSend($text . "\napprove" . $approve_link . "\nreject" . $reject_link);
 */
 
 //send mail with request id
-
-$response["request_id"] = $request_id;
+$response["request"] = dataGet(["requests", $request_id], $admin_token);
 
 echo json_encode($response);
 

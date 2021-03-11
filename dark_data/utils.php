@@ -18,7 +18,8 @@ function dataCreate(array $path, $password, $create = true)
     $data_id = null;
 
     foreach ($path as $index => $key) {
-
+        if (!is_string($key))
+            $key = "$key";
         $push = strpos($key, "[]");
         $key = substr($key, 0, $push !== false ? $push : strlen($key));
         $data_parent_id = $data_id;
@@ -128,11 +129,14 @@ function dataSetValue($data_id, &$result)
     } else if (is_string($result)) {
         return updateWhere("data", array("data_type" => DATA_STRING, "data_value" => $result), array("data_id" => $data_id));
     } else if (is_array($result)) {
+
+
         if (is_assoc($result)) {
             updateWhere("data", array("data_type" => DATA_MAP, "data_value" => null), array("data_id" => $data_id));
         } else {
             updateWhere("data", array("data_type" => DATA_ARRAY, "data_value" => null), array("data_id" => $data_id));
         }
+
         $success = true;
         foreach ($result as $key => $value) {
             $child_data_id = insertRowAndGetId("data", array(
@@ -140,6 +144,7 @@ function dataSetValue($data_id, &$result)
                 "data_key" => $key,
                 "data_type" => DATA_NULL,
             ));
+
             $success = dataSetValue($child_data_id, $value);
             if (!$success) break;
         }

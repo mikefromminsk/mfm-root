@@ -19,36 +19,39 @@ use PHPMailer\Exception;
 use PHPMailer\SMTP;
 
 
-function send($Subject, $Body, $Receivers){
-    $mail = new PHPMailer(true);
-    $mail->IsSMTP();
-    $mail->SMTPDebug = 0;
-    $mail->SMTPAuth = true;
-    $mail->SMTPSecure = "ssl";
-    $mail->Host = "smtp.gmail.com";
-    $mail->Port = 465;
-    $mail->Username = $GLOBALS["email_addr"];
-    $mail->Password = $GLOBALS["email_pass"];
-    $mail->From = $GLOBALS["email_addr"];
-    $mail->FromName = $GLOBALS["email_name"];
-    $mail->isHTML(true);
+function mailSend($emails, $subject, $body){
+    try {
+        $mail = new PHPMailer(true);
+        $mail->IsSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->SMTPAuth = true;
+        $mail->SMTPSecure = "ssl";
+        $mail->Host = "smtp.gmail.com";
+        $mail->Port = 465;
+        $mail->Username = $GLOBALS["email_addr"];
+        $mail->Password = $GLOBALS["email_pass"];
+        $mail->From = $GLOBALS["email_addr"];
+        $mail->FromName = $GLOBALS["email_name"];
+        $mail->isHTML(true);
 
-    if (is_array($Receivers)) {
-        if (array_keys($Receivers) === range(0, count($Receivers) - 1)){
-            foreach ($Receivers as $receiver)
-                $mail->addAddress($receiver);
+        if (is_array($emails)) {
+            if (array_keys($emails) === range(0, count($emails) - 1))
+                foreach ($emails as $receiver)
+                    $mail->addAddress($receiver);
+             else
+                foreach ($emails as $receiver_email => $receiver_name)
+                    $mail->addAddress($receiver_email, $receiver_name);
         } else {
-            foreach ($Receivers as $receiver_email => $receiver_name)
-                $mail->addAddress($receiver_email, $receiver_name);
+            $mail->addAddress($emails);
         }
-    } else {
-        $mail->addAddress($Receivers);
-    }
 
-    $mail->Subject = $Subject;
-    $mail->Body = $Body;
-    $success = $mail->send();
-    if (!$success && $mail->SMTPDebug == 1)
-        echo "check google option at https://myaccount.google.com/lesssecureapps";
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        $success = $mail->send();
+        if (!$success && $mail->SMTPDebug == 1)
+            return "check google option at https://myaccount.google.com/lesssecureapps";
+    } catch (Exception $e) {
+        return $e->getMessage();
+    }
     return $success;
 }

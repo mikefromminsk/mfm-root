@@ -41,17 +41,6 @@ $keys = requestEquals("localhost/dark_domain/hosting.php",
 
 $hrp = domains_generate("HRP", 1);
 
-requestCount("localhost/dark_domain/domains.php",
-    array(
-        "domains" => $hrp["domains"]
-    ), "bad_domains", 0);
-
-
-
-$payment_keys = array_slice($hrp["keys"], 0, 2);
-
-include_once $_SERVER["DOCUMENT_ROOT"] . "/paincoin/test.php";
-
 /*
 http_get("host1.com/dark_node/init.php");
 http_get("host1.com/dark_node/commit.php?domain_name=node&domain_next_key=1");

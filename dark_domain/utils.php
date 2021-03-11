@@ -235,6 +235,7 @@ function domains_generate($domain_name, $domain_postfix_length)
             "server_repo_hash" => null,
         );
     }
-    return array("keys" => $keys, "domains" => $domains);
+    domains_set($GLOBALS["host_name"], $domains);
+    return $keys;
 }
 

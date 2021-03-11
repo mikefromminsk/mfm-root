@@ -2,6 +2,7 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_data/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/test.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/paincoin/test.php";
 
 $admin_token = requestNotNull("localhost/dark_wallet/reg.php",
     array(
@@ -10,21 +11,20 @@ $admin_token = requestNotNull("localhost/dark_wallet/reg.php",
     ), "token")["token"];
 
 
+
 function encode_decode(&$keys)
 {
     foreach ($keys as $key => $value)
         $keys[$key] = strrev($value);
 }
 
-encode_decode($keys);
-
-$keys = $hrp["keys"];
+encode_decode($hrp);
 
 $result = requestEquals("localhost/dark_wallet/save.php",
     array(
         "token" => $admin_token,
         "domain_name" => "HRP",
-        "keys" => $keys,
+        "keys" => $hrp,
     ), "added", 10);
 
 
@@ -38,8 +38,8 @@ $user1_token = requestNotNull("localhost/dark_wallet/reg.php",
         "password" => "123",
     ), "token")["token"];
 
-encode_decode($keys);
-$hrp_send_keys = array_slice($keys, 0, 10);
+encode_decode($hrp);
+$hrp_send_keys = array_slice($hrp, 0, 10);
 
 requestEquals("localhost/dark_wallet/send.php",
     array(
