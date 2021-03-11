@@ -2,10 +2,10 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_wallet/test.php";
 
-$user1_token = requestNotEquals("localhost/dark_stock/reg.php",
-    array("login" => "user1", "password" => "123",), "token", null)["token"];
-$user2_token = requestNotEquals("localhost/dark_stock/reg.php",
-    array("login" => "user2", "password" => "123",), "token", null)["token"];
+$user1_token = requestNotNull("localhost/dark_stock/reg.php",
+    array("login" => "user1", "password" => "123",), "token")["token"];
+$user2_token = requestNotNull("localhost/dark_stock/reg.php",
+    array("login" => "user2", "password" => "123",), "token")["token"];
 
 
 requestEquals("localhost/dark_stock/income.php",

@@ -21,6 +21,10 @@ $response["success"] = dataAdd(["requests", $request_id], $admin_token, array(
 telegramSend($text . "\napprove" . $approve_link . "\nreject" . $reject_link);
 */
 
+//send mail with request id
+
+$response["request_id"] = $request_id;
+
 echo json_encode($response);
 
 

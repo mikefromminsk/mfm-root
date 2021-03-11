@@ -14,8 +14,11 @@ $request = dataGet(["requests", $request_id], $admin_token);
 
 dataSet(["requests", $request_id, "promo"], $admin_token, $promo);
 
+//domain_set($host_name, );
+
 $promo_url = $host_name . "/dark_wallet/promo.php?login=" .  $request["email"] . "&promo=$promo";
 
 $response["success"] = mail($request["email"], "Вы выиграли paincoun", "For get coins go to follow link: $promo_url");
+$response["promo_url"] = $promo_url;
 
 echo json_encode($response);

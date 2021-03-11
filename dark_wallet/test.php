@@ -3,11 +3,11 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_data/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/dark_domain/test.php";
 
-$admin_token = requestNotEquals("localhost/dark_wallet/reg.php",
+$admin_token = requestNotNull("localhost/dark_wallet/reg.php",
     array(
         "login" => "admin",
         "password" => "123",
-    ), "token", null)["token"];
+    ), "token")["token"];
 
 
 function encode_decode(&$keys)
@@ -32,11 +32,11 @@ $result = requestEquals("localhost/dark_wallet/save.php",
 // buy hrps payment_start.php;
 // save hrps payment_finish.php;
 
-$user1_token = requestNotEquals("localhost/dark_wallet/reg.php",
+$user1_token = requestNotNull("localhost/dark_wallet/reg.php",
     array(
         "login" => "user1",
         "password" => "123",
-    ), "token", null)["token"];
+    ), "token")["token"];
 
 encode_decode($keys);
 $hrp_send_keys = array_slice($keys, 0, 10);
