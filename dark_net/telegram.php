@@ -1,18 +1,16 @@
 <?php
 
-
-function telegramSend($chatID, $message)
+function telegramSend($telegram_token, $chatID, $message)
 {
-    file_get_contents("https://api.telegram.org/bot" . $GLOBALS["telegram_token"] . "/sendMessage?"
+    return json_decode(file_get_contents("https://api.telegram.org/bot$telegram_token/sendMessage?"
         . http_build_query(array(
             "text" => $message,
             "chat_id" => $chatID,
-        )));
+            "parse_mode" => "HTML",
+        ))), true);
 }
 
-
-function telegramGetUpdates($offset = null)
+function telegramGetUpdates($telegram_token, $offset = null)
 {
-    $response = file_get_contents("https://api.telegram.org/bot" . $GLOBALS["telegram_token"] . "/getUpdates?offset=$offset");
-    return json_decode($response, true);
+    return json_decode(file_get_contents("https://api.telegram.org/bot$telegram_token/getUpdates?offset=$offset"), true);
 }

@@ -48,11 +48,16 @@ input[type=text], textarea, input[type=email] {
     font-family: NewFont, serif;
 }
 
+input[type=submit]:disabled {
+    background-color: #c6c6c6;
+    color: black;
+}
+
 textarea {
     resize: none;
 }
 
-input[type=button] {
+input[type=button], input[type=submit] {
     padding: 0 16px;
     font-size: 1.5em;
     font-family: NewFont, serif;

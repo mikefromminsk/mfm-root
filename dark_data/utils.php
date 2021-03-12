@@ -152,7 +152,7 @@ function dataSetValue($data_id, &$result)
     }
 }
 
-
+/*TODO offset -10 count 10*/
 function dataGet(array $path, $password, $asc = null, $offset = 0, $count = 10000, $level = -1)
 {
     $data_id = dataCreate($path, $password, false);

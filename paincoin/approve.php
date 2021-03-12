@@ -26,7 +26,10 @@ dataSet(["requests", $request_id, "promo"], $admin_token, $promo);
 $promo_url = $host_name . "/paincoin/promo.php?promo=$promo";
 $reg_url = $host_name . "/dark_wallet/reg.html?login=" . $request["email"] . "&promo_url=$promo_url";
 
-//$response["mail_send"] = mailSend($request["email"], "Вы выиграли paincoun", "For get coins go to follow link: $promo_url");
+$response["mail_send"] = mailSend($request["email"],
+    "Вы выиграли paincoin",
+    "Для получение койнов пройдите по ссылке: <a href='$promo_url'>$promo_url</a>");
+
 $response["promo_url"] = $promo_url;
 $response["promo_count"] = dataCount(["promos", $promo], $admin_token);
 

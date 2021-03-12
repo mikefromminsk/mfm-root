@@ -1,21 +1,5 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
-
-
-function http_json_put($url, $fields)
-{
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($fields));
-    $result = curl_exec($ch);
-    curl_close($ch);
-    return json_decode($result, true);
-}
-
 function to_utf8($mixed)
 {
     if (is_array($mixed)) {
@@ -93,29 +77,4 @@ function redirect($url, $params = array(), $params_in_url = true)
         header("Location: $url");
         die($redirect_script);
     }
-}
-
-function http_request($url, $params = array(), $headers = array())
-{
-    $url_scheme = parse_url($url);
-    $route = selectRowWhere("routes", array(
-        "route_protocol" => $url_scheme["scheme"] ?: "http",
-        "route_address" => $url_scheme["host"] ?: "localhost",
-    ));
-    $result = null;
-    if (doubleval($route["route_last_online_time"]) > doubleval($route["route_last_offline_time"])) {
-        $result = http_post($url, $params, $headers);
-    } else {
-        // other host routes
-    }
-
-    if ($result === false) {
-        updateWhere("routes", array("route_last_offline_time" => time()), array("route_id" => $route["route_id"]));
-        // proxy request
-    }
-    if ($result !== false) {
-        updateWhere("routes", array("route_last_online_time" => time()), array("route_id" => $route["route_id"]));
-    }
-
-    return $result;
 }
