@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+
+<form ng-submit="get_promo($event)">
+    <input type="text" ng-model="promo_code" required>
+    <button type="submit">Get promo</button>
+</form>
+
+
+<button ng-click="update()">Update</button>
+{{login}}
+<div class="col">
+    <div ng-repeat="(key, value) in account.balance">
+        <button ng-click="open_coin(key)">{{key}} = {{value}}</button>
+    </div>
+</div>
+
+<div class="row">
+    <a href="/stock">
+        <button>Главная</button>
+    </a>
+    <a href="/stock/pairs">
+        <button>Торговля</button>
+    </a>
+    <a href="/stock/new_coin">
+        <button>Новый койн</button>
+    </a>
+    <a href="/stock/dialogs">
+        <button>Мессенджер</button>
+    </a>
+    <a href="/stock/account">
+        <button disabled>Аккаунт</button>
+    </a>
+</div>
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        $scope.account = {}
+
+        $scope.update = function () {
+            $http({
+                method: "POST",
+                url: "account.php",
+                data: {
+                    token: localStorage.getItem("token"),
+                },
+            }).then(function (response) {
+                $scope.account = response.data.account
+                $scope.login = response.data.login
+            })
+        }
+
+        $scope.update()
+
+        $scope.open_coin = function (name) {
+            location.href = "coin?domain_name=" + name
+        }
+
+        $scope.get_promo = function (e){
+            e.preventDefault()
+            $http({
+                method: "POST",
+                url: "get_promo.php",
+                data: {
+                    token: localStorage.getItem("token"),
+                    promo_code: $scope.promo_code,
+                },
+            }).then(function (response) {
+                $scope.update()
+            })
+        }
+    })
+</script>
+
+</body>
+</html>

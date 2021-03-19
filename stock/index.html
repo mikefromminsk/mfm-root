@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+
+<div class="row">
+    <input type="text" ng-model="search_text" required>
+    <button type="submit">Поиск</button>
+</div>
+<div class="col">
+    <div class="row" ng-repeat="find_result in found">
+        <a href="pairs/trade?pair={{find_result}}"><button>{{find_result}}</button></a>
+    </div>
+</div>
+
+<div class="col">
+    <div class="row" ng-repeat="pair in top">
+        <div class="row">
+            {{pair.rate}} <a href="pairs/trade?pair={{pair.pair}}"><button>{{pair.pair}}</button></a>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <a href="/stock/reg"><button >Регистрация</button></a>
+    <a href="/stock/login"><button >Вход</button></a>
+    <button ng-click="exit()" >Выход</button>
+</div>
+
+<form class="col" ng-submit="auth($event)" style="width: 400px">
+    <input type="text" ng-model="login" required>
+    <input type="text" ng-model="password" required>
+    <input type="text" ng-model="promo_url">
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        $scope.exit = function () {
+            localStorage.removeItem("token")
+        }
+
+        $scope.search_text = ""
+
+        $http({
+            method: "POST",
+            url: "pairs/top.php",
+        }).then(function (response) {
+            $scope.top = response.data.top
+        })
+
+        $scope.search = function (e) {
+            e.preventDefault()
+            $http({
+                method: "POST",
+                url: "search.php",
+                data: {
+                    search: $scope.search_text
+                }
+            }).then(function (response) {
+                $scope.top = response.data.top
+            })
+        }
+    })
+</script>
+</body>
+</html>

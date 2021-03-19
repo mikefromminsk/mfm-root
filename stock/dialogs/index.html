@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+
+<form ng-submit="search($event)" class="row">
+    <input type="text" ng-model="search_text" required>
+    <button type="submit">Поиск</button>
+</form>
+
+<div class="col" ng-repeat="found_result in found">
+    <a href="chat?dialog_id={{found_result.dialog_id}}"><button>{{found_result.dialog_id}}</button></a>
+</div>
+
+
+<div class="col">
+    <div class="row" ng-repeat="dialog in dialogs" ng-click="open(dialog)">
+        {{dialog}}
+    </div>
+</div>
+
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+
+        $scope.dialogs = []
+        $scope.found = []
+
+        $http({
+            method: "POST",
+            url:"dialogs.php",
+            data: {
+                token: localStorage.getItem("token"),
+            },
+        }).then(function (response) {
+            $scope.dialogs = response.data.dialogs
+        })
+
+        $scope.open = function(dialog){
+            location.href = "chat/?receiver=" + dialog.dialog_id
+        }
+
+        $scope.search = function (e) {
+            e.preventDefault()
+            $http({
+                method: "POST",
+                url:"search.php",
+                data: {
+                    token: localStorage.getItem("token"),
+                    search: $scope.search_text,
+                },
+            }).then(function (response) {
+                $scope.found = response.data.found
+            })
+        }
+    })
+</script>
+
+</body>
+</html>

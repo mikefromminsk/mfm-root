@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+
+
+<div class="col" style="width: 300px">
+    <div class="row" ng-repeat="pair in pairs">
+        {{pair.split("_")[0]}} {{pair.split("_")[1]}}
+    </div>
+    <form class="col" ng-submit="add_pair($event)">
+        <div class="row">
+            <input type="text" ng-model="first" required>
+            <input type="text" ng-model="second" required>
+        </div>
+        <button type="submit">Добавить пару</button>
+    </form>
+</div>
+
+
+<div class="row">
+    <a href="/stock">
+        <button>Главная</button>
+    </a>
+    <a href="/stock/pairs">
+        <button>Торговля</button>
+    </a>
+    <a href="/stock/new_coin">
+        <button>Новый койн</button>
+    </a>
+    <a href="/stock/dialogs">
+        <button>Мессенджер</button>
+    </a>
+    <a href="/stock/account">
+        <button>Аккаунт</button>
+    </a>
+</div>
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        const params = new URLSearchParams(location.search);
+        $scope.domain_name = params.get("domain_name")
+        $scope.coin = {}
+
+        function update() {
+            $http({
+                method: "POST",
+                url: "pairs.php",
+                data: {
+                    token: localStorage.getItem("token"),
+                    domain_name: $scope.domain_name,
+                },
+            }).then(function (response) {
+                $scope.pairs = response.data.pairs
+            })
+        }
+
+        update()
+
+
+        $scope.add_pair = function (e) {
+            e.preventDefault()
+            $http({
+                method: "POST",
+                url: "add_pair.php",
+                data: {
+                    token: localStorage.getItem("token"),
+                    first: $scope.first,
+                    second: $scope.second,
+                },
+            }).then(function (response) {
+                update()
+            })
+        }
+    })
+</script>
+
+</body>
+</html>

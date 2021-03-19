@@ -1,0 +1,121 @@
+@font-face {
+    font-family: NewFont;
+    src: url("../font/SomeTimeLater.otf") format("opentype");
+}
+
+body {
+    font-family: NewFont, serif;
+}
+
+h1, h2, h3, h4, h5 {
+    margin: 0;
+    line-height: 1em;
+}
+
+.main_container {
+    width: 960px;
+}
+
+.header {
+    background-color: white;
+    box-shadow: 0 1px 5px 0 rgba(41, 85, 115, .21);
+    height: 48px
+}
+
+.menu-item {
+    color: #162d3d;
+    font-size: 1.5em;
+    margin-right: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    color: #3899ec;
+}
+
+.logo {
+    color: #162d3d;
+    font-size: 2em;
+    margin-right: 10px;
+}
+
+input[type=text], textarea, input[type=email] {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 14px 8px 8px 14px;
+    font-size: 2em;
+    font-family: NewFont, serif;
+}
+
+input[type=submit]:disabled {
+    background-color: #c6c6c6;
+    color: black;
+}
+
+textarea {
+    resize: none;
+}
+
+input[type=button], input[type=submit] {
+    padding: 0 16px;
+    font-size: 1.5em;
+    font-family: NewFont, serif;
+    background-color: black;
+    color: white;
+    border-radius: 4px;
+    height: 60px;
+    cursor: pointer;
+}
+
+input[type=button]:hover {
+    background-color: #ffffff;
+    color: black;
+}
+
+.divider {
+    width: 960px;
+    margin: 30px auto;
+    height: 2px;
+    background-color: black;
+}
+
+a {
+    color: black;
+}
+
+.card {
+    background-color: #ccc;
+    color: black;
+    font-size: 1.5em;
+    padding: 18px 20px;
+    line-height: 26px;
+    border-radius: 7px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.card:after {
+    content: " ";
+    position: absolute;
+    bottom: -20px;
+    right: 7%;
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    border: solid transparent;
+    border-top-color: #ccc;
+    border-width: 10px;
+}
+
+.owner {
+    font-size: 1.2em;
+    margin-bottom: 14px;
+}
+
+.footer-social-logo {
+    width: 40px;
+    height: 40px;
+    fill: white;
+    margin: 2px;
+}
