@@ -2,74 +2,160 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Булат Окуджава</title>
     <script src="/DarkNet/angular/angular-material.min.js"></script>
     <link rel="stylesheet" href="/DarkNet/angular/angular-material.min.css">
 
     <link rel="stylesheet" href="style.css">
+    <script src="controller.js"></script>
 </head>
-<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+<body ng-app="App" ng-controller="Controller" class="col">
 
-<div class="row">
-    <input type="text" ng-model="search_text" required>
-    <button type="submit">Поиск</button>
-</div>
-<div class="col">
-    <div class="row" ng-repeat="find_result in found">
-        <a href="pairs/trade?pair={{find_result}}"><button>{{find_result}}</button></a>
-    </div>
-</div>
-
-<div class="col">
-    <div class="row" ng-repeat="pair in top">
-        <div class="row">
-            {{pair.rate}} <a href="pairs/trade?pair={{pair.pair}}"><button>{{pair.pair}}</button></a>
+<div class="row border align-center">
+    <div class="row main-container align-start-center" style="background-color: #181818;">
+        <h2 style="margin: 0 10px">Музыка</h2>
+        <input class="search-input" placeholder="Трек, альбом, исполнитель, подкаст">
+        <a href="#" class="menu-item">Главное</a>
+        <a href="#" class="menu-item">Подкасты</a>
+        <a href="#" class="menu-item">Жанры</a>
+        <a href="#" class="menu-item">Радио</a>
+        <div class="flex row align-end">
+            <a class="menu-item row align-start-center" href="#">
+                <span class="my-collection-logo"></span>
+                Моя коллекция
+            </a>
         </div>
     </div>
 </div>
 
+<main class="row align-center">
+    <div class="row main-container" style="background-color: #181818;">
+        <div class="col" style="padding: 30px;">
+            <div class="row">
+                <img class="author-logo" src="{{artist.logo}}"/>
+                <div class="col">
+                    <span class="text-back" style="letter-spacing: 1px; margin-bottom: 5px">ИСПОЛНИТЕЛЬ</span>
+                    <h1 style="margin-bottom: 7px;">{{artist.name}}</h1>
+                    <div class="row align-start-center">
+                        <span class="text-back">Нравится слушателям:&nbsp</span>
+                        <div ng-repeat="friend in likes.fiends">{{friend + (!$last ? ",&nbsp" : "")}}</div>
+                    </div>
+                    <div class="flex row align-start-end">
+                        <div class="row align-start-center round-button play-button" style="margin-right: 10px;">
+                            <img src="img/play.svg" style="width: 24px; height: 24px; margin-right: 5px;">
+                            <span>Слушать</span>
+                        </div>
 
-<div class="row">
-    <a href="/stock/reg"><button >Регистрация</button></a>
-    <a href="/stock/login"><button >Вход</button></a>
-    <button ng-click="exit()" >Выход</button>
-</div>
+                        <div class="row align-start-center round-button like-button" style="margin-right: 10px;">
+                            <img src="img/liked.svg" style="width: 24px; height: 24px; margin-right: 5px;">
+                            <span>{{likes.count.toLocaleString()}}</span>
+                        </div>
 
-<form class="col" ng-submit="auth($event)" style="width: 400px">
-    <input type="text" ng-model="login" required>
-    <input type="text" ng-model="password" required>
-    <input type="text" ng-model="promo_url">
-    <input type="submit" value="Submit">
-</form>
+                        <div class="row align-start-center round-button share-button" style="margin-right: 10px;">
+                            <img src="img/share.svg" style="width: 24px; height: 24px; margin-right: 5px;">
+                        </div>
 
-<script>
-    angular.module("App", []).controller("Controller", function ($scope, $http) {
-        $scope.exit = function () {
-            localStorage.removeItem("token")
-        }
+                        <div class="row  align-end">
+                            <div class="row align-start-center round-button share-button" style="margin-right: 10px;">
+                                <img src="img/img1.svg" style="width: 24px; height: 24px; margin-right: 5px;">
+                            </div>
+                            <div class="row align-start-center round-button share-button">
+                                <img src="img/img2.svg" style="width: 24px; height: 24px; margin-right: 5px;">
+                            </div>
+                        </div>
+                    </div>
 
-        $scope.search_text = ""
+                </div>
+            </div>
 
-        $http({
-            method: "POST",
-            url: "pairs/top.php",
-        }).then(function (response) {
-            $scope.top = response.data.top
-        })
+            <div class="row" style="margin-top: 30px; margin-bottom: 10px">
+                <span class="track-list-menu-item">ГЛАВНОЕ</span>
+                <span class="track-list-menu-item">ТРЕКИ</span>
+                <span class="track-list-menu-item">АЛЬБОМЫ</span>
+                <span class="track-list-menu-item">КОНЦЕРТЫ</span>
+                <span class="track-list-menu-item">ПОХОЖИЕ</span>
+                <span class="track-list-menu-item">ИНФО</span>
+            </div>
 
-        $scope.search = function (e) {
-            e.preventDefault()
-            $http({
-                method: "POST",
-                url: "search.php",
-                data: {
-                    search: $scope.search_text
-                }
-            }).then(function (response) {
-                $scope.top = response.data.top
-            })
-        }
-    })
-</script>
+            <div class="divider"></div>
+
+            <div class="row align-start-center">
+                <span class="flex text3">Популярные треки</span>
+                <span class="text4">Смотреть все </span>
+                <img src="img/arrow-right.svg" style="width: 12px;height: 12px; ">
+            </div>
+
+            <div class="col">
+                <div class="row align-start-center track" ng-repeat="track in tracks">
+                    <div class="row align-center-center track-logo-background">
+                        <img class="track-logo-no-logo" src="img/track_no-cover.svg" >
+                    </div>
+
+                    <div class="row flex">
+                        <span class="text5">{{track.title}}</span>
+                        <span class="text-back">&nbsp—&nbsp{{artist.name}}</span>
+                    </div>
+
+                    <span class="text-back">{{track.length}}</span>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="vertical-divider"></div>
+        <div class="col text-back" style="white-space: normal; padding: 30px">
+            Була́т Ша́лвович Окуджа́ва (9 мая 1924, Москва, СССР — 12 июня 1997, Кламар, Франция) — советский и российский поэт, бард, прозаик и сценарист, композитор. Автор около двухсот авторских и эстрадных песен, один из наиболее ярких представителей жанра авторской песни в 1960-е—1980-е годы[9]. Участник Великой Отечественной войны. Гвардии красноармеец (1944).
+           <br> Награды
+           <br> Орден Отечественной войны I степени (1985).
+           <br> Орден Дружбы народов (1984).
+           <br> Медаль Жукова (1996).
+           <br> Медаль «За оборону Кавказа» (1944).
+           <br> Медаль «За победу над Германией в Великой Отечественной войне 1941—1945 гг.» (1945).
+           <br> Медаль «Двадцать лет Победы в Великой Отечественной войне 1941—1945 гг.» (1965).
+           <br> Медаль «Тридцать лет Победы в Великой Отечественной войне 1941—1945 гг.» (1975).
+           <br> Медаль «Сорок лет Победы в Великой Отечественной войне 1941—1945 гг.» (1985).
+           <br> Медаль «50 лет Победы в Великой Отечественной войне 1941—1945 гг.» (1995).
+           <br> Медаль «50 лет Вооружённых Сил СССР» (1968).
+           <br> Медаль «60 лет Вооружённых Сил СССР» (1977).
+           <br> Медаль «70 лет Вооружённых Сил СССР» (1988).
+           <br> Почётная медаль Правления Советского фонда мира[16].
+           <br> Премии, почётные звания
+           <br> Первая премия и приз «Золотой венец», Югославия (1967).
+           <br> Приз «Золотая гитара» на фестивале в Сан-Ремо, Италия (1985).
+           <br> Почётная степень доктора гуманитарных наук Норвичского университета, США (1990).
+           <br> Премия «Пеньо Пенев», Болгария (1990).
+           <br> Премия «За мужество в литературе» им. А. Д. Сахарова независимой писательской ассоциации «Апрель» (1991).
+           <br> Государственная премия СССР (1991) — за сборник стихотворений «Посвящается Вам» (1988).
+           <br> Премия «Русский Букер» (1994) — за автобиографический роман «Упразднённый театр»[18].
+           <br> Почётный гражданин Калуги (1996)[16].
+           <br> Память
+
+           <br> Памятник на могиле Окуджавы, Ваганьковское кладбище
+
+           <br> Почтовая марка России из серии «Популярные певцы российской эстрады», посвящённая Булату Окуджаве, 1999, 2 рубля (ИТЦ 539, Скотт 6546). Входит в Марочный лист 1999 года «Певцы России» (фото).
+           <br> Имя Окуджавы присвоено астероиду № 3149[39].
+           <br> Государственный мемориальный музей Булата Окуджавы в Переделкине был основан 22 августа 1998 года, открыт 31 октября 1999 года. Расположен на территории Внуковского поселения в Новомосковском административном округе Москвы, Переделкино, ул. Довженко, 11.
+           <br> В 1998 году была учреждена Государственная премия имени Булата Окуджавы[40].
+           <br> С 14 апреля 1998 года московская школа № 69 носит имя Б. Ш. Окуджавы[41].
+           <br> Культурный центр «Дом Окуджавы» в Нижнем Тагиле с музейной экспозицией был открыт в мае 2017 года в здании, где в 1930-х годах жила семья Булата Окуджавы[42].
+           <br> В честь Булата Окуджавы назван лайнер Боинг-737 (бортовой номер VP-BKN) авиакомпании «Аэрофлот — Российские авиалинии»[43].
+           <br> Памятники
+           <br> См. также: Памятники Окуджаве в Москве
+           <br> 8 мая 2002 года в Москве был открыт первый памятник Булату Окуджаве. Монумент установлен на углу Арбата и Плотникова переулка.
+           <br> 8 сентября 2007 года был открыт памятник Окуджаве в Москве во дворе Центра образования № 109. Автор обеих скульптур — Георгий Франгулян.
+           <br> В честь 80-летия поэта в калужской школе № 5 открыт барельеф Окуджавы[19].
+           <br> 9 мая 2015 в Нижнем Тагиле, на фасаде школы № 32 открыта мемориальная доска в память о Б. Ш. Окуджаве, учившемся в её стенах в 1936—1937 годах[44].
+           <br> Фестивали и конкурсы имени Булата Окуджавы
+           <br> Международный фестиваль Булата Окуджавы.
+           <br> Ежегодный московский фестиваль «И друзей созову…», посвящённый Булату Окуджаве.
+           <br> Открытый городской конкурс патриотической авторской песни имени Булата Окуджавы, Пермь.
+           <br> Израильский международный фестиваль памяти Булата Окуджавы.
+           <br> Всероссийский фестиваль авторской песни и поэзии «Песня Булата в Колонтаево».
+           <br> Всероссийский фестиваль авторской песни и поэзии «Песня Булата на Байкале»[45].
+        </div>
+    </div>
+
+</main>
+
 </body>
 </html>
