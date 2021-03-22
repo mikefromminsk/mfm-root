@@ -6,194 +6,124 @@
     <script src="/angular/angular-material.min.js"></script>
     <link rel="stylesheet" href="/angular/angular-material.min.css">
 
-    <!--<link rel="stylesheet" href="style.css">-->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+<body ng-app="App" ng-controller="Controller" class="col">
 
+<header class="row align-start-center block">
+    <img src="/stock/img/dollar.svg" class="header-logo">
+    <a href="#" class="header-logo-text">BINANCE</a>
+    <a href="#" class="menu-item">Buy Crypto</a>
+    <a href="#" class="menu-item">Log In</a>
+    <a href="#" class="reg-button">Register</a>
+</header>
 
-<div class="col">
-    <div class="row" ng-repeat="request_group in sale_requests" style="color: red" ng-click="sale_request_click(request_group)">
-        {{request_group[first]}} {{request_group.opp_rate}} {{request_group[second]}}
+<div class="row">
+    <div class="col flex">
+        <div class="pair-header row block">
+            <div class="col" style="margin-right: 20px; margin-left: 4px;">
+                <h1>BTC/USDT</h1>
+                <div class="row align-start-center">
+                    <img src="img/info.svg" style="width: 16px; height: 16px; margin-right: 4px;"/>
+                    <a href="#" class="gray size12">Bitcoin</a>
+                </div>
+            </div>
+            <div class="col align-center">
+                <div class="green current-price">52,555.12</div>
+                <div class="gray size12" style="height: 15px">$52,555.12</div>
+            </div>
+            <div class="row pair-stat-panel">
+                <div class="col">
+                    <div class="gray  pair-header-top-item">24h Change</div>
+                    <div class="green  pair-header-bottom-item">655.79 +1.16%</div>
+                </div>
+                <div class="col">
+                    <div class="gray  pair-header-top-item">24h High</div>
+                    <div class="white  pair-header-bottom-item">58,430.73</div>
+                </div>
+                <div class="col">
+                    <div class="gray  pair-header-top-item">24h Low</div>
+                    <div class="white  pair-header-bottom-item">56,289.00</div>
+                </div>
+                <div class="col">
+                    <div class="gray  pair-header-top-item">24h Volume(BTC)</div>
+                    <div class="white  pair-header-bottom-item">44,058.16</div>
+                </div>
+                <div class="col">
+                    <div class="gray  pair-header-top-item">24h Volume(USDT)</div>
+                    <div class="white  pair-header-bottom-item">2,533,420,665.01</div>
+                </div>
+            </div>
+
+            <div class="flex row align-end gray size12">
+                Spot Tutorial
+            </div>
+        </div>
+        <div class="row">
+            <div class="col block" style="min-width: 277px;">
+                <div class="row req-header">
+                    <img src="img/sale-and-buy.svg" class="req-mode mode-active">
+                    <img src="img/sale-and-buy.svg" class="req-mode">
+                    <img src="img/sale-and-buy.svg" class="req-mode">
+                    <div class="flex row align-end">
+                        <select class="mode-active">
+                            <option value="0.01">0.01</option>
+                            <option value="0.1">0.1</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row req-header align-start-center" style="height: 24px;">
+                    <div class="flex-33 req-header-text">Price(USDT)</div>
+                    <div class="flex-33 req-header-text row align-end">Amount(BTC)</div>
+                    <div class="flex-33 req-header-text row align-end">Total</div>
+                </div>
+                <div class="row req" style="position: relative" ng-repeat="req_groups in sale_req_groups">
+                    <div class="flex row req-header">
+                        <div class="flex-33 red ">123123</div>
+                        <div class="flex-33 row align-end" style="margin-left: 4px;">123123</div>
+                        <div class="flex-33 row align-end" style="margin-left: 4px;">123312</div>
+                    </div>
+                    <div class="flex progress-sale"></div>
+                </div>
+                <div class="row req-header align-start-center" style="height: 35px; margin-top: 12px;">
+                    <div class="current-price">53.123,12</div>
+                    <img class="price-arrow" style="margin-right: 4px;" src="img/price-arrow-buy.svg"/>
+                    <div class="gray size14">$53.123,12</div>
+                    <div class="flex row align-end">
+                        <div style="margin-right: 6px;">More</div>
+                        <img src="img/more.svg" style="width: 16px;height: 12px;">
+                    </div>
+                </div>
+                <div class="row req" style="position: relative" ng-repeat="req_groups in sale_req_groups">
+                    <div class="flex row req-header">
+                        <div class="flex-33 green ">123123</div>
+                        <div class="flex-33 row align-end" style="margin-left: 4px;">123123</div>
+                        <div class="flex-33 row align-end" style="margin-left: 4px;">123312</div>
+                    </div>
+                    <div class="flex progress-buy"></div>
+                </div>
+            </div>
+
+            <div class="flex col">
+                <div class="block flex"></div>
+                <div class="block" style="min-height: 280px"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col" style="min-width: 320px;">
+        <div class="block-right">
+            <div class="row" style="padding: 8px 0 4px 16px">
+                wefwef
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="col">
-    <div class="row" ng-repeat="request_group in buy_requests" style="color: darkgreen" ng-click="buy_request_click(request_group)">
-        {{request_group[first]}} {{request_group.rate}} {{request_group[second]}}
-    </div>
-</div>
-
-<div class="row">
-    <form ng-submit="buy($event)" class="col">
-        <input type="text" ng-model="buy_rate" ng-change="buy_rate_change()" required>
-        <input type="text" ng-model="buy_want_count" ng-change="buy_want_change()" placeholder="{{first}}" required>
-        <div class="row">
-            <button class="flex-25" ng-click="buy_percent($event, 25)">25%</button>
-            <button class="flex-25" ng-click="buy_percent($event, 50)">50%</button>
-            <button class="flex-25" ng-click="buy_percent($event, 75)">75%</button>
-            <button class="flex-25" ng-click="buy_percent($event, 100)">100%</button>
-        </div>
-        <div class="row align-end">{{balance[second]}}</div>
-        <input type="text" ng-model="buy_give_count" ng-change="buy_give_change()" placeholder="{{second}}" required>
-        <button type="submit">Buy</button>
-    </form>
-    <form ng-submit="sale($event)" class="col">
-        <input type="text" ng-model="sale_rate" ng-change="sale_rate_change()" required>
-        <input type="text" ng-model="sale_give_count" ng-change="sale_give_change()" placeholder="{{first}}" required>
-        <div class="row">
-            <button class="flex-25" ng-click="sale_percent($event, 25)">25%</button>
-            <button class="flex-25" ng-click="sale_percent($event, 50)">50%</button>
-            <button class="flex-25" ng-click="sale_percent($event, 75)">75%</button>
-            <button class="flex-25" ng-click="sale_percent($event, 100)">100%</button>
-        </div>
-        <div class="row align-end">{{balance[first]}}</div>
-        <input type="text" ng-model="sale_want_count" ng-change="sale_want_change()" placeholder="{{second}}" required>
-        <button type="submit">Sale</button>
-    </form>
-</div>
-
-
-<div class="row">
-    <a href="/stock">
-        <button>Главная</button>
-    </a>
-    <a href="/stock/pairs">
-        <button>Торговля</button>
-    </a>
-    <a href="/stock/new_coin">
-        <button>Новый койн</button>
-    </a>
-    <a href="/stock/dialogs">
-        <button>Мессенджер</button>
-    </a>
-    <a href="/stock/account">
-        <button disabled>Аккаунт</button>
-    </a>
-</div>
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
-        const params = new URLSearchParams(location.search);
-        $scope.pair = params.get("pair")
-        $scope.first = $scope.pair.split("_")[0]
-        $scope.second = $scope.pair.split("_")[1]
-        $scope.buy_rate = 3.5
-        $scope.buy_want_count = 0.1
-        $scope.buy_give_count = 0.35
-        $scope.sale_rate = 1.5
-        $scope.sale_give_count = 0.1
-        $scope.sale_want_count = 0.15
-        $scope.balance = {}
-
-        $scope.sdf = function (e) {
-            e.preventDefault()
-            alert(1)
-        }
-
-
-        $scope.buy = function (e) {
-            e.preventDefault()
-            $http({
-                method: "POST",
-                url: "new_limit_request.php",
-                data: {
-                    token: localStorage.getItem("token"),
-                    pair: $scope.pair,
-                    give: $scope.second,
-                    want: $scope.first,
-                    give_count: $scope.buy_give_count,
-                    want_count: $scope.buy_want_count,
-                },
-            }).then(function (response) {
-                update()
-            })
-        }
-
-        $scope.sale = function (e) {
-            e.preventDefault()
-            $http({
-                method: "POST",
-                url: "new_limit_request.php",
-                data: {
-                    token: localStorage.getItem("token"),
-                    pair: $scope.pair,
-                    give: $scope.first,
-                    want: $scope.second,
-                    give_count: $scope.sale_give_count,
-                    want_count: $scope.sale_want_count,
-                },
-            }).then(function (response) {
-                update()
-            })
-        }
-
-        function update() {
-            $http({
-                method: "POST",
-                url: "info.php",
-                data: {
-                    token: localStorage.getItem("token"),
-                    pair: $scope.pair,
-                },
-            }).then(function (response) {
-                $scope.buy_requests = response.data.buy
-                $scope.sale_requests = response.data.sale
-                $scope.balance = response.data.balance
-            })
-        }
-
-        update()
-
-        $scope.buy_percent = function (e, percent) {
-            e.preventDefault()
-            $scope.buy_give_count = $scope.balance[$scope.second] * (percent / 100);
-            $scope.buy_want_count = $scope.buy_give_count / $scope.buy_rate;
-        }
-
-        $scope.sale_percent = function (e, percent) {
-            e.preventDefault()
-            $scope.sale_give_count = $scope.balance[$scope.first] * (percent / 100);
-            $scope.sale_want_count = $scope.sale_give_count * $scope.sale_rate;
-        }
-
-        $scope.removeZeros = function (num_str){
-            return num_str.replace(new RegExp("^[0]+|[.][0]+$", "g"), "");
-        }
-
-
-        $scope.buy_request_click = function (request_group) {
-            $scope.sale_rate = $scope.removeZeros(request_group.rate)
-            $scope.sale_rate_change()
-        }
-
-        $scope.sale_request_click = function (request_group) {
-            $scope.buy_rate = $scope.removeZeros(request_group.opp_rate)
-            $scope.buy_rate_change()
-        }
-
-        $scope.buy_rate_change = function () {
-            $scope.buy_give_count = $scope.buy_rate * $scope.buy_want_count
-        }
-
-        $scope.buy_want_change = function () {
-            $scope.buy_give_count = $scope.buy_want_count * $scope.buy_rate
-        }
-
-        $scope.buy_give_change = function () {
-            $scope.buy_want_count = $scope.buy_give_count / $scope.buy_rate
-        }
-
-        $scope.sale_rate_change = function () {
-            $scope.sale_want_count = $scope.sale_rate * $scope.sale_give_count
-        }
-
-        $scope.sale_give_change = function () {
-            $scope.sale_want_count = $scope.sale_give_count * $scope.sale_rate
-        }
-
-        $scope.sale_want_change = function () {
-            $scope.sale_give_count = $scope.sale_want_count / $scope.sale_rate
-        }
-    })
+        $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    });
 </script>
 
 </body>

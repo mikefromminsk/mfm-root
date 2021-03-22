@@ -1,0 +1,254 @@
+
+body {
+    background-color: rgb(24, 26, 32);
+    color: white;
+    font-family: Helvetica, sans-serif;
+    font-weight: 400;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+}
+
+.block, .block-right{
+    background-color: rgb(29, 31, 37);
+}
+.block {
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+
+.block-right{
+    margin-bottom: 4px;
+}
+
+header {
+    height: 64px;
+    border-bottom: 1px solid rgb(30, 32, 38);
+}
+
+.header-logo {
+    margin-left: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.header-logo-text {
+    font-size: 18px;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    font-weight: 600;
+    margin-left: 8px;
+    margin-right: 16px;
+    color: rgb(240, 185, 11);
+}
+
+.menu-item {
+    padding: 25px 16px 25px 8px;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.menu-item:hover {
+    color: rgb(240, 185, 11);
+}
+
+
+.reg-button {
+    background-image: linear-gradient(rgb(248, 209, 47) 0%, rgb(240, 185, 11) 100%);
+    font-size: 14px;
+    line-height: 20px;
+    word-break: keep-all;
+    color: rgb(33, 40, 51);
+    border-radius: 4px;
+    padding: 6px 16px;
+    min-height: 24px;
+    text-align: center;
+}
+
+
+.reg-button:hover {
+    background-image: linear-gradient(rgb(255, 226, 81) 0%, rgb(237, 196, 35) 100%);
+}
+
+
+.pair-header {
+    padding: 10px 16px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.green {
+    color: rgb(2, 192, 118);
+}
+
+.white {
+    color: rgb(255, 255, 255);
+}
+
+.red {
+    color: rgb(248, 73, 96);
+}
+
+.gray {
+    color: rgb(132, 142, 156);
+}
+
+.size12 {
+    font-size: 12px;
+}
+
+.size14 {
+    font-size: 14px;
+}
+
+.size16 {
+    font-size: 16px;
+}
+
+.pair-header-top-item {
+    font-size: 10px;
+    line-height: 16px;
+    margin-bottom: 2px;
+    height: 17px;
+    border-bottom: 1px solid black;
+}
+
+.pair-header-bottom-item {
+    font-size: 12px;
+    height: 15px;
+}
+
+.pair-stat-panel {
+    margin-left: 16px;
+    margin-right: 8px;
+}
+
+.pair-stat-panel > * {
+    padding-right: 10px;
+}
+
+.mode-active {
+    background-color: rgb(43, 49, 57)
+}
+
+select {
+    background-color: rgb(24, 26, 32);
+    color: white;
+    font-size: 12px;
+    padding-left: 8px;
+    padding-right: 4px;
+    height: 24px;
+    border: none;
+    cursor: pointer;
+}
+
+select:hover {
+    color: rgb(255, 255, 255);
+    background-color: rgb(71, 77, 87);
+}
+
+
+select > option {
+    padding: 4px;
+    background-color: rgb(43, 49, 57);
+    border: none;
+}
+
+select:focus {
+    outline: 0;
+}
+
+.req-mode {
+    border-radius: 2px;
+    width: 24px;
+    height: 24px;
+    padding: 4px 0;
+    margin-right: 4px;
+    cursor: pointer;
+}
+
+.req-header {
+    padding: 0 16px;
+}
+
+.req-header-text {
+    height: 15px;
+    font-size: 12px;
+    color: rgb(94, 102, 115);
+}
+
+.req {
+    font-weight: 400;
+    height: 20px;
+    line-height: 18px;
+    font-size: 12px;
+}
+
+.req:hover {
+    font-weight: 600;
+    background-color: rgb(43, 49, 57);
+}
+
+.progress-sale, .progress-buy {
+    background-color: rgb(248, 73, 96);
+    position: absolute;
+    right: 0;
+    z-index: 1;
+    opacity: 0.15;
+    height: 18px;
+    width: 10%;
+    display: block;
+    direction: ltr;
+}
+
+.progress-buy {
+    background-color: rgb(2, 192, 118);
+}
+
+.current-price {
+    height: 20px;
+    font-size: 16px;
+}
+
+.price-arrow{
+    width: 16px;
+    height: 16px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
