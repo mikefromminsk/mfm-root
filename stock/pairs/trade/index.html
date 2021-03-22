@@ -107,22 +107,147 @@
 
             <div class="flex col">
                 <div class="block flex"></div>
-                <div class="block" style="min-height: 280px"></div>
+                <div class="col block req-header" style="min-height: 280px; padding-bottom: 16px;">
+
+
+                    <div class="row" style="border-bottom: 1px solid rgb(24, 26, 32)">
+                        <div class="block-title-active">Limit</div>
+                        <div class="block-title">Market</div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col flex-50" style="margin-right: 25px;">
+                            <div class="row align-start-center" style="padding-top: 8px; padding-bottom: 4px;">
+                                <div class="flex size16">Buy BTC</div>
+                                <div class="row align-start-center">
+                                    <img src="img/wallet.svg" style="width: 20px;height: 20px;margin-right: 4px;">
+                                    <div class="gray size12">- USDT</div>
+                                </div>
+                            </div>
+
+                            <div class="row price-input-wrapper">
+                                <div class="price-input-label-left">Price</div>
+                                <input type="text" class="flex mode-active price-input">
+                                <div class="price-input-label-right">USDT</div>
+                            </div>
+
+                            <div class="row price-input-wrapper">
+                                <div class="price-input-label-left">Price</div>
+                                <input type="text" class="flex mode-active price-input">
+                                <div class="price-input-label-right">USDT</div>
+                            </div>
+
+                            <div class="row align-center-center login-or-reg-button">
+                                <a class="size14 orange" href="#">Log In</a>
+                                <div class="size12 gray">&nbsp;or&nbsp;</div>
+                                <a class="size14 orange" href="#">Register Now</a>
+                            </div>
+                        </div>
+
+                        <div class="col flex-50" style="margin-left: 25px;">
+                            <div class="row align-start-center" style="padding-top: 8px; padding-bottom: 4px;">
+                                <div class="flex size16">Buy BTC</div>
+                                <div class="row align-start-center">
+                                    <img src="img/wallet.svg" style="width: 20px;height: 20px;margin-right: 4px;">
+                                    <div class="gray size12">- USDT</div>
+                                </div>
+                            </div>
+
+                            <div class="row price-input-wrapper">
+                                <div class="price-input-label-left">Price</div>
+                                <input type="text" class="flex mode-active price-input">
+                                <div class="price-input-label-right">USDT</div>
+                            </div>
+
+                            <div class="row price-input-wrapper">
+                                <div class="price-input-label-left">Price</div>
+                                <input type="text" class="flex mode-active price-input">
+                                <div class="price-input-label-right">USDT</div>
+                            </div>
+
+                            <div class="row align-center-center login-or-reg-button">
+                                <a class="size14 orange" href="#">Log In</a>
+                                <div class="size12 gray">&nbsp;or&nbsp;</div>
+                                <a class="size14 orange" href="#">Register Now</a>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
             </div>
         </div>
     </div>
     <div class="col" style="min-width: 320px;">
-        <div class="block-right">
-            <div class="row" style="padding: 8px 0 4px 16px">
-                wefwef
+        <div class="block-right" style=" min-height: 388px">
+            <div class="row req-header" style="padding-top: 8px; padding-bottom: 4px;">
+                <img class="rate-menu-item hover-active" src="img/favorite-disabled.svg"
+                     style="width: 24px;height: 24px;">
+                <div class="rate-menu-item hover-active">Margin</div>
+                <div class="rate-menu-item hover-active">BNB</div>
+                <div class="rate-menu-item hover-active">BTC</div>
+                <div class="rate-menu-item hover-active">USDT</div>
+            </div>
+            <div class="row req-header align-start-center" style="height: 28px;">
+                <div class="row search flex">
+                    <img src="img/search.svg" class="search-image"/>
+                    <input type="text" class="search-input flex">
+                </div>
+                <div class="row">
+                    <img src="img/radio-button-disabled.svg" class="radio-button">
+                    <div class="gray size12">Change</div>
+                </div>
+                <div class="row">
+                    <img src="img/radio-button-enabled.svg" class="radio-button">
+                    <div class="gray size12">Volume</div>
+                </div>
+            </div>
+            <div class="row req-header align-start-center" style="height: 30px;">
+                <div class="flex gray size12">Pair</div>
+                <div class="flex-33 gray size12">Price</div>
+                <div class="flex-20 gray size12 row align-end">Volume</div>
+            </div>
+
+            <div class="flex col" style="overflow: auto">
+                <div class="row req-header req" ng-repeat="item in sale_req_groups">
+                    <div class="flex row align-start-center">
+                        <img src="img/favorite-enabled.svg" class="rate-favorite">
+                        <div class="white size12">BTC</div>
+                        <div class="gray size12">/USDT</div>
+                    </div>
+                    <div class="flex-33 size12 green">54.232,12</div>
+                    <div class="flex-20 size12 white row align-end">712,123,526</div>
+                </div>
             </div>
         </div>
+
+        <div class="flex col block-right req-header">
+            <div class="row">
+                <div class="block-title-active">Market Trades</div>
+                <div class="block-title">My Trades</div>
+            </div>
+            <div class="flex col" style="overflow: auto">
+                <div class="row req-header req" ng-repeat="item in sale_req_groups">
+                    <div class="flex row align-start-center">
+                        <img src="img/favorite-enabled.svg" class="rate-favorite">
+                        <div class="white size12">BTC</div>
+                        <div class="gray size12">/USDT</div>
+                    </div>
+                    <div class="flex-33 size12 green">54.232,12</div>
+                    <div class="flex-20 size12 white row align-end">712,123,526</div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="col block-right req-header">
+            <div  class="block-title-active">Market Activities</div>
+        </div>-->
     </div>
 </div>
 
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
-        $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
     });
 </script>
 
