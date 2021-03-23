@@ -23,7 +23,7 @@
 <div class="col">
     <div class="row" ng-repeat="pair in top">
         <div class="row">
-            {{pair.rate}} <a href="pairs/trade?pair={{pair.pair}}"><button>{{pair.pair}}</button></a>
+            {{pair.rate}} <a href="trade?pair={{pair.pair}}"><button>{{pair.pair}}</button></a>
         </div>
     </div>
 </div>
@@ -52,7 +52,7 @@
 
         $http({
             method: "POST",
-            url: "pairs/top.php",
+            url: "top.php",
         }).then(function (response) {
             $scope.top = response.data.top
         })

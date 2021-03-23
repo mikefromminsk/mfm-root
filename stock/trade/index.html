@@ -6,16 +6,17 @@
     <script src="/angular/angular-material.min.js"></script>
     <link rel="stylesheet" href="/angular/angular-material.min.css">
 
+    <link rel="stylesheet" href="../base.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 
-<header class="row align-start-center block">
+<header class="row align-start-center block-top">
     <img src="/stock/img/dollar.svg" class="header-logo">
     <a href="#" class="header-logo-text">BINANCE</a>
     <a href="#" class="menu-item">Buy Crypto</a>
     <a href="#" class="menu-item">Log In</a>
-    <a href="#" class="reg-button">Register</a>
+    <a href="#" class="main-button">Register</a>
 </header>
 
 <div class="row">
@@ -230,15 +231,16 @@
                 <div class="block-title-active">Market Trades</div>
                 <div class="block-title">My Trades</div>
             </div>
-            <div class="flex col scroll" style="max-height: calc(428px - 44px - 16px)">
+            <div class="row req-header" style="padding: 8px 16px;">
+                <div class="flex size12 gray ">Price(USDT)</div>
+                <div class="flex-33 size12 gray row align-end">Amount(BTC)</div>
+                <div class="flex-33 size12 gray row align-end">Time</div>
+            </div>
+            <div class="flex col scroll" style="max-height: calc(428px - 44px - 16px - 16px)">
                 <div class="row req-header req" ng-repeat="item in sale_req_groups">
-                    <div class="flex row align-start-center">
-                        <img src="img/favorite-enabled.svg" class="rate-favorite">
-                        <div class="white size12">BTC</div>
-                        <div class="gray size12">/USDT</div>
-                    </div>
-                    <div class="flex-33 size12 green">54.232,12</div>
-                    <div class="flex-20 size12 white row align-end">712,123,526</div>
+                    <div class="flex size12 green ">55.242,12</div>
+                    <div class="flex-33 size12 white row align-end">54.232,12</div>
+                    <div class="flex-33 size12 white row align-end">712,123,526</div>
                 </div>
             </div>
         </div>
