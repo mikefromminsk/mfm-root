@@ -78,13 +78,15 @@
                     <div class="flex-33 req-header-text row align-end">Amount(BTC)</div>
                     <div class="flex-33 req-header-text row align-end">Total</div>
                 </div>
-                <div class="row req" style="position: relative" ng-repeat="req_groups in sale_req_groups">
-                    <div class="flex row req-header">
-                        <div class="flex-33 red ">123123</div>
-                        <div class="flex-33 row align-end" style="margin-left: 4px;">123123</div>
-                        <div class="flex-33 row align-end" style="margin-left: 4px;">123312</div>
+                <div class="scroll" style="height: 333px">
+                    <div class="row req" style="position: relative" ng-repeat="req_groups in sale_req_groups">
+                        <div class="flex row req-header">
+                            <div class="flex-33 red ">123123</div>
+                            <div class="flex-33 row align-end" style="margin-left: 4px;">123123</div>
+                            <div class="flex-33 row align-end" style="margin-left: 4px;">123312</div>
+                        </div>
+                        <div class="flex progress-sale"></div>
                     </div>
-                    <div class="flex progress-sale"></div>
                 </div>
                 <div class="row req-header align-start-center" style="height: 35px; margin-top: 12px;">
                     <div class="current-price">53.123,12</div>
@@ -95,13 +97,15 @@
                         <img src="img/more.svg" style="width: 16px;height: 12px;">
                     </div>
                 </div>
-                <div class="row req" style="position: relative" ng-repeat="req_groups in sale_req_groups">
-                    <div class="flex row req-header">
-                        <div class="flex-33 green ">123123</div>
-                        <div class="flex-33 row align-end" style="margin-left: 4px;">123123</div>
-                        <div class="flex-33 row align-end" style="margin-left: 4px;">123312</div>
+                <div class="scroll" style="height: 333px">
+                    <div class="row req" style="position: relative" ng-repeat="req_groups in sale_req_groups">
+                        <div class="flex row req-header">
+                            <div class="flex-33 green ">123123</div>
+                            <div class="flex-33 row align-end" style="margin-left: 4px;">123123</div>
+                            <div class="flex-33 row align-end" style="margin-left: 4px;">123312</div>
+                        </div>
+                        <div class="flex progress-buy"></div><!--will-change: transform-->
                     </div>
-                    <div class="flex progress-buy"></div>
                 </div>
             </div>
 
@@ -174,13 +178,12 @@
                     </div>
 
 
-
                 </div>
             </div>
         </div>
     </div>
-    <div class="col" style="min-width: 320px;">
-        <div class="block-right" style=" min-height: 388px">
+    <div class="col" style="width: 320px;">
+        <div class="block-right" style="height: 388px">
             <div class="row req-header" style="padding-top: 8px; padding-bottom: 4px;">
                 <img class="rate-menu-item hover-active" src="img/favorite-disabled.svg"
                      style="width: 24px;height: 24px;">
@@ -209,7 +212,7 @@
                 <div class="flex-20 gray size12 row align-end">Volume</div>
             </div>
 
-            <div class="flex col" style="overflow: auto">
+            <div class="flex col scroll" style="height: 288px;">
                 <div class="row req-header req" ng-repeat="item in sale_req_groups">
                     <div class="flex row align-start-center">
                         <img src="img/favorite-enabled.svg" class="rate-favorite">
@@ -222,12 +225,12 @@
             </div>
         </div>
 
-        <div class="flex col block-right req-header">
-            <div class="row">
+        <div class="flex col block-right">
+            <div class="row req-header">
                 <div class="block-title-active">Market Trades</div>
                 <div class="block-title">My Trades</div>
             </div>
-            <div class="flex col" style="overflow: auto">
+            <div class="flex col scroll" style="max-height: calc(428px - 44px - 16px)">
                 <div class="row req-header req" ng-repeat="item in sale_req_groups">
                     <div class="flex row align-start-center">
                         <img src="img/favorite-enabled.svg" class="rate-favorite">
@@ -247,7 +250,7 @@
 
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
-        $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
+        $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
     });
 </script>
 
