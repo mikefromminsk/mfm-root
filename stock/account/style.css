@@ -1,0 +1,223 @@
+body {
+    color: rgb(30, 35, 41);
+}
+
+.black41 {
+    color: rgb(30, 35, 41);
+}
+
+.black51 {
+    color: rgb(33, 40, 51);
+}
+
+.black87 {
+    color: rgb(71, 77, 87)
+}
+
+.gray138 {
+    color: rgb(112, 122, 138);
+}
+
+.orange {
+    color: rgb(201, 148, 0);
+}
+
+.red {
+    color: rgb(248, 73, 96);
+}
+
+.left-menu {
+    width: 200px;
+}
+
+.left-menu-item {
+    color: rgb(33, 40, 51);
+    background-color: white;
+    height: 48px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 48px;
+    padding-left: 40px;
+    padding-right: 16px;
+}
+
+.left-menu-item.active {
+    font-weight: 600;
+    padding-left: 36px;
+    background-color: rgb(245, 245, 245);
+    border-left: 4px solid rgb(201, 148, 0);
+}
+
+.left-menu-item:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.block-left {
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 8%) 0px 2px 4px, rgb(0 0 0 / 8%) 0px 0px 4px;
+}
+
+.block {
+    padding: 8px 24px;
+    margin: 24px 24px 0 24px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: rgb(0 0 0 / 8%) 0px 0px 4px;
+}
+
+.block-top {
+    box-shadow: rgb(0 0 0 / 8%) 0px 0px 4px;
+    background-color: white;
+    padding: 24px;
+}
+
+.stat > * {
+    margin: 16px 32px 16px 0;
+}
+
+
+.search-wrapper {
+    position: relative;
+    width: 184px;
+    margin-right: 16px;
+}
+
+.search {
+    border: none;
+    border-bottom: 1px solid rgb(234, 236, 239);
+    height: 32px;
+    font-size: 16px;
+    outline: none;
+    color: rgb(30, 35, 41);
+}
+
+.search-close {
+    background: url(img/search-close.svg);
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    right: 0px;
+    top: 10px;
+    cursor: pointer;
+}
+
+.checkbox {
+    width: 16px;
+    height: 16px;
+    border: 1px solid rgb(183, 189, 198);
+}
+
+.checkbox.active {
+    border: 1px solid rgb(240, 185, 11);
+    background: url(img/checkbox-checked.svg);
+}
+
+
+.grid {
+    margin-top: 24px;
+    border-left: 1px solid rgb(245, 245, 245);
+    border-right: 1px solid rgb(245, 245, 245);
+}
+
+.grid-header {
+    background-color: rgb(245, 245, 245);
+    color: rgb(112, 122, 138);
+    font-size: 12px;
+}
+
+.grid-header > * {
+    padding: 12px 16px;
+}
+
+.grid-line {
+    /*justify-content: flex-start;
+    align-items: center;
+    max-width: 100%;*/
+    border-bottom: 1px solid rgb(245, 245, 245);
+}
+
+.grid-line:hover {
+    background-color: rgba(249, 249, 250, 0.7);
+}
+
+.grid-line > * {
+    padding: 12px 16px;
+}
+
+.coin-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+}
+
+.actions > *{
+    margin-right: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

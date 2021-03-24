@@ -7,16 +7,20 @@ a {
 }
 
 input[type=text] {
+    height: 38px;
+    outline: none;
     border: 1px solid rgb(234, 236, 239);
     padding: 0 8px;
     margin-top: 4px;
+    border-radius: 3px;
+    background-color: transparent;
 }
 
-.white-content {
+
+.block {
     padding: 24px 24px 32px;
     margin: 40px auto 24px;
     box-shadow: 0px 2px 4px rgb(0 0 0 / 8%), 0px 0px 2px rgb(0 0 0 / 8%);
-    width: 384px;
     background-color: white;
     color: black;
 }
@@ -57,7 +61,4 @@ h1 {
     color: rgb(201, 148, 0);
 }
 
-.hover-orange:hover {
-    color: rgb(240, 185, 11);
-    text-decoration: underline;
-}
+

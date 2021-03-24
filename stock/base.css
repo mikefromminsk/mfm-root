@@ -1,19 +1,25 @@
 body {
-    background-color: rgb(24, 26, 32);
-    color: white;
+    background-color: #FAFAFA;
+    color: black;
     font-family: Helvetica, sans-serif;
     font-weight: 400;
     white-space: nowrap;
+    font-size: 14px;
 }
 
-h1{
+h1 {
     margin: 0;
 }
 
 a {
+    color: rgb(201, 148, 0);
     text-decoration: none;
-    color: white;
     cursor: pointer;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: rgb(240, 185, 11);
 }
 
 .green {
@@ -32,7 +38,7 @@ a {
     color: rgb(132, 142, 156);
 }
 
-.orange{
+.orange {
     color: rgb(240, 185, 11);
 }
 
@@ -42,41 +48,31 @@ a {
 
 .size14 {
     font-size: 14px;
+    line-height: 18px;
 }
 
 .size16 {
     font-size: 16px;
 }
 
-.underline{
+.size32 {
+    font-size: 32px;
+    line-height: 42px;
+}
+
+.underline {
     text-decoration: underline;
 }
 
-.block, .block-right, .block-top {
-    background-color: rgb(29, 31, 37);
-}
-
-.block {
-    margin-right: 4px;
-    margin-bottom: 4px;
-}
-
-.block-right {
-    margin-bottom: 4px;
-}
-
-.block-top {
-    margin-bottom: 4px;
-}
-
 header {
+    background-color: rgb(29, 31, 37);
+    padding: 0 24px;
     color: white;
     height: 64px;
     border-bottom: 1px solid rgb(30, 32, 38);
 }
 
 .header-logo {
-    margin-left: 24px;
     width: 24px;
     height: 24px;
 }
@@ -104,14 +100,6 @@ header {
 
 input[type=text] {
     width: 100%;
-    height: 38px;
-    outline: none;
-    border-radius: 3px;
-    font-size: 14px;
-}
-
-input[type=text]:hover, input[type=text]:focus {
-    border: 1px solid rgb(240, 185, 11);
 }
 
 
@@ -146,7 +134,6 @@ input[type=text]:hover, input[type=text]:focus {
     outline: none;
     border: none;
 }
-
 
 .main-button:hover {
     background-image: linear-gradient(rgb(255, 226, 81) 0%, rgb(237, 196, 35) 100%);

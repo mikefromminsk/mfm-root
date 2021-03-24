@@ -6,41 +6,126 @@
     <script src="/angular/angular-material.min.js"></script>
     <link rel="stylesheet" href="/angular/angular-material.min.css">
 
-    <!--<link rel="stylesheet" href="style.css">-->
+    <link rel="stylesheet" href="../base.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+<body ng-app="App" ng-controller="Controller" class="col">
 
-<form ng-submit="get_promo($event)">
+<header class="row align-start-center">
+    <img src="/stock/img/dollar.svg" class="header-logo">
+    <a href="#" class="header-logo-text">BINANCE</a>
+    <a href="/stock" class="menu-item">Главная</a>
+    <a href="/stock/trade" class="menu-item">Торговля</a>
+    <a href="/stock/new_coin" class="menu-item">Новый койн</a>
+    <a href="/stock/account" class="menu-item">Кошелек</a>
+    <div class="flex"></div>
+    <a href="/stock/account" class="menu-item">{{login}}</a>
+</header>
+
+<!--<form ng-submit="get_promo($event)">
     <input type="text" ng-model="promo_code" required>
     <button type="submit">Get promo</button>
-</form>
+</form>-->
+<div class="row">
+    <div class="col left-menu block-left">
+        <a href="#" class="left-menu-item active">Wallet</a>
+        <a href="#" class="left-menu-item">Spot</a>
+    </div>
+    <div class="col flex">
+        <div class="flex row block-top">
+            <div class="size32 black41">Fiat and Spot</div>
+        </div>
+        <div class="row block stat wrap">
+            <div class="col">
+                <div class="size14 black41">Fiat and Spot balance</div>
+                <div class="row align-start-end">
+                    <div class="size32 black87">0.31245140</div>
+                    <div class="size14 black87" style="margin-left: 4px; line-height: 28px">BTC</div>
+                </div>
+                <div class="size14 gray138">≈ $17,290.98</div>
+            </div>
+            <div class="col">
+                <div class="size14 black41">Spot balance</div>
+                <div class="row align-start-end">
+                    <div class="size32 black87">0.31245140</div>
+                    <div class="size14 black87" style="margin-left: 4px; line-height: 28px">BTC</div>
+                </div>
+                <div class="size14 gray138">≈ $17,290.98</div>
+            </div>
+            <div class="col">
+                <div class="size14 black41">Fiat balance</div>
+                <div class="row align-start-end">
+                    <div class="size32 black87">0.00000000</div>
+                    <div class="size14 black87" style="margin-left: 4px; line-height: 28px">BTC</div>
+                </div>
+                <div class="size14 gray138">≈ $0.000000</div>
+            </div>
+            <div class="col">
+                <div class="size14 black41">Yesterday's PNL</div>
+                <div class="row align-start-end">
+                    <div class="size32 black87">-$628.03</div>
+                    <div class="size14 black87" style="margin-left: 4px; line-height: 28px">BTC</div>
+                </div>
+                <div class="size14 red">-3.65%</div>
+            </div>
+        </div>
 
+        <div class="col block"  style="padding: 24px">
+            <div class="row align-start-center">
+                <div class="search-wrapper">
+                    <input type="text" class="search">
+                    <div class="search-close"></div>
+                </div>
+                <div class="row align-start-center">
+                    <div class="checkbox" style="margin-right: 4px;"></div>
+                    <div class="size14 black87">Hide Small Balances</div>
+                </div>
+                <a href="#" class="orange size14 underline" style="margin-left: 24px;">Convert to BNB</a>
+            </div>
 
-<button ng-click="update()">Update</button>
-{{login}}
-<div class="col">
-    <div ng-repeat="(key, value) in account.balance">
-        <button ng-click="open_coin(key)">{{key}} = {{value}}</button>
+            <div class="grid col">
+                <div class="grid-header row align-start-center">
+                    <div class="row">Coin</div>
+                    <div class="row">Total</div>
+                    <div class="row">Availible</div>
+                    <div class="row">In Order</div>
+                    <div class="row">BTC Value</div>
+                    <div class="row">Action</div>
+                </div>
+                <!--<div class="col">
+                    <div ng-repeat="(key, value) in account.balance">
+                        <button ng-click="open_coin(key)">{{key}} = {{value}}</button>
+                    </div>
+                </div>-->
+                <div class="grid-line row align-start-center">
+                    <div class="flex-10 row align-start-center">
+                        <img src="/stock/img/dollar.svg" class="coin-logo">
+                        <div class="col">
+                            <div class="size14 black41" style="line-height: 20px;">FTM</div>
+                            <div class="size12 gray138 underline" style="line-height: 20px;">Fantom</div>
+                        </div>
+                    </div>
+                    <div class="flex-15 size14 black41">38,402.85870000</div>
+                    <div class="flex-15 size14 black41">38,402.85870000</div>
+                    <div class="flex-15 size14 black41">0.00000000</div>
+                    <div class="flex-15 size14 black41">0.00000000</div>
+                    <div class="row actions">
+                        <a href="#" class="size12">Buy</a>
+                        <a href="#" class="size12">Deposit</a>
+                        <a href="#" class="size12">Withdraw</a>
+                        <a href="#" class="size12">Trade</a>
+                        <a href="#" class="size12">Earn</a>
+                        <a href="#" class="size12">Convert</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <a href="/stock">
-        <button>Главная</button>
-    </a>
-    <a href="/stock/pairs">
-        <button>Торговля</button>
-    </a>
-    <a href="/stock/new_coin">
-        <button>Новый койн</button>
-    </a>
-    <a href="/stock/dialogs">
-        <button>Мессенджер</button>
-    </a>
-    <a href="/stock/account">
-        <button disabled>Аккаунт</button>
-    </a>
-</div>
+<ng-include src="'/stock/footer.html'"></ng-include>
+
+
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
         $scope.account = {}
@@ -64,7 +149,7 @@
             location.href = "coin?domain_name=" + name
         }
 
-        $scope.get_promo = function (e){
+        $scope.get_promo = function (e) {
             e.preventDefault()
             $http({
                 method: "POST",
