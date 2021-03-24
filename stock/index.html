@@ -6,33 +6,115 @@
     <script src="/angular/angular-material.min.js"></script>
     <link rel="stylesheet" href="/angular/angular-material.min.css">
 
-    <!--<link rel="stylesheet" href="style.css">-->
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+<body ng-app="App" ng-controller="Controller" class="col">
 
-<div class="row">
-    <input type="text" ng-model="search_text" required>
-    <button type="submit">Поиск</button>
+<header class="row align-start-center block-top">
+    <img src="/stock/img/dollar.svg" class="header-logo">
+    <a href="#" class="header-logo-text">BINANCE</a>
+    <a href="#" class="menu-item">Buy Crypto</a>
+    <a href="#" class="menu-item">Log In</a>
+    <a href="#" class="main-button">Register</a>
+</header>
+
+<div class="header-intro col align-center-center">
+    <h2>Buy & sell Crypto in minutes</h2>
+    <div class="size16 gray138" style="margin-top: 24px;">Join the world's largest crypto exchange</div>
+    <div class="main-button row align-center-center" style="height: 48px; margin-top: 24px;">Buy Now</div>
 </div>
-<div class="col">
-    <div class="row" ng-repeat="find_result in found">
-        <a href="pairs/trade?pair={{find_result}}"><button>{{find_result}}</button></a>
+
+<div class="row block" style="margin: 24px 0">
+    <a class="flex-25" href="#"><img src="img/promo1.png" class="promo"></a>
+    <a class="flex-25" href="#"><img src="img/promo1.png" class="promo"></a>
+    <a class="flex-25" href="#"><img src="img/promo1.png" class="promo"></a>
+    <a class="flex-25" href="#"><img src="img/promo1.png" class="promo"></a>
+</div>
+
+<div class="col block grid" style="background-color: white;">
+    <div class="row top-header">
+        <div class="flex-40 gray138">Name</div>
+        <div class="flex-15 gray138">Last Price</div>
+        <div class="flex-15 gray138">24h Change</div>
+        <div class="gray138">Markets</div>
+    </div>
+
+    <div class="row grid-line size18 align-start">
+        <div class="row flex-40 align-start-center">
+            <img src="/stock/img/dollar.svg" class="coin-logo">
+            <div style="margin-left: 16px;">BTC</div>
+            <div class="gray138" style="margin-left: 16px;">Bitcoin</div>
+        </div>
+        <div class="flex-15 black41">$263.20</div>
+        <div class="flex-15 green">+2.02%</div>
+        <div class="gray138">Markets</div>
+    </div>
+</div>
+
+<div class="col block">
+    <h1>Trade. Anywhere.</h1>
+    <div class="row" style="white-space: normal">
+        <div class="col flex-33 square-block">
+            <div class="size24 weight7">Mobile</div>
+            <div class="size14 black87 square-block-text">
+                All the power of Binance's cryptocurrency exchange, in the palm of your hand. Download the Binance mobile crypto trading app today.
+            </div>
+            <div class="row wrap">
+                <img src="/stock/img/google-play.png" class="image-link">
+                <img src="/stock/img/android.png" class="image-link">
+                <img src="/stock/img/app-store.png" class="image-link">
+            </div>
+            <img src="/stock/img/mobile.svg" class="square-block-mark"/>
+        </div>
+        <div class="div" style="min-width: 24px"></div>
+        <div class="col flex-33 square-block">
+            <div class="size24 weight7">Desktop</div>
+            <div class="size14 black87 square-block-text">
+                Powerful crypto trading platform for those who mean business. The Binance crypto trading experience, tailor-made for your Windows or MacOS device.
+            </div>
+            <div class="row wrap">
+                <img src="/stock/img/google-play.png" class="image-link">
+                <img src="/stock/img/android.png" class="image-link">
+                <img src="/stock/img/app-store.png" class="image-link">
+            </div>
+            <img src="/stock/img/desktop.svg" class="square-block-mark"/>
+        </div>
+        <div class="div" style="min-width: 24px"></div>
+        <div class="col flex-33 square-block">
+            <div class="size24 weight7">API</div>
+            <div class="size14 black87 square-block-text">
+                The Binance API is designed to provide an easy and efficient way to integrate your trading application into our platform.
+            </div>
+            <div class="flex"></div>
+            <div class="row align-start-center">
+                <img src="/stock/img/api.svg" style="width: 21px;height: 21px;margin-right: 8px;">
+                <a href="#" class="size16 black51">Official Binance API Documentation</a>
+            </div>
+            <img src="/stock/img/api2.svg" class="square-block-mark"/>
+        </div>
     </div>
 </div>
 
 <div class="col">
     <div class="row" ng-repeat="pair in top">
         <div class="row">
-            {{pair.rate}} <a href="trade?pair={{pair.pair}}"><button>{{pair.pair}}</button></a>
+            {{pair.rate}} <a href="trade?pair={{pair.pair}}">
+            <button>{{pair.pair}}</button>
+        </a>
         </div>
     </div>
 </div>
 
 
 <div class="row">
-    <a href="/stock/reg"><button >Регистрация</button></a>
-    <a href="/stock/login"><button >Вход</button></a>
-    <button ng-click="exit()" >Выход</button>
+    <a href="/stock/reg">
+        <button>Регистрация</button>
+    </a>
+    <a href="/stock/login">
+        <button>Вход</button>
+    </a>
+    <button ng-click="exit()">Выход</button>
 </div>
 
 <form class="col" ng-submit="auth($event)" style="width: 400px">
@@ -41,6 +123,12 @@
     <input type="text" ng-model="promo_url">
     <input type="submit" value="Submit">
 </form>
+
+<div class="col align-center-center" style="background-color: rgb(29, 31, 37);   padding: 64px 24px;">
+    <h2>Start trading now</h2>
+    <div class="main-button" style="margin-top: 33px;">Trade Now</div>
+</div>
+<ng-include src="'/stock/footer.html'"></ng-include>
 
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {

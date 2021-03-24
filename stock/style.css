@@ -1,0 +1,89 @@
+h1, h2 {
+    margin: 0;
+    font-size: 40px;
+    line-height: 46px;
+}
+
+h1 {
+    color: black;
+    margin: 80px 16px 40px 16px;
+}
+
+h2 {
+    color: white;
+}
+
+.header-intro {
+    padding: 48px 0;
+    background-color: #0B0E11;
+    background-size: auto 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-image: url(img/top-bg.png);
+}
+
+
+.main-button {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+
+.promo {
+    height: auto;
+    border-radius: 4px;
+    margin-right: 24px;
+}
+
+.block {
+    margin: 0 24px;
+}
+
+.grid {
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 20px 0px;
+}
+
+.grid-line {
+    padding: 16px 24px;
+}
+
+.grid-line:hover {
+    background-color: rgb(245, 245, 245);
+}
+
+.top-header {
+    border-bottom: 1px solid rgb(242, 242, 242);
+    padding: 16px 24px;
+}
+
+.coin-logo {
+    width: 36px;
+    height: 36px;
+}
+
+.square-block {
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.08) 0px 0px 40px 0px;
+    background-color: white;
+    padding: 32px;
+}
+
+.square-block-mark {
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    right: 12px;
+    top: 12px;
+}
+
+.square-block-text {
+    line-height: 21px;
+    margin: 32px 40px 54px 0;
+}
+
+.image-link {
+    width: 125px;
+    height: 38px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+}

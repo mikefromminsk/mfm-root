@@ -22,6 +22,7 @@ a:hover {
     color: rgb(240, 185, 11);
 }
 
+
 .green {
     color: rgb(2, 192, 118);
 }
@@ -42,6 +43,22 @@ a:hover {
     color: rgb(240, 185, 11);
 }
 
+.black41 {
+    color: rgb(30, 35, 41);
+}
+
+.black51 {
+    color: rgb(33, 40, 51);
+}
+
+.black87 {
+    color: rgb(71, 77, 87)
+}
+
+.gray138 {
+    color: rgb(112, 122, 138);
+}
+
 .size12 {
     font-size: 12px;
 }
@@ -55,9 +72,32 @@ a:hover {
     font-size: 16px;
 }
 
+.size18{
+    font-size: 18px;
+}
+
+.size24{
+    font-size: 24px;
+}
 .size32 {
     font-size: 32px;
     line-height: 42px;
+}
+
+.weight4{
+    font-weight: 400;
+}
+
+.weight5{
+    font-weight: 500;
+}
+
+.weight6{
+    font-weight: 600;
+}
+
+.weight7{
+    font-weight: 700;
 }
 
 .underline {
@@ -133,6 +173,7 @@ input[type=text] {
     text-align: center;
     outline: none;
     border: none;
+    cursor: pointer;
 }
 
 .main-button:hover {
