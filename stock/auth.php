@@ -1,11 +1,12 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
 $token = get_required("token");
 
-$login = dataGet(["tokens", $token], $pass);
+$user_id = selectRowWhere("users", ["token" => $token])["user_id"];
 
-if ($login == null)
-    error("login is not exist");
-
+if ($user_id == null) {
+    $user_id = insertRowAndGetId("users", ["token" => $token]);
+    insertRow("balances", ["user_id" => $user_id, "ticker" => "USDT", "spot" => 0, "blocked" => 0]);
+}

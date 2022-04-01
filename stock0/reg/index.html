@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="row align-center-center">
+
+<form class="col" ng-submit="auth($event)" style="width: 400px">
+    <input type="text" ng-model="login" required>
+    <input type="text" ng-model="password" required>
+    <input type="text" ng-model="promo_url">
+    <input type="submit" value="Submit">
+</form>
+
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        $scope.login = "123"
+        $scope.password = "123"
+        $scope.promo_url = "123"
+
+
+        $scope.auth = function (e) {
+            e.preventDefault()
+            $http({
+                method: "POST",
+                url:"reg.php",
+                data: {
+                    login: $scope.login,
+                    password: $scope.password,
+                    promo_url: $scope.promo_url,
+                },
+            }).then(function (response) {
+                localStorage.setItem("token", response.data.token)
+                location.href = "../account"
+            })
+        }
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+
+{{count}}
+<a href="promo?domain_name={{domain_name}}">
+    <button>Промо</button>
+</a>
+
+<a href="console?domain_name={{domain_name}}">
+    <button>Консоль</button>
+</a>
+
+<div class="row">
+    <a href="/stock0">
+        <button>Главная</button>
+    </a>
+    <a href="/stock0/pairs">
+        <button>Торговля</button>
+    </a>
+    <a href="/stock0/new_coin">
+        <button>Новый койн</button>
+    </a>
+    <a href="/stock0/dialogs">
+        <button>Мессенджер</button>
+    </a>
+    <a href="/stock0/account">
+        <button>Аккаунт</button>
+    </a>
+</div>
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        const params = new URLSearchParams(location.search);
+        $scope.count = 0
+        $scope.domain_name = params.get("domain_name")
+
+        $http({
+            method: "POST",
+            url: "coin.php",
+            data: {
+                token: localStorage.getItem("token"),
+                domain_name: $scope.domain_name,
+            },
+        }).then(function (response) {
+            $scope.count = response.data.count
+        })
+
+
+    })
+</script>
+
+</body>
+</html>

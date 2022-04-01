@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <!--<link rel="stylesheet" href="style.css">-->
+</head>
+<body ng-app="App" ng-controller="Controller" class="col align-center-center">
+
+
+<form class="col" ng-submit="save($event)">
+    <input type="text" ng-model="coin.title" required>
+    <input type="text" ng-model="coin.description" required>
+    <button type="submit">Сохранить</button>
+</form>
+
+<div class="row">
+    <a href="/stock0">
+        <button>Главная</button>
+    </a>
+    <a href="/stock0/pairs">
+        <button>Торговля</button>
+    </a>
+    <a href="/stock0/new_coin">
+        <button>Новый койн</button>
+    </a>
+    <a href="/stock0/dialogs">
+        <button>Мессенджер</button>
+    </a>
+    <a href="/stock0/account">
+        <button>Аккаунт</button>
+    </a>
+</div>
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        const params = new URLSearchParams(location.search);
+        $scope.domain_name = params.get("domain_name")
+        $scope.coin = {}
+
+        $http({
+            method: "POST",
+            url: "coin.php",
+            data: {
+                token: localStorage.getItem("token"),
+                domain_name: $scope.domain_name,
+            },
+        }).then(function (response) {
+            $scope.coin = response.data.coin
+        })
+
+
+        $scope.save = function (e) {
+            e.preventDefault()
+            $http({
+                method: "POST",
+                url: "general.php",
+                data: {
+                    token: localStorage.getItem("token"),
+                    domain_name: $scope.domain_name,
+                    title: $scope.coin.title,
+                    description: $scope.coin.description,
+                },
+            }).then(function (response) {
+
+            })
+        }
+    })
+</script>
+
+</body>
+</html>
