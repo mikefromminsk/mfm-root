@@ -14,7 +14,7 @@ function incBalance($user_id, $ticker, $amount)
 
 function decBalance($user_id, $ticker, $amount)
 {
-    return incBalance($user_id, $ticker, -$$amount);
+    return incBalance($user_id, $ticker, -$amount);
 }
 
 function blkBalance($user_id, $ticker, $amount)
