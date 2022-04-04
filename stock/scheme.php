@@ -19,10 +19,11 @@ if ($drop == 1) {
     `blocked` double NOT NULL
     ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 
-    query("DROP TABLE IF EXISTS `currencies`;");
-    query("CREATE TABLE IF NOT EXISTS `currencies` (
+    query("DROP TABLE IF EXISTS `coins`;");
+    query("CREATE TABLE IF NOT EXISTS `coins` (
   `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
-  `rate` double NOT NULL,
+  `rate` double NOT NULL DEFAULT 0,
+  `last_trade_timestamp` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ticker`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 
@@ -39,9 +40,22 @@ if ($drop == 1) {
   `timestamp` int(11) NOT NULL,
    PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
+
+    query("DROP TABLE IF EXISTS `sticks`;");
+    query("CREATE TABLE IF NOT EXISTS `sticks` (
+    `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
+    `period` int(11) NOT NULL,
+    `timestamp` int(11) NOT NULL,
+    `start` double NOT NULL,
+    `send` double NOT NULL,
+    `smax` double NOT NULL,
+    `smin` double NOT NULL,
+    `volume` double NOT NULL
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 } else {
     query("DELETE FROM `users`;");
     query("DELETE FROM `balances`;");
-    query("DELETE FROM `currencies`;");
+    query("DELETE FROM `coins`;");
     query("DELETE FROM `orders`;");
+    query("DELETE FROM `sticks`;");
 }
