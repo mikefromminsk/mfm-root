@@ -12,12 +12,14 @@ requestEquals("localhost/stock/create_currency.php",
 
 
 requestEquals("localhost/stock/place.php",
-    array("token" => $token2, "ticker" => "coin", "is_sell" => "0", "price" => 7, "amount" => 3), "result", true);
+    array("token" => $token2, "ticker" => "coin", "is_sell" => "0", "price" => 10, "amount" => 1), "result", true);
+requestEquals("localhost/stock/place.php",
+    array("token" => $token2, "ticker" => "coin", "is_sell" => "0", "price" => 5, "amount" => 1), "result", true);
+requestEquals("localhost/stock/place.php",
+    array("token" => $token2, "ticker" => "coin", "is_sell" => "0", "price" => 1, "amount" => 1), "result", true);
 
 requestEquals("localhost/stock/place.php",
     array("token" => $token1, "ticker" => "coin", "is_sell" => "1", "price" => 5, "amount" => 1), "result", true);
-requestEquals("localhost/stock/place.php",
-    array("token" => $token1, "ticker" => "coin", "is_sell" => "1", "price" => 10, "amount" => 1), "result", true);
 
 
 
