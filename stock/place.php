@@ -13,7 +13,7 @@ if ($is_sell == 1) {
     if (!haveBalance($user_id, $ticker, $amount)) error("not enough balance");
     $not_filled = $amount;
     decBalance($user_id, $ticker, $amount);
-    foreach (select("select * from orders where ticker = '$ticker' and is_sell = 0 and price >= $price and status >= 0 order by price,timestamp") as $order) {
+    foreach (select("select * from orders where ticker = '$ticker' and is_sell = 0 and price >= $price and status = 0 order by price DESC,timestamp", true) as $order) {
         $order_not_filled = $order["amount"] - $order["filled"];
         $coin_to_fill = min($not_filled, $order_not_filled);
         $usdt_to_fill = $coin_to_fill * $order["price"];
@@ -30,7 +30,7 @@ if ($is_sell == 1) {
 } else {
     if (!haveBalance($user_id, USDT, $total)) error("not enough balance");
     $not_filled = $amount;
-    foreach (select("select * from orders where ticker = '$ticker' and is_sell = 1 and price <= $price and status >= 0 order by price DESC,timestamp") as $order) {
+    foreach (select("select * from orders where ticker = '$ticker' and is_sell = 1 and price <= $price and status = 0 order by price,timestamp") as $order) {
         $order_not_filled = $order["amount"] - $order["filled"];
         $coin_to_fill = min($not_filled, $order_not_filled);
         $usdt_to_fill = $coin_to_fill * $order["price"];
