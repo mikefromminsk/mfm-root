@@ -2,41 +2,50 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/auth.php";
 
-$limit = get_int("limit", 1);
 $ticker = get_required_uppercase("ticker");
 $is_sell = get_int_required("is_sell");
 $price = get_int_required("price");
 $amount = get_int_required("amount");
+$total = $price * $amount;
 
-$currency = selectRow("currencies", ["ticker" => $ticker]);
-if ($currency == null) error("ticker is not found");
-
-$coin_balance = selectRowWhere("balances", ["user_id" => $user_id, "ticker" => $ticker]);
-$usdt_balance = selectRowWhere("balances", ["user_id" => $user_id, "ticker" => "USDT"]);
 
 if ($is_sell == 1) {
-    $filled = 0;
-    if ($coin_balance["spot"] < $amount) error("balance is not enough");
-    updateWhere("balances", ["spot" => $coin_balance["spot"] - $amount], ["user_id" => $user_id, "ticker" => $ticker]);
-    foreach (select("select * from orders where ticker == '$ticker' and price >= $price and status >= 0 order by price,timestamp") as $order) {
-        $not_filled = $amount - $filled;
+    if (!haveBalance($user_id, $ticker, $amount)) error("not enough balance");
+    $not_filled = $amount;
+    decBalance($user_id, $ticker, $amount);
+    foreach (select("select * from orders where ticker = '$ticker' and is_sell = 0 and price >= $price and status >= 0 order by price,timestamp") as $order) {
         $order_not_filled = $order["amount"] - $order["filled"];
         $coin_to_fill = min($not_filled, $order_not_filled);
         $usdt_to_fill = $coin_to_fill * $order["price"];
-        updateWhere("orders", ["filled" => $order["filled"] + $coin_to_fill, "status" => $order_not_filled == $coin_to_fill ? 1 : 0], ["order_id" => $order["order_id"]]);
-        $order_usdt_balance = selectRowWhere("balances", ["user_id" => $order["user_id"], "ticker" => "USDT"]);
-        $order_coin_balance = selectRowWhere("balances", ["user_id" => $order["user_id"], "ticker" => $ticker]);
-        updateWhere("balances", ["blocked" => $order_usdt_balance["blocked"] - $usdt_to_fill], ["user_id" => $order["user_id"], "ticker" => "USDT"]);
-        updateWhere("balances", ["spot" => $order_coin_balance["spot"] + $coin_to_fill], ["user_id" => $order["user_id"], "ticker" => $ticker]);
-
-        $usdt_balance["spot"] += $usdt_to_fill;
-        updateWhere("balances", ["spot" => $usdt_balance["spot"]], ["user_id" => $order["user_id"], "ticker" => "USDT"]);
-        $filled += $coin_to_fill;
-        if ($filled == $amount)
+        updateWhere("orders", [filled => $order["filled"] + $coin_to_fill, status => $order_not_filled == $coin_to_fill ? 1 : 0], [order_id => $order["order_id"]]);
+        unbBalance($order["user_id"], USDT, $usdt_to_fill);
+        incBalance($order["user_id"], $ticker, $coin_to_fill);
+        incBalance($user_id, USDT, $usdt_to_fill);
+        $not_filled -= $coin_to_fill;
+        if ($not_filled == 0)
             break;
     }
-    $response["order_id"] = insertRowAndGetId("orders", ["ticker" => $ticker, "user_id" => $user_id, "is_sell" => $is_sell, "price" => $price, "amount" => $amount, "timestamp" => time(), "filled" => $filled, "status" => $filled == $amount ? 1 : 0]);
+    blkBalance($user_id, $ticker, $not_filled);
+    $response["order_id"] = insertRowAndGetId("orders", [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => time()]);
 } else {
+    if (!haveBalance($user_id, USDT, $total)) error("not enough balance");
+    $not_filled = $amount;
+    decBalance($user_id, USDT, $total);
+    foreach (select("select * from orders where ticker = '$ticker' and is_sell = 1 and price <= $price and status >= 0 order by price DESC,timestamp") as $order) {
+        $order_not_filled = $order["amount"] - $order["filled"];
+        $coin_to_fill = min($not_filled, $order_not_filled);
+        $usdt_to_fill = $coin_to_fill * $order["price"];
+        updateWhere("orders", [filled => $order["filled"] + $coin_to_fill, status => $order_not_filled == $coin_to_fill ? 1 : 0], [order_id => $order["order_id"]]);
+        unbBalance($order["user_id"], $ticker, $coin_to_fill);
+        incBalance($order["user_id"], USDT, $usdt_to_fill);
+        incBalance($user_id, $ticker, $coin_to_fill);
+        $not_filled -= $coin_to_fill;
+        if ($not_filled == 0)
+            break;
+    }
+    blkBalance($user_id, USDT, $not_filled * $price);
+    $response["order_id"] = insertRowAndGetId("orders", [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => time()]);
 }
 
+$response["result"] = $response["order_id"] != null;
 echo json_encode($response);

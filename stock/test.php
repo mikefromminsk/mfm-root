@@ -3,12 +3,20 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/scheme.php";
 
-$token = "123";
+$token1 = "123";
+$token2 = "321";
 requestEquals("localhost/stock/create_currency.php",
-    array("tag" => "coin", "token" => $token), "result", true);
+    array("token" => $token1, "ticker" => "coin"), "result", true);
 requestEquals("localhost/stock/create_currency.php",
-    array("tag" => "usdt", "token" => $token), "result", true);
+    array("token" => $token2, "ticker" => "usdt"), "result", true);
 
-requestEquals("localhost/stock/create_currency.php",
-    array("tag" => "coin", "token" => $token), "result", true);
+
+requestEquals("localhost/stock/place.php",
+    array("token" => $token1, "ticker" => "coin", "is_sell" => "1", "price" => 5, "amount" => 1), "result", true);
+requestEquals("localhost/stock/place.php",
+    array("token" => $token1, "ticker" => "coin", "is_sell" => "1", "price" => 10, "amount" => 1), "result", true);
+
+requestEquals("localhost/stock/place.php",
+    array("token" => $token2, "ticker" => "coin", "is_sell" => "0", "price" => 7, "amount" => 3), "result", true);
+
 
