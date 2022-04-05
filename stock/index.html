@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+    <script src="/angular/angular-material.min.js"></script>
+    <link rel="stylesheet" href="/angular/angular-material.min.css">
+
+    <link rel="stylesheet" href="../flex/flex.css">
+    <link rel="stylesheet" href="base.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body ng-app="App" ng-controller="Controller" class="col">
+
+<div class="row line align-start-center shadow-bottom" style="height: 64px;">
+    <div class="row align-center-center ripple" style="min-width: 40px; height: 40px; border-radius: 50%; ">
+        <img src="img/back.svg" style="width: 18px;height: 18px;">
+    </div>
+    <div class="col" style="margin-left: 8px">
+        <div class="size16">SOL / USDT</div>
+        <div class="size16 gray" style="margin-top: 2px">Solana</div>
+    </div>
+    <div class="flex"></div>
+
+    <div class="size16" style="margin-right: 8px">127.25</div>
+    <div class="row white-text green-back" style="padding: 8px 8px; border-radius: 2px">+4.28%</div>
+
+    <div class="row align-center-center ripple"
+         style="min-width: 40px; height: 40px; border-radius: 50%; margin-right: 4px">
+        <img src="img/star.svg" style="width: 18px;height: 18px;">
+    </div>
+</div>
+<div class="row shadow-bottom size12" style="height: 40px">
+    <div class="flex row align-center-center ripple" style="border-bottom: 2px #4F50FB solid;">Trade</div>
+    <div class="flex row align-center-center ripple">Overview</div>
+    <div class="flex row align-center-center ripple">Chart</div>
+    <div class="flex row align-center-center ripple">Trade</div>
+</div>
+<div class="row line" style="margin-top: 12px">
+    <div class="col" style="width: 202px;">
+        <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 2px">
+            <div class="flex row align-center-center green-text white-back ripple" style="border-radius: 2px">Buy</div>
+            <div class="flex row align-center-center red-text ripple" style="border-radius: 2px">Sell</div>
+        </div>
+
+        <div class="row input-wrapper" style="margin-top: 16px">
+            <div class="input-label-top">Price</div>
+            <input type="text" class="flex input" value="9,747.22">
+            <div class="input-label-right">$9,000,000</div>
+        </div>
+
+        <div class="row input-wrapper" style="margin-top: 16px">
+            <div class="input-label-top">Sol amount</div>
+            <input type="text" class="flex input" value="0.5">
+        </div>
+        <div class="row" style="height: 22px">
+            <div class="flex row align-center-center gray-text white-back size12" style="border: 1px solid rgba(0, 0, 0, 0.2);">25%</div>
+            <div class="flex row align-center-center gray-text white-back size12" style="border: 1px solid rgba(0, 0, 0, 0.2);">50%</div>
+            <div class="flex row align-center-center gray-text white-back size12" style="border: 1px solid rgba(0, 0, 0, 0.2);">78%</div>
+            <div class="flex row align-center-center gray-text white-back size12" style="border: 1px solid rgba(0, 0, 0, 0.2);">100%</div>
+        </div>
+
+        <div class="row input-wrapper" style="margin-top: 16px">
+            <div class="input-label-top">Total</div>
+            <input type="text" class="flex input"  value="4,402.5">
+            <div class="input-label-right">$9,000,000</div>
+        </div>
+
+        <div class="row size10" style="margin-top: 8px">
+            <div class="gray-text">Available USDT</div>
+            <div class="flex" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2); margin: 0 4px"></div>
+            <div class="gray-text">9,762.33</div>
+        </div>
+
+        <div class="row align-center-center ripple green-back white-text size18" style="height: 40px; margin-top: 15px; border-radius: 2px">Buy SOL</div>
+
+    </div>
+    <div class="flex col" style="margin-left: 10px">
+
+        <div class="row align-center-center blue-text gray-back ripple" style="height: 32px; border-radius: 2px">
+            Chart
+        </div>
+
+        <div class="row" style="margin-top: 16px">
+            <div class="gray-text size10">Price (USDT)</div>
+            <div class="flex"></div>
+            <div class="row gray-text size10">Amt (SOL)</div>
+        </div>
+
+
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="red-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="red-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="red-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="red-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="red-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="red-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center">
+            <div class="flex" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2);"></div>
+        </div>
+
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="green-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="green-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="green-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="green-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="green-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+        <div class="row align-start-center" style="height: 20px;">
+            <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+            <div class="green-text" style="margin-left: 4px">9.764.32</div>
+            <div class="flex"></div>
+            <div>20.34</div>
+        </div>
+    </div>
+</div>
+
+<div class="row shadow-bottom size12" style="height: 40px; margin-top: 16px">
+    <div class="flex row align-center-center ripple" style="border-bottom: 2px #4F50FB solid;">SOL/USDT</div>
+    <div class="flex row align-center-center ripple">All</div>
+</div>
+<div class="line gray-text" style="margin-top: 8px">
+    Active
+</div>
+<div class="row line align-start-center">
+    <div class="row align-center-center ripple"
+         style="min-width: 40px; height: 40px; border-radius: 50%; margin-right: 4px">
+        <img src="img/star.svg" style="width: 18px;height: 18px;">
+    </div>
+    <div class="col">
+        <div class="row">
+            <div>SOL / USDT</div>
+            <div class="row align-start-center red-back white-text size12" style="padding: 0 2px; margin-left: 4px;">SELL</div>
+        </div>
+        <div class="gray-text">Today, 07:31pm</div>
+    </div>
+    <div class="flex"></div>
+    <div class="col align-start-end size13">
+        <div>0.4234223 SOL</div>
+        <div class="gray-text">0.0 / 0.4234223</div>
+    </div>
+    <div class="col align-start-end size13" style="min-width: 60px; margin-left: 10px">
+        <div>0.4234223</div>
+        <div class="gray-text">0.4234223</div>
+    </div>
+
+    <div class="row align-center-center ripple"
+         style="min-width: 20px; height: 20px; border-radius: 50%; margin-left: 8px">
+        <img src="img/star.svg" style="width: 18px;height: 18px;">
+    </div>
+</div>
+wwwwwwwwwwww2wwwwww2wwe
+
+
+
+<script>
+    angular.module("App", []).controller("Controller", function ($scope, $http) {
+        $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+    });
+</script>
+
+</body>
+</html>
