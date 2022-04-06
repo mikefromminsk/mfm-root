@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/auth.php";
+include_once "auth.php";
 
 $ticker = get_required_uppercase("ticker");
 $is_sell = get_int_required("is_sell");

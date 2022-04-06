@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/api/utils.php";
 
 $token = get_required("token");
 

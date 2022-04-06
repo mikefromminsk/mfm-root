@@ -22,6 +22,7 @@ if ($drop == 1) {
     query("DROP TABLE IF EXISTS `coins`;");
     query("CREATE TABLE IF NOT EXISTS `coins` (
   `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
+  `name` varchar(25) COLLATE utf32_bin NOT NULL,
   `rate` double NOT NULL DEFAULT 0,
   `last_trade_timestamp` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ticker`)
