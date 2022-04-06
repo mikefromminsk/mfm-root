@@ -1,7 +1,7 @@
 body {
     background-color: #FAFAFA;
     color: black;
-    font-family: sans-serif;
+    font-family: "Fira Sans", sans-serif;
     font-weight: 400;
     white-space: nowrap;
     font-size: 14px;
@@ -129,7 +129,8 @@ body {
 
 
 /* Ripple effect */
-.ripple {
+.white-back-ripple{
+    background-color: white;
     border: none;
     border-radius: 2px;
     cursor: pointer;
@@ -137,12 +138,31 @@ body {
     transition: background 0.8s;
 }
 
-.ripple:hover {
-    background: #eeeeee radial-gradient(circle, transparent 1%, #eeeeee 1%) center/15000%;
+.white-back-ripple:hover {
+    background: white radial-gradient(circle, transparent 1%, white 1%) center/15000%;
 }
 
-.ripple:active {
-    background-color: #e2e2e2;
+.white-back-ripple:active {
+    background-color: #d9d9d9;
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.green-back-ripple{
+    background-color: rgb(2, 192, 118);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    background-position: center;
+    transition: background 0.8s;
+}
+
+.green-back-ripple:hover {
+    background: rgb(2, 192, 118) radial-gradient(circle, transparent 1%, rgb(2, 192, 118) 1%) center/15000%;
+}
+
+.green-back-ripple:active {
+    background-color: rgb(255, 255, 255);
     background-size: 100%;
     transition: background 0s;
 }
@@ -153,7 +173,6 @@ button {
     font-size: 16px;
     outline: none;
 }
-
 
 .input-wrapper {
     position: relative;

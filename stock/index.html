@@ -9,6 +9,7 @@
     <script src="/angular/angular-material.min.js"></script>
     <link rel="stylesheet" href="/angular/angular-material.min.css">
 
+    <link rel="stylesheet" href="fonts/firasans.css">
     <link rel="stylesheet" href="../flex/flex.css">
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style.css">
@@ -16,7 +17,7 @@
 <body ng-app="App" ng-controller="Controller" class="col">
 
 <div class="row line align-start-center shadow-bottom" style="height: 64px;">
-    <div class="row align-center-center ripple" style="min-width: 40px; height: 40px; border-radius: 50%; ">
+    <div class="row align-center-center white-back-ripple" style="min-width: 40px; height: 40px; border-radius: 50%; ">
         <img src="img/back.svg" style="width: 18px;height: 18px;">
     </div>
     <div class="col" style="margin-left: 8px">
@@ -28,18 +29,17 @@
     <div class="size16" style="margin-right: 8px">127.25</div>
     <div class="row white-text green-back" style="padding: 8px 8px; border-radius: 2px">+4.28%</div>
 
-    <div class="row align-center-center ripple"
+    <div class="row align-center-center white-back-ripple"
          style="min-width: 40px; height: 40px; border-radius: 50%; margin-right: 4px">
         <img src="img/star.svg" style="width: 18px;height: 18px;">
     </div>
 </div>
 <div class="row shadow-bottom size12" style="height: 40px">
-    <div class="flex row align-center-center ripple" style="border-bottom: 2px #4F50FB solid;">Trade</div>
-    <div class="flex row align-center-center ripple">Overview</div>
-    <div class="flex row align-center-center ripple">Chart</div>
-    <div class="flex row align-center-center ripple">Trade</div>
+    <div class="flex row align-center-center white-back-ripple">Market</div>
+    <div class="flex row align-center-center white-back-ripple" style="border-bottom: 2px #4F50FB solid;">Trade</div>
+    <div class="flex row align-center-center white-back-ripple">Chart</div>
 </div>
-<div class="row line" style="margin-top: 12px">
+<!--<div class="row line" style="margin-top: 12px">
     <div class="col" style="width: 202px;">
         <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 2px">
             <div class="flex row align-center-center green-text white-back ripple" style="border-radius: 2px">Buy</div>
@@ -172,42 +172,48 @@
 
 <div class="row shadow-bottom size12" style="height: 40px; margin-top: 16px">
     <div class="flex row align-center-center ripple" style="border-bottom: 2px #4F50FB solid;">SOL/USDT</div>
-    <div class="flex row align-center-center ripple">All</div>
+    <div class="flex row align-center-center ripple">Orders</div>
+    <div class="flex row align-center-center ripple">Wallet</div>
+</div>-->
+<div class="row line" style="position: relative; margin-top: 12px;">
+    <input class="flex shadow-bottom size16" type="text" placeholder="Search"
+    style="border: none; border-radius: 20px; height: 35px; padding: 7px 12px">
+    <img src="img/loupe.svg" style="width: 18px; height: 18px; position: absolute; right: 25px; top: 8px">
 </div>
-<div class="line gray-text" style="margin-top: 8px">
+<!--<div class="line gray-text" style="margin-top: 12px; margin-bottom: 8px">
     Active
-</div>
-<div class="row line align-start-center">
-    <div class="row align-center-center ripple"
-         style="min-width: 40px; height: 40px; border-radius: 50%; margin-right: 4px">
-        <img src="img/star.svg" style="width: 18px;height: 18px;">
+</div>-->
+<div class="row line align-start-center" style="padding-top: 12px; padding-bottom: 12px;">
+    <div class="row align-center-center"
+         style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
+        <img src="img/coin/bitcoin.jpg" style="width: 100%; height: 100%;">
     </div>
-    <div class="col">
-        <div class="row">
-            <div>SOL / USDT</div>
-            <div class="row align-start-center red-back white-text size12" style="padding: 0 2px; margin-left: 4px;">SELL</div>
-        </div>
-        <div class="gray-text">Today, 07:31pm</div>
+    <div class="col" style="margin-left: 7px">
+        <div class="size16">SOL</div>
+        <div class="gray-text size12">Solana $128.07B</div>
     </div>
     <div class="flex"></div>
+
     <div class="col align-start-end size13">
-        <div>0.4234223 SOL</div>
-        <div class="gray-text">0.0 / 0.4234223</div>
-    </div>
-    <div class="col align-start-end size13" style="min-width: 60px; margin-left: 10px">
-        <div>0.4234223</div>
-        <div class="gray-text">0.4234223</div>
+        <div class="size14">$9,839.02</div>
+        <div class="green-text" style="">+3.75%</div>
     </div>
 
-    <div class="row align-center-center ripple"
-         style="min-width: 20px; height: 20px; border-radius: 50%; margin-left: 8px">
-        <img src="img/star.svg" style="width: 18px;height: 18px;">
+    <div class="row align-center-center size13 " style="min-width: 70px; margin-left: 10px">
+        <div class="row align-center-center green-back-ripple white-text" style="border-radius: 2px; padding: 8px 11px;">
+            Get
+            <img src="img/card.svg" style="width: 11px;height: 11px; margin-left: 6px">
+        </div>
+    </div>
+
+    <div class="row align-center-center white-back-ripple"
+         style="min-width: 34px; height: 34px; border-radius: 50%;">
+        <img src="img/notify_off.svg" style="width: 18px;height: 18px;">
     </div>
 </div>
-wwwwwwwwwwww2wwwwww2wwe
+<div class="gray-back" style="height: 1px"></div>
 
-
-
+wwwww
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
         $scope.sale_req_groups = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
