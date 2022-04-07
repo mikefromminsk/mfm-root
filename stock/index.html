@@ -16,55 +16,58 @@
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 
-<div class="row line align-start-center shadow-bottom" style="height: 64px;">
+<div class="row line align-start-center shadow-bottom" style="min-height: 64px;">
     <div class="row align-center-center white-back-ripple" style="min-width: 40px; height: 40px; border-radius: 50%; ">
         <img src="img/back.svg" style="width: 18px;height: 18px;">
     </div>
     <div class="col" style="margin-left: 8px">
-        <div class="size16">SOL / USDT</div>
-        <div class="size16 gray" style="margin-top: 2px">Solana</div>
+        <div class="size16">{{coin.ticker}}</div>
+        <div class="size16 gray" style="margin-top: 2px">{{coin.name}}</div>
     </div>
     <div class="flex"></div>
 
-    <div class="size16" style="margin-right: 8px">127.25</div>
-    <div class="row white-text green-back" style="padding: 8px 8px; border-radius: 2px">+4.28%</div>
+    <div class="size16" style="margin-right: 8px">{{priceFormat(coin.price)}}</div>
+    <div class="row white-text" style="padding: 8px 8px; border-radius: 2px; margin-right: 8px"
+         ng-class="changeBackColor(coin.change24)">
+        {{changeFormat(coin.change24)}}
+    </div>
 
     <div class="row align-center-center white-back-ripple"
          style="min-width: 40px; height: 40px; border-radius: 50%; margin-right: 4px">
         <img src="img/star.svg" style="width: 18px;height: 18px;">
     </div>
 </div>
-<div class="row shadow-bottom size12" style="height: 40px">
+<div class="row shadow-bottom size12" style="min-height: 40px">
     <div class="flex col" ng-repeat="item in tabs">
-        <div class="flex row align-center-center white-back-ripple" ng-click="selectTab(item)">{{item}}</div>
-        <div class="blue-back" style="height: 1px;" ng-show="tab == item"></div>
+        <div class="flex row align-center-center white-back-ripple" ng-click="selectTab($index)">{{item}}
+            {{$index > 0 ? coin.ticker : ""}}
+        </div>
+        <div class="blue-back" style="height: 1px;" ng-show="tabIndex == $index"></div>
     </div>
 </div>
 
 
-
-
-<div class="col" ng-show="tab == tabs[0]">
+<div class="col" ng-show="tabIndex == 0">
     <div class="row line" style="position: relative; margin-top: 12px;">
         <input class="flex shadow-bottom size16" type="text" placeholder="Search"
                style="border: none; border-radius: 20px; height: 35px; padding: 7px 12px">
         <img src="img/loupe.svg" style="width: 16px; height: 16px; position: absolute; right: 25px; top: 9px">
     </div>
-    <div class="col " ng-repeat="(ticker, coin) in coins">
-        <div class="row line align-start-center white-back-ripple" ng-click="openCoin(ticker, $event)"
+    <div class="col " ng-repeat="(key, item) in coins">
+        <div class="row line align-start-center white-back-ripple" ng-click="openCoin(key, $event)"
              style="padding-top: 12px; padding-bottom: 12px;">
             <div class="row align-center-center"
                  style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
                 <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
             </div>
             <div class="col" style="margin-left: 7px">
-                <div class="size16">{{ticker}}</div>
-                <div class="gray-text size12">{{coin.name}} $128.07B</div>
+                <div class="size16">{{item.ticker}}</div>
+                <div class="gray-text size12">{{item.name}} $128.07B</div>
             </div>
             <div class="flex"></div>
 
             <div class="col align-start-end size13">
-                <div class="size14">${{priceFormat(coin.rate)}}</div>
+                <div class="size14">{{priceFormat(item.price)}}</div>
                 <div class="green-text" style="">+3.75%</div>
             </div>
 
@@ -86,27 +89,26 @@
 </div>
 
 
-
-
-
-<div class="col"  ng-show="tab == tabs[1]">
+<div class="col" ng-show="tabIndex == 1">
     <div class="row line" style="margin-top: 12px">
         <div class="col" style="width: 202px;">
             <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 2px">
-                <div class="flex row align-center-center green-text white-back ripple" style="border-radius: 2px">Buy
+                <div class="flex row align-center-center green-text ripple" style="border-radius: 2px"
+                     ng-class="{'white-back': !is_sell, ' gray-back': is_sell}" ng-click="is_sell = false">Buy
                 </div>
-                <div class="flex row align-center-center red-text ripple" style="border-radius: 2px">Sell</div>
+                <div class="flex row align-center-center red-text ripple" style="border-radius: 2px"
+                     ng-class="{'white-back': is_sell, ' gray-back': !is_sell}" ng-click="is_sell = true">Sell
+                </div>
             </div>
 
             <div class="row input-wrapper" style="margin-top: 16px">
                 <div class="input-label-top">Price</div>
-                <input type="text" class="flex input" value="9,747.22">
-                <div class="input-label-right">$9,000,000</div>
+                <input type="number" class="flex input" ng-model="price" ng-change="changePrice()">
             </div>
 
             <div class="row input-wrapper" style="margin-top: 16px">
-                <div class="input-label-top">Sol amount</div>
-                <input type="text" class="flex input" value="0.5">
+                <div class="input-label-top">{{coin.ticker}} amount</div>
+                <input type="number" class="flex input" ng-model="amount" ng-change="changeAmount()">
             </div>
             <div class="row" style="height: 22px">
                 <div class="flex row align-center-center gray-text white-back size12"
@@ -125,18 +127,20 @@
 
             <div class="row input-wrapper" style="margin-top: 16px">
                 <div class="input-label-top">Total</div>
-                <input type="text" class="flex input" value="4,402.5">
-                <div class="input-label-right">$9,000,000</div>
+                <input type="number" class="flex input" ng-model="total" ng-change="changeTotal()">
             </div>
 
             <div class="row size10" style="margin-top: 8px">
-                <div class="gray-text">Available USDT</div>
+                <div class="gray-text">Available {{is_sell ? coin.ticker : "USDT"}}</div>
                 <div class="flex" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2); margin: 0 4px"></div>
-                <div class="gray-text">9,762.33</div>
+                <div class="gray-text">{{amountFormat(is_sell ? availableCoin : availableUsdt)}}</div>
             </div>
 
             <div class="row align-center-center ripple green-back white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 2px">Buy SOL
+                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 ng-class="{'red-back-ripple': is_sell, ' green-back-ripple': !is_sell}"
+                 ng-click="place()">{{is_sell ? "Sell" : "Buy"}}
+                {{coin.ticker}}
             </div>
 
         </div>
@@ -149,124 +153,258 @@
             <div class="row" style="margin-top: 16px">
                 <div class="gray-text size10">Price (USDT)</div>
                 <div class="flex"></div>
-                <div class="row gray-text size10">Amt (SOL)</div>
+                <div class="row gray-text size10">Amt ({{coin.ticker}})</div>
             </div>
 
 
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="red-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
+            <div class="col align-end" style="height: calc(20px * 6)">
+                <div class="row align-start-center" style="height: 20px;" ng-repeat="item in sell">
+                    <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+                    <div class="red-text" style="margin-left: 4px">{{priceFormat(item.price)}}</div>
+                    <div class="flex"></div>
+                    <div>{{amountFormat(item.amount)}}</div>
+                </div>
             </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="red-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="red-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="red-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="red-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="red-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="red-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
+
             <div class="row align-start-center">
                 <div class="flex" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2);"></div>
             </div>
 
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="green-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="green-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="green-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="green-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="green-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
-            </div>
-            <div class="row align-start-center" style="height: 20px;">
-                <div class="green-back" style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
-                <div class="green-text" style="margin-left: 4px">9.764.32</div>
-                <div class="flex"></div>
-                <div>20.34</div>
+            <div class="col align-end" style="height: calc(20px * 6)">
+                <div class="row align-start-center" style="height: 20px;" ng-repeat="item in buy">
+                    <div class="green-back"
+                         style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+                    <div class="green-text" style="margin-left: 4px">{{priceFormat(item.price)}}</div>
+                    <div class="flex"></div>
+                    <div>{{amountFormat(item.amount)}}</div>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="row shadow-bottom size12" style="height: 40px; margin-top: 16px">
-        <div class="flex row align-center-center ripple" style="border-bottom: 2px #4F50FB solid;">SOL/USDT</div>
-        <div class="flex row align-center-center ripple">Orders</div>
-        <div class="flex row align-center-center ripple">Wallet</div>
+        <div class="flex col" ng-repeat="item in bottomTabs" ng-click="selectBottomTab($index   )">
+            <div class="flex row align-center-center ripple">{{item}}</div>
+            <div class="blue-back" style="height: 1px;" ng-show="bottomTabIndex == $index"></div>
+        </div>
     </div>
-    <div class="line gray-text" style="margin-top: 12px; margin-bottom: 8px">
-        Active
+    <div class="col" ng-show="bottomTabIndex == 0">
+        <div class="col" ng-repeat="(key, item) in balances">
+            <div class="row line align-start-center"
+                 style="padding-top: 12px; padding-bottom: 12px;">
+                <div class="row align-center-center"
+                     style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
+                    <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
+                </div>
+                <div class="col" style="margin-left: 7px">
+                    <div class="size16">{{coins[key].ticker}}</div>
+                    <div class="gray-text size12">{{coins[key].name}} $128.07B</div>
+                </div>
+                <div class="flex"></div>
+                <div class="col align-start-end size13">
+                    <div class="size14">{{priceFormat(coins[key].price)}}</div>
+                    <div ng-class="changeColor(coins[key].change24)">{{changeFormat(coins[key].change24)}}</div>
+                </div>
+                <div class="col align-start-end size13" style="min-width: 90px; margin-left: 10px">
+                    <div class="size14">{{priceFormat(item.spot + item.blocked)}}</div>
+                    <div>{{amountFormat(item.spot + item.blocked) + " " + key}}</div>
+                </div>
+            </div>
+            <div class="gray-back" style="height: 1px"></div>
+        </div>
     </div>
+    <div class="col" ng-show="bottomTabIndex == 1">
+        <div class="col" ng-repeat="groupIndex in [0, 1]">
+            <div class="row" style="margin-top: 12px; margin-bottom: 8px" ng-show="$index == 0 && (active || []).length > 0">
+                <div class="line gray-text size14">{{groupNames[groupIndex]}}</div>
+                <div class="flex"></div>
+                <div class="line red-text size14" ng-click="cancelAll()">Cancel all</div>
+            </div>
+            <div class="line gray-text" style="margin-top: 12px; margin-bottom: 8px"
+                 ng-show="$index == 1 && (history || []).length > 0">
+                {{groupNames[groupIndex]}}
+            </div>
+            <div class="col" ng-repeat="item in (groupIndex == 0 ? active : history)">
+                <div class="row line align-start-center"
+                     style="padding-top: 12px; padding-bottom: 12px;">
+                    <div class="row align-center-center"
+                         style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
+                        <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
+                    </div>
+                    <div class="col" style="margin-left: 7px">
+                        <div class="size16">{{item.ticker}}</div>
+                        <div class="gray-text size12">{{timeFormat(item.timestamp)}}</div>
+                    </div>
+                    <div class="flex"></div>
+                    <div class="col align-start-end size13">
+                        <div class="size14">{{priceFormat(item.price)}}</div>
+                        <div>{{priceFormat(item.price * item.amount)}}</div>
+                    </div>
+                    <div class="col align-start-end size13" style="min-width: 70px; margin-left: 10px">
+                        <div class="size14">{{amountFormat(item.filled) + "/" + amountFormat(item.amount)}}
+                            {{item.ticker}}
+                        </div>
+                        <div>Filled {{priceFormat(item.filled * item.price)}}</div>
+                    </div>
+
+                    <div class="row align-center-center"
+                         style="min-width: 14px; height: 14px; border-radius: 50%; margin-left: 12px">
+                        <img src="img/cancel.svg" class="img-red" ng-show="item.status == 0"
+                             ng-click="cancel(item.order_id)">
+                        <img src="img/success.svg" class="img-green" ng-show="item.status == 1">
+                        <img src="img/canceled.svg" class="img-red" ng-show="item.status == -1">
+                    </div>
+                </div>
+                <div class="gray-back" style="height: 1px"></div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
-
-
 
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
+        var orderbookTimer = null;
+        var ticker = null || "SOL"
+        var token = "123" || localStorage.getItem('token')
+        if (token == null)
+            localStorage.setItem('token', token = Math.random())
 
+        $scope.place = function () {
+            $http({
+                method: "POST",
+                url: "api/place.php",
+                data: {
+                    token: token,
+                    ticker: ticker,
+                    is_sell: $scope.is_sell ? "1" : "0",
+                    price: $scope.price,
+                    amount: $scope.amount
+                }
+            }).then(function (response) {
+                updateOrders()
+            })
+        }
+
+        $scope.cancel = function (order_id) {
+            $http({
+                method: "POST",
+                url: "api/cancel.php",
+                data: {token: token, order_id: order_id}
+            }).then(function (response) {
+                updateOrders()
+            })
+        }
+        $scope.cancelAll = function () {
+            for (var key in $scope.active) {
+                $http({
+                    method: "POST",
+                    url: "api/cancel.php",
+                    data: {token: token, order_id: $scope.active[key].order_id}
+                }).then(function (response) {
+                })
+            }
+            setTimeout(function () {
+                updateOrders()
+            }, 1000)
+        }
+
+        function initOrders() {
+
+        }
+
+        function initWallet() {
+
+        }
+
+
+        $scope.is_sell = false
+        $scope.price;
+        $scope.amount;
+        $scope.total;
+        $scope.availableCoin;
+        $scope.availableUsdt;
+
+
+        $scope.changePrice = function () {
+            if ($scope.price != null && $scope.amount != null)
+                $scope.total = $scope.price * $scope.amount
+        }
+
+
+        $scope.changeAmount = function () {
+            if ($scope.price != null && $scope.amount != null)
+                $scope.total = $scope.price * $scope.amount
+        }
+
+
+        $scope.changeTotal = function () {
+            if ($scope.price != null && $scope.total != null)
+                $scope.amount = $scope.total / $scope.price
+        }
+
+        var userLoaded = false
+        $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
+            $scope.user = response.data.user
+            $scope.balances = response.data.balances
+            userLoaded = true
+            attemptInit()
+        })
+        var coinsLoaded = false
         $http({method: "POST", url: "api/coins.php"}).then(function (response) {
-            $scope.coins = response.data.result
+            $scope.coins = response.data.coins
+            $scope.coin = $scope.coins[ticker]
+            coinsLoaded = true
+            attemptInit()
         })
 
-        var numberFormat = new Intl.NumberFormat('en-IN');
-        $scope.priceFormat = function (number) {
-            return numberFormat.format(number)
-        }
-        $scope.tabs = ["Market", "Trade", "Chart"]
-        $scope.tab = $scope.tabs[0]
-        $scope.selectTab = function (tab) {
-            $scope.tab = tab
+        function attemptInit() {
+            if (userLoaded && coinsLoaded)
+                $scope.selectTab(1)
         }
 
+        function initMarket() {
+        }
+
+        function initTrade() {
+            $scope.price = Number.parseFloat($scope.coin.price)
+            $scope.availableCoin = $scope.balances[ticker] ? $scope.balances[ticker].spot : 0
+            $scope.availableUsdt = $scope.balances["USDT"].spot
+            updateOrderbook();
+            orderbookTimer = setInterval(updateOrderbook, 1000)
+            updateOrders();
+        }
+
+        function updateOrderbook() {
+            $http({
+                method: "POST",
+                url: "api/orderbook.php",
+                data: {ticker: ticker}
+            }).then(function (response) {
+                $scope.sell = response.data.sell
+                $scope.buy = response.data.buy
+            })
+        }
+
+        function updateOrders() {
+            $http({method: "POST", url: "api/orders.php", data: {token: token}}).then(function (response) {
+                $scope.active = response.data.active
+                $scope.history = response.data.history
+            })
+        }
+
+        function initChart() {
+        }
 
         $scope.openCoin = function (ticker, $event) {
-            $scope.selectTab($scope.tab[1])
+            setTimeout(function () {
+                $scope.coin = $scope.coins[ticker]
+                $scope.selectTab(1)
+                $scope.$apply()
+            }, 500)
             $event.stopPropagation()
         }
-
 
         $scope.go = function (url, $event) {
             setTimeout(function () {
@@ -293,6 +431,60 @@
                 $scope.top = response.data.top
             })
         }
+
+        var numberFormat = new Intl.NumberFormat('en-IN');
+        $scope.priceFormat = function (number) {
+            return "$" + numberFormat.format(number)
+        }
+        $scope.amountFormat = function (number) {
+            return number // K M B T
+        }
+        $scope.changeFormat = function (number) {
+            if (number < 0)
+                return "-" + number + "%";
+            else if (number == 0)
+                return "0%";
+            else if (number > 0)
+                return "+" + number + "%";
+        }
+
+        $scope.changeBackColor = function (number) {
+            return {'green-back': number > 0, 'gray-back': number == 0, 'red-back': number < 0}
+        }
+
+        $scope.changeColor = function (number) {
+            return {'green-text': number > 0, 'gray-text': number == 0, 'red-text': number < 0}
+        }
+
+        $scope.timeFormat = function (number) {
+            return new Date(number * 1000).toLocaleString()
+        }
+
+        $scope.tabs = ["Market", "Trade", "About"]
+        $scope.tabIndex;
+        $scope.selectTab = function (index) {
+            if (orderbookTimer != null)
+                clearInterval(orderbookTimer)
+            if (index == 0)
+                initMarket()
+            if (index == 1)
+                initTrade()
+            if (index == 2)
+                initChart()
+            $scope.tabIndex = index
+        }
+
+        $scope.bottomTabs = ["Wallet", "Orders"]
+        $scope.bottomTabIndex = 1;
+        $scope.selectBottomTab = function (index) {
+            if (index == 0)
+                initWallet()
+            if (index == 1)
+                initOrders()
+            $scope.bottomTabIndex = index
+        }
+
+        $scope.groupNames = ["Active", "History"]
     });
 </script>
 

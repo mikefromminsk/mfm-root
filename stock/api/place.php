@@ -18,7 +18,7 @@ if ($is_sell == 1) {
         $order_not_filled = $order[amount] - $order[filled];
         $coin_to_fill = min($not_filled, $order_not_filled);
         $usdt_to_fill = $coin_to_fill * $order[price];
-        updateWhere("orders", [filled => $order[filled] + $coin_to_fill, status => $order_not_filled == $coin_to_fill ? 1 : 0], [order_id => $order[order_id]]);
+        updateWhere(orders, [filled => $order[filled] + $coin_to_fill, status => $order_not_filled == $coin_to_fill ? 1 : 0], [order_id => $order[order_id]]);
         unbBalance($order[user_id], USDT, $usdt_to_fill);
         incBalance($order[user_id], $ticker, $coin_to_fill);
         incBalance($user_id, USDT, $usdt_to_fill);
@@ -29,7 +29,7 @@ if ($is_sell == 1) {
             break;
     }
     blkBalance($user_id, $ticker, $not_filled);
-    $response[order_id] = insertRowAndGetId("orders", [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => $timestamp]);
+    $response[order_id] = insertRowAndGetId(orders, [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => $timestamp]);
 } else {
     if (!haveBalance($user_id, USDT, $total)) error("not enough balance");
     $not_filled = $amount;
@@ -37,7 +37,7 @@ if ($is_sell == 1) {
         $order_not_filled = $order[amount] - $order[filled];
         $coin_to_fill = min($not_filled, $order_not_filled);
         $usdt_to_fill = $coin_to_fill * $order[price];
-        updateWhere("orders", [filled => $order[filled] + $coin_to_fill, status => $order_not_filled == $coin_to_fill ? 1 : 0], [order_id => $order[order_id]]);
+        updateWhere(orders, [filled => $order[filled] + $coin_to_fill, status => $order_not_filled == $coin_to_fill ? 1 : 0], [order_id => $order[order_id]]);
         unbBalance($order[user_id], $ticker, $coin_to_fill);
         incBalance($order[user_id], USDT, $usdt_to_fill);
         incBalance($user_id, $ticker, $coin_to_fill);
@@ -50,22 +50,22 @@ if ($is_sell == 1) {
     }
     decBalance($user_id, USDT, $not_filled * $price);
     blkBalance($user_id, USDT, $not_filled * $price);
-    $response[order_id] = insertRowAndGetId("orders", [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => $timestamp]);
+    $response[order_id] = insertRowAndGetId(orders, [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => $timestamp]);
 }
 
 if ($last_trade_price != null) {
-    $coin = selectRowWhere("coins", [ticker => $ticker]);
+    $coin = selectRowWhere(coins, [ticker => $ticker]);
     foreach ([1 * 60, 15 * 60, 60 * 60, 1440 * 60] as $seconds) {
         $trade_period = ceil($timestamp / $seconds) * $seconds;
         $last_trade_period = ceil($coin[last_trade_timestamp] / $seconds) * $seconds;
         if ($trade_period == $last_trade_period) {
-            $stick = selectRowWhere("sticks", [ticker => $ticker, period => $seconds, timestamp => $last_trade_period]);
+            $stick = selectRowWhere(sticks, [ticker => $ticker, period => $seconds, timestamp => $last_trade_period]);
             update("update sticks set smin = LEAST(smin, $last_trade_price), smax = GREATEST(smax, $last_trade_price), send = $last_trade_price, volume = volume + $trade_volume where ticker = '$ticker' and period = $seconds and timestamp = $last_trade_period");
         } else {
-            insertRow("sticks", [ticker => $ticker, period => $seconds, timestamp => $trade_period, smin => $last_trade_price, smax => $last_trade_price, start => $last_trade_price, send => $last_trade_price, volume => $trade_volume]);
+            insertRow(sticks, [ticker => $ticker, period => $seconds, timestamp => $trade_period, smin => $last_trade_price, smax => $last_trade_price, start => $last_trade_price, send => $last_trade_price, volume => $trade_volume]);
         }
     }
-    updateWhere("coins", [rate => $last_trade_price, last_trade_timestamp => $timestamp], [ticker => $ticker]);
+    updateWhere(coins, [price => $last_trade_price, last_trade_timestamp => $timestamp], [ticker => $ticker]);
 }
 
 $response[result] = $response[order_id] != null;

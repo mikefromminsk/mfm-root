@@ -167,6 +167,44 @@ body {
     transition: background 0s;
 }
 
+.red-back-ripple{
+    background-color: rgb(248, 73, 96);
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    background-position: center;
+    transition: background 0.8s;
+}
+
+.red-back-ripple:hover {
+    background: rgb(248, 73, 96) radial-gradient(circle, transparent 1%, rgb(248, 73, 96) 1%) center/15000%;
+}
+
+.red-back-ripple:active {
+    background-color: rgb(241, 137, 151);
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.blue-back-ripple{
+    background-color: #4F50FB;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    background-position: center;
+    transition: background 0.8s;
+}
+
+.blue-back-ripple:hover {
+    background: #4F50FB radial-gradient(circle, transparent 1%, #4F50FB 1%) center/15000%;
+}
+
+.blue-back-ripple:active {
+    background-color: #8e8eea;
+    background-size: 100%;
+    transition: background 0s;
+}
+
 /* Button style */
 button {
     padding: 12px 18px;
@@ -214,3 +252,6 @@ button {
     right: 0;
 }
 
+.img-red {
+    width: 100%; height: 100%;
+}
