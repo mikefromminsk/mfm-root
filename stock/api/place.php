@@ -55,14 +55,14 @@ if ($is_sell == 1) {
 
 if ($last_trade_price != null) {
     $coin = selectRowWhere(coins, [ticker => $ticker]);
-    foreach ([1 * 60, 15 * 60, 60 * 60, 1440 * 60] as $seconds) {
+    foreach ([1 * 60, 1 * 60 * 5, 1 * 60 * 15, 1 * 60 * 60, 1 * 60 * 60 * 24] as $seconds) {
         $trade_period = ceil($timestamp / $seconds) * $seconds;
         $last_trade_period = ceil($coin[last_trade_timestamp] / $seconds) * $seconds;
         if ($trade_period == $last_trade_period) {
-            $stick = selectRowWhere(sticks, [ticker => $ticker, period => $seconds, timestamp => $last_trade_period]);
-            update("update sticks set smin = LEAST(smin, $last_trade_price), smax = GREATEST(smax, $last_trade_price), send = $last_trade_price, volume = volume + $trade_volume where ticker = '$ticker' and period = $seconds and timestamp = $last_trade_period");
+            $stick = selectRowWhere(sticks, [ticker => $ticker, period => $seconds, time => $last_trade_period]);
+            update("update sticks set low = LEAST(low, $last_trade_price), high = GREATEST(high, $last_trade_price), close = $last_trade_price, volume = volume + $trade_volume where ticker = '$ticker' and period = $seconds and time = $last_trade_period");
         } else {
-            insertRow(sticks, [ticker => $ticker, period => $seconds, timestamp => $trade_period, smin => $last_trade_price, smax => $last_trade_price, start => $last_trade_price, send => $last_trade_price, volume => $trade_volume]);
+            insertRow(sticks, [ticker => $ticker, period => $seconds, time => $trade_period, low => $last_trade_price, high => $last_trade_price, open => $last_trade_price, close => $last_trade_price, volume => $trade_volume]);
         }
     }
     updateWhere(coins, [price => $last_trade_price, last_trade_timestamp => $timestamp], [ticker => $ticker]);

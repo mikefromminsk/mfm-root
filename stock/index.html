@@ -5,9 +5,8 @@
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-
-    <script src="../angular/angular-material.min.js"></script>
-    <link rel="stylesheet" href="../angular/angular-material.min.css">
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="../angular/angular.min.js"></script>
 
     <link rel="stylesheet" href="fonts/firasans.css">
     <link rel="stylesheet" href="../flex/flex.css">
@@ -88,7 +87,6 @@
     </div>
 </div>
 
-
 <div class="col" ng-show="tabIndex == 1">
     <div class="row line" style="margin-top: 12px">
         <div class="col" style="width: 202px;">
@@ -112,19 +110,10 @@
             </div>
             <div class="row" style="height: 22px">
                 <div class="flex row align-center-center gray-text white-back size12"
-                     style="border: 1px solid rgba(0, 0, 0, 0.2);">25%
-                </div>
-                <div class="flex row align-center-center gray-text white-back size12"
-                     style="border: 1px solid rgba(0, 0, 0, 0.2);">50%
-                </div>
-                <div class="flex row align-center-center gray-text white-back size12"
-                     style="border: 1px solid rgba(0, 0, 0, 0.2);">78%
-                </div>
-                <div class="flex row align-center-center gray-text white-back size12"
-                     style="border: 1px solid rgba(0, 0, 0, 0.2);">100%
+                     style="border: 1px solid rgba(0, 0, 0, 0.2);" ng-repeat="item in [25,50,75,100]"
+                     ng-click="setPortion(item)">{{item}}%
                 </div>
             </div>
-
             <div class="row input-wrapper" style="margin-top: 16px">
                 <div class="input-label-top">Total</div>
                 <input type="number" class="flex input" ng-model="total" ng-change="changeTotal()">
@@ -145,10 +134,6 @@
 
         </div>
         <div class="flex col" style="margin-left: 10px">
-
-            <div class="row align-center-center blue-text gray-back ripple" style="height: 32px; border-radius: 2px">
-                Chart
-            </div>
 
             <div class="row" style="margin-top: 16px">
                 <div class="gray-text size10">Price (USDT)</div>
@@ -215,12 +200,13 @@
     </div>
     <div class="col" ng-show="bottomTabIndex == 1">
         <div class="col" ng-repeat="groupIndex in [0, 1]">
-            <div class="row" style="margin-top: 12px; margin-bottom: 8px" ng-show="$index == 0 && (active || []).length > 0">
+            <div class="row" style="margin-top: 12px;"
+                 ng-show="$index == 0 && (active || []).length > 0">
                 <div class="line gray-text size14">{{groupNames[groupIndex]}}</div>
                 <div class="flex"></div>
                 <div class="line red-text size14" ng-click="cancelAll()">Cancel all</div>
             </div>
-            <div class="line gray-text" style="margin-top: 12px; margin-bottom: 8px"
+            <div class="line gray-text" style="margin-top: 12px;"
                  ng-show="$index == 1 && (history || []).length > 0">
                 {{groupNames[groupIndex]}}
             </div>
@@ -259,8 +245,19 @@
             </div>
         </div>
     </div>
+</div>
 
 
+
+
+<div class="col" ng-show="tabIndex == 2">
+
+    <div class="row">
+        <div class="flex row align-center-center white-back-ripple" style="padding: 10px"
+             ng-repeat="item in periods" ng-click="getSticks(item)">{{item}}
+        </div>
+    </div>
+    <div id="tradeChart" style="width: 100%; height: 300px"></div>
 </div>
 
 <script>
@@ -270,6 +267,73 @@
         var token = "123" || localStorage.getItem('token')
         if (token == null)
             localStorage.setItem('token', token = Math.random())
+
+        var chart
+        var candleSeries
+
+        function initChart() {
+            if (chart == null) {
+                var tradeChart = document.getElementById("tradeChart")
+                chart = LightweightCharts.createChart(tradeChart, {
+                    crosshair: {
+                        mode: LightweightCharts.CrosshairMode.Normal,
+                    },
+                    timeScale: {
+                        timeVisible: true,
+                    },
+                });
+                candleSeries = chart.addCandlestickSeries();
+                new ResizeObserver(entries => {
+                    if (entries.length === 0 || entries[0].target !== tradeChart) return;
+                    const newRect = entries[0].contentRect;
+                    chart.applyOptions({height: newRect.height, width: newRect.width});
+                }).observe(tradeChart)
+                $scope.getSticks($scope.period || $scope.periods[0])
+            }
+        }
+
+        var currentBar = {}
+
+        function updateChart() {
+            if (chart != null) {
+                var price = parseFloat($scope.coin.price)
+                var nextTime = Math.ceil(new Date() / 1000 / 60) * 60
+                if (nextTime != currentBar.time) {
+                    currentBar.open = currentBar.close || price
+                    currentBar.high = price
+                    currentBar.low = price
+                    currentBar.close = price
+                    currentBar.time = nextTime
+                } else {
+                    currentBar.close = price
+                    currentBar.high = Math.max(currentBar.high, price)
+                    currentBar.low = Math.min(currentBar.low, price)
+                }
+                candleSeries.update(currentBar)
+            }
+        }
+
+        $scope.setPortion = function (percent) {
+            $scope.amount = ($scope.is_sell ? $scope.availableCoin : $scope.availableUsdt) * (percent / 100)
+            $scope.changeAmount()
+        }
+
+        $scope.periods = ['1m', '5m', '15m', '1H', '1D']
+        $scope.period
+
+        $scope.getSticks = function (period) {
+            $scope.period = period
+            $http({
+                method: "POST",
+                url: "api/sticks.php",
+                data: {
+                    ticker: ticker,
+                    period: $scope.period
+                }
+            }).then(function (response) {
+                candleSeries.setData(response.data.sticks)
+            })
+        }
 
         $scope.place = function () {
             $http({
@@ -384,6 +448,8 @@
             }).then(function (response) {
                 $scope.sell = response.data.sell
                 $scope.buy = response.data.buy
+                $scope.coin = response.data.coin
+                updateChart()
             })
         }
 
@@ -392,9 +458,6 @@
                 $scope.active = response.data.active
                 $scope.history = response.data.history
             })
-        }
-
-        function initChart() {
         }
 
         $scope.openCoin = function (ticker, $event) {

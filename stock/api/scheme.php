@@ -47,11 +47,11 @@ if ($drop == 1) {
     query("CREATE TABLE IF NOT EXISTS `sticks` (
     `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
     `period` int(11) NOT NULL,
-    `timestamp` int(11) NOT NULL,
-    `start` double NOT NULL,
-    `send` double NOT NULL,
-    `smax` double NOT NULL,
-    `smin` double NOT NULL,
+    `time` int(11) NOT NULL,
+    `open` double NOT NULL,
+    `close` double NOT NULL,
+    `high` double NOT NULL,
+    `low` double NOT NULL,
     `volume` double NOT NULL
     ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 } else {
