@@ -15,7 +15,7 @@
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 
-<div class="row line align-start-center shadow-bottom" style="min-height: 64px;">
+<div class="row line align-start-center shadow-bottom header">
     <div class="row align-center-center white-back-ripple" style="min-width: 40px; height: 40px; border-radius: 50%; ">
         <img src="img/back.svg" style="width: 18px;height: 18px;">
     </div>
@@ -36,7 +36,7 @@
         <img src="img/star.svg" style="width: 18px;height: 18px;">
     </div>
 </div>
-<div class="row shadow-bottom size12" style="min-height: 40px">
+<div class="row shadow-bottom size12" style="min-height: 40px;">
     <div class="flex col" ng-repeat="item in tabs">
         <div class="flex row align-center-center white-back-ripple" ng-click="selectTab($index)">{{item}}
             {{$index > 0 ? coin.ticker : ""}}
@@ -47,13 +47,35 @@
 
 
 <div class="col" ng-show="tabIndex == 0">
-    <div class="row line" style="position: relative; margin-top: 12px;">
+    <div class="row line align-center" style="margin-top: 2px">
+        <div class="col align-center-center white-back-ripple" style="width: 78px; height: 78px;"
+             ng-click="showLaunchpad = true">
+            <img src="img/rocket.svg" style="width: 18px; height: 18px;">
+            <div class="gray-text size10" style="margin-top: 8px">Launchpad</div>
+        </div>
+        <div class="col align-center-center white-back-ripple" style="width: 78px; height: 78px;"
+             ng-click="">
+            <img src="img/rocket.svg" style="width: 18px; height: 18px;">
+            <div class="gray-text size10" style="margin-top: 8px">Launchpad</div>
+        </div>
+        <div class="col align-center-center white-back-ripple" style="width: 78px; height: 78px;"
+             ng-click="">
+            <img src="img/rocket.svg" style="width: 18px; height: 18px;">
+            <div class="gray-text size10" style="margin-top: 8px">Launchpad</div>
+        </div>
+        <div class="col align-center-center white-back-ripple" style="width: 78px; height: 78px;"
+             ng-click="">
+            <img src="img/rocket.svg" style="width: 18px; height: 18px;">
+            <div class="gray-text size10" style="margin-top: 8px">Launchpad</div>
+        </div>
+    </div>
+    <div class="row line" style="position: relative; margin: 8px 0;">
         <input class="flex shadow-bottom size16" type="text" placeholder="Search"
                style="border: none; border-radius: 20px; height: 35px; padding: 7px 12px">
         <img src="img/loupe.svg" style="width: 16px; height: 16px; position: absolute; right: 25px; top: 9px">
     </div>
     <div class="col " ng-repeat="(key, item) in coins">
-        <div class="row line align-start-center white-back-ripple" ng-click="openCoin(key, $event)"
+        <div class="row line align-start-center white-back-ripple" ng-click="openCoin(key)"
              style="padding-top: 12px; padding-bottom: 12px;">
             <div class="row align-center-center"
                  style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
@@ -69,8 +91,9 @@
                 <div class="size14">{{priceFormat(item.price)}}</div>
                 <div class="green-text" style="">+3.75%</div>
             </div>
-
-            <div class="row align-center-center size13 " style="min-width: 70px; margin-left: 10px">
+{{item.ticket}}
+            <div class="row align-center-center size13 " style="min-width: 70px; margin-left: 10px"
+                 ng-show="!balances[key]">
                 <div class="row align-center-center green-back-ripple white-text"
                      style="border-radius: 2px; padding: 8px 11px;">
                     Get
@@ -78,10 +101,16 @@
                 </div>
             </div>
 
-            <div class="row align-center-center white-back-ripple" ng-click="subscribe($event)"
+            <div class="col align-center-end size13" style="min-width: 90px; margin-left: 10px"
+                 ng-show="balances[key]">
+                <div class="size14">{{priceFormat(item.price * (balances[key].spot + balances[key].blocked))}}</div>
+                <div class="">{{amountFormat(balances[key].spot + balances[key].blocked)}} {{key}}</div>
+            </div>
+
+            <!--<div class="row align-center-center white-back-ripple" ng-click="subscribe($event)"
                  style="min-width: 34px; height: 34px; border-radius: 50%;">
                 <img src="img/notify_off.svg" style="width: 18px;height: 18px;">
-            </div>
+            </div>-->
         </div>
         <div class="gray-back" style="height: 1px"></div>
     </div>
@@ -247,9 +276,6 @@
     </div>
 </div>
 
-
-
-
 <div class="col" ng-show="tabIndex == 2">
 
     <div class="row">
@@ -260,6 +286,36 @@
     <div id="tradeChart" style="width: 100%; height: 300px"></div>
 </div>
 
+
+<div class="col flex" style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-color: #fafafa"
+     ng-show="showLaunchpad">
+    <div class="row line header shadow-bottom align-start-center">
+        <div class="size16">Launchpad</div>
+        <div class="flex"></div>
+        <div class="row align-center-center white-back-ripple" ng-click="showLaunchpad = false"
+             style="min-width: 40px; height: 40px; border-radius: 50%;">
+            <img src="img/close.svg" style="width: 18px;height: 18px;">
+        </div>
+    </div>
+    <div class="col line input-list-wrapper">
+        <div class="row input-wrapper">
+            <div class="input-label-top">Name</div>
+            <input type="text" class="flex input" ng-model="launchCoin.name" ng-change="">
+        </div>
+        <div class="row input-wrapper">
+            <div class="input-label-top">Ticker</div>
+            <input type="text" class="flex input" ng-model="launchCoin.ticker" ng-change="">
+        </div>
+
+        <div class="row align-center-center ripple green-back white-text size18"
+             style="height: 40px; border-radius: 2px"
+             ng-class="{'red-back-ripple': is_sell, ' green-back-ripple': !is_sell}"
+             ng-click="launch()">
+            <img src="img/rocket.svg" style="width: 18px;height: 18px;">
+            <div class="size16" style="margin-left: 8px">Launch</div>
+        </div>
+    </div>
+</div>
 <script>
     angular.module("App", []).controller("Controller", function ($scope, $http) {
         var orderbookTimer = null;
@@ -267,6 +323,70 @@
         var token = "123" || localStorage.getItem('token')
         if (token == null)
             localStorage.setItem('token', token = Math.random())
+
+
+        $scope.openCoin = function (newTicker, $event) {
+            ticker = newTicker
+            $scope.coin = $scope.coins[ticker]
+            $scope.selectTab(1)
+        }
+
+        $scope.tabs = ["Market", "Trade", "About"]
+        $scope.tabIndex;
+        $scope.selectTab = function (index) {
+            if (orderbookTimer != null)
+                clearInterval(orderbookTimer)
+            if (index == 0)
+                initMarket()
+            if (index == 1)
+                initTrade()
+            if (index == 2)
+                initChart()
+            $scope.tabIndex = index
+        }
+
+        function initTrade() {
+            $scope.price = $scope.coin.price
+            $scope.availableCoin = $scope.balances[ticker] ? $scope.balances[ticker].spot : 0
+            $scope.availableUsdt = $scope.balances["USDT"].spot
+            updateOrderbook();
+            orderbookTimer = setInterval(updateOrderbook, 1000)
+            updateOrders();
+        }
+
+
+
+        $scope.showLaunchpad = false
+        $scope.launchCoin = {}
+        $scope.launch = function () {
+            $http({
+                method: "POST",
+                url: "api/create_coin.php",
+                data: {
+                    token: token,
+                    ticker: $scope.launchCoin.ticker,
+                    name: $scope.launchCoin.name
+                }
+            }).then(function (response) {
+                if (response.data.result) {
+                    var loadUser = false
+                    updateUser(function () {
+                        loadUser = true
+                        attemptToClose()
+                    })
+                    var loadCoins = false
+                    updateCoins(function () {
+                        loadCoins = true
+                        attemptToClose()
+                    })
+
+                    function attemptToClose() {
+                        if (loadUser && loadCoins)
+                            $scope.showLaunchpad = false
+                    }
+                }
+            })
+        }
 
         var chart
         var candleSeries
@@ -408,36 +528,44 @@
                 $scope.amount = $scope.total / $scope.price
         }
 
+
         var userLoaded = false
-        $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
-            $scope.user = response.data.user
-            $scope.balances = response.data.balances
+        var coinsLoaded = false
+
+        updateUser(function () {
             userLoaded = true
             attemptInit()
         })
-        var coinsLoaded = false
-        $http({method: "POST", url: "api/coins.php"}).then(function (response) {
-            $scope.coins = response.data.coins
-            $scope.coin = $scope.coins[ticker]
+
+        updateCoins(function () {
             coinsLoaded = true
             attemptInit()
         })
 
         function attemptInit() {
             if (userLoaded && coinsLoaded)
-                $scope.selectTab(1)
+                $scope.selectTab(0)
+        }
+
+        function updateUser(callback) {
+            $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
+                $scope.user = response.data.user
+                $scope.balances = response.data.balances
+                if (callback != null)
+                    callback()
+            })
+        }
+
+        function updateCoins(callback) {
+            $http({method: "POST", url: "api/coins.php"}).then(function (response) {
+                $scope.coins = response.data.coins
+                $scope.coin = $scope.coins[ticker]
+                if (callback != null)
+                    callback()
+            })
         }
 
         function initMarket() {
-        }
-
-        function initTrade() {
-            $scope.price = Number.parseFloat($scope.coin.price)
-            $scope.availableCoin = $scope.balances[ticker] ? $scope.balances[ticker].spot : 0
-            $scope.availableUsdt = $scope.balances["USDT"].spot
-            updateOrderbook();
-            orderbookTimer = setInterval(updateOrderbook, 1000)
-            updateOrders();
         }
 
         function updateOrderbook() {
@@ -458,15 +586,6 @@
                 $scope.active = response.data.active
                 $scope.history = response.data.history
             })
-        }
-
-        $scope.openCoin = function (ticker, $event) {
-            setTimeout(function () {
-                $scope.coin = $scope.coins[ticker]
-                $scope.selectTab(1)
-                $scope.$apply()
-            }, 500)
-            $event.stopPropagation()
         }
 
         $scope.go = function (url, $event) {
@@ -521,20 +640,6 @@
 
         $scope.timeFormat = function (number) {
             return new Date(number * 1000).toLocaleString()
-        }
-
-        $scope.tabs = ["Market", "Trade", "About"]
-        $scope.tabIndex;
-        $scope.selectTab = function (index) {
-            if (orderbookTimer != null)
-                clearInterval(orderbookTimer)
-            if (index == 0)
-                initMarket()
-            if (index == 1)
-                initTrade()
-            if (index == 2)
-                initChart()
-            $scope.tabIndex = index
         }
 
         $scope.bottomTabs = ["Wallet", "Orders"]

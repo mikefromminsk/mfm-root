@@ -255,3 +255,13 @@ button {
 .img-red {
     width: 100%; height: 100%;
 }
+
+
+
+.header{
+    min-height: 64px;
+}
+
+.input-list-wrapper > * {
+    margin-top: 16px;
+}
