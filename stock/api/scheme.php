@@ -23,8 +23,9 @@ if ($drop == 1) {
     query("CREATE TABLE IF NOT EXISTS `coins` (
   `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
   `name` varchar(25) COLLATE utf32_bin NOT NULL,
-  `price` double NOT NULL DEFAULT 0,
+  `price` double NOT NULL DEFAULT 1,
   `change24` double NOT NULL DEFAULT 0,
+  `user_id` int(11) NOT NULL,
   `last_trade_timestamp` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ticker`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
