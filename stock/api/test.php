@@ -47,7 +47,7 @@ requestEquals("localhost/stock/api/place.php",
 
 requestEquals("localhost/stock/api/create_coin.php",
     array(
-        "token" => $token1,
+        "token" => $token2,
         "ticker" => "DOGE",
         "name" => "Doge coin",
         "description" => "Good coin for doge",
@@ -55,6 +55,11 @@ requestEquals("localhost/stock/api/create_coin.php",
         "price" => "0.2",
         "starter_supply" => "100",
     ), "result", true);
+
+requestEquals("localhost/stock/api/place.php",
+    array("token" => $token1, "ticker" => "DOGE", "is_sell" => "0", "price" => 0.2, "amount" => 1), "result", true);
+
+requestEquals("localhost/stock/api/ieo_close.php", array("ticker" => "DOGE"), "returned", 0.2);
 
 
 //requestEquals("localhost/stock/api/bot_spred.php", array(), "result", true);

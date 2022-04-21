@@ -173,4 +173,5 @@ function transfer($from_user_id, $to_user_id, $ticker, $amount)
     if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer");
     decBalance($from_user_id, $ticker, $amount);
     incBalance($to_user_id, $ticker, $amount);
+    return true;
 }
