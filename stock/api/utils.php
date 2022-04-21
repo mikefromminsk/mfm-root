@@ -1,8 +1,6 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
-const USDT = "USDT";
-
 function getSpot($user_id, $ticker)
 {
     return scalar("select spot from balances where user_id = $user_id and ticker = '$ticker'");
@@ -50,12 +48,20 @@ function haveBalance($user_id, $ticker, $amount)
     return getSpot($user_id, $ticker) >= $amount;
 }
 
-function place($user_id, $ticker, $is_sell, $price, $amount) {
-    if ($price != round($price,2)) error("price tick is 0.01");
-    if ($amount != round($amount,2)) error("amount tick is 0.01");
+function place($user_id, $ticker, $is_sell, $price, $amount)
+{
+    if ($price != round($price, 2)) error("price tick is 0.01");
+    if ($amount != round($amount, 2)) error("amount tick is 0.01");
     $total = round($price * $amount, 4);
     $timestamp = time();
     $trade_volume = 0;
+
+    $coin = selectRowWhere(coins, [ticker => $ticker]);
+    if ($coin[type] == IEO) {
+        if ($coin[price] != 0 && $is_sell == 1) error("only one sell order has to be in ieo");
+        if ($coin[created] < time() - 60 * 60 * 24 * 30) error("ieo is finished");
+        if ($coin[price] == 0 && $is_sell == 0) error("first ieo order has to be sell");
+    }
 
     if ($is_sell == 1) {
         if (!haveBalance($user_id, $ticker, $amount)) error("not enough balance");
@@ -77,6 +83,10 @@ function place($user_id, $ticker, $is_sell, $price, $amount) {
         }
         blkBalance($user_id, $ticker, $not_filled);
         $order_id = insertRowAndGetId(orders, [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => $timestamp]);
+
+        if ($coin[price] == 0) {
+            updateWhere(coins, [price => $price], [ticker => $ticker]);
+        }
     } else {
         if (!haveBalance($user_id, USDT, $total)) error("not enough balance");
         $not_filled = $amount;
@@ -98,10 +108,18 @@ function place($user_id, $ticker, $is_sell, $price, $amount) {
         decBalance($user_id, USDT, round($not_filled * $price, 4));
         blkBalance($user_id, USDT, round($not_filled * $price, 4));
         $order_id = insertRowAndGetId(orders, [user_id => $user_id, ticker => $ticker, is_sell => $is_sell, price => $price, amount => $amount, filled => $amount - $not_filled, status => $not_filled == 0 ? 1 : 0, timestamp => $timestamp]);
+
+        if ($coin[type] == IEO) {
+            $sell_order = selectRowWhere(orders, [ticker => $ticker, is_sell => 1]);
+            if ($sell_order[status] == 1) {
+                updateWhere(coins, [type => COIN], [ticker => $ticker]);
+                transfer($coin[ieo_user_id], $coin[user_id], $ticker, getSpot($coin[ieo_user_id], $ticker));
+                transfer($coin[ieo_user_id], $coin[user_id], USDT, getSpot($coin[ieo_user_id], USDT));
+            }
+        }
     }
 
     if ($last_trade_price != null) {
-        $coin = selectRowWhere(coins, [ticker => $ticker]);
         foreach ([1 * 60, 1 * 60 * 5, 1 * 60 * 15, 1 * 60 * 60, 1 * 60 * 60 * 24] as $seconds) {
             $trade_period = ceil($timestamp / $seconds) * $seconds;
             $last_trade_period = ceil($coin[last_trade_timestamp] / $seconds) * $seconds;
@@ -116,27 +134,43 @@ function place($user_id, $ticker, $is_sell, $price, $amount) {
     return $order_id;
 }
 
-function cancel($user_id, $order_id){
+function cancel($user_id, $order_id)
+{
     $order = selectRowWhere(orders, [order_id => $order_id]);
     if ($order == null) error("order not exist");
     if ($order[status] != 0) error("cannot cancel");
     if ($order["user_id"] != $user_id) error("not yours");
 
     if ($order[is_sell]) {
-        $amount = $order[amount] - $order[filled];
+        $amount = round($order[amount] - $order[filled], 2);
         unbBalance($user_id, $order[ticker], $amount);
         incBalance($user_id, $order[ticker], $amount);
     } else {
-        $amount = ($order[amount] - $order[filled]) * $order[price];
+        $amount = round(($order[amount] - $order[filled]) * $order[price], 4);
         unbBalance($user_id, USDT, $amount);
         incBalance($user_id, $order[ticker], $amount);
     }
     return updateWhere(orders, [status => -1], [order_id => $order_id]);
 }
 
-function cancelAll($user_id, $ticker) {
+function cancelAll($user_id, $ticker)
+{
     $order_ids = selectListWhere(orders, order_id, [user_id => $user_id, ticker => $ticker, status => 0]);
     foreach ($order_ids as $order_id)
         cancel($user_id, $order_id);
     return true;
+}
+
+function createUser($token)
+{
+    $user_id = insertRowAndGetId("users", [token => $token]);
+    insertRow("balances", [user_id => $user_id, ticker => "USDT", spot => 0, blocked => 0]);
+    return $user_id;
+}
+
+function transfer($from_user_id, $to_user_id, $ticker, $amount)
+{
+    if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer");
+    decBalance($from_user_id, $ticker, $amount);
+    incBalance($to_user_id, $ticker, $amount);
 }

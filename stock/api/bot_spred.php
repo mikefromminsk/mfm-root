@@ -9,7 +9,7 @@ foreach (selectWhere("coins", [ticker => SOL]) as $coin) {
     $spred = 1;
     $support_percent = 10;
     $support_usdt = 10;
-    $support_orders = 3;
+    $support_orders = 10;
     $coin_balance = getSpot($user_id, $ticker);
     $usdt_balance = getSpot($user_id, "USDT");
     $sell_orders_count = scalar("select count(*) from orders where user_id = $user_id and ticker = '$ticker' and is_sell = 1 and status = 0");
