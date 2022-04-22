@@ -39,14 +39,14 @@
 <div class="col" ng-show="menuIndex == 0">
     <div class="row shadow size12" style="min-height: 40px;">
         <div class="flex col" ng-repeat="item in tabs">
-            <div class="flex row align-center-center white-back-ripple" ng-click="selectTab($index)">{{item}}
+            <div class="flex row align-center-center white-back-ripple" ng-click="selectTradeTab($index)">{{item}}
                 {{$index > 0 ? coin.ticker : ""}}
             </div>
-            <div class="blue-back" style="height: 1px;" ng-show="tabIndex == $index"></div>
+            <div class="blue-back" style="height: 1px;" ng-show="tradeTabIndex == $index"></div>
         </div>
     </div>
 
-    <div class="col" ng-show="tabIndex == 0">
+    <div class="col" ng-show="tradeTabIndex == 0">
         <div class="row line" style="position: relative; margin: 8px 0;">
             <input class="flex shadow size16" type="text" placeholder="Search"
                    style="border: none; border-radius: 20px; height: 35px; padding: 7px 12px">
@@ -95,7 +95,7 @@
         </div>
     </div>
 
-    <div class="col" ng-show="tabIndex == 1">
+    <div class="col" ng-show="tradeTabIndex == 1">
         <div class="row line" style="margin-top: 12px">
             <div class="col" style="width: 202px;">
                 <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 2px">
@@ -180,10 +180,10 @@
         <div class="row shadow size12" style="height: 40px; margin-top: 16px">
             <div class="flex col" ng-repeat="item in bottomTabs" ng-click="selectBottomTab($index   )">
                 <div class="flex row align-center-center ripple">{{item}}</div>
-                <div class="blue-back" style="height: 1px;" ng-show="bottomTabIndex == $index"></div>
+                <div class="blue-back" style="height: 1px;" ng-show="bottomtradeTabIndex == $index"></div>
             </div>
         </div>
-        <div class="col" ng-show="bottomTabIndex == 0">
+        <div class="col" ng-show="bottomtradeTabIndex == 0">
             <div class="col" ng-repeat="groupIndex in [0, 1]">
                 <div class="row" style="margin-top: 12px;"
                      ng-show="$index == 0 && (active || []).length > 0">
@@ -229,7 +229,7 @@
                 </div>
             </div>
         </div>
-        <div class="col" ng-show="bottomTabIndex == 1">
+        <div class="col" ng-show="bottomtradeTabIndex == 1">
             <div class="col" ng-repeat="(key, item) in balances">
                 <div class="row line align-start-center"
                      style="padding-top: 12px; padding-bottom: 12px;">
@@ -257,7 +257,7 @@
 
     </div>
 
-    <div class="col" ng-show="tabIndex == 2">
+    <div class="col" ng-show="tradeTabIndex == 2">
 
         <div class="row">
             <div class="flex row align-center-center white-back-ripple" style="padding: 10px"
@@ -444,61 +444,68 @@
         </div>
     </div>
 
-    <div class="flex line col white-back" ng-show="earnIndex == 1">
-        <div class="col white-back-ripple shadow" style="margin-top: 20px">
+    <div class="flex line col white-back" ng-show="earnIndex == 0">
+        <div class="col white-back-ripple shadow" style="margin-top: 20px" ng-repeat="(key, item) in tc"
+             ng-click="selectTC(item)" ng-show="selectedTC == null">
             <img src="img/rocket.svg" style="width: 100%; height: 140px;">
             <div class="row align-start-center" style="margin: 8px 12px">
                 <img src="img/coin/sol.jpg" style="width: 20px;height: 20px;">
                 <div class="col flex" style="margin-left: 12px">
-                    <div class="size16">GCME</div>
-                    <div class="gray-text">GoCryptiMe</div>
+                    <div class="size16">{{key}}</div>
+                    <div class="gray-text">{{coins[key].name}}</div>
                 </div>
-                <div class="row align-center-center blue-back-ripple white-text" style="padding: 6px 12px">
-                    Buy GCME
+                <div class="row align-center-center blue-back-ripple white-text" style="padding: 6px 12px"
+                 ng-click="openTrade(key)">
+                    Buy {{key}}
                 </div>
             </div>
         </div>
-    </div>
-    <div class="flex col white-back" ng-show="earnIndex == 0">
-        <div class="row header line align-start-center">
-            <div class="white-back-ripple" style="border-radius: 50%">
-                <img src="img/back.svg" style="width: 40px;height: 40px;" ng-click="tcClose()">
+
+        <div class="flex col white-back" ng-show="selectedTC != null">
+            <div class="row header line align-start-center">
+                <div class="white-back-ripple" style="border-radius: 50%">
+                    <img src="img/back.svg" style="width: 40px;height: 40px;" ng-click="selectTC(null)">
+                </div>
             </div>
-        </div>
-        <div class="col line align-start-center">
-            <div class="row align-center-center">
-                <img src="img/coin/sol.jpg" style="width: 40px;height: 40px;">
-            </div>
-            <div class="weight5 multiline-text" style="text-align: center; line-height: 24px; margin-top: 20px">
-                Get a chance to win a share of 171.5K SOL during the trading competition. Trade bug to win the biggest
-                reward!
-            </div>
-            <div class="size8 gray-text" style="margin-top: 20px">Competition will finish after</div>
-            <div class="col" style="width: 170px">
-                <div class="row" style="margin-top: 10px">
-                    <div class="flex col align-center-center" ng-repeat="(key, item) in tcTimer">
-                        <div class="size18 weight5">{{item}}</div>
-                        <div class="size8" style="margin-top: 8px">{{key}}</div>
+            <div class="col line align-start-center">
+                <div class="row align-center-center">
+                    <img src="img/coin/sol.jpg" style="width: 40px;height: 40px;">
+                </div>
+                <div class="weight5 multiline-text" style="text-align: center; line-height: 24px; margin-top: 20px">
+                    Get a chance to win a share of {{amountFormat(selectedTC.reward)}} {{selectedTC.ticker}} during the trading competition. Trade bug to win the biggest
+                    reward!
+                </div>
+                <div class="size8 gray-text" style="margin-top: 20px">Competition will finish after</div>
+                <div class="col" style="width: 170px">
+                    <div class="row" style="margin-top: 10px">
+                        <div class="flex col align-center-center" ng-repeat="(key, item) in tcTimer">
+                            <div class="size18 weight5">{{item}}</div>
+                            <div class="size8" style="margin-top: 8px">{{key}}</div>
+                        </div>
+                    </div>
+                    <div class="flex row align-center-center white-text blue-back-ripple"
+                         style="padding: 8px 0; margin-top: 12px" ng-click="openTrade(selectedTC.ticker)">Buy {{selectedTC.ticker}}
                     </div>
                 </div>
-                <div class="flex row align-center-center white-text blue-back-ripple" style="padding: 8px 0; margin-top: 12px">Buy GCME</div>
             </div>
-        </div>
-        <div class="gray-back" style="height: 1px; margin-top: 12px"></div>
-        <div class="col line">
-            <div class="weight5" style="margin-top: 20px">Other participants</div>
-            <div class="col" ng-repeat="item in ['wefwe', 'wef', 'wefw']">
-                <div class="row align-start-center" style="height: 60px;">
-                    <div>{{$index}}.</div>
-                    <div class="col" style="margin-left: 20px">
-                        <div>{{item}}</div>
-                        <div class="gray-text size12" style="margin-top: 4px">123,12,124</div>
+            <div class="gray-back" style="height: 1px; margin-top: 12px"></div>
+            <div class="col line">
+                <div class="weight5" style="margin-top: 20px">Other participants</div>
+                <div class="col" ng-repeat="item in selectedTCWinners">
+                    <div class="row align-start-center" style="height: 60px;">
+                        <div>{{$index}}.</div>
+                        <div class="col" style="margin-left: 20px">
+                            <div>{{item.winner}}</div>
+                            <div class="gray-text size12" style="margin-top: 4px">{{amountFormat(item.traded)}}</div>
+                        </div>
                     </div>
+                    <div class="gray-back" style="height: 1px;"></div>
                 </div>
-                <div class="gray-back" style="height: 1px;"></div>
             </div>
         </div>
+
     </div>
+
 </div>
 
 <div class="row shadow size12" style="min-height: 40px;">
@@ -549,12 +556,40 @@
         }
 
         function initCompetitions() {
-
+            $http({
+                method: "POST",
+                url: "api/tc.php",
+            }).then(function (response) {
+                $scope.tc = response.data.tc
+            })
         }
 
+        $scope.selectEarnTab(0)
+
+        $scope.selectTC = function (item) {
+            $scope.selectedTC = item
+            if (item != null)
+                $http({
+                    method: "POST",
+                    url: "api/tc_winners.php",
+                    data: {
+                        ticker: item.ticker,
+                        start: item.start,
+                    }
+                }).then(function (response) {
+                    $scope.selectedTCWinners = response.data.winners
+                })
+
+        }
+        
+        $scope.openTrade = function (ticker) {
+            $scope.coin = $scope.coins[ticker]
+            $scope.tradeTabIndex = 1
+            $scope.selectMenu(0)
+        }
 
         function initMenuTrade() {
-            $scope.selectTab($scope.tabindex)
+            $scope.selectTradeTab($scope.tradeTabIndex)
         }
 
         $scope.starter = ["List", "Overview", "Launchpad"]
@@ -662,12 +697,12 @@
         $scope.openCoin = function (newTicker, $event) {
             ticker = newTicker
             $scope.coin = $scope.coins[ticker]
-            $scope.selectTab(1)
+            $scope.selectTradeTab(1)
         }
 
         $scope.tabs = ["Market", "Trade", "About"]
-        $scope.tabIndex;
-        $scope.selectTab = function (index) {
+        $scope.tradeTabIndex;
+        $scope.selectTradeTab = function (index) {
             if (orderbookTimer != null)
                 clearInterval(orderbookTimer)
             if (index == 0)
@@ -676,11 +711,11 @@
                 initTrade()
             if (index == 2)
                 initChart()
-            $scope.tabIndex = index
+            $scope.tradeTabIndex = index
         }
 
         function initTrade() {
-            $scope.availableCoin = $scope.balances[ticker] ? $scope.balances[ticker].spot : 0
+            $scope.availableCoin = $scope.balances[$scope.coin.ticker] ? $scope.balances[$scope.coin.ticker].spot : 0
             $scope.availableUsdt = $scope.balances["USDT"].spot
             updateOrderbook();
             orderbookTimer = setInterval(updateOrderbook, 1000)
@@ -840,7 +875,7 @@
 
         function attemptInit() {
             if (userLoaded && coinsLoaded)
-                $scope.selectTab(1)
+                $scope.selectTradeTab(1)
         }
 
         function updateUser(callback) {
@@ -869,7 +904,7 @@
             $http({
                 method: "POST",
                 url: "api/orderbook.php",
-                data: {ticker: ticker}
+                data: {ticker: $scope.coin.ticker}
             }).then(function (response) {
                 $scope.sell = response.data.sell
                 $scope.buy = response.data.buy
@@ -939,13 +974,13 @@
         }
 
         $scope.bottomTabs = ["Orders", "Wallet"]
-        $scope.bottomTabIndex = 0;
+        $scope.bottomtradeTabIndex = 0;
         $scope.selectBottomTab = function (index) {
             if (index == 0)
                 initOrders()
             if (index == 1)
                 initWallet()
-            $scope.bottomTabIndex = index
+            $scope.bottomtradeTabIndex = index
         }
 
         $scope.groupNames = ["Active", "History"]
