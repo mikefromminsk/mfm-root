@@ -75,6 +75,7 @@ function place($user_id, $ticker, $is_sell, $price, $amount)
             unbBalance($order[user_id], USDT, $usdt_to_fill);
             incBalance($order[user_id], $ticker, $coin_to_fill);
             incBalance($user_id, USDT, $usdt_to_fill);
+            insertRow(trades, [time => time(), ticker => $ticker, is_sell => 1, maker => $user_id, taker => $order[user_id], price => $order[price], amount => $coin_to_fill, total => $usdt_to_fill]);
             $not_filled = round($not_filled - $coin_to_fill, 2);
             $last_trade_price = $order[price];
             $trade_volume += $usdt_to_fill;
@@ -99,6 +100,7 @@ function place($user_id, $ticker, $is_sell, $price, $amount)
             incBalance($order[user_id], USDT, $usdt_to_fill);
             incBalance($user_id, $ticker, $coin_to_fill);
             decBalance($user_id, USDT, $usdt_to_fill);
+            insertRow(trades, [time => time(), ticker => $ticker, is_sell => 0, maker => $user_id, taker => $order[user_id], price => $order[price], amount => $coin_to_fill, total => $usdt_to_fill]);
             $not_filled = round($not_filled - $coin_to_fill, 2);
             $last_trade_price = $order[price];
             $trade_volume += $usdt_to_fill;
@@ -112,7 +114,7 @@ function place($user_id, $ticker, $is_sell, $price, $amount)
         if ($coin[type] == IEO) {
             $sell_order = selectRowWhere(orders, [ticker => $ticker, is_sell => 1]);
             if ($sell_order[status] == 1) {
-                updateWhere(coins, [type => COIN], [ticker => $ticker]);
+                updateWhere(coins, [type => ACTIVE], [ticker => $ticker]);
                 transfer($coin[ieo_user_id], $coin[user_id], $ticker, getSpot($coin[ieo_user_id], $ticker));
                 transfer($coin[ieo_user_id], $coin[user_id], USDT, getSpot($coin[ieo_user_id], USDT));
             }
@@ -161,17 +163,26 @@ function cancelAll($user_id, $ticker)
     return true;
 }
 
-function createUser($token)
+function createUser($token, $email = null)
 {
-    $user_id = insertRowAndGetId("users", [token => $token]);
+    $user_id = insertRowAndGetId("users", [token => $token, email => $email]);
     insertRow("balances", [user_id => $user_id, ticker => "USDT", spot => 0, blocked => 0]);
     return $user_id;
 }
 
 function transfer($from_user_id, $to_user_id, $ticker, $amount)
 {
-    if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer");
+    if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer need $amount");
     decBalance($from_user_id, $ticker, $amount);
     incBalance($to_user_id, $ticker, $amount);
+    insertRow(transfers, [from_user_id => $from_user_id, to_user_id => $to_user_id, ticker => $ticker, amount => $amount, time => time()]);
     return true;
+}
+
+function tcWinners($ticker, $start)
+{
+    $tc = selectRowWhere(tc, [ticker => $ticker, start => $start]);
+    return select("select maker as winner, sum(amount) as traded "
+        . " from trades where ticker = '$ticker' and time >= $tc[start] and time <= $tc[finish] "
+        . " group by maker order by traded desc");
 }

@@ -53,6 +53,10 @@ body {
     border-radius: 2px;
 }
 
+.size8 {
+    font-size: 8px;
+}
+
 .size10 {
     font-size: 10px;
 }
@@ -118,7 +122,7 @@ body {
     -webkit-mask-position: center;
 }
 
-.shadow-bottom {
+.shadow {
     box-shadow: 0px 0px 2px 0px #b4b4b4;
 }
 
@@ -264,4 +268,9 @@ button {
 
 .input-list-wrapper > * {
     margin-top: 16px;
+}
+
+
+.multiline-text{
+    white-space: normal;
 }

@@ -11,11 +11,13 @@ $starter_supply = get_int_required(starter_supply);
 
 $type = IEO;
 if ($ticker == USDT) {
-    $type = COIN;
+    $type = ACTIVE;
     $ieo_user_id = $user_id;
 } else {
     $ieo_user_id = createUser(random_id());
 }
+
+$tc_user_id = createUser(random_id());
 
 insertRow("coins",
     [
@@ -27,6 +29,7 @@ insertRow("coins",
         description => $description,
         supply => $supply,
         ieo_user_id => $ieo_user_id,
+        tc_user_id => $tc_user_id,
     ]);
 
 incBalance($ieo_user_id, $ticker, $supply);

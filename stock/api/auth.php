@@ -7,5 +7,5 @@ $token = get_required("token");
 $user_id = selectRowWhere("users", [token => $token])["user_id"];
 
 if ($user_id == null) {
-    $user_id = createUser($token);
+    $user_id = createUser($token, get_string(email));
 }
