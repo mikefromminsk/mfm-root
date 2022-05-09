@@ -14,7 +14,7 @@ if ($coin[user_id] != $user_id) error("you are not admin");
 if (!haveBalance($user_id, $ticker, $reward)) error("you donot have enough $ticker");
 
 
-transfer($user_id, $coin[tc_user_id], $ticker, $reward);
+transfer(TC_START, $user_id, $coin[tc_user_id], $ticker, $reward);
 
 $response[result] = insertRow(tc, [
     ticker => $ticker,

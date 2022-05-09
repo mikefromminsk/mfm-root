@@ -12,6 +12,6 @@ if ($to_email != null && $to_user_id == null)
 
 if ($to_user_id == null) error("user not found");
 
-$response[result] = transfer($user_id, $to_user_id, $ticker, $amount);
+$response[result] = transfer(INTERNAL, $user_id, $to_user_id, $ticker, $amount) != null;
 
 echo json_encode($response);

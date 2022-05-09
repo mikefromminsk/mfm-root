@@ -455,7 +455,7 @@
                     <div class="gray-text">{{coins[key].name}}</div>
                 </div>
                 <div class="row align-center-center blue-back-ripple white-text" style="padding: 6px 12px"
-                 ng-click="openTrade(key)">
+                     ng-click="openTrade(key)">
                     Buy {{key}}
                 </div>
             </div>
@@ -472,7 +472,8 @@
                     <img src="img/coin/sol.jpg" style="width: 40px;height: 40px;">
                 </div>
                 <div class="weight5 multiline-text" style="text-align: center; line-height: 24px; margin-top: 20px">
-                    Get a chance to win a share of {{amountFormat(selectedTC.reward)}} {{selectedTC.ticker}} during the trading competition. Trade bug to win the biggest
+                    Get a chance to win a share of {{amountFormat(selectedTC.reward)}} {{selectedTC.ticker}} during the
+                    trading competition. Trade bug to win the biggest
                     reward!
                 </div>
                 <div class="size8 gray-text" style="margin-top: 20px">Competition will finish after</div>
@@ -484,7 +485,8 @@
                         </div>
                     </div>
                     <div class="flex row align-center-center white-text blue-back-ripple"
-                         style="padding: 8px 0; margin-top: 12px" ng-click="openTrade(selectedTC.ticker)">Buy {{selectedTC.ticker}}
+                         style="padding: 8px 0; margin-top: 12px" ng-click="openTrade(selectedTC.ticker)">Buy
+                        {{selectedTC.ticker}}
                     </div>
                 </div>
             </div>
@@ -504,6 +506,66 @@
             </div>
         </div>
 
+    </div>
+    <div class="flex line col white-back" ng-show="earnIndex == 1">
+
+        <div ng-show="selectedStaking == null">
+            <div ng-show="stakes.length > 0">
+                <div style="margin-top: 12px">Active stakes</div>
+                <div class="col shadow" ng-repeat="item in stakes" style="padding: 12px; margin-top: 12px">
+                    <div class="row align-start-center">
+                        <img src="img/coin/sol.jpg" style="width: 24px;height: 24px;">
+                        <div style="margin-left: 12px">{{item.ticker}}</div>
+                        <div class="flex"></div>
+                        <div class="col align-center-center">
+                            <div>Earned</div>
+                            {{item.earned}}
+                        </div>
+                    </div>
+                    <div class="row align-center-center ripple red-back white-text size18"
+                         style="height: 40px; margin-top: 15px; border-radius: 2px"
+                         ng-click="unstake(item)">
+                        Unstake {{priceFormat(item.earned + item.amount)}} {{item.ticker}}
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 12px">Staking plans</div>
+            <div class="col shadow" ng-repeat="item in stakingActive" style="padding: 12px; margin-top: 12px">
+                <div class="row align-start-center">
+                    <img src="img/coin/sol.jpg" style="width: 24px;height: 24px;">
+                    <div style="margin-left: 12px">{{item.ticker}}</div>
+                    <div class="flex"></div>
+                    <div class="col align-center-center">
+                        <div>Year earn percent</div>
+                        <div class="green-text">{{changeFormat(item.staking_apy)}}</div>
+                    </div>
+                </div>
+                <div class="row align-center-center ripple blue-back white-text size18"
+                     style="height: 40px; margin-top: 15px; border-radius: 2px"
+                     ng-click="selectStaking(item)">
+                    Stake {{item.ticker}}
+                </div>
+            </div>
+        </div>
+        <div class="flex col white-back" ng-show="selectedStaking != null">
+            <div class="row header line align-start-center">
+                <div class="white-back-ripple" style="border-radius: 50%">
+                    <img src="img/back.svg" style="width: 40px;height: 40px;" ng-click="selectStaking(null)">
+                </div>
+            </div>
+
+            <div class="row input-wrapper" style="margin-top: 16px">
+                <div class="input-label-top">Stake {{selectedStaking.ticker}}</div>
+                <div class="input-label-right">Balance {{balances[selectedStaking.ticker].spot}}</div>
+                <input type="number" class="flex input" ng-model="stakingAmount">
+            </div>
+
+            <div class="row align-center-center ripple blue-back white-text size18"
+                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 ng-click="stake()">
+                Stake {{stakingAmount}} {{selectedStaking.ticker}}
+            </div>
+        </div>
     </div>
 
 </div>
@@ -552,8 +614,11 @@
         $scope.selectEarnTab = function (index) {
             if (index == 0)
                 initCompetitions()
+            if (index == 1)
+                initStaking()
             $scope.earnIndex = index
         }
+        $scope.selectEarnTab(1)
 
         function initCompetitions() {
             $http({
@@ -564,7 +629,73 @@
             })
         }
 
-        $scope.selectEarnTab(0)
+        var stakingTimer;
+
+        function initStaking() {
+            if (stakingTimer != null)
+                clearInterval(stakingTimer)
+            stakingTimer = setInterval(stakingTimerAction, 1000)
+
+            updateUser()
+
+            $http({
+                method: "POST",
+                url: "api/stakes.php",
+                data: {
+                    token: token,
+                }
+            }).then(function (response) {
+                $scope.stakes = response.data.stakes
+            })
+
+            updateCoins(function () {
+                $scope.stakingActive = []
+                for (var key in $scope.coins)
+                    if ($scope.coins[key].staking_apy > 0)
+                        $scope.stakingActive.push($scope.coins[key])
+            })
+        }
+
+        function stakingTimerAction() {
+            for (var key in $scope.stakes){
+                var stake = $scope.stakes[key]
+                stake.earned = stake.amount * (new Date().getTime() / 1000 - stake.time) / (1000 * 60 * 60 * 24 * 365) * (stake.parameter / 100)
+            }
+            $scope.$apply()
+        }
+
+        $scope.selectStaking = function (item) {
+            $scope.selectedStaking = item
+        }
+
+        $scope.stake = function () {
+            $http({
+                method: "POST",
+                url: "api/stake.php",
+                data: {
+                    token: token,
+                    ticker: $scope.selectedStaking.ticker,
+                    amount: $scope.stakingAmount,
+                }
+            }).then(function (response) {
+                $scope.selectedStaking = null
+                initStaking()
+            })
+        }
+
+        $scope.unstake = function (item) {
+            $http({
+                method: "POST",
+                url: "api/stake_close.php",
+                data: {
+                    token: token,
+                    stake_id: item.transfer_id,
+                }
+            }).then(function (response) {
+                initStaking()
+            })
+        }
+
 
         $scope.selectTC = function (item) {
             $scope.selectedTC = item
@@ -581,7 +712,7 @@
                 })
 
         }
-        
+
         $scope.openTrade = function (ticker) {
             $scope.coin = $scope.coins[ticker]
             $scope.tradeTabIndex = 1

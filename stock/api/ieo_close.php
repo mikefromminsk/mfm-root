@@ -12,7 +12,7 @@ $buy_orders = selectWhere(orders, [ticker => $ticker, is_sell => 0]);
 $returned = 0;
 foreach ($buy_orders as $order) {
     $return_usdt = $order[filled] * $order[price];
-    if (transfer($coin[ieo_user_id], $order[user_id], USDT, $return_usdt))
+    if (transfer(IEO_FAIL, $coin[ieo_user_id], $order[user_id], USDT, $return_usdt) != null)
         $returned = $return_usdt;
 }
 $response[returned] = $returned;

@@ -19,7 +19,7 @@ foreach ($winners as $winner)
 $rewarded = 0;
 foreach ($winners as $winner){
     $reward = round($tc[reward] * $winner[traded] / $all_traded, 2);
-    transfer($coin[tc_user_id], $winner[winner], $ticker, $reward);
+    transfer(TC_REWARD, $coin[tc_user_id], $winner[winner], $ticker, $reward);
     $rewarded += $reward;
 }
 

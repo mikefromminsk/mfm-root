@@ -33,6 +33,8 @@ if ($drop == 1) {
   `user_id` int(11) NOT NULL,
   `ieo_user_id` int(11) NOT NULL,
   `tc_user_id` int(11) NOT NULL,
+  `staking_user_id` int(11) NOT NULL,
+  `staking_apy` int(11) NOT NULL,
   `last_trade_timestamp` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ticker`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
@@ -86,11 +88,15 @@ if ($drop == 1) {
 
     query("DROP TABLE IF EXISTS `transfers`;");
     query("CREATE TABLE IF NOT EXISTS `transfers` (
+    `transfer_id` int(11) NOT NULL AUTO_INCREMENT,
+    `type` varchar(10) COLLATE utf32_bin NULL,
     `from_user_id` int(11) NOT NULL,
     `to_user_id` int(11) NOT NULL,
     `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
     `amount` int(11) NOT NULL,
-    `time` int(11) NOT NULL
+    `parameter` int(11) NULL,
+    `time` int(11) NOT NULL,
+   PRIMARY KEY (`transfer_id`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 } else {
     query("DELETE FROM `users`;");

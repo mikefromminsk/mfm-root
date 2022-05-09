@@ -115,8 +115,8 @@ function place($user_id, $ticker, $is_sell, $price, $amount)
             $sell_order = selectRowWhere(orders, [ticker => $ticker, is_sell => 1]);
             if ($sell_order[status] == 1) {
                 updateWhere(coins, [type => ACTIVE], [ticker => $ticker]);
-                transfer($coin[ieo_user_id], $coin[user_id], $ticker, getSpot($coin[ieo_user_id], $ticker));
-                transfer($coin[ieo_user_id], $coin[user_id], USDT, getSpot($coin[ieo_user_id], USDT));
+                transfer(TRADE, $coin[ieo_user_id], $coin[user_id], $ticker, getSpot($coin[ieo_user_id], $ticker));
+                transfer(TRADE, $coin[ieo_user_id], $coin[user_id], USDT, getSpot($coin[ieo_user_id], USDT));
             }
         }
     }
@@ -170,13 +170,12 @@ function createUser($token, $email = null)
     return $user_id;
 }
 
-function transfer($from_user_id, $to_user_id, $ticker, $amount)
+function transfer($type, $from_user_id, $to_user_id, $ticker, $amount, $parameter = null)
 {
     if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer need $amount");
     decBalance($from_user_id, $ticker, $amount);
     incBalance($to_user_id, $ticker, $amount);
-    insertRow(transfers, [from_user_id => $from_user_id, to_user_id => $to_user_id, ticker => $ticker, amount => $amount, time => time()]);
-    return true;
+    return insertRowAndGetId(transfers, [type => $type, parameter => $parameter, from_user_id => $from_user_id, to_user_id => $to_user_id, ticker => $ticker, amount => $amount, time => time()]);
 }
 
 function tcWinners($ticker, $start)
@@ -185,4 +184,24 @@ function tcWinners($ticker, $start)
     return select("select maker as winner, sum(amount) as traded "
         . " from trades where ticker = '$ticker' and time >= $tc[start] and time <= $tc[finish] "
         . " group by maker order by traded desc");
+}
+
+function stake($user_id, $ticker, $amount)
+{
+    if (!haveBalance($user_id, $ticker, $amount)) error("not enough $ticker");
+    $coin = selectRowWhere(coins, [ticker => $ticker]);
+    return transfer(STAKE, $user_id, $coin[staking_user_id], $ticker, $amount, $coin[staking_apy]);
+}
+
+function stake_close($user_id, $stake_id)
+{
+    $stake_transfer = selectRowWhere(transfers, [transfer_id => $stake_id, type => STAKE]);
+    $unstake_transfer = selectRowWhere(transfers, [transfer_id => $stake_id, type => UNSTAKE, parameter => $stake_transfer[transfer_id]]);
+    $coin = selectRowWhere(coins, [ticker => $stake_transfer[ticker]]);
+    if ($stake_transfer == null) error("its not a stake");
+    if ($unstake_transfer != null) error("its already unstaked");
+    if ($user_id != $stake_transfer[from_user_id]) error("its not yours");
+    $unstake_amount = $stake_transfer[amount] + $stake_transfer[amount] * ((time() - $stake_transfer[time]) / (1000 * 60 * 60 * 24 * 365)) * ($stake_transfer[parameter] / 100);
+    $unstake_amount = floor($unstake_amount * 100) / 100;
+    return transfer(UNSTAKE,  $coin[staking_user_id], $user_id, $coin[ticker], $unstake_amount, $stake_transfer[transfer_id]);
 }
