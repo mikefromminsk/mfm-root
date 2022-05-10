@@ -21,6 +21,7 @@ if ($ticker == USDT) {
 
 $tc_user_id = createUser(random_key(users, user_id));
 $staking_user_id = createUser(random_key(users, user_id));
+$drop_user_id = createUser(random_key(users, user_id));
 
 insertRow("coins",
     [
@@ -35,6 +36,7 @@ insertRow("coins",
         tc_user_id => $tc_user_id,
         staking_user_id => $staking_user_id,
         staking_apy => $staking_apy,
+        drop_user_id => $drop_user_id,
     ]);
 $ieo_supply = $supply - $staking_supply;
 incBalance($ieo_user_id, $ticker, $ieo_supply);

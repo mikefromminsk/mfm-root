@@ -114,7 +114,11 @@ requestEquals("localhost/stock/api/user.php",
     array("token" => $tccTrader1), "balances.TCC.spot", 100);
 
 
+requestEquals("localhost/stock/api/drop_start.php",
+    array(token => $solOwner, ticker => SOL, type => SIMPLE, total => 100, reward => 10), result, true);
 
+requestEquals("localhost/stock/api/email_send_code.php",
+    array(token => $usdtOwner, email => "x29a100@gmail.com"), result, true);
 
 //requestEquals("localhost/stock/api/bot_spred.php", array(), "result", true);
 

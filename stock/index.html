@@ -230,29 +230,6 @@
             </div>
         </div>
         <div class="col" ng-show="bottomtradeTabIndex == 1">
-            <div class="col" ng-repeat="(key, item) in balances">
-                <div class="row line align-start-center"
-                     style="padding-top: 12px; padding-bottom: 12px;">
-                    <div class="row align-center-center"
-                         style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
-                        <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
-                    </div>
-                    <div class="col" style="margin-left: 7px">
-                        <div class="size16">{{coins[key].ticker}}</div>
-                        <div class="gray-text size12">{{coins[key].name}} $128.07B</div>
-                    </div>
-                    <div class="flex"></div>
-                    <div class="col align-start-end size13">
-                        <div class="size14">{{priceFormat(coins[key].price)}}</div>
-                        <div ng-class="changeColor(coins[key].change24)">{{changeFormat(coins[key].change24)}}</div>
-                    </div>
-                    <div class="col align-start-end size13" style="min-width: 90px; margin-left: 10px">
-                        <div class="size14">{{priceFormat(item.spot + item.blocked)}}</div>
-                        <div>{{amountFormat(item.spot + item.blocked) + " " + key}}</div>
-                    </div>
-                </div>
-                <div class="gray-back" style="height: 1px"></div>
-            </div>
         </div>
 
     </div>
@@ -567,8 +544,110 @@
             </div>
         </div>
     </div>
+    <div class="flex line col white-back" ng-show="earnIndex == 2">
+        <div class="col shadow" ng-repeat="item in drops" style="padding: 12px; margin-top: 12px">
+            <div class="row align-start-center">
+                <img src="img/coin/sol.jpg" style="width: 24px;height: 24px;">
+                <div style="margin-left: 12px">{{item.ticker}}</div>
+                <div class="flex"></div>
+                <div class="col align-center-center">
+                    <div>Reward</div>
+                    <div class="green-text">{{item.reward}} {{item.ticker}}</div>
+                </div>
+            </div>
+            <div class="row align-center-center ripple blue-back white-text size18"
+                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 ng-show="!item.rewarded"
+                 ng-click="openDrop(item)">
+                Participate
+            </div>
+            <div class="row align-center-center ripple gray-back white-text size18"
+                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 ng-show="item.rewarded">
+                Rewarded
+            </div>
+        </div>
+    </div>
 
 </div>
+
+<div class="col flex" ng-show="menuIndex == 3">
+    <div class="col white-back" style="padding: 12px; margin-top: 12px">
+        <div class="col" ng-show="user.email_confirmed == 1">
+            <div class="col align-center-center">
+                <img src="img/secure.svg" style="width: 50px; height: 50px;">
+                <div style="margin-top: 20px;">Your account protected</div>
+                <div style="margin-top: 12px;">{{user.email}}</div>
+            </div>
+        </div>
+        <div class="col" ng-show="user.email_confirmed <= 0">
+            <div class="col align-center-center">
+                <img src="img/unsecure.svg" style="width: 50px; height: 50px;">
+                <div style="margin: 20px 0;">Link email for save your money</div>
+            </div>
+            <div class="row input-wrapper" style="margin-top: 16px">
+                <div class="input-label-top">Email</div>
+                <input type="email" class="flex input" ng-model="user.email">
+            </div>
+            <div class="row align-center-center ripple blue-back-ripple white-text size18"
+                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 ng-click="sendEmailCode()">
+                Send Code
+            </div>
+        </div>
+        <div class="row input-wrapper" style="margin-top: 16px"
+             ng-show="user.email_confirmed == 0">
+            <div class="input-label-top">Code</div>
+            <input type="number" class="flex input" ng-model="user.email_confirm_code">
+        </div>
+        <div class="row align-center-center ripple blue-back-ripple white-text size18"
+             style="height: 40px; margin-top: 15px; border-radius: 2px"
+             ng-show="user.email_confirmed == 0"
+             ng-click="confirmEmailCode()">
+            Confirm code
+        </div>
+    </div>
+
+    <div class="row shadow size12" style="min-height: 40px;">
+        <div class="flex col" ng-repeat="item in walletTabs">
+            <div class="flex row align-center-center white-back-ripple" ng-click="selectWalletTab($index)">{{item}}
+            </div>
+            <div class="blue-back" style="height: 1px;" ng-show="walletIndex == $index"></div>
+        </div>
+    </div>
+    <div class="col" ng-show="walletIndex == 0">
+
+        <div class="col" ng-repeat="(key, item) in balances">
+            <div class="row line align-start-center"
+                 style="padding-top: 12px; padding-bottom: 12px;">
+                <div class="row align-center-center"
+                     style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
+                    <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
+                </div>
+                <div class="col" style="margin-left: 7px">
+                    <div class="size16">{{coins[key].ticker}}</div>
+                    <div class="gray-text size12">{{coins[key].name}} $128.07B</div>
+                </div>
+                <div class="flex"></div>
+                <div class="col align-start-end size13">
+                    <div class="size14">{{priceFormat(coins[key].price)}}</div>
+                    <div ng-class="changeColor(coins[key].change24)">{{changeFormat(coins[key].change24)}}</div>
+                </div>
+                <div class="col align-start-end size13" style="min-width: 90px; margin-left: 10px">
+                    <div class="size14">{{priceFormat(item.spot + item.blocked)}}</div>
+                    <div>{{amountFormat(item.spot + item.blocked) + " " + key}}</div>
+                </div>
+            </div>
+            <div class="gray-back" style="height: 1px"></div>
+        </div>
+    </div>
+
+    <div class="col" ng-show="walletIndex == 0">
+
+    </div>
+
+</div>
+
 
 <div class="row shadow size12" style="min-height: 40px;">
     <div class="flex col" ng-repeat="item in menu">
@@ -586,21 +665,56 @@
     angular.module("App", []).controller("Controller", function ($scope, $http) {
         var orderbookTimer = null;
         var ticker = null || "SOL"
-        var token = "123" || localStorage.getItem('token')
+        var token = localStorage.getItem('token')
         if (token == null)
             localStorage.setItem('token', token = Math.random())
 
-        $scope.menu = ["Trade", "Starter", "Earn"]
-        $scope.menuIndex = 2
+        $scope.menu = ["Trade", "Starter", "Earn", "Wallet"]
+        $scope.menuIndex = 3
         $scope.selectMenu = function (index) {
-            if ($scope.menuIndex == index)
-                initMenuTrade()
-            if ($scope.menuIndex == index)
-                initMenuStarter()
-            if ($scope.menuIndex == index)
-                initMenuEarn()
+            if (index == 0)
+                $scope.selectTradeTab($scope.tradeTabIndex)
+            if (index == 1)
+                $scope.selectStarterTab($scope.starterIndex)
+            if (index == 2)
+                $scope.selectEarnTab($scope.earnIndex)
+            if (index == 3)
+                $scope.selectWalletTab($scope.walletIndex)
             $scope.menuIndex = index
         }
+
+        $scope.walletTabs = ["Balances", "Transactions"]
+        $scope.walletIndex = 0
+        $scope.selectWalletTab = function (index) {
+            $scope.walletIndex = index
+        }
+
+        $scope.sendEmailCode = function () {
+            $http({
+                method: "POST",
+                url: "api/email_send_code.php",
+                data: {
+                    token: token,
+                    email: $scope.user.email,
+                }
+            }).then(function (response) {
+                updateUser()
+            })
+        }
+
+        $scope.confirmEmailCode = function () {
+            $http({
+                method: "POST",
+                url: "api/email_confirm.php",
+                data: {
+                    token: token,
+                    email_confirm_code: $scope.user.email_confirm_code,
+                }
+            }).then(function (response) {
+                updateUser()
+            })
+        }
+
 
         $scope.earn = ["Competitions", "Staking", "Drops"]
         $scope.earnIndex = 0
@@ -616,9 +730,37 @@
                 initCompetitions()
             if (index == 1)
                 initStaking()
+            if (index == 2)
+                initDrops()
             $scope.earnIndex = index
         }
-        $scope.selectEarnTab(1)
+
+        function initDrops() {
+            $http({
+                method: "POST",
+                url: "api/drops.php",
+                data: {
+                    token: token,
+                }
+            }).then(function (response) {
+                $scope.drops = response.data.drops
+            })
+        }
+
+        $scope.openDrop = function (drop) {
+            if (drop.type == "SIMPLE") {
+                $http({
+                    method: "POST",
+                    url: "api/drop_finish.php",
+                    data: {
+                        token: token,
+                        drop_id: drop.drop_id,
+                    }
+                }).then(function (response) {
+                    initDrops()
+                })
+            }
+        }
 
         function initCompetitions() {
             $http({
@@ -657,7 +799,7 @@
         }
 
         function stakingTimerAction() {
-            for (var key in $scope.stakes){
+            for (var key in $scope.stakes) {
                 var stake = $scope.stakes[key]
                 stake.earned = stake.amount * (new Date().getTime() / 1000 - stake.time) / (1000 * 60 * 60 * 24 * 365) * (stake.parameter / 100)
             }
@@ -719,22 +861,15 @@
             $scope.selectMenu(0)
         }
 
-        function initMenuTrade() {
-            $scope.selectTradeTab($scope.tradeTabIndex)
-        }
-
         $scope.starter = ["List", "Overview", "Launchpad"]
         $scope.starterIndex = 0
 
-        function initMenuStarter() {
-        }
 
         $scope.selectStarterTab = function (index) {
             if (index == 0)
                 initStarterList()
             $scope.starterIndex = index
         }
-        $scope.selectStarterTab(0)
 
         function initStarterList(ticker) {
             $http({

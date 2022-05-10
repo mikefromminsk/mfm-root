@@ -9,6 +9,8 @@ if ($drop == 1) {
     `user_id` int(11) NOT NULL AUTO_INCREMENT,
     `token` varchar(128) COLLATE utf32_bin NOT NULL,
     `email` varchar(128) COLLATE utf32_bin NULL,
+    `email_confirmed` int(11) NOT NULL DEFAULT -1,
+    `email_confirm_code` int(11) NULL,
     PRIMARY KEY (`user_id`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 
@@ -35,6 +37,7 @@ if ($drop == 1) {
   `tc_user_id` int(11) NOT NULL,
   `staking_user_id` int(11) NOT NULL,
   `staking_apy` int(11) NOT NULL,
+  `drop_user_id` int(11) NOT NULL,
   `last_trade_timestamp` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`ticker`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
@@ -89,14 +92,25 @@ if ($drop == 1) {
     query("DROP TABLE IF EXISTS `transfers`;");
     query("CREATE TABLE IF NOT EXISTS `transfers` (
     `transfer_id` int(11) NOT NULL AUTO_INCREMENT,
-    `type` varchar(10) COLLATE utf32_bin NULL,
+    `type` varchar(16) COLLATE utf32_bin NULL,
+    `parameter` int(11) NULL,
     `from_user_id` int(11) NOT NULL,
     `to_user_id` int(11) NOT NULL,
     `ticker` varchar(10) COLLATE utf32_bin NOT NULL,
     `amount` int(11) NOT NULL,
-    `parameter` int(11) NULL,
     `time` int(11) NOT NULL,
    PRIMARY KEY (`transfer_id`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
+
+    query("DROP TABLE IF EXISTS `drops`;");
+    query("CREATE TABLE IF NOT EXISTS `drops` (
+    `drop_id` int(11) NOT NULL AUTO_INCREMENT,
+    `type` varchar(16) COLLATE utf32_bin NULL,
+    `ticker` varchar(16) COLLATE utf32_bin NULL,
+    `total` int(11) NOT NULL,
+    `rewarded` int(11) DEFAULT 0,
+    `reward` int(11) NOT NULL,
+   PRIMARY KEY (`drop_id`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 } else {
     query("DELETE FROM `users`;");
