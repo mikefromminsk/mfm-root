@@ -579,26 +579,25 @@
                 <img src="img/unsecure.svg" style="width: 50px; height: 50px;">
                 <div style="margin: 20px 0;">Link email for save your money</div>
             </div>
-            <div class="row input-wrapper" style="margin-top: 16px">
-                <div class="input-label-top">Email</div>
-                <input type="email" class="flex input" ng-model="user.email">
-            </div>
-            <div class="row align-center-center ripple blue-back-ripple white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 2px"
-                 ng-click="sendEmailCode()">
-                Send Code
+            <div class="row align-start-end">
+                <div class="flex row input-wrapper" style="margin-top: 16px">
+                    <div class="input-label-top">Email</div>
+                    <input type="email" class="flex input" ng-model="user.email">
+                </div>
+                <md-button class="md-primary md-raised" ng-click="sendEmailCode()">
+                    Send Code
+                </md-button>
             </div>
         </div>
-        <div class="row input-wrapper" style="margin-top: 16px"
-             ng-show="user.email_confirmed == 0">
-            <div class="input-label-top">Code</div>
-            <input type="number" class="flex input" ng-model="user.email_confirm_code">
-        </div>
-        <div class="row align-center-center ripple blue-back-ripple white-text size18"
-             style="height: 40px; margin-top: 15px; border-radius: 2px"
-             ng-show="user.email_confirmed == 0"
-             ng-click="confirmEmailCode()">
-            Confirm code
+        <div class="row align-start-end" ng-show="user.email_confirmed == 0">
+            <div class="row input-wrapper" style="margin-top: 16px"
+                 ng-show="user.email_confirmed == 0">
+                <div class="input-label-top">Code</div>
+                <input type="number" class="flex input" ng-model="user.email_confirm_code">
+            </div>
+            <md-button class="md-primary md-raised" ng-click="confirmEmailCode()">
+                Confirm code
+            </md-button>
         </div>
     </div>
     <md-tabs class="flex" md-selected="walletIndex" md-autoselect md-swipe-content>
