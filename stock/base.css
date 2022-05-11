@@ -8,6 +8,12 @@ body {
     user-select: none;
 }
 
+
+
+* {
+    outline: none;
+}
+
 .blue-text {
     color: #4F50FB;
 }
@@ -279,4 +285,32 @@ button {
     width: 30px;
     height: 30px;
     margin-right: 8px;
+}
+
+.page{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: calc(100% - 40px);
+}
+
+.animate-show-hide.ng-hide {
+    opacity: 0;
+}
+
+.animate-show-hide.ng-hide-add,
+.animate-show-hide.ng-hide-remove {
+    transition: all linear 0.5s;
+}
+
+.check-element {
+    border: 1px solid black;
+    opacity: 1;
+    padding: 10px;
+}
+
+/*https://codepen.io/sosuke/pen/Pjoqqp*/
+.filter-green{
+    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
 }
