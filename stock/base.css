@@ -274,3 +274,9 @@ button {
 .multiline-text{
     white-space: normal;
 }
+
+.coin-logo {
+    width: 30px;
+    height: 30px;
+    margin-right: 8px;
+}

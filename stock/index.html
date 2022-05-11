@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="../flex/flex.css">
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://unpkg.com/ui-avatar-svg@latest/dist/ui-avatar-svg.umd.js" type="module"></script>
+
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 
@@ -55,10 +58,7 @@
         <div class="col " ng-repeat="(key, item) in coins">
             <div class="row line align-start-center white-back-ripple" ng-click="openCoin(key)"
                  style="padding-top: 12px; padding-bottom: 12px;">
-                <div class="row align-center-center"
-                     style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
-                    <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
-                </div>
+                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                 <div class="col" style="margin-left: 7px">
                     <div class="size16">{{item.ticker}}</div>
                     <div class="gray-text size12">{{item.name}} $128.07B</div>
@@ -198,10 +198,7 @@
                 <div class="col" ng-repeat="item in (groupIndex == 0 ? active : history)">
                     <div class="row line align-start-center"
                          style="padding-top: 12px; padding-bottom: 12px;">
-                        <div class="row align-center-center"
-                             style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
-                            <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
-                        </div>
+                        <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                         <div class="col" style="margin-left: 7px">
                             <div class="size16">{{item.ticker}}</div>
                             <div class="gray-text size12">{{timeFormat(item.timestamp)}}</div>
@@ -261,7 +258,8 @@
         <div class="col line input-list-wrapper shadow white-back-ripple"
              style="margin-top: 12px; padding-bottom: 12px;"
              ng-repeat="(key, item) in ieo" ng-click="selectStarterCoin(item)">
-            <div class="row">
+            <div class="row align-start-center">
+                 <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                 <div class="size16">{{item.name}}</div>
                 <div class="size16 gray-text" style="margin-left: 4px">{{item.ticker}}</div>
             </div>
@@ -371,9 +369,12 @@
 </div>
 
 <div class="col line input-list-wrapper" ng-show="starterIndex == 2">
-    <div class="row input-wrapper">
-        <div class="input-label-top">Name</div>
-        <input type="text" class="flex input" ng-model="launchCoin.name">
+    <div class="row align-start-center">
+        <img id="starter-logo" class="coin-logo" ng-click="generateStarterLogo()">
+        <div class="flex row input-wrapper">
+            <div class="input-label-top">Name</div>
+            <input type="text" class="flex input" ng-model="launchCoin.name" ng-change="generateStarterLogo()">
+        </div>
     </div>
     <div class="row input-wrapper">
         <div class="input-label-top">Ticker</div>
@@ -422,18 +423,18 @@
     </div>
 
     <div class="flex line col white-back" ng-show="earnIndex == 0">
-        <div class="col white-back-ripple shadow" style="margin-top: 20px" ng-repeat="(key, item) in tc"
+        <div class="col white-back-ripple shadow" style="margin-top: 20px" ng-repeat="(ticker, item) in tc"
              ng-click="selectTC(item)" ng-show="selectedTC == null">
             <img src="img/rocket.svg" style="width: 100%; height: 140px;">
             <div class="row align-start-center" style="margin: 8px 12px">
-                <img src="img/coin/sol.jpg" style="width: 20px;height: 20px;">
-                <div class="col flex" style="margin-left: 12px">
-                    <div class="size16">{{key}}</div>
-                    <div class="gray-text">{{coins[key].name}}</div>
+                <img src="img/coin/{{ticker}}.svg" class="coin-logo">
+                <div class="col flex">
+                    <div class="size16">{{ticker}}</div>
+                    <div class="gray-text">{{coins[ticker].name}}</div>
                 </div>
                 <div class="row align-center-center blue-back-ripple white-text" style="padding: 6px 12px"
                      ng-click="openTrade(key)">
-                    Buy {{key}}
+                    Buy {{ticker}}
                 </div>
             </div>
         </div>
@@ -446,7 +447,7 @@
             </div>
             <div class="col line align-start-center">
                 <div class="row align-center-center">
-                    <img src="img/coin/sol.jpg" style="width: 40px;height: 40px;">
+                    <img src="img/coin/{{selectedTC.ticker}}.svg" class="coin-logo">
                 </div>
                 <div class="weight5 multiline-text" style="text-align: center; line-height: 24px; margin-top: 20px">
                     Get a chance to win a share of {{amountFormat(selectedTC.reward)}} {{selectedTC.ticker}} during the
@@ -491,7 +492,7 @@
                 <div style="margin-top: 12px">Active stakes</div>
                 <div class="col shadow" ng-repeat="item in stakes" style="padding: 12px; margin-top: 12px">
                     <div class="row align-start-center">
-                        <img src="img/coin/sol.jpg" style="width: 24px;height: 24px;">
+                        <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                         <div style="margin-left: 12px">{{item.ticker}}</div>
                         <div class="flex"></div>
                         <div class="col align-center-center">
@@ -509,8 +510,8 @@
             <div style="margin-top: 12px">Staking plans</div>
             <div class="col shadow" ng-repeat="item in stakingActive" style="padding: 12px; margin-top: 12px">
                 <div class="row align-start-center">
-                    <img src="img/coin/sol.jpg" style="width: 24px;height: 24px;">
-                    <div style="margin-left: 12px">{{item.ticker}}</div>
+                    <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                    <div>{{item.ticker}}</div>
                     <div class="flex"></div>
                     <div class="col align-center-center">
                         <div>Year earn percent</div>
@@ -547,8 +548,8 @@
     <div class="flex line col white-back" ng-show="earnIndex == 2">
         <div class="col shadow" ng-repeat="item in drops" style="padding: 12px; margin-top: 12px">
             <div class="row align-start-center">
-                <img src="img/coin/sol.jpg" style="width: 24px;height: 24px;">
-                <div style="margin-left: 12px">{{item.ticker}}</div>
+                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                <div>{{item.ticker}}</div>
                 <div class="flex"></div>
                 <div class="col align-center-center">
                     <div>Reward</div>
@@ -617,25 +618,22 @@
     </div>
     <div class="col" ng-show="walletIndex == 0">
 
-        <div class="col" ng-repeat="(key, item) in balances">
+        <div class="col" ng-repeat="(ticker, item) in balances">
             <div class="row line align-start-center"
                  style="padding-top: 12px; padding-bottom: 12px;">
-                <div class="row align-center-center"
-                     style="min-width: 24px; height: 24px; border-radius: 50%; margin-right: 4px">
-                    <img src="img/coin/sol.jpg" style="width: 100%; height: 100%;">
-                </div>
-                <div class="col" style="margin-left: 7px">
-                    <div class="size16">{{coins[key].ticker}}</div>
-                    <div class="gray-text size12">{{coins[key].name}} $128.07B</div>
+                <img src="img/coin/{{ticker}}.svg" class="coin-logo">
+                <div class="col">
+                    <div class="size16">{{ticker}}</div>
+                    <div class="gray-text size12">{{coins[ticker].name}} $128.07B</div>
                 </div>
                 <div class="flex"></div>
                 <div class="col align-start-end size13">
-                    <div class="size14">{{priceFormat(coins[key].price)}}</div>
-                    <div ng-class="changeColor(coins[key].change24)">{{changeFormat(coins[key].change24)}}</div>
+                    <div class="size14">{{priceFormat(coins[ticker].price)}}</div>
+                    <div ng-class="changeColor(coins[key].change24)">{{changeFormat(coins[ticker].change24)}}</div>
                 </div>
                 <div class="col align-start-end size13" style="min-width: 90px; margin-left: 10px">
                     <div class="size14">{{priceFormat(item.spot + item.blocked)}}</div>
-                    <div>{{amountFormat(item.spot + item.blocked) + " " + key}}</div>
+                    <div>{{amountFormat(item.spot + item.blocked) + " " + ticker}}</div>
                 </div>
             </div>
             <div class="gray-back" style="height: 1px"></div>
@@ -661,27 +659,13 @@
     function round(num, precision) {
         return +(Math.round(num + "e+" + precision) + "e-" + precision);
     }
-
-    angular.module("App", []).controller("Controller", function ($scope, $http) {
+    var App = angular.module("App", [])
+    App.controller("Controller", function ($scope, $http) {
         var orderbookTimer = null;
         var ticker = null || "SOL"
         var token = localStorage.getItem('token')
         if (token == null)
             localStorage.setItem('token', token = Math.random())
-
-        $scope.menu = ["Trade", "Starter", "Earn", "Wallet"]
-        $scope.menuIndex = 3
-        $scope.selectMenu = function (index) {
-            if (index == 0)
-                $scope.selectTradeTab($scope.tradeTabIndex)
-            if (index == 1)
-                $scope.selectStarterTab($scope.starterIndex)
-            if (index == 2)
-                $scope.selectEarnTab($scope.earnIndex)
-            if (index == 3)
-                $scope.selectWalletTab($scope.walletIndex)
-            $scope.menuIndex = index
-        }
 
         $scope.walletTabs = ["Balances", "Transactions"]
         $scope.walletIndex = 0
@@ -714,6 +698,7 @@
                 updateUser()
             })
         }
+
 
 
         $scope.earn = ["Competitions", "Staking", "Drops"]
@@ -864,10 +849,10 @@
         $scope.starter = ["List", "Overview", "Launchpad"]
         $scope.starterIndex = 0
 
-
         $scope.selectStarterTab = function (index) {
             if (index == 0)
                 initStarterList()
+            $scope.generateStarterLogo()
             $scope.starterIndex = index
         }
 
@@ -913,12 +898,38 @@
             price: 0.2,
             starter_supply: 100,
         }
+
+        $scope.generateStarterLogo = function () {
+            var svg = new UIAvatarSvg()
+                .text(($scope.launchCoin.name || "B")[0].toUpperCase())
+                .round(true)
+                .size(64)
+                .bgColor('#' + Math.floor(Math.random()*16777215).toString(16))
+                .textColor('#ffffff')
+                .fontSize(0.8)
+                .fontWeight('normal')
+                .fontFamily('-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif')
+                .generate()
+            $scope.launchCoin.logo = new Blob([svg], {type: 'image/svg+xml'})
+            document.getElementById('starter-logo').src = URL.createObjectURL($scope.launchCoin.logo)
+        }
+
         $scope.launch = function () {
             $scope.launchCoin.token = token
             $http({
-                method: "POST",
-                url: "api/create_coin.php",
-                data: $scope.launchCoin
+                method: 'POST',
+                url: 'api/create_coin.php',
+                headers: {
+                    'Content-Type': undefined
+                },
+                data: $scope.launchCoin,
+                transformRequest: function (data) {
+                    var formData = new FormData();
+                    angular.forEach(data, function (value, key) {
+                        formData.append(key, value);
+                    });
+                    return formData;
+                }
             }).then(function (response) {
                 if (response.data.result) {
                     var loadUser = false
@@ -1250,7 +1261,40 @@
         }
 
         $scope.groupNames = ["Active", "History"]
+
+
+        $scope.menu = ["Trade", "Starter", "Earn", "Wallet"]
+        $scope.menuIndex = 1
+        $scope.selectMenu = function (index) {
+            if (index == 0)
+                $scope.selectTradeTab($scope.tradeTabIndex)
+            if (index == 1)
+                $scope.selectStarterTab($scope.starterIndex)
+            if (index == 2)
+                $scope.selectEarnTab($scope.earnIndex)
+            if (index == 3)
+                $scope.selectWalletTab($scope.walletIndex)
+            $scope.menuIndex = index
+        }
+
+        $scope.selectStarterTab(2)
     });
+
+    App.directive('file', function () {
+        return {
+            scope: {
+                file: '='
+            },
+            link: function (scope, el, attrs) {
+                el.bind('change', function (event) {
+                    var file = event.target.files[0];
+                    scope.file = file ? file : undefined;
+                    scope.$apply();
+                });
+            }
+        };
+    });
+
 </script>
 
 </body>

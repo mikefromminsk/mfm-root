@@ -1,6 +1,7 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/api/auth.php";
 
+$logo = get_required(logo);
 $ticker = get_required_uppercase(ticker);
 $name = get_required(name);
 $description = get_required(description);
@@ -10,6 +11,17 @@ $starter_supply = get_int_required(starter_supply);
 $staking_apy = get_int_required(staking_apy, 10);
 $staking_supply = get_int_required(staking_supply, 1000);
 
+if (selectRowWhere(coins, [ticker => $ticker]) != null) error("this ticker exists");
+
+function endsWith($haystack, $needle) {
+    return substr_compare($haystack, $needle, -strlen($needle)) === 0;
+}
+
+if (is_string($logo)) {
+    if (!endsWith($logo, ".svg")) error("need svg");
+    file_put_contents("../img/coin/$ticker.svg", file_get_contents($logo));
+} else
+    if (!move_uploaded_file($logo['tmp_name'], "../img/coin/$ticker.svg")) error("error saving logo");
 
 $type = IEO;
 if ($ticker == USDT) {
