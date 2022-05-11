@@ -53,7 +53,8 @@
         <img src="img/star.svg" style="width: 18px;height: 18px;">
     </div>
 </div>-->
-<md-tabs class="page animate-show-hide" md-selected="tradeTabIndex" md-autoselect md-swipe-content ng-show="menuIndex == 0">
+<md-tabs class="page animate-show-hide" md-selected="tradeTabIndex" md-autoselect md-swipe-content
+         ng-show="menuIndex == 0">
     <md-tab class="col" label="{{tabs[0]}}">
         <div class="row line" style="position: relative; margin: 8px 0;">
             <input class="flex shadow size16" type="text" placeholder="Search"
@@ -62,8 +63,8 @@
                  style="width: 16px; height: 16px; position: absolute; right: 25px; top: 9px">
         </div>
         <div class="col " ng-repeat="(key, item) in coins">
-            <div class="row line align-start-center white-back-ripple" ng-click="openCoin(key)"
-                 style="padding-top: 12px; padding-bottom: 12px;">
+            <md-content class="row line align-start-center" ng-click="openCoin(key)" md-ink-ripple
+                        style="padding-top: 12px; padding-bottom: 12px;">
                 <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                 <div class="col" style="margin-left: 7px">
                     <div class="size16">{{item.ticker}}</div>
@@ -96,7 +97,7 @@
                      style="min-width: 34px; height: 34px; border-radius: 50%;">
                     <img src="img/notify_off.svg" style="width: 18px;height: 18px;">
                 </div>-->
-            </div>
+            </md-content>
             <div class="gray-back" style="height: 1px"></div>
         </div>
     </md-tab>
@@ -249,39 +250,42 @@
 </md-tabs>
 
 
-<md-tabs class="page animate-show-hide" md-selected="starterIndex" md-autoselect md-swipe-content ng-show="menuIndex == 1">
-    <md-tab class="col line" ng-show="starterIndex == 0" label="{{starter[0]}}">
-        <div class="col line input-list-wrapper shadow white-back-ripple"
-             style="margin-top: 12px; padding-bottom: 12px;"
-             ng-repeat="(key, item) in ieo" ng-click="selectStarterCoin(item)">
-            <div class="row align-start-center">
-                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
-                <div class="size16">{{item.name}}</div>
-                <div class="size16 gray-text" style="margin-left: 4px">{{item.ticker}}</div>
-            </div>
-            <div class="row gray-back" style="margin-top: 20px; height: 3px">
-                <div class="green-back" ng-style="{'min-width': (item.filled / item.amount) + '%'}"></div>
-                <div class="flex"></div>
-            </div>
-            <div class="row">
-                <div class="col green-text">
-                    <div>{{(item.filled / item.amount)}}%</div>
-                    <div style="margin-top: 5px">founded</div>
+<md-tabs class="page animate-show-hide" md-selected="starterIndex" md-autoselect md-swipe-content
+         ng-show="menuIndex == 1">
+    <md-tab ng-show="starterIndex == 0" label="{{starter[0]}}">
+        <div class="col line">
+            <md-content class="col line  shadow" md-ink-ripple
+                        style="margin-top: 12px; padding: 12px"
+                        ng-repeat="(key, item) in ieo" ng-click="selectStarterCoin(item)">
+                <div class="row align-start-center">
+                    <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                    <div class="size16">{{item.name}}</div>
+                    <div class="size16 gray-text" style="margin-left: 4px">{{item.ticker}}</div>
                 </div>
-                <div class="col gray-text" style="margin-left: 24px">
-                    <div>14</div>
-                    <div style="margin-top: 5px">backers</div>
+                <div class="row gray-back" style="margin-top: 20px; height: 3px">
+                    <div class="green-back" ng-style="{'min-width': (item.filled / item.amount) + '%'}"></div>
+                    <div class="flex"></div>
                 </div>
-                <div class="col gray-text" style="margin-left: 24px">
-                    <div>29</div>
-                    <div style="margin-top: 5px">days to go</div>
+                <div class="row">
+                    <div class="col green-text">
+                        <div>{{(item.filled / item.amount)}}%</div>
+                        <div style="margin-top: 5px">founded</div>
+                    </div>
+                    <div class="col gray-text" style="margin-left: 24px">
+                        <div>14</div>
+                        <div style="margin-top: 5px">backers</div>
+                    </div>
+                    <div class="col gray-text" style="margin-left: 24px">
+                        <div>29</div>
+                        <div style="margin-top: 5px">days to go</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row" style="margin-top: 20px">
-                <img src="img/rocket.svg" style="width: 12px; height: 12px;">
-                <div class="div gray-text" style="margin-left: 4px">Rocket bank</div>
-            </div>
+                <div class="row" style="margin-top: 20px">
+                    <img src="img/rocket.svg" style="width: 12px; height: 12px;">
+                    <div class="div gray-text" style="margin-left: 4px">Rocket bank</div>
+                </div>
+            </md-content>
         </div>
     </md-tab>
 
@@ -644,7 +648,9 @@
 <div class="row shadow size12" style="position: absolute; left: 0; bottom: 0; width: 100%; min-height: 40px;">
     <div class="flex col" ng-repeat="item in menu">
         <div class="blue-back animate-show-hide" style="height: 2px;" ng-show="menuIndex == $index"></div>
-        <md-content class="flex row align-center-center card-title" ng-click="selectMenu($index)" md-ink-ripple>{{item}}</md-content>
+        <md-content class="flex row align-center-center card-title" ng-click="selectMenu($index)" md-ink-ripple>
+            {{item}}
+        </md-content>
     </div>
 </div>
 
@@ -656,11 +662,11 @@
 
     var App = angular.module("App", ['ngMaterial', 'ngAnimate'])
 
-    App.config(function($mdThemingProvider) {
+    App.config(function ($mdThemingProvider) {
         $mdThemingProvider.theme('default')
             .accentPalette('indigo')
-            //.dark()
-        });
+        //.dark()
+    });
 
     App.controller("Controller", function ($scope, $http) {
         var orderbookTimer = null;
