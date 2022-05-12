@@ -1,0 +1,18 @@
+var str = {
+active: 'Активний',
+history: 'Історія',
+trade: 'Торгувати',
+starter: 'Стартер',
+earn: 'Заробляти',
+wallet: 'Гаманець',
+market: 'Ринок',
+about: 'Про',
+list: 'Список',
+overview: 'Огляд',
+launchpad: 'Стартова майданчик',
+competitions: 'Змагання',
+staking: 'Укладання',
+drops: 'Падіння',
+balances: 'Баланси',
+transactions: 'Транзакції',
+}

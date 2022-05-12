@@ -31,6 +31,12 @@
 
     <script src="tracker.js"></script>
 
+    <script>
+        var languageScript = document.createElement('script')
+        languageScript.setAttribute('src','lang/' + navigator.language.substr(0, 2) + '.js')
+        document.head.appendChild(languageScript)
+    </script>
+
 </head>
 <body ng-app="App" class="col" ng-controller="Controller" ng-cloak>
 
@@ -671,6 +677,7 @@
     var token = localStorage.getItem('token')
 
     App.controller("Controller", function ($scope, $http) {
+        $scope.str = str
         var orderbookTimer = null;
         var ticker = null || "SOL"
         if (token == null)
@@ -1229,10 +1236,10 @@
             $scope.bottomtradeTabIndex = index
         }
 
-        $scope.groupNames = ["Active", "History"]
+        $scope.groupNames = [str.active, str.history]
 
 
-        $scope.menu = ["Trade", "Starter", "Earn", "Wallet"]
+        $scope.menu = [str.trade, str.starter, str.earn, str.wallet]
         $scope.menuIndex = 0
         $scope.selectMenu = function (index) {
             if (index == 0)
@@ -1246,7 +1253,7 @@
             $scope.menuIndex = index
         }
 
-        $scope.tabs = ["Market", "Trade", "About"]
+        $scope.tabs = [str.market, str.trade, str.about]
         $scope.tradeTabIndex
         $scope.$watch('tradeTabIndex', function (newValue) {
             if (orderbookTimer != null)
@@ -1258,7 +1265,7 @@
             }
         })
 
-        $scope.starter = ["List", "Overview", "Launchpad"]
+        $scope.starter = [str.list, str.overview, str.overview]
         $scope.starterIndex
         $scope.$watch('starterIndex', function (newValue) {
             switch (newValue) {
@@ -1268,7 +1275,7 @@
         })
 
 
-        $scope.earn = ["Competitions", "Staking", "Drops"]
+        $scope.earn = [str.competitions, str.staking, str.drops]
         $scope.earnIndex
         $scope.$watch('earnIndex', function (newValue) {
             switch (newValue) {
@@ -1278,7 +1285,7 @@
             }
         })
 
-        $scope.walletTabs = ["Balances", "Transactions"]
+        $scope.walletTabs = [str.balances, str.transactions]
         $scope.walletIndex
 
         $scope.$watch('walletIndex', function (newValue) {

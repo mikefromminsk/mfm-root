@@ -1,0 +1,18 @@
+var str = {
+active: 'Active',
+history: 'History',
+trade: 'Trade',
+starter: 'Starter',
+earn: 'Earn',
+wallet: 'Wallet',
+market: 'Market',
+about: 'About',
+list: 'List',
+overview: 'Overview',
+launchpad: 'Launchpad',
+competitions: 'Competitions',
+staking: 'Staking',
+drops: 'Drops',
+balances: 'Balances',
+transactions: 'Transactions',
+}

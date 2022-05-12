@@ -1,0 +1,18 @@
+var str = {
+active: 'Активный',
+history: 'История',
+trade: 'Торговля',
+starter: 'Стартер',
+earn: 'Зарабатывать',
+wallet: 'Бумажник',
+market: 'Рынок',
+about: 'О',
+list: 'Список',
+overview: 'Обзор',
+launchpad: 'Launchpad',
+competitions: 'Соревнования',
+staking: 'Статей',
+drops: 'Капли',
+balances: 'Баланс',
+transactions: 'Транзакции',
+}
