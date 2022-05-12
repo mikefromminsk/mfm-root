@@ -29,6 +29,8 @@
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="style.css">
 
+    <script src="tracker.js"></script>
+
 </head>
 <body ng-app="App" class="col" ng-controller="Controller" ng-cloak>
 
@@ -666,19 +668,14 @@
             .accentPalette('indigo')
         //.dark()
     });
+    var token = localStorage.getItem('token')
 
     App.controller("Controller", function ($scope, $http) {
         var orderbookTimer = null;
         var ticker = null || "SOL"
-        var token = localStorage.getItem('token')
         if (token == null)
             localStorage.setItem('token', token = Math.random())
 
-        $scope.walletTabs = ["Balances", "Transactions"]
-        $scope.walletIndex = 0
-        $scope.selectWalletTab = function (index) {
-            $scope.walletIndex = index
-        }
 
         $scope.sendEmailCode = function () {
             $http({
@@ -707,23 +704,11 @@
         }
 
 
-        $scope.earn = ["Competitions", "Staking", "Drops"]
-        $scope.earnIndex = 0
         $scope.tcTimer = {
             days: 12,
             hours: 35,
             minutes: 26,
             seconds: 58,
-        }
-
-        $scope.selectEarnTab = function (index) {
-            if (index == 0)
-                initCompetitions()
-            if (index == 1)
-                initStaking()
-            if (index == 2)
-                initDrops()
-            $scope.earnIndex = index
         }
 
         function initDrops() {
@@ -852,15 +837,7 @@
             $scope.selectMenu(0)
         }
 
-        $scope.starter = ["List", "Overview", "Launchpad"]
-        $scope.starterIndex = 0
 
-        $scope.selectStarterTab = function (index) {
-            if (index == 0)
-                initStarterList()
-            $scope.generateStarterLogo()
-            $scope.starterIndex = index
-        }
 
         function initStarterList(ticker) {
             $http({
@@ -876,7 +853,7 @@
         $scope.starterCoin
         $scope.selectStarterCoin = function (starterCoin) {
             $scope.starterCoin = starterCoin
-            $scope.selectStarterTab(1)
+            $scope.starterIndex = 1
         }
 
         $scope.backProject = function () {
@@ -977,27 +954,14 @@
             $scope.changeAmount()
         }
 
-        $scope.openCoin = function (newTicker, $event) {
+        $scope.openCoin = function (newTicker) {
             ticker = newTicker
             $scope.coin = $scope.coins[ticker]
-            $scope.selectTradeTab(1)
-        }
-
-        $scope.tabs = ["Market", "Trade", "About"]
-        $scope.tradeTabIndex = 0;
-        $scope.selectTradeTab = function (index) {
-            if (orderbookTimer != null)
-                clearInterval(orderbookTimer)
-            if (index == 0)
-                initMarket()
-            if (index == 1)
-                initTrade()
-            if (index == 2)
-                initChart()
-            $scope.tradeTabIndex = index
+            $scope.tradeTabIndex = 1
         }
 
         function initTrade() {
+            trackTradeViewed()
             $scope.availableCoin = $scope.balances[$scope.coin.ticker] ? $scope.balances[$scope.coin.ticker].spot : 0
             $scope.availableUsdt = $scope.balances["USDT"].spot
             updateOrderbook();
@@ -1116,14 +1080,12 @@
 
         }
 
-
         $scope.is_sell = false
         $scope.price;
         $scope.amount;
         $scope.total;
         $scope.availableCoin;
         $scope.availableUsdt;
-
 
         $scope.changePrice = function () {
             if ($scope.price != null && $scope.amount != null)
@@ -1180,6 +1142,7 @@
         }
 
         function initMarket() {
+            trackMarketViewed()
             updateUser()
         }
 
@@ -1273,17 +1236,57 @@
         $scope.menuIndex = 0
         $scope.selectMenu = function (index) {
             if (index == 0)
-                $scope.selectTradeTab($scope.tradeTabIndex)
+                $scope.tradeTabIndex = $scope.tradeTabIndex || 0
             if (index == 1)
-                $scope.selectStarterTab($scope.starterIndex)
+                $scope.starterIndex = $scope.starterIndex || 0
             if (index == 2)
-                $scope.selectEarnTab($scope.earnIndex)
+                $scope.earnIndex = $scope.earnIndex || 0
             if (index == 3)
-                $scope.selectWalletTab($scope.walletIndex)
+                $scope.walletIndex = $scope.walletIndex || 0
             $scope.menuIndex = index
         }
 
-        $scope.selectWalletTab(0)
+        $scope.tabs = ["Market", "Trade", "About"]
+        $scope.tradeTabIndex
+        $scope.$watch('tradeTabIndex', function (newValue) {
+            if (orderbookTimer != null)
+                clearInterval(orderbookTimer)
+            switch (newValue) {
+                case 0: initMarket(); break
+                case 1: initTrade(); break
+                case 2: initChart(); break
+            }
+        })
+
+        $scope.starter = ["List", "Overview", "Launchpad"]
+        $scope.starterIndex
+        $scope.$watch('starterIndex', function (newValue) {
+            switch (newValue) {
+                case 0: initStarterList(); break
+            }
+            $scope.generateStarterLogo()
+        })
+
+
+        $scope.earn = ["Competitions", "Staking", "Drops"]
+        $scope.earnIndex
+        $scope.$watch('earnIndex', function (newValue) {
+            switch (newValue) {
+                case 0: initCompetitions(); break
+                case 1: initStaking(); break
+                case 2: initDrops(); break
+            }
+        })
+
+        $scope.walletTabs = ["Balances", "Transactions"]
+        $scope.walletIndex
+
+        $scope.$watch('walletIndex', function (newValue) {
+            /*switch (newValue) {
+            }*/
+        })
+
+        $scope.selectMenu(0)
     });
 
 </script>

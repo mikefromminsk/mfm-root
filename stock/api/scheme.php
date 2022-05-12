@@ -112,6 +112,20 @@ if ($drop == 1) {
     `reward` int(11) NOT NULL,
    PRIMARY KEY (`drop_id`)
     ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
+
+    query("DROP TABLE IF EXISTS `tracker`;");
+    query("CREATE TABLE IF NOT EXISTS `tracker` (
+    `track_id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `event_name` varchar(24) COLLATE utf32_bin NOT NULL,
+    `time` BIGINT NOT NULL,
+    `par1` varchar(64) COLLATE utf32_bin NULL,
+    `par2` varchar(64) COLLATE utf32_bin NULL,
+    `par3` varchar(64) COLLATE utf32_bin NULL,
+    `par4` varchar(64) COLLATE utf32_bin NULL,
+    `par5` varchar(64) COLLATE utf32_bin NULL,
+   PRIMARY KEY (`track_id`)
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf32 COLLATE=utf32_bin;");
 } else {
     query("DELETE FROM `users`;");
     query("DELETE FROM `balances`;");
@@ -121,4 +135,5 @@ if ($drop == 1) {
     query("DELETE FROM `tc`;");
     query("DELETE FROM `trades`;");
     query("DELETE FROM `transfers`;");
+    query("DELETE FROM `tracker`;");
 }
