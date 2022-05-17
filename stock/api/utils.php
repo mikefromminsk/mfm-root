@@ -48,6 +48,11 @@ function haveBalance($user_id, $ticker, $amount)
     return getSpot($user_id, $ticker) >= $amount;
 }
 
+function checkBalance($user_id, $ticker, $amount)
+{
+    if (!haveBalance($user_id, $ticker, $amount)) error("not have enough balance");
+}
+
 function place($user_id, $ticker, $is_sell, $price, $amount)
 {
     if ($price != round($price, 2)) error("price tick is 0.01");
@@ -64,7 +69,7 @@ function place($user_id, $ticker, $is_sell, $price, $amount)
     }
 
     if ($is_sell == 1) {
-        if (!haveBalance($user_id, $ticker, $amount)) error("not enough balance");
+        checkBalance($user_id, $ticker, $amount);
         $not_filled = $amount;
         decBalance($user_id, $ticker, $amount);
         foreach (select("select * from orders where ticker = '$ticker' and is_sell = 0 and price >= $price and status = 0 order by price DESC,timestamp") as $order) {
@@ -188,7 +193,7 @@ function tcWinners($ticker, $start)
 
 function stake($user_id, $ticker, $amount)
 {
-    if (!haveBalance($user_id, $ticker, $amount)) error("not enough $ticker");
+    checkBalance($user_id, $ticker, $amount);
     $coin = selectRowWhere(coins, [ticker => $ticker]);
     return transfer(STAKE, $user_id, $coin[staking_user_id], $ticker, $amount, $coin[staking_apy]);
 }

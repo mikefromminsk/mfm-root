@@ -9,7 +9,6 @@ body {
 }
 
 
-
 * {
     outline: none;
 }
@@ -139,7 +138,7 @@ body {
 
 
 /* Ripple effect */
-.white-back-ripple{
+.white-back-ripple {
     background-color: white;
     border: none;
     border-radius: 2px;
@@ -158,7 +157,7 @@ body {
     transition: background 0s;
 }
 
-.green-back-ripple{
+.green-back-ripple {
     background-color: rgb(2, 192, 118);
     border: none;
     border-radius: 2px;
@@ -177,7 +176,7 @@ body {
     transition: background 0s;
 }
 
-.red-back-ripple{
+.red-back-ripple {
     background-color: rgb(248, 73, 96);
     border: none;
     border-radius: 2px;
@@ -196,7 +195,7 @@ body {
     transition: background 0s;
 }
 
-.blue-back-ripple{
+.blue-back-ripple {
     background-color: #4F50FB;
     border: none;
     border-radius: 2px;
@@ -263,12 +262,12 @@ button {
 }
 
 .img-red {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 
-
-.header{
+.header {
     min-height: 64px;
 }
 
@@ -276,8 +275,12 @@ button {
     margin-top: 16px;
 }
 
+.content-col > * {
+    margin-top: 16px;
+}
 
-.multiline-text{
+
+.multiline-text {
     white-space: normal;
 }
 
@@ -287,13 +290,14 @@ button {
     margin-right: 8px;
 }
 
-.page{
+.page {
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: calc(100% - 40px);
 }
+
 
 .animate-show-hide.ng-hide {
     opacity: 0;
@@ -310,12 +314,16 @@ button {
     padding: 10px;
 }
 
-.md-button{
+.md-button {
     margin: 0;
     height: 38px;
 }
 
 /*https://codepen.io/sosuke/pen/Pjoqqp*/
-.filter-green{
+.filter-green {
     filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(86deg) brightness(118%) contrast(119%);
+}
+
+.dialog {
+
 }

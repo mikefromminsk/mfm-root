@@ -1,0 +1,25 @@
+<md-bottom-sheet>
+    <div class="col content-col">
+        <div class="row align-start-center">
+            <img src="img/coin/{{locals.balance.ticker}}.svg" class="coin-logo">
+            <div class="size16">{{locals.balance.ticker}}</div>
+            <div class="flex"></div>
+            <div class="col">
+                <div class="gray-text">Balance {{locals.balance.spot}}</div>
+            </div>
+        </div>
+        <div class="row">
+            <md-button class="flex md-primary" ng-click="hide('deposit')">
+                Deposit
+            </md-button>
+            <md-button class="flex md-primary" ng-click="hide('withdrawal')">
+                Withdrawal
+            </md-button>
+        </div>
+        <div class="row">
+            <md-button class="flex md-primary md-raised" ng-click="hide('trade')">
+                Trade
+            </md-button>
+        </div>
+    </div>
+</md-bottom-sheet>

@@ -13,7 +13,7 @@ requestEquals("localhost/stock/api/create_coin.php",
         "logo" => "http://localhost/stock/img/coin/USDT.svg",
         "name" => "Tether",
         "description" => "Good usd coin",
-        "supply" => "100000",
+        "supply" => "10000",
         "price" => "1",
         "starter_supply" => "10",
     ), "result", true);
@@ -25,7 +25,7 @@ requestEquals("localhost/stock/api/create_coin.php",
         "logo" => "http://localhost/stock/img/coin/SOL.svg",
         "name" => "Solana",
         "description" => "Good coin",
-        "supply" => "10000",
+        "supply" => "2000",
         "price" => "1000",
         "starter_supply" => "1",
     ), "result", true);
@@ -121,8 +121,8 @@ requestEquals("localhost/stock/api/user.php",
 requestEquals("localhost/stock/api/drop_start.php",
     array(token => $solOwner, ticker => SOL, type => SIMPLE, total => 100, reward => 10), result, true);
 
-requestEquals("localhost/stock/api/email_send_code.php",
-    array(token => $usdtOwner, email => "x29a100@gmail.com"), result, true);
+/*requestEquals("localhost/stock/api/email_send_code.php",
+    array(token => $usdtOwner, email => "x29a100@gmail.com"), result, true);*/
 
 //requestEquals("localhost/stock/api/bot_spred.php", array(), "result", true);
 

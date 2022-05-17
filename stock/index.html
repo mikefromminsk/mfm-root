@@ -33,7 +33,7 @@
 
     <script>
         var languageScript = document.createElement('script')
-        languageScript.setAttribute('src','lang/' + navigator.language.substr(0, 2) + '.js')
+        languageScript.setAttribute('src', 'lang/' + navigator.language.substr(0, 2) + '.js')
         document.head.appendChild(languageScript)
     </script>
 
@@ -611,7 +611,8 @@
     <md-tabs class="flex" md-selected="walletIndex" md-autoselect md-swipe-content>
         <md-tab label="{{walletTabs[0]}}">
             <div class="col">
-                <div class="col" ng-repeat="(ticker, item) in balances">
+                <md-content class="col" ng-repeat="(ticker, item) in balances" ng-click="selectBalance(item)"
+                            md-ink-ripple>
                     <div class="row line align-start-center"
                          style="padding-top: 12px; padding-bottom: 12px;">
                         <img src="img/coin/{{ticker}}.svg" class="coin-logo">
@@ -632,7 +633,7 @@
                         </div>
                     </div>
                     <div class="gray-back" style="height: 1px"></div>
-                </div>
+                </md-content>
 
             </div>
         </md-tab>
@@ -652,7 +653,7 @@
 </div>
 
 
-<div class="row shadow size12" style="position: absolute; left: 0; bottom: 0; width: 100%; min-height: 40px;">
+<div class="row shadow size12 dialog" style="position: absolute; left: 0; bottom: 0; width: 100%;min-height: 40px;">
     <div class="flex col" ng-repeat="item in menu">
         <div class="blue-back animate-show-hide" style="height: 2px;" ng-show="menuIndex == $index"></div>
         <md-content class="flex row align-center-center card-title" ng-click="selectMenu($index)" md-ink-ripple>
@@ -666,6 +667,14 @@
     function round(num, precision) {
         return +(Math.round(num + "e+" + precision) + "e-" + precision);
     }
+    function download(filename, url) {
+        var element = document.createElement('a')
+        element.setAttribute('href', url)
+        element.setAttribute('download', filename)
+        document.body.appendChild(element)
+        element.click()
+        //document.body.removeChild(element);
+    }
 
     var App = angular.module("App", ['ngMaterial', 'ngAnimate'])
 
@@ -674,14 +683,55 @@
             .accentPalette('indigo')
         //.dark()
     });
-    var token = localStorage.getItem('token')
+    var token = "123" || localStorage.getItem('token')
 
-    App.controller("Controller", function ($scope, $http) {
+    App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         $scope.str = str
         var orderbookTimer = null;
         var ticker = null || "SOL"
         if (token == null)
             localStorage.setItem('token', token = Math.random())
+
+        $scope.selectBalance = function (balance) {
+            $mdBottomSheet.show({
+                templateUrl: 'balance_dialog.html',
+                //scope: $scope.$new(),
+                locals: {
+                    balance: balance
+                },
+                controller: function ($scope, $mdBottomSheet, locals) {
+                    $scope.locals = locals
+                    $scope.hide = function (choose) {
+                        $mdBottomSheet.hide(choose)
+                    }
+                }
+            }).then(function (choose) {
+                if (choose == 'trade'){
+                    $scope.openTrade(balance.ticker)
+                } else if (choose == 'withdrawal'){
+                    $scope.openWithdrawal(balance)
+                }
+            })
+        }
+
+        $scope.openWithdrawal = function(balance){
+            $mdBottomSheet.show({
+                templateUrl: 'withdrawal_dialog.html',
+                //scope: $scope.$new(),
+                locals: {
+                    balance: balance
+                },
+                controller: function ($scope, $mdBottomSheet, locals) {
+                    $scope.locals = locals
+                    $scope.withdrawal = function () {
+                        download(balance.ticker + $scope.amount + ".json",
+                            "api/withdrawal.php?token=" + token + "&ticker=" + balance.ticker + "&amount=" + $scope.amount)
+                        $mdBottomSheet.hide()
+                    }
+                }
+            }).then(function () {
+            })
+        }
 
 
         $scope.sendEmailCode = function () {
@@ -843,7 +893,6 @@
             $scope.tradeTabIndex = 1
             $scope.selectMenu(0)
         }
-
 
 
         function initStarterList(ticker) {
@@ -1083,9 +1132,6 @@
 
         }
 
-        function initWallet() {
-
-        }
 
         $scope.is_sell = false
         $scope.price;
@@ -1226,13 +1272,11 @@
             return new Date(number * 1000).toLocaleString()
         }
 
-        $scope.bottomTabs = ["Orders", "Wallet"]
+        $scope.bottomTabs = ["Orders"]
         $scope.bottomtradeTabIndex = 0;
         $scope.selectBottomTab = function (index) {
             if (index == 0)
                 initOrders()
-            if (index == 1)
-                initWallet()
             $scope.bottomtradeTabIndex = index
         }
 
@@ -1259,17 +1303,32 @@
             if (orderbookTimer != null)
                 clearInterval(orderbookTimer)
             switch (newValue) {
-                case 0: initMarket(); break
-                case 1: initTrade(); break
-                case 2: initChart(); break
+                case 0:
+                    initMarket();
+                    break
+                case 1:
+                    initTrade();
+                    break
+                case 2:
+                    initChart();
+                    break
             }
         })
+
+        var walletTimer = null
+        function initWallet() {
+            if (walletTimer != null)
+                clearInterval(walletTimer)
+            walletTimer = setInterval(updateUser, 1000)
+        }
 
         $scope.starter = [str.list, str.overview, str.overview]
         $scope.starterIndex
         $scope.$watch('starterIndex', function (newValue) {
             switch (newValue) {
-                case 0: initStarterList(); break
+                case 0:
+                    initStarterList();
+                    break
             }
             $scope.generateStarterLogo()
         })
@@ -1279,9 +1338,15 @@
         $scope.earnIndex
         $scope.$watch('earnIndex', function (newValue) {
             switch (newValue) {
-                case 0: initCompetitions(); break
-                case 1: initStaking(); break
-                case 2: initDrops(); break
+                case 0:
+                    initCompetitions();
+                    break
+                case 1:
+                    initStaking();
+                    break
+                case 2:
+                    initDrops();
+                    break
             }
         })
 
@@ -1289,11 +1354,14 @@
         $scope.walletIndex
 
         $scope.$watch('walletIndex', function (newValue) {
-            /*switch (newValue) {
-            }*/
+            switch (newValue) {
+                case 0:
+                    initWallet();
+                    break;
+            }
         })
 
-        $scope.selectMenu(0)
+        $scope.selectMenu(3)
     });
 
 </script>

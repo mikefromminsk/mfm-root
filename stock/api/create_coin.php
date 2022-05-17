@@ -1,5 +1,6 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/stock/api/auth.php";
+include_once "auth.php";
+include_once "token_utils.php";
 
 $logo = get_required(logo);
 $ticker = get_required_uppercase(ticker);
@@ -10,6 +11,7 @@ $price = get_int_required(price);
 $starter_supply = get_int_required(starter_supply);
 $staking_apy = get_int_required(staking_apy, 10);
 $staking_supply = get_int_required(staking_supply, 1000);
+$domain = strtolower($name);
 
 if (selectRowWhere(coins, [ticker => $ticker]) != null) error("this ticker exists");
 
@@ -34,6 +36,7 @@ if ($ticker == USDT) {
 $tc_user_id = createUser(random_key(users, user_id));
 $staking_user_id = createUser(random_key(users, user_id));
 $drop_user_id = createUser(random_key(users, user_id));
+$domain_id = random_key(coins, domain_id, 8);
 
 insertRow("coins",
     [
@@ -49,10 +52,19 @@ insertRow("coins",
         staking_user_id => $staking_user_id,
         staking_apy => $staking_apy,
         drop_user_id => $drop_user_id,
+        domain => $domain,
+        domain_id => $domain_id,
     ]);
+
 $ieo_supply = $supply - $staking_supply;
 incBalance($ieo_user_id, $ticker, $ieo_supply);
 incBalance($staking_user_id, $ticker, $staking_supply);
+
+generate_token($domain, $supply);
+$count = scalar("select count(*) from `tokens` where domain_id = $domain_id");
+if ($count != $supply) error("generate tokens error count = $count supply = $supply");
+$count = scalar("select count(*) from `keys` where domain_id = $domain_id");
+if ($count != $supply) error("generate keys error count = $count supply = $supply");
 
 $response["result"] = place($ieo_user_id, $ticker, 1, $price, $starter_supply) != null;
 
