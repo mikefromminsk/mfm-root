@@ -1,0 +1,24 @@
+<md-bottom-sheet>
+    <div class="col content-col">
+        <div class="size16">Deposit</div>
+        <div class="row align-start-center">
+            <img src="img/coin/{{locals.balance.ticker}}.svg" class="coin-logo">
+            <div class="size16">{{locals.balance.ticker}}</div>
+            <div class="flex"></div>
+            <div class="gray-text">Balance {{locals.balance.spot}}</div>
+        </div>
+        <div class="row">
+            <md-button class="flex md-primary" ng-click="selectFile()">
+                Load from file
+            </md-button>
+        </div>
+        <div class="col">
+            <md-progress-linear md-mode="indeterminate" ng-show="in_progress"></md-progress-linear>
+            <div class="row">
+                <md-button class="flex md-primary md-raised" ng-click="withdrawal()" ng-disabled="in_progress">
+                    {{in_progress ? 'In progress' : 'Deposit'}}
+                </md-button>
+            </div>
+        </div>
+    </div>
+</md-bottom-sheet>

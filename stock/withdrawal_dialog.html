@@ -1,5 +1,6 @@
 <md-bottom-sheet>
     <div class="col content-col">
+        <div class="size16">Withdrawal</div>
         <div class="row align-start-center">
             <img src="img/coin/{{locals.balance.ticker}}.svg" class="coin-logo">
             <div class="size16">{{locals.balance.ticker}}</div>
@@ -13,8 +14,8 @@
             </div>
         </div>
         <div class="row">
-            <md-button class="flex md-primary md-raised" ng-click="withdrawal()">
-                Withdrawal
+            <md-button class="flex md-primary md-raised" ng-click="withdraw()">
+                Withdraw
             </md-button>
         </div>
     </div>

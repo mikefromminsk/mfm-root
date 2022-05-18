@@ -11,35 +11,35 @@ function getBlocked($user_id, $ticker)
     return scalar("select blocked from balances where user_id = $user_id and ticker = '$ticker'");
 }
 
-function incBalance($user_id, $ticker, $coins)
+function incBalance($user_id, $ticker, $amount)
 {
-    if ($coins != round($coins, 4)) error("inc balance tick error $coins");
-    if ($coins == 0) return false;
-    $spot = round(getSpot($user_id, $ticker) + $coins, 4);
+    if ($amount != round($amount, 4)) error("inc balance tick error $amount");
+    if ($amount == 0) return false;
+    $spot = round(getSpot($user_id, $ticker) + $amount, 4);
     $success = updateWhere(balances, [spot => $spot], [user_id => $user_id, ticker => $ticker]);
     if ($success == false)
-        return insertRow(balances, [user_id => $user_id, ticker => $ticker, spot => $coins, blocked => 0]);
+        return insertRow(balances, [user_id => $user_id, ticker => $ticker, spot => $amount, blocked => 0]);
     return true;
 }
 
-function decBalance($user_id, $ticker, $coins)
+function decBalance($user_id, $ticker, $amount)
 {
-    if ($coins != round($coins, 4)) error("dec balance tick error $coins " . round($coins, 4));
-    return incBalance($user_id, $ticker, -$coins);
+    if ($amount != round($amount, 4)) error("dec balance tick error $amount " . round($amount, 4));
+    return incBalance($user_id, $ticker, -$amount);
 }
 
-function blkBalance($user_id, $ticker, $coins)
+function blkBalance($user_id, $ticker, $amount)
 {
-    if ($coins != round($coins, 4)) error("blk balance tick error $coins");
-    if ($coins == 0) return false;
-    $blocked = round(getBlocked($user_id, $ticker) + $coins, 4);
+    if ($amount != round($amount, 4)) error("blk balance tick error $amount");
+    if ($amount == 0) return false;
+    $blocked = round(getBlocked($user_id, $ticker) + $amount, 4);
     return updateWhere(balances, [blocked => $blocked], [user_id => $user_id, ticker => $ticker]);
 }
 
-function unbBalance($user_id, $ticker, $coins)
+function unbBalance($user_id, $ticker, $amount)
 {
-    if ($coins != round($coins, 4)) error("unb balance tick error $coins");
-    return blkBalance($user_id, $ticker, -$coins);
+    if ($amount != round($amount, 4)) error("unb balance tick error $amount");
+    return blkBalance($user_id, $ticker, -$amount);
 }
 
 function haveBalance($user_id, $ticker, $amount)
@@ -177,9 +177,13 @@ function createUser($token, $email = null)
 
 function transfer($type, $from_user_id, $to_user_id, $ticker, $amount, $parameter = null)
 {
-    if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer need $amount");
-    decBalance($from_user_id, $ticker, $amount);
-    incBalance($to_user_id, $ticker, $amount);
+    if ($type != DEPOSIT && $from_user_id >= 0) {
+        if (!haveBalance($from_user_id, $ticker, $amount)) error("donot have enough $ticker for transfer need $amount");
+        decBalance($from_user_id, $ticker, $amount);
+    }
+    if (type != WITHDRAWAL && $to_user_id >= 0){
+        incBalance($to_user_id, $ticker, $amount);
+    }
     return insertRowAndGetId(transfers, [type => $type, parameter => $parameter, from_user_id => $from_user_id, to_user_id => $to_user_id, ticker => $ticker, amount => $amount, time => time()]);
 }
 

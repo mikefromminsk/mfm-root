@@ -667,6 +667,7 @@
     function round(num, precision) {
         return +(Math.round(num + "e+" + precision) + "e-" + precision);
     }
+
     function download(filename, url) {
         var element = document.createElement('a')
         element.setAttribute('href', url)
@@ -674,6 +675,26 @@
         document.body.appendChild(element)
         element.click()
         //document.body.removeChild(element);
+    }
+
+    function selectFile(contentType, callback) {
+        let input = document.createElement('input')
+        input.type = 'file'
+        input.accept = contentType
+        input.onchange = _ => {
+            let files = Array.from(input.files)
+            if (callback != null)
+                callback(files[0])
+        }
+        input.click();
+    }
+
+    function objectToForm(data) {
+        var formData = new FormData();
+        angular.forEach(data, function (value, key) {
+            formData.append(key, value);
+        });
+        return formData;
     }
 
     var App = angular.module("App", ['ngMaterial', 'ngAnimate'])
@@ -706,15 +727,52 @@
                     }
                 }
             }).then(function (choose) {
-                if (choose == 'trade'){
+                if (choose == 'trade') {
                     $scope.openTrade(balance.ticker)
-                } else if (choose == 'withdrawal'){
+                } else if (choose == 'withdrawal') {
                     $scope.openWithdrawal(balance)
+                } else if (choose == 'deposit') {
+                    $scope.openDeposit(balance.ticker)
                 }
             })
         }
 
-        $scope.openWithdrawal = function(balance){
+        $scope.openDeposit = function (ticker) {
+            $mdBottomSheet.show({
+                templateUrl: 'deposit_dialog.html',
+                //scope: $scope.$new(),
+                locals: {
+                    ticker: ticker,
+                    balance: $scope.balances[ticker],
+                },
+                controller: function ($scope, $mdBottomSheet, locals) {
+                    $scope.locals = locals
+                    $scope.selectFile = function () {
+                        selectFile('json', function (file) {
+                            $scope.in_progress = true
+                            $http({
+                                method: 'POST',
+                                url: 'api/deposit.php',
+                                headers: {
+                                    'Content-Type': undefined
+                                },
+                                data: {
+                                    token: token,
+                                    file: file
+                                },
+                                transformRequest: objectToForm
+                            }).then(function (response) {
+                                updateUser()
+                                $scope.in_progress = false
+                                $mdBottomSheet.hide()
+                            })
+                        })
+                    }
+                }
+            })
+        }
+
+        $scope.openWithdrawal = function (balance) {
             $mdBottomSheet.show({
                 templateUrl: 'withdrawal_dialog.html',
                 //scope: $scope.$new(),
@@ -723,13 +781,12 @@
                 },
                 controller: function ($scope, $mdBottomSheet, locals) {
                     $scope.locals = locals
-                    $scope.withdrawal = function () {
+                    $scope.withdraw = function () {
                         download(balance.ticker + $scope.amount + ".json",
                             "api/withdrawal.php?token=" + token + "&ticker=" + balance.ticker + "&amount=" + $scope.amount)
                         $mdBottomSheet.hide()
                     }
                 }
-            }).then(function () {
             })
         }
 
@@ -962,13 +1019,7 @@
                     'Content-Type': undefined
                 },
                 data: $scope.launchCoin,
-                transformRequest: function (data) {
-                    var formData = new FormData();
-                    angular.forEach(data, function (value, key) {
-                        formData.append(key, value);
-                    });
-                    return formData;
-                }
+                transformRequest: objectToForm
             }).then(function (response) {
                 if (response.data.result) {
                     var loadUser = false
@@ -1286,6 +1337,13 @@
         $scope.menu = [str.trade, str.starter, str.earn, str.wallet]
         $scope.menuIndex = 0
         $scope.selectMenu = function (index) {
+            if ($scope.menuIndex == index)
+                return;
+            if (orderbookTimer != null)
+                clearInterval(orderbookTimer)
+            if (walletTimer != null)
+                clearInterval(walletTimer)
+
             if (index == 0)
                 $scope.tradeTabIndex = $scope.tradeTabIndex || 0
             if (index == 1)
@@ -1316,9 +1374,8 @@
         })
 
         var walletTimer = null
+
         function initWallet() {
-            if (walletTimer != null)
-                clearInterval(walletTimer)
             walletTimer = setInterval(updateUser, 1000)
         }
 
@@ -1354,6 +1411,8 @@
         $scope.walletIndex
 
         $scope.$watch('walletIndex', function (newValue) {
+            if (walletTimer != null)
+                clearInterval(walletTimer)
             switch (newValue) {
                 case 0:
                     initWallet();
