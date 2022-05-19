@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+        var languageScript = document.createElement('script')
+        languageScript.setAttribute('src', 'lang/' + navigator.language.substr(0, 2) + '.js')
+        document.head.appendChild(languageScript)
+    </script>
+
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
     <script src="../angular/angular.min.js"></script>
@@ -31,11 +38,6 @@
 
     <script src="tracker.js"></script>
 
-    <script>
-        var languageScript = document.createElement('script')
-        languageScript.setAttribute('src', 'lang/' + navigator.language.substr(0, 2) + '.js')
-        document.head.appendChild(languageScript)
-    </script>
 
 </head>
 <body ng-app="App" class="col" ng-controller="Controller" ng-cloak>
@@ -61,7 +63,7 @@
         <img src="img/star.svg" style="width: 18px;height: 18px;">
     </div>
 </div>-->
-<md-tabs class="page animate-show-hide" md-selected="tradeTabIndex" md-autoselect md-swipe-content
+<md-tabs class="page fade-animation" md-selected="tradeTabIndex" md-autoselect md-swipe-content
          ng-show="menuIndex == 0">
     <md-tab class="col" label="{{tabs[0]}}">
         <div class="row line" style="position: relative; margin: 8px 0;">
@@ -258,7 +260,7 @@
 </md-tabs>
 
 
-<md-tabs class="page animate-show-hide" md-selected="starterIndex" md-autoselect md-swipe-content
+<md-tabs class="page fade-animation" md-selected="starterIndex" md-autoselect md-swipe-content
          ng-show="menuIndex == 1">
     <md-tab ng-show="starterIndex == 0" label="{{starter[0]}}">
         <div class="col line">
@@ -299,7 +301,7 @@
 
 
     <md-tab class="flex col white-back" label="{{starter[1]}}">
-        <div class="flex col scroll line input-list-wrapper">
+        <div class="flex col scroll line content-col">
             <div class="size16">{{starterCoin.name}}</div>
             <div class="row multiline-text">{{starterCoin.description}}</div>
             <div class="row">
@@ -359,7 +361,7 @@
                 This project will only funded if at least 4300$ is pledged by 20 may 2022 13:00
             </div>
         </div>
-        <div class="col line input-list-wrapper" ng-class="{'shadow-bottom': true}"
+        <div class="col line content-col" ng-class="{'shadow-bottom': true}"
              style="padding-bottom: 20px; padding-top: 12px; border-top-left-radius: 20px; border-top-right-radius: 20px;">
             <div class="row input-wrapper">
                 <div class="input-label-top">Donate</div>
@@ -374,7 +376,7 @@
             </div>
         </div>
     </md-tab>
-    <md-tab class="flex col line input-list-wrapper" label="{{starter[2]}}">
+    <md-tab class="flex col line content-col" label="{{starter[2]}}">
         <div class="row align-start-center">
             <img id="starter-logo" class="coin-logo" ng-click="generateStarterLogo()">
             <div class="flex row input-wrapper">
@@ -423,7 +425,7 @@
 </md-tabs>
 
 
-<md-tabs class="page animate-show-hide" md-selected="earnIndex" md-autoselect md-swipe-content ng-show="menuIndex == 2">
+<md-tabs class="page fade-animation" md-selected="earnIndex" md-autoselect md-swipe-content ng-show="menuIndex == 2">
     <md-tab class="flex line col white-back" label="{{earn[0]}}">
         <div class="col white-back-ripple shadow" style="margin-top: 20px" ng-repeat="(ticker, item) in tc"
              ng-click="selectTC(item)" ng-show="selectedTC == null">
@@ -573,7 +575,7 @@
     <div class="flex"></div>
 </md-tabs>
 
-<div class="page animate-show-hide" ng-show="menuIndex == 3">
+<div class="page fade-animation" ng-show="menuIndex == 3">
     <div class="col white-back" style="padding: 12px; margin-top: 12px">
         <div class="col" ng-show="user.email_confirmed == 1">
             <div class="col align-center-center">
@@ -655,10 +657,30 @@
 
 <div class="row shadow size12 dialog" style="position: absolute; left: 0; bottom: 0; width: 100%;min-height: 40px;">
     <div class="flex col" ng-repeat="item in menu">
-        <div class="blue-back animate-show-hide" style="height: 2px;" ng-show="menuIndex == $index"></div>
+        <div class="blue-back fade-animation" style="height: 2px;" ng-show="menuIndex == $index"></div>
         <md-content class="flex row align-center-center card-title" ng-click="selectMenu($index)" md-ink-ripple>
             {{item}}
         </md-content>
+    </div>
+</div>
+
+<div class="col white-back fullscreen fade-animation" style="position: absolute; left: 0; bottom: 0;"
+     ng-show="showHello">
+    <md-tabs class="flex md-no-ink-bar-color" md-selected="helloIndex" md-autoselect md-stretch-tabs>
+        <md-tab ng-repeat="item in helloLabels" label="{{item}}">
+            <div class="col white-back fullscreen">
+                <div class="flex col align-center-center content-col">
+                    <img src="{{helloImages[$index]}}" style="width: 200px; height: 200px;">
+                    <div class="size16">{{helloTitles[$index]}}</div>
+                    <div>{{helloTexts[$index]}}</div>
+                </div>
+            </div>
+        </md-tab>
+    </md-tabs>
+    <div class="row" style="margin: 30px">
+        <md-button class="flex md-primary md-raised" ng-click="helloNext()">
+            Next {{helloIndex}}
+        </md-button>
     </div>
 </div>
 
@@ -697,6 +719,15 @@
         return formData;
     }
 
+    function strArray(prefix) {
+        let values = []
+        for (let key in str) {
+            if (key.startsWith(prefix))
+                values.push(str[key])
+        }
+        return values
+    }
+
     var App = angular.module("App", ['ngMaterial', 'ngAnimate'])
 
     App.config(function ($mdThemingProvider) {
@@ -713,9 +744,24 @@
         if (token == null)
             localStorage.setItem('token', token = Math.random())
 
+        $scope.helloImages = strArray('hello_img')
+        $scope.helloLabels = strArray('hello_label')
+        $scope.helloTitles = strArray('hello_title')
+        $scope.helloTexts = strArray('hello_text')
+
+        $scope.showHello = localStorage.getItem('hello_showed') == null
+        $scope.helloIndex = 0
+        $scope.helloNext = function () {
+            if ($scope.helloIndex == $scope.helloLabels.length - 1) {
+                $scope.showHello = false
+                localStorage.setItem('hello_showed', '1')
+            } else
+                $scope.helloIndex++
+        }
+
         $scope.selectBalance = function (balance) {
             $mdBottomSheet.show({
-                templateUrl: 'balance_dialog.html',
+                templateUrl: 'balance.html',
                 //scope: $scope.$new(),
                 locals: {
                     balance: balance
@@ -739,7 +785,7 @@
 
         $scope.openDeposit = function (ticker) {
             $mdBottomSheet.show({
-                templateUrl: 'deposit_dialog.html',
+                templateUrl: 'deposit.html',
                 //scope: $scope.$new(),
                 locals: {
                     ticker: ticker,
@@ -774,7 +820,7 @@
 
         $scope.openWithdrawal = function (balance) {
             $mdBottomSheet.show({
-                templateUrl: 'withdrawal_dialog.html',
+                templateUrl: 'withdrawal.html',
                 //scope: $scope.$new(),
                 locals: {
                     balance: balance
