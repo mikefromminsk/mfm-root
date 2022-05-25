@@ -146,4 +146,3 @@ query("CREATE TABLE IF NOT EXISTS `keys` (
     `archived` int(1) DEFAULT 0,
    PRIMARY KEY (`key_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
-    

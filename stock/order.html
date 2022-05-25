@@ -1,0 +1,17 @@
+<md-bottom-sheet>
+    <div class="col col-content">
+        <div class="row">
+            <div class="size16 flex">{{locals.title}}</div>
+            <div class="gray-text">{{locals.str.balance}} {{locals.balance.spot}} {{locals.ticker}}</div>
+        </div>
+        <div class="row input-wrapper">
+            <div class="input-label-top" ng-disabled="locals.blockedAmount">{{locals.ticker}}</div>
+            <input type="text" class="flex input" ng-model="locals.amount">
+        </div>
+        <div class="row">
+            <md-button class="flex md-primary md-raised" ng-click="submit()">
+                {{locals.str.submit}}
+            </md-button>
+        </div>
+    </div>
+</md-bottom-sheet>

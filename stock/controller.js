@@ -1,0 +1,827 @@
+var App = angular.module("App", ['ngMaterial', 'ngAnimate'])
+
+App.config(function ($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+        .accentPalette('indigo')
+    //.dark()
+});
+var token = "123" || localStorage.getItem('token')
+
+App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
+    $scope.str = str
+    var orderbookTimer = null;
+    var ticker = null || "SOL"
+    if (token == null)
+        localStorage.setItem('token', token = Math.random())
+
+
+    $scope.tariffs = [
+        {
+            title: str.basic,
+            description: str.basic_desc,
+            supply: 10000,
+            price: 10,
+        }, {
+            title: str.pro,
+            description: str.pro_desc,
+            supply: 100000,
+            price: 100,
+        }, {
+            title: str.custom,
+            description: str.custom_desc,
+            supply: 10000,
+            price: 10,
+        }
+    ]
+    $scope.tariffIndex = 0
+    $scope.selectTariff = function (index) {
+        $scope.tariffIndex = index
+    }
+
+    $scope.launchCoin = {
+        ticker: "",
+        name: "",
+        description: "",
+        supply: 10000,
+        price: 0.2,
+        usd_round: 0,
+        starter_supply: 1000,
+    }
+
+    $scope.generateStarterLogo = function () {
+        var svg = new UIAvatarSvg()
+            .text(($scope.launchCoin.name || "B")[0].toUpperCase())
+            .round(true)
+            .size(64)
+            .bgColor('#' + Math.floor(Math.random() * 16777215).toString(16))
+            .textColor('#ffffff')
+            .fontSize(0.8)
+            .fontWeight('normal')
+            .fontFamily('-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif')
+            .generate()
+        $scope.launchCoin.logo = new Blob([svg], {type: 'image/svg+xml'})
+        document.getElementById('starter-logo').src = URL.createObjectURL($scope.launchCoin.logo)
+    }
+
+    $scope.validate = function (type, value, success, error) {
+        $http({
+            method: "POST",
+            url: "api/validate.php",
+            data: {
+                type: type,
+                value: value,
+            }
+        }).then(success, error)
+    }
+
+    $scope.changeCoinName = function () {
+        $scope.validate('coin_name', $scope.launchCoin.name, function () {
+            $scope.coin_name_message = null
+        }, function (response) {
+            $scope.coin_name_message = response.data.message
+        })
+        if ($scope.launchCoin.name != null) {
+            $scope.launchCoin.ticker = $scope.launchCoin.name.substr(0, 3).toUpperCase()
+            $scope.changeCoinTicker()
+        } else
+            $scope.launchCoin.ticker = null
+        $scope.generateStarterLogo()
+    }
+
+    $scope.changeCoinTicker = function () {
+        $scope.validate('coin_ticker', $scope.launchCoin.ticker, function () {
+            $scope.coin_ticker_message = null
+        }, function (response) {
+            $scope.coin_ticker_message = response.data.message
+        })
+    }
+
+    $scope.$watch(function () {
+        return $scope.launchCoin.usd_round
+    }, function (newValue) {
+        $scope.launchCoin.price = newValue / ($scope.launchCoin.supply * 0.1)
+    })
+
+    $scope.launch = function () {
+        $scope.launchCoin.token = token
+        $http({
+            method: 'POST',
+            url: 'api/create_coin.php',
+            headers: {
+                'Content-Type': undefined
+            },
+            data: $scope.launchCoin,
+            transformRequest: objectToForm
+        }).then(function (response) {
+            if (response.data.result) {
+                var loadUser = false
+                updateUser(function () {
+                    loadUser = true
+                    attemptToClose()
+                })
+                var loadCoins = false
+                updateCoins(function () {
+                    loadCoins = true
+                    attemptToClose()
+                })
+
+                function attemptToClose() {
+                    $scope.selected
+                    $scope.starterIndex = 1
+                }
+            }
+        })
+    }
+
+
+    $scope.helloImages = strArray('hello_img')
+    $scope.helloLabels = strArray('hello_label')
+    $scope.helloTitles = strArray('hello_title')
+    $scope.helloTexts = strArray('hello_text')
+
+    $scope.showHello = localStorage.getItem('hello_showed') == null
+    $scope.helloIndex = 0
+    $scope.helloNext = function () {
+        if ($scope.helloIndex == $scope.helloLabels.length - 1) {
+            $scope.showHello = false
+            localStorage.setItem('hello_showed', '1')
+        } else
+            $scope.helloIndex++
+    }
+
+    $scope.selectBalance = function (balance) {
+        $mdBottomSheet.show({
+            templateUrl: 'balance.html',
+            //scope: $scope.$new(),
+            locals: {
+                balance: balance
+            },
+            controller: function ($scope, $mdBottomSheet, locals) {
+                $scope.locals = locals
+                $scope.hide = function (choose) {
+                    $mdBottomSheet.hide(choose)
+                }
+            }
+        }).then(function (choose) {
+            if (choose == 'trade') {
+                $scope.openTrade(balance.ticker)
+            } else if (choose == 'withdrawal') {
+                $scope.openWithdrawal(balance)
+            } else if (choose == 'deposit') {
+                $scope.openDeposit(balance.ticker)
+            }
+        })
+    }
+
+    $scope.openDeposit = function (ticker) {
+        $mdBottomSheet.show({
+            templateUrl: 'deposit.html',
+            //scope: $scope.$new(),
+            locals: {
+                ticker: ticker,
+                balance: $scope.balances[ticker],
+            },
+            controller: function ($scope, $mdBottomSheet, locals) {
+                $scope.locals = locals
+                $scope.selectFile = function () {
+                    selectFile('json', function (file) {
+                        $scope.in_progress = true
+                        $http({
+                            method: 'POST',
+                            url: 'api/deposit.php',
+                            headers: {
+                                'Content-Type': undefined
+                            },
+                            data: {
+                                token: token,
+                                file: file
+                            },
+                            transformRequest: objectToForm
+                        }).then(function (response) {
+                            updateUser()
+                            $scope.in_progress = false
+                            $mdBottomSheet.hide()
+                        })
+                    })
+                }
+            }
+        })
+    }
+
+    $scope.openWithdrawal = function (balance) {
+        $mdBottomSheet.show({
+            templateUrl: 'withdrawal.html',
+            //scope: $scope.$new(),
+            locals: {
+                balance: balance
+            },
+            controller: function ($scope, $mdBottomSheet, locals) {
+                $scope.locals = locals
+                $scope.withdraw = function () {
+                    download(balance.ticker + $scope.amount + ".json",
+                        "api/withdrawal.php?token=" + token + "&ticker=" + balance.ticker + "&amount=" + $scope.amount)
+                    $mdBottomSheet.hide()
+                }
+            }
+        })
+    }
+
+
+    $scope.sendEmailCode = function () {
+        $http({
+            method: "POST",
+            url: "api/email_send_code.php",
+            data: {
+                token: token,
+                email: $scope.user.email,
+            }
+        }).then(function (response) {
+            updateUser()
+        })
+    }
+
+    $scope.confirmEmailCode = function () {
+        $http({
+            method: "POST",
+            url: "api/email_confirm.php",
+            data: {
+                token: token,
+                email_confirm_code: $scope.user.email_confirm_code,
+            }
+        }).then(function (response) {
+            updateUser()
+        })
+    }
+
+
+    $scope.tcTimer = {
+        days: 12,
+        hours: 35,
+        minutes: 26,
+        seconds: 58,
+    }
+
+    function initDrops() {
+        $http({
+            method: "POST",
+            url: "api/drops.php",
+            data: {
+                token: token,
+            }
+        }).then(function (response) {
+            $scope.drops = response.data.drops
+        })
+    }
+
+    $scope.openDrop = function (drop) {
+        if (drop.type == "SIMPLE") {
+            $http({
+                method: "POST",
+                url: "api/drop_finish.php",
+                data: {
+                    token: token,
+                    drop_id: drop.drop_id,
+                }
+            }).then(function (response) {
+                initDrops()
+            })
+        }
+    }
+
+    function initCompetitions() {
+        $http({
+            method: "POST",
+            url: "api/tc.php",
+        }).then(function (response) {
+            $scope.tc = response.data.tc
+        })
+    }
+
+    var stakingTimer;
+
+    function initStaking() {
+        if (stakingTimer != null)
+            clearInterval(stakingTimer)
+        stakingTimer = setInterval(stakingTimerAction, 1000)
+
+        updateUser()
+
+        $http({
+            method: "POST",
+            url: "api/stakes.php",
+            data: {
+                token: token,
+            }
+        }).then(function (response) {
+            $scope.stakes = response.data.stakes
+        })
+
+        updateCoins(function () {
+            $scope.stakingActive = []
+            for (var key in $scope.coins)
+                if ($scope.coins[key].staking_apy > 0)
+                    $scope.stakingActive.push($scope.coins[key])
+        })
+    }
+
+    function stakingTimerAction() {
+        for (var key in $scope.stakes) {
+            var stake = $scope.stakes[key]
+            stake.earned = stake.amount * (new Date().getTime() / 1000 - stake.time) / (1000 * 60 * 60 * 24 * 365) * (stake.parameter / 100)
+        }
+        $scope.$apply()
+    }
+
+    $scope.selectStaking = function (item) {
+        $scope.selectedStaking = item
+    }
+
+    $scope.stake = function () {
+        $http({
+            method: "POST",
+            url: "api/stake.php",
+            data: {
+                token: token,
+                ticker: $scope.selectedStaking.ticker,
+                amount: $scope.stakingAmount,
+            }
+        }).then(function (response) {
+            $scope.selectedStaking = null
+            initStaking()
+        })
+    }
+
+    $scope.unstake = function (item) {
+        $http({
+            method: "POST",
+            url: "api/stake_close.php",
+            data: {
+                token: token,
+                stake_id: item.transfer_id,
+            }
+        }).then(function (response) {
+            initStaking()
+        })
+    }
+
+
+    $scope.selectTC = function (item) {
+        $scope.selectedTC = item
+        if (item != null)
+            $http({
+                method: "POST",
+                url: "api/tc_winners.php",
+                data: {
+                    ticker: item.ticker,
+                    start: item.start,
+                }
+            }).then(function (response) {
+                $scope.selectedTCWinners = response.data.winners
+            })
+
+    }
+
+    $scope.openTrade = function (ticker) {
+        $scope.coin = $scope.coins[ticker]
+        $scope.tradeTabIndex = 1
+        $scope.selectMenu(0)
+    }
+
+
+    function updateStarterList() {
+        $http({
+            method: "POST",
+            url: "api/ieo.php",
+            data: $scope.launchCoin
+        }).then(function (response) {
+            $scope.ieo = response.data.ieo
+            if ($scope.selectedStarter == null) {
+                $scope.selectedStarter = $scope.ieo[0]
+            } else {
+                for (var key in $scope.ieo)
+                    if ($scope.ieo[key].ticker == $scope.selectedStarter.ticker)
+                        $scope.selectedStarter = $scope.ieo[key]
+            }
+        })
+    }
+
+    $scope.selectedStarter
+    $scope.selectStarter = function (starterCoin) {
+        $scope.selectedStarter = starterCoin
+        $scope.starterIndex = 2
+    }
+
+    $scope.backProject = function () {
+        $scope.order(str.back_project + ' ' + $scope.selectedStarter.name, 'USDT', 10, false, function (usdt) {
+                $http({
+                    method: "POST",
+                    url: "api/place.php",
+                    data: {
+                        token: token,
+                        ticker: $scope.selectedStarter.ticker,
+                        is_sell: "0",
+                        price: $scope.selectedStarter.price,
+                        amount: usdt / $scope.selectedStarter.price
+                    }
+                }).then(function (response) {
+                    updateStarterList()
+                })
+            }
+        )
+    }
+
+
+    $scope.sellLineClick = function (index) {
+        $scope.is_sell = false
+        $scope.amount = 0
+        for (var i = $scope.sell.length - 1; i >= index; i--)
+            $scope.amount += $scope.sell[i].amount
+        $scope.amount = round($scope.amount, 2)
+        $scope.price = round($scope.sell[index].price, 2)
+        $scope.changeAmount()
+    }
+
+    $scope.buyLineClick = function (index) {
+        $scope.is_sell = true
+        $scope.amount = 0
+        for (var i = 0; i <= index; i++)
+            $scope.amount += $scope.buy[i].amount
+        $scope.amount = round($scope.amount, 2)
+        $scope.price = round($scope.buy[index].price, 2)
+        $scope.changeAmount()
+    }
+
+    $scope.openCoin = function (newTicker) {
+        ticker = newTicker
+        $scope.coin = $scope.coins[ticker]
+        $scope.tradeTabIndex = 1
+    }
+
+    function initTrade() {
+        trackTradeViewed()
+        $scope.availableCoin = $scope.balances[$scope.coin.ticker] ? $scope.balances[$scope.coin.ticker].spot : 0
+        $scope.availableUsdt = $scope.balances["USDT"].spot
+        updateOrderbook();
+        orderbookTimer = setInterval(updateOrderbook, 1000)
+        updateOrders();
+    }
+
+
+    var chart
+    var candleSeries
+
+    function initChart() {
+        if (chart == null) {
+            var tradeChart = document.getElementById("tradeChart")
+            chart = LightweightCharts.createChart(tradeChart, {
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+                timeScale: {
+                    timeVisible: true,
+                },
+            });
+            candleSeries = chart.addCandlestickSeries();
+            new ResizeObserver(entries => {
+                if (entries.length === 0 || entries[0].target !== tradeChart) return;
+                const newRect = entries[0].contentRect;
+                chart.applyOptions({height: newRect.height, width: newRect.width});
+            }).observe(tradeChart)
+            $scope.getSticks($scope.period || $scope.periods[0])
+        }
+    }
+
+    var currentBar = {}
+
+    function updateChart() {
+        if (chart != null) {
+            var price = parseFloat($scope.coin.price)
+            var nextTime = Math.ceil(new Date() / 1000 / 60) * 60
+            if (nextTime != currentBar.time) {
+                currentBar.open = currentBar.close || price
+                currentBar.high = price
+                currentBar.low = price
+                currentBar.close = price
+                currentBar.time = nextTime
+            } else {
+                currentBar.close = price
+                currentBar.high = Math.max(currentBar.high, price)
+                currentBar.low = Math.min(currentBar.low, price)
+            }
+            candleSeries.update(currentBar)
+        }
+    }
+
+    $scope.setPortion = function (percent) {
+        $scope.amount = ($scope.is_sell ? $scope.availableCoin : $scope.availableUsdt) * (percent / 100)
+        $scope.changeAmount()
+    }
+
+    $scope.periods = ['1m', '5m', '15m', '1H', '1D']
+    $scope.period
+
+    $scope.getSticks = function (period) {
+        $scope.period = period
+        $http({
+            method: "POST",
+            url: "api/sticks.php",
+            data: {
+                ticker: ticker,
+                period: $scope.period
+            }
+        }).then(function (response) {
+            candleSeries.setData(response.data.sticks)
+        })
+    }
+
+    $scope.place = function () {
+        $http({
+            method: "POST",
+            url: "api/place.php",
+            data: {
+                token: token,
+                ticker: ticker,
+                is_sell: $scope.is_sell ? "1" : "0",
+                price: $scope.price,
+                amount: $scope.amount
+            }
+        }).then(function (response) {
+            updateOrders()
+        })
+    }
+
+    $scope.cancel = function (order_id) {
+        $http({
+            method: "POST",
+            url: "api/cancel.php",
+            data: {token: token, order_id: order_id}
+        }).then(function (response) {
+            updateOrders()
+        })
+    }
+    $scope.cancelAll = function () {
+        $http({
+            method: "POST",
+            url: "api/cancelAll.php",
+            data: {token: token, ticker: ticker}
+        }).then(function () {
+            updateOrders()
+        })
+    }
+
+    function initOrders() {
+
+    }
+
+
+    $scope.is_sell = false
+    $scope.price;
+    $scope.amount;
+    $scope.total;
+    $scope.availableCoin;
+    $scope.availableUsdt;
+
+    $scope.changePrice = function () {
+        if ($scope.price != null && $scope.amount != null)
+            $scope.total = round($scope.price * $scope.amount, 4)
+    }
+
+
+    $scope.changeAmount = function () {
+        if ($scope.price != null && $scope.amount != null)
+            $scope.total = round($scope.price * $scope.amount, 4)
+    }
+
+
+    $scope.changeTotal = function () {
+        if ($scope.price != null && $scope.total != null)
+            $scope.amount = round($scope.total / $scope.price, 2)
+    }
+
+
+    var userLoaded = false
+    var coinsLoaded = false
+
+    updateUser(function () {
+        userLoaded = true
+        attemptInit()
+    })
+
+    updateCoins(function () {
+        coinsLoaded = true
+        attemptInit()
+    })
+
+    function attemptInit() {
+        if (userLoaded && coinsLoaded)
+            $scope.selectMenu($scope.menuIndex)
+    }
+
+    function updateUser(callback) {
+        $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
+            $scope.user = response.data.user
+            $scope.balances = response.data.balances
+            if (callback != null)
+                callback()
+        })
+    }
+
+    function updateCoins(callback) {
+        $http({method: "POST", url: "api/coins.php"}).then(function (response) {
+            $scope.coins = response.data.coins
+            $scope.coin = $scope.coins[ticker]
+            if (callback != null)
+                callback()
+        })
+    }
+
+    function initMarket() {
+        trackMarketViewed()
+        updateUser()
+    }
+
+    function updateOrderbook() {
+        $http({
+            method: "POST",
+            url: "api/orderbook.php",
+            data: {ticker: $scope.coin.ticker}
+        }).then(function (response) {
+            $scope.sell = response.data.sell
+            $scope.buy = response.data.buy
+            $scope.coin = response.data.coin
+            updateChart()
+        })
+    }
+
+    function updateOrders() {
+        $http({method: "POST", url: "api/orders.php", data: {token: token}}).then(function (response) {
+            $scope.active = response.data.active
+            $scope.history = response.data.history
+        })
+    }
+
+    $scope.go = function (url, $event) {
+        setTimeout(function () {
+            window.location.href = url
+        }, 500)
+        $event.stopPropagation()
+    }
+
+    $scope.subscribe = function ($event) {
+        $event.stopPropagation()
+    }
+
+    $scope.search_text = ""
+    $scope.search = function (e) {
+    }
+
+    var numberFormat = new Intl.NumberFormat('en-IN');
+    $scope.priceFormat = function (number) {
+        return "$" + numberFormat.format(round(number, 2))
+    }
+    $scope.amountFormat = function (number) {
+        return round(number, 4) // K M B T
+    }
+    $scope.changeFormat = function (number) {
+        if (number < 0)
+            return "-" + number + "%";
+        else if (number == 0)
+            return "0%";
+        else if (number > 0)
+            return "+" + number + "%";
+    }
+
+    $scope.changeBackColor = function (number) {
+        return {'green-back': number > 0, 'gray-back': number == 0, 'red-back': number < 0}
+    }
+
+    $scope.changeColor = function (number) {
+        return {'green-text': number > 0, 'gray-text': number == 0, 'red-text': number < 0}
+    }
+
+    $scope.timeFormat = function (number) {
+        return new Date(number * 1000).toLocaleString()
+    }
+
+    $scope.percentFormat = function (number) {
+        return round(number, 0) + "%";
+    }
+
+    $scope.order = function (title, ticker, amount, blockedAmount, callback) {
+        $mdBottomSheet.show({
+            templateUrl: 'order.html',
+            locals: {
+                str: str,
+                title: title,
+                ticker: ticker,
+                amount: amount,
+                blockedAmount: blockedAmount,
+                balance: $scope.balances[ticker]
+            },
+            controller: function ($scope, $mdBottomSheet, locals) {
+                $scope.locals = locals
+                $scope.submit = function () {
+                    $mdBottomSheet.hide(locals.amount)
+                }
+            }
+        }).then(function (selectedAmount) {
+            callback(selectedAmount)
+        })
+    }
+
+    $scope.bottomTabs = [str.orders]
+    $scope.bottomtradeTabIndex = 0;
+    $scope.selectBottomTab = function (index) {
+        if (index == 0)
+            initOrders()
+        $scope.bottomtradeTabIndex = index
+    }
+
+    $scope.groupNames = [str.active, str.history]
+
+
+    $scope.menu = [str.trade, str.starter, str.earn, str.wallet]
+    $scope.menuIndex = 0
+    $scope.selectMenu = function (index) {
+        if ($scope.menuIndex == index)
+            return;
+        if (orderbookTimer != null)
+            clearInterval(orderbookTimer)
+        if (walletTimer != null)
+            clearInterval(walletTimer)
+
+        if (index == 0)
+            $scope.tradeTabIndex = $scope.tradeTabIndex || 0
+        if (index == 1)
+            $scope.starterIndex = $scope.starterIndex || 1
+        if (index == 2)
+            $scope.earnIndex = $scope.earnIndex || 0
+        if (index == 3)
+            $scope.walletIndex = $scope.walletIndex || 0
+        $scope.menuIndex = index
+    }
+
+    $scope.tradeTabIndex
+    $scope.$watch('tradeTabIndex', function (newValue) {
+        if (orderbookTimer != null)
+            clearInterval(orderbookTimer)
+        switch (newValue) {
+            case 0:
+                initMarket();
+                break
+            case 1:
+                initTrade();
+                break
+            case 2:
+                initChart();
+                break
+        }
+    })
+
+    var walletTimer = null
+
+    function initWallet() {
+        walletTimer = setInterval(updateUser, 1000)
+    }
+
+    $scope.starterIndex
+    $scope.$watch('starterIndex', function (newValue) {
+        switch (newValue) {
+            case 1:
+                updateStarterList();
+                $scope.selectedStarter = $scope.ieo[0]
+                break
+        }
+        $scope.generateStarterLogo()
+    })
+
+
+    $scope.earnIndex
+    $scope.$watch('earnIndex', function (newValue) {
+        switch (newValue) {
+            case 0:
+                initCompetitions();
+                break
+            case 1:
+                initStaking();
+                break
+            case 2:
+                initDrops();
+                break
+        }
+    })
+
+    $scope.walletIndex
+    $scope.$watch('walletIndex', function (newValue) {
+        if (walletTimer != null)
+            clearInterval(walletTimer)
+        switch (newValue) {
+            case 0:
+                initWallet();
+                break;
+        }
+    })
+
+    $scope.selectMenu(1)
+})
+;

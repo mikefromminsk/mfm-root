@@ -49,10 +49,10 @@ requestEquals("localhost/stock/api/place.php",
 // ieo fail
 requestEquals("localhost/stock/api/create_coin.php",
     array(
-        "token" => $solOwner,
-        "ticker" => "DOGE",
+        "token" => $usdtOwner,
+        "ticker" => "GFC",
         "logo" => "http://localhost/stock/img/coin/DOGE.svg",
-        "name" => "Doge coin",
+        "name" => "Gas Free Coin",
         "description" => "Good coin for doge",
         "supply" => "10000",
         "price" => "0.2",
@@ -60,10 +60,9 @@ requestEquals("localhost/stock/api/create_coin.php",
     ), "result", true);
 
 requestEquals("localhost/stock/api/place.php",
-    array("token" => $usdtOwner, "ticker" => "DOGE", "is_sell" => "0", "price" => 0.2, "amount" => 1), "result", true);
-requestEquals("localhost/stock/api/ieo_close.php",
-    array("ticker" => "DOGE"), "returned", 0.2);
-
+    array("token" => $usdtOwner, "ticker" => "GFC", "is_sell" => "0", "price" => 0.2, "amount" => 100), "result", true);
+requestEquals("localhost/stock/api/drop_start.php",
+    array(token => $usdtOwner, ticker => GFC, type => SIMPLE, total => 5000, reward => 10), result, true);
 
 // tc
 $tccOwner = "424";
@@ -118,8 +117,6 @@ requestEquals("localhost/stock/api/user.php",
     array("token" => $tccTrader1), "balances.TCC.spot", 100);
 
 
-requestEquals("localhost/stock/api/drop_start.php",
-    array(token => $solOwner, ticker => SOL, type => SIMPLE, total => 100, reward => 10), result, true);
 
 /*requestEquals("localhost/stock/api/email_send_code.php",
     array(token => $usdtOwner, email => "x29a100@gmail.com"), result, true);*/

@@ -13,50 +13,6 @@ body {
     outline: none;
 }
 
-.blue-text {
-    color: #4F50FB;
-}
-
-.blue-back {
-    background-color: #4F50FB;
-    border-radius: 2px;
-}
-
-.green-text {
-    color: rgb(2, 192, 118);
-}
-
-.green-back {
-    background-color: rgb(2, 192, 118);
-    border-radius: 2px;
-}
-
-.white-text {
-    color: rgb(255, 255, 255);
-}
-
-.white-back {
-    background-color: rgb(255, 255, 255);
-    border-radius: 2px;
-}
-
-.red-text {
-    color: rgb(248, 73, 96);
-}
-
-.red-back {
-    background-color: rgb(248, 73, 96);
-    border-radius: 2px;
-}
-
-.gray-text {
-    color: rgba(0, 0, 0, 0.66);
-}
-
-.gray-back {
-    background-color: rgb(222, 222, 222);
-    border-radius: 2px;
-}
 
 .size8 {
     font-size: 8px;
@@ -127,8 +83,12 @@ body {
     -webkit-mask-position: center;
 }
 
-.shadow {
+.shadow-black {
     box-shadow: 0px 0px 2px 0px #b4b4b4;
+}
+
+.shadow-blue {
+    box-shadow: 0px 0px 2px 0px #4F50FB;
 }
 
 
@@ -271,10 +231,13 @@ button {
     min-height: 64px;
 }
 
-.content-col > * {
+.col-content > * {
     margin-top: 16px;
 }
 
+.col-content > *:last-child {
+    margin-bottom: 16px;
+}
 
 .multiline-text {
     white-space: normal;
@@ -323,4 +286,66 @@ button {
 .fullscreen {
     width: 100%;
     height: 100%;
+}
+
+
+
+.blue-text {
+    color: #4F50FB;
+}
+
+.blue-back {
+    background-color: #4F50FB;
+    border-radius: 2px;
+}
+
+.green-text {
+    color: rgb(2, 192, 118);
+}
+
+.green-back {
+    background-color: rgb(2, 192, 118);
+    border-radius: 2px;
+}
+
+.white-text {
+    color: rgb(255, 255, 255);
+}
+
+.white-back {
+    background-color: rgb(255, 255, 255);
+    border-radius: 2px;
+}
+
+.red-text {
+    color: rgb(248, 73, 96);
+}
+
+.red-back {
+    background-color: rgb(248, 73, 96);
+    border-radius: 2px;
+}
+
+.gray-text {
+    color: rgba(0, 0, 0, 0.66);
+}
+
+.gray-back {
+    background-color: rgb(222, 222, 222);
+    border-radius: 2px;
+}
+
+/* To display a border for the input */
+.mat-input-flex.mat-form-field-flex{
+    border: 1px solid black;
+}
+
+/* To remove the default underline */
+.mat-input-underline.mat-form-field-underline {
+    background: transparent;
+}
+
+/* To remove the underline ripple */
+.mat-input-ripple.mat-form-field-ripple{
+    background-color: transparent;
 }

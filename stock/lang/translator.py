@@ -1,13 +1,14 @@
 import csv
-from lxml import etree
-import sys
 import os
 import requests
 
 response = requests.get('https://docs.google.com/spreadsheet/ccc?key=1zsouwYP3NAXHJlAB2lO0sqCc1DDT8Bl91qPTU2icQK8&output=csv')
-open("s.csv", "wb").write(response.content)
+storage = open("s.csv", "wb")
+storage.write(response.content)
+storage.close()
 
-reader = csv.reader(open("s.csv", encoding="utf8"))
+storage = open("s.csv", encoding="utf8")
+reader = csv.reader(storage)
 
 strings = []
 languages = []
@@ -27,3 +28,6 @@ for i in range(0, len(languages)):
     file = open(languages[i] + ".js", "w", encoding="utf8")
     file.write(strings[i] + "}")
     file.close()
+
+storage.close()
+os.remove("s.csv")
