@@ -300,8 +300,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
     var stakingTimer;
 
     function initStaking() {
-        if (stakingTimer != null)
-            clearInterval(stakingTimer)
         stakingTimer = setInterval(stakingTimerAction, 1000)
 
         updateUser()
@@ -383,7 +381,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
 
     $scope.openTrade = function (ticker) {
         $scope.coin = $scope.coins[ticker]
-        $scope.tradeTabIndex = 1
+        $scope.marketIndex = 1
         $scope.selectMenu(0)
     }
 
@@ -451,12 +449,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         $scope.changeAmount()
     }
 
-    $scope.openCoin = function (newTicker) {
-        ticker = newTicker
-        $scope.coin = $scope.coins[ticker]
-        $scope.tradeTabIndex = 1
-    }
-
     function initTrade() {
         trackTradeViewed()
         $scope.availableCoin = $scope.balances[$scope.coin.ticker] ? $scope.balances[$scope.coin.ticker].spot : 0
@@ -464,6 +456,24 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         updateOrderbook();
         orderbookTimer = setInterval(updateOrderbook, 1000)
         updateOrders();
+    }
+
+    $scope.home_button_titles = strArray('home_button_title')
+    $scope.home_button_imgs = strArray('home_button_img')
+    $scope.home_button_action = function (action) {
+        if (action == 'deposit') {
+            $scope.selectMenu(3)
+        } else if (action == 'withdrawal') {
+            $scope.selectMenu(3)
+        } else if (action == 'starter') {
+            $scope.selectMenu(1)
+        }
+    }
+
+    $scope.openCoin = function (newTicker) {
+        ticker = newTicker
+        $scope.coin = $scope.coins[ticker]
+        $scope.marketIndex = 1
     }
 
 
@@ -598,47 +608,48 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
             $scope.amount = round($scope.total / $scope.price, 2)
     }
 
-
-    var userLoaded = false
-    var coinsLoaded = false
-
-    updateUser(function () {
-        userLoaded = true
-        attemptInit()
-    })
-
-    updateCoins(function () {
-        coinsLoaded = true
-        attemptInit()
-    })
-
-    function attemptInit() {
-        if (userLoaded && coinsLoaded)
-            $scope.selectMenu($scope.menuIndex)
-    }
-
-    function updateUser(callback) {
-        $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
-            $scope.user = response.data.user
-            $scope.balances = response.data.balances
-            if (callback != null)
-                callback()
-        })
-    }
-
-    function updateCoins(callback) {
-        $http({method: "POST", url: "api/coins.php"}).then(function (response) {
-            $scope.coins = response.data.coins
-            $scope.coin = $scope.coins[ticker]
-            if (callback != null)
-                callback()
-        })
-    }
-
     function initMarket() {
-        trackMarketViewed()
+        bannerTimer = setInterval(function () {
+            $scope.bannerIndex = ($scope.bannerIndex + 1) % $scope.banners.length
+            $scope.$apply()
+        }, 5000)
         updateUser()
     }
+
+    $scope.banners = strArray('banner')
+    $scope.bannerIndex = 0
+    var bannerTimer
+
+    $scope.filtered_coins = [];
+    $scope.search_text = ""
+    $scope.$watch('search_text', function (newValue) {
+        filterCoins();
+    })
+
+    function filterCoins() {
+        if ($scope.search_text == "") {
+            $scope.filtered_coins = Object.values($scope.coins)
+        } else {
+            var search = $scope.search_text.toLowerCase()
+            $scope.filtered_coins = []
+            for (var coin in Object.values($scope.coins)) {
+                if (coin.name.toLowerCase().indexOf(search) != -1
+                    || coin.ticker.toLowerCase().indexOf(search) != -1)
+                    $scope.filtered_coins.push(coin)
+            }
+        }
+        $scope.filtered_coins.sort(function compare(a, b) {
+            let balanceA = $scope.balances[a.ticker]
+            let balanceB = $scope.balances[b.ticker]
+            if (balanceA == null && balanceB != null) return 1;
+            if (balanceA != null && balanceB == null) return -1;
+            if (balanceA == null && balanceB == null) return a.price - b.price; // need volume
+            if (balanceA != null && balanceB != null)
+                return (b.price * (balanceB.spot + balanceB.blocked)) - (a.price * (balanceA.spot + balanceA.blocked));
+            return 0;
+        })
+    }
+
 
     function updateOrderbook() {
         $http({
@@ -658,21 +669,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
             $scope.active = response.data.active
             $scope.history = response.data.history
         })
-    }
-
-    $scope.go = function (url, $event) {
-        setTimeout(function () {
-            window.location.href = url
-        }, 500)
-        $event.stopPropagation()
-    }
-
-    $scope.subscribe = function ($event) {
-        $event.stopPropagation()
-    }
-
-    $scope.search_text = ""
-    $scope.search = function (e) {
     }
 
     var numberFormat = new Intl.NumberFormat('en-IN');
@@ -729,43 +725,112 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         })
     }
 
+    function clearTimers() {
+        if (bannerTimer != null)
+            clearInterval(bannerTimer)
+        if (orderbookTimer != null)
+            clearInterval(orderbookTimer)
+        if (walletTimer != null)
+            clearInterval(walletTimer)
+        if (stakingTimer != null)
+            clearInterval(stakingTimer)
+    }
+
     $scope.bottomTabs = [str.orders]
-    $scope.bottomtradeTabIndex = 0;
+    $scope.bottommarketIndex = 0;
     $scope.selectBottomTab = function (index) {
         if (index == 0)
             initOrders()
-        $scope.bottomtradeTabIndex = index
+        $scope.bottommarketIndex = index
     }
 
     $scope.groupNames = [str.active, str.history]
 
 
-    $scope.menu = [str.trade, str.starter, str.earn, str.wallet]
-    $scope.menuIndex = 0
-    $scope.selectMenu = function (index) {
-        if ($scope.menuIndex == index)
-            return;
-        if (orderbookTimer != null)
-            clearInterval(orderbookTimer)
-        if (walletTimer != null)
-            clearInterval(walletTimer)
+    var userLoaded = false
+    var coinsLoaded = false
 
-        if (index == 0)
-            $scope.tradeTabIndex = $scope.tradeTabIndex || 0
-        if (index == 1)
-            $scope.starterIndex = $scope.starterIndex || 1
-        if (index == 2)
-            $scope.earnIndex = $scope.earnIndex || 0
-        if (index == 3)
-            $scope.walletIndex = $scope.walletIndex || 0
+    updateUser(function () {
+        userLoaded = true
+        attemptInit()
+    })
+
+    updateCoins(function () {
+        coinsLoaded = true
+        attemptInit()
+    })
+
+    function attemptInit() {
+        if (userLoaded && coinsLoaded) {
+            $scope.selectMenu(0)
+        }
+    }
+
+    function updateUser(callback) {
+        $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
+            $scope.user = response.data.user
+            $scope.balances = response.data.balances
+            if (callback != null)
+                callback()
+        })
+    }
+
+    function updateCoins(callback) {
+        $http({method: "POST", url: "api/coins.php"}).then(function (response) {
+            $scope.coins = response.data.coins
+            $scope.coin = $scope.coins[ticker]
+            filterCoins()
+            if (callback != null)
+                callback()
+        })
+    }
+
+    var walletTimer
+
+    function initWallet() {
+        walletTimer = setInterval(updateUser, 1000)
+    }
+
+
+    $scope.menu = [str.trade, str.starter, str.earn, str.wallet]
+    $scope.menuIndex
+    $scope.selectMenu = function (index) {
         $scope.menuIndex = index
     }
 
-    $scope.tradeTabIndex
-    $scope.$watch('tradeTabIndex', function (newValue) {
-        if (orderbookTimer != null)
-            clearInterval(orderbookTimer)
+    $scope.marketIndex
+
+    $scope.starterIndex
+
+    $scope.earnIndex
+
+    $scope.walletIndex
+
+    $scope.$watch('menuIndex', function (newValue, oldValue) {
         switch (newValue) {
+            case 0:
+                showMarket(0)
+                break
+            case 1:
+                showStarter(1)
+                break
+            case 2:
+                showEarn(0)
+                break
+            case 3:
+                showWallet(0)
+                break
+        }
+    })
+
+    $scope.$watch('marketIndex', function (newValue, oldValue) {
+        if (oldValue == null || newValue == null) return;
+        showMarket(newValue)
+    })
+
+    function showMarket(index) {
+        clearTimers()
+        switch (index) {
             case 0:
                 initMarket();
                 break
@@ -776,29 +841,34 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
                 initChart();
                 break
         }
-    })
-
-    var walletTimer = null
-
-    function initWallet() {
-        walletTimer = setInterval(updateUser, 1000)
     }
 
-    $scope.starterIndex
-    $scope.$watch('starterIndex', function (newValue) {
-        switch (newValue) {
+    $scope.$watch('starterIndex', function (newValue, oldValue) {
+        if (oldValue == null || newValue == null) return;
+        showStarter(newValue)
+    })
+
+    function showStarter(index) {
+        clearTimers()
+        $scope.starterIndex = index
+        switch (index) {
             case 1:
                 updateStarterList();
                 $scope.selectedStarter = $scope.ieo[0]
                 break
         }
         $scope.generateStarterLogo()
+    }
+
+    $scope.$watch('earnIndex', function (newValue, oldValue) {
+        if (oldValue == null || newValue == null) return;
+        showEarn(newValue)
     })
 
-
-    $scope.earnIndex
-    $scope.$watch('earnIndex', function (newValue) {
-        switch (newValue) {
+    function showEarn(index) {
+        clearTimers()
+        $scope.earnIndex = index
+        switch (index) {
             case 0:
                 initCompetitions();
                 break
@@ -809,19 +879,20 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
                 initDrops();
                 break
         }
+    }
+
+    $scope.$watch('walletIndex', function (newValue, oldValue) {
+        if (oldValue == null || newValue == null) return;
+        showWallet(newValue)
     })
 
-    $scope.walletIndex
-    $scope.$watch('walletIndex', function (newValue) {
-        if (walletTimer != null)
-            clearInterval(walletTimer)
-        switch (newValue) {
+    function showWallet(index) {
+        clearTimers()
+        $scope.walletIndex = index
+        switch (index) {
             case 0:
                 initWallet();
                 break;
         }
-    })
-
-    $scope.selectMenu(1)
+    }
 })
-;
