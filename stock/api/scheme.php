@@ -56,8 +56,8 @@ query("CREATE TABLE IF NOT EXISTS `orders` (
    PRIMARY KEY (`order_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-query("DROP TABLE IF EXISTS `sticks`;");
-query("CREATE TABLE IF NOT EXISTS `sticks` (
+query("DROP TABLE IF EXISTS `candles`;");
+query("CREATE TABLE IF NOT EXISTS `candles` (
     `ticker` varchar(10) COLLATE utf8_bin NOT NULL,
     `period` int(11) NOT NULL,
     `time` int(11) NOT NULL,

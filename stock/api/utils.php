@@ -127,13 +127,17 @@ function place($user_id, $ticker, $is_sell, $price, $amount)
     }
 
     if ($last_trade_price != null) {
-        foreach ([1 * 60, 1 * 60 * 5, 1 * 60 * 15, 1 * 60 * 60, 1 * 60 * 60 * 24] as $seconds) {
+        foreach ([1, 1 * 60] as $seconds) {
             $trade_period = ceil($timestamp / $seconds) * $seconds;
             $last_trade_period = ceil($coin[last_trade_timestamp] / $seconds) * $seconds;
-            if ($trade_period == $last_trade_period) {
-                update("update sticks set low = LEAST(low, $last_trade_price), high = GREATEST(high, $last_trade_price), close = $last_trade_price, volume = volume + $trade_volume where ticker = '$ticker' and period = $seconds and time = $last_trade_period");
-            } else {
-                insertRow(sticks, [ticker => $ticker, period => $seconds, time => $trade_period, low => $last_trade_price, high => $last_trade_price, open => $last_trade_price, close => $last_trade_price, volume => $trade_volume]);
+            /*if ($trade_period == $last_trade_period) {
+                update("update candles set low = LEAST(low, $last_trade_price), high = GREATEST(high, $last_trade_price), close = $last_trade_price, volume = volume + $trade_volume "
+                    ." where ticker = '$ticker' and period = $seconds and time = $last_trade_period");
+            } else */{
+                insertRow(candles, [ticker => $ticker, period => $seconds, time => $trade_period,
+                    low => min($last_trade_price, $coin[price]), high => max($last_trade_price, $coin[price]),
+                    open => $coin[price], close => $last_trade_price,
+                    volume => $trade_volume]);
             }
         }
         updateWhere(coins, [price => $last_trade_price, last_trade_timestamp => $timestamp], [ticker => $ticker]);

@@ -456,6 +456,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         updateOrderbook();
         orderbookTimer = setInterval(updateOrderbook, 1000)
         updateOrders();
+        initChart()
     }
 
     $scope.home_button_titles = strArray('home_button_title')
@@ -476,29 +477,52 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         $scope.marketIndex = 1
     }
 
-
+    $scope.showChart = true;
+    $scope.showChartToggle = function () {
+        $scope.showChart = !$scope.showChart
+    }
     var chart
     var candleSeries
 
     function initChart() {
-        if (chart == null) {
-            var tradeChart = document.getElementById("tradeChart")
-            chart = LightweightCharts.createChart(tradeChart, {
-                crosshair: {
-                    mode: LightweightCharts.CrosshairMode.Normal,
-                },
-                timeScale: {
-                    timeVisible: true,
-                },
-            });
-            candleSeries = chart.addCandlestickSeries();
-            new ResizeObserver(entries => {
-                if (entries.length === 0 || entries[0].target !== tradeChart) return;
-                const newRect = entries[0].contentRect;
-                chart.applyOptions({height: newRect.height, width: newRect.width});
-            }).observe(tradeChart)
-            $scope.getSticks($scope.period || $scope.periods[0])
-        }
+        setTimeout(function () {
+            if (chart == null) {
+                var tradeChart = document.getElementById("tradeChart")
+                chart = LightweightCharts.createChart(tradeChart, {
+                    crosshair: {
+                        mode: LightweightCharts.CrosshairMode.Normal,
+                    },
+                    timeScale: {
+                        timeVisible: true,
+                    },
+                });
+                candleSeries = chart.addCandlestickSeries();
+                /*new ResizeObserver(entries => {
+                    if (entries.length === 0 || entries[0].target !== tradeChart) return;
+                    const newRect = entries[0].contentRect;
+                    chart.applyOptions({height: newRect.height, width: newRect.width});
+                }).observe(tradeChart)*/
+            }
+            $scope.getSticks($scope.period)
+        })
+    }
+
+
+    $scope.periods = ['1m', '5m', '15m', '1H', '1D']
+    $scope.period = '1s'
+    $scope.getSticks = function (period) {
+        $scope.period = period
+        if (candleSeries != null)
+            $http({
+                method: "POST",
+                url: "api/candles.php",
+                data: {
+                    ticker: ticker,
+                    period: $scope.period
+                }
+            }).then(function (response) {
+                candleSeries.setData(response.data.candles)
+            })
     }
 
     var currentBar = {}
@@ -527,23 +551,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         $scope.changeAmount()
     }
 
-    $scope.periods = ['1m', '5m', '15m', '1H', '1D']
-    $scope.period
-
-    $scope.getSticks = function (period) {
-        $scope.period = period
-        $http({
-            method: "POST",
-            url: "api/sticks.php",
-            data: {
-                ticker: ticker,
-                period: $scope.period
-            }
-        }).then(function (response) {
-            candleSeries.setData(response.data.sticks)
-        })
-    }
-
     $scope.place = function () {
         $http({
             method: "POST",
@@ -555,9 +562,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
                 price: $scope.price,
                 amount: $scope.amount
             }
-        }).then(function (response) {
-            updateOrders()
-        })
+        }).then(updateOrdersResult)
     }
 
     $scope.cancel = function (order_id) {
@@ -660,18 +665,39 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
             $scope.sell = response.data.sell
             $scope.buy = response.data.buy
             $scope.coin = response.data.coin
+            $scope.getSticks($scope.period)
             updateChart()
         })
     }
 
+
     function updateOrders() {
-        $http({method: "POST", url: "api/orders.php", data: {token: token}}).then(function (response) {
-            $scope.active = response.data.active
-            $scope.history = response.data.history
-        })
+        $http({method: "POST", url: "api/orders.php", data: {token: token}}).then(updateOrdersResult)
     }
 
-    var numberFormat = new Intl.NumberFormat('en-IN');
+    $scope.allActiveOrders = []
+    $scope.allHistoryOrders = []
+    $scope.coinActiveOrders = []
+    $scope.coinHistoryOrders = []
+
+    function ordersByTicker(list, ticker) {
+        var result = [];
+        for (var key in list) {
+            var order = list[key]
+            if (order.ticker == ticker)
+                result.push(order)
+        }
+        return result
+    }
+
+    function updateOrdersResult(response) {
+        $scope.allActiveOrders = response.data.active || []
+        $scope.allHistoryOrders = response.data.history || []
+        $scope.coinActiveOrders = ordersByTicker($scope.allActiveOrders, $scope.coin.ticker)
+        $scope.coinHistoryOrders = ordersByTicker($scope.allHistoryOrders, $scope.coin.ticker)
+    }
+
+    var numberFormat = new Intl.NumberFormat();
     $scope.priceFormat = function (number) {
         return "$" + numberFormat.format(round(number, 2))
     }
@@ -735,17 +761,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         if (stakingTimer != null)
             clearInterval(stakingTimer)
     }
-
-    $scope.bottomTabs = [str.orders]
-    $scope.bottommarketIndex = 0;
-    $scope.selectBottomTab = function (index) {
-        if (index == 0)
-            initOrders()
-        $scope.bottommarketIndex = index
-    }
-
-    $scope.groupNames = [str.active, str.history]
-
 
     var userLoaded = false
     var coinsLoaded = false
@@ -836,9 +851,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
                 break
             case 1:
                 initTrade();
-                break
-            case 2:
-                initChart();
                 break
         }
     }

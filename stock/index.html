@@ -85,33 +85,41 @@
                 <div class="row align-end-center" style="min-width: 90px;">
                     <div class="col" ng-show="!balances[item.ticker]">
                         <div class="row align-center-center green-back-ripple white-text"
-                             style="border-radius: 2px; padding: 8px 11px;">
+                             style="border-radius: 3px; padding: 8px 11px;">
                             {{str.buy}}
                         </div>
                     </div>
                     <div class="col align-center-end size13"
                          ng-show="balances[item.ticker]">
-                        <div class="size14">{{priceFormat(item.price * (balances[item.ticker].spot + balances[item.ticker].blocked))}}
+                        <div class="size14">
+                            {{priceFormat(item.price * (balances[item.ticker].spot + balances[item.ticker].blocked))}}
                         </div>
-                        <div class="">{{amountFormat(balances[item.ticker].spot + balances[item.ticker].blocked)}} {{item.ticker}}</div>
+                        <div class="">{{amountFormat(balances[item.ticker].spot + balances[item.ticker].blocked)}}
+                            {{item.ticker}}
+                        </div>
                     </div>
                 </div>
             </md-content>
             <md-divider></md-divider>
         </div>
     </md-tab>
+
+
     <md-tab class="flex col" label="{{str.trade}}">
+        <div id="tradeChart" style="width: 100%; height: 300px" ng-show="showChart"></div>
         <div class="row line" style="margin-top: 12px">
-            <div class="col" style="width: 202px;">
-                <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 2px">
-                    <div class="flex row align-center-center green-text ripple" style="border-radius: 2px"
-                         ng-class="{'white-back': !is_sell, ' gray-back': is_sell}" ng-click="is_sell = false">
+            <div class="col" style="width: 200px;">
+                <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 3px">
+                    <md-content class="flex row align-center-center green-text" style="border-radius: 3px"
+                                ng-class="{'white-back': !is_sell, ' gray-back': is_sell}" ng-click="is_sell = false"
+                                md-ink-ripple>
                         Buy
-                    </div>
-                    <div class="flex row align-center-center red-text ripple" style="border-radius: 2px"
-                         ng-class="{'white-back': is_sell, ' gray-back': !is_sell}" ng-click="is_sell = true">
+                    </md-content>
+                    <md-content class="flex row align-center-center red-text" style="border-radius: 3px"
+                                ng-class="{'white-back': is_sell, ' gray-back': !is_sell}" ng-click="is_sell = true"
+                                md-ink-ripple>
                         Sell
-                    </div>
+                    </md-content>
                 </div>
 
                 <div class="row input-wrapper" style="margin-top: 16px">
@@ -124,10 +132,10 @@
                     <input type="number" class="flex input" ng-model="amount" ng-change="changeAmount()">
                 </div>
                 <div class="row" style="height: 22px">
-                    <div class="flex row align-center-center gray-text white-back size12"
-                         style="border: 1px solid rgba(0, 0, 0, 0.2);" ng-repeat="item in [25,50,75,100]"
-                         ng-click="setPortion(item)">{{item}}%
-                    </div>
+                    <md-content class="flex row align-center-center gray-text white-back size12"
+                                style="border: 1px solid rgba(0, 0, 0, 0.2);" ng-repeat="item in [25,50,75,100]"
+                                ng-click="setPortion(item)" md-ink-ripple>{{item}}%
+                    </md-content>
                 </div>
                 <div class="row input-wrapper" style="margin-top: 16px">
                     <div class="input-label-top">Total</div>
@@ -140,15 +148,22 @@
                     <div class="gray-text">{{amountFormat(is_sell ? availableCoin : availableUsdt)}}</div>
                 </div>
 
-                <div class="row align-center-center ripple green-back white-text size18"
-                     style="height: 40px; margin-top: 15px; border-radius: 2px"
-                     ng-class="{'red-back-ripple': is_sell, ' green-back-ripple': !is_sell}"
-                     ng-click="place()">{{is_sell ? "Sell" : "Buy"}}
-                    {{coin.ticker}}
-                </div>
+                <md-content class="row align-center-center ripple green-back white-text size18 fade-animation"
+                            style="height: 40px; margin-top: 15px; border-radius: 3px"
+                            ng-class="{'red-back': is_sell, ' green-back': !is_sell}"
+                            ng-click="place()" md-ink-ripple>
+                    {{is_sell ? str.sell : str.buy}} {{coin.ticker}}
+                </md-content>
 
             </div>
             <div class="flex col" style="margin-left: 10px">
+
+                <md-content class="row gray-back size14" style="height: 32px; padding: 1px; border-radius: 3px">
+                    <div class="flex row align-center-center" style="border-radius: 3px"
+                         ng-class="{'white-back': showChart}" ng-click="showChartToggle()" md-ink-ripple>
+                        Chart
+                    </div>
+                </md-content>
 
                 <div class="row" style="margin-top: 16px">
                     <div class="gray-text size10">Price (USDT)</div>
@@ -159,23 +174,21 @@
 
                 <!--orderbook-->
                 <div class="col align-end" style="height: calc(20px * 6)">
-                    <div class="row align-start-center" style="height: 20px;" ng-repeat="item in sell"
+                    <div class="row align-start-center" ng-repeat="item in sell" style="height: 20px; position: relative"
                          ng-click="sellLineClick($index)">
-                        <div class="red-back"
-                             style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+                        <div class="red-back" style="position: absolute; height: 100%; opacity: 0.09;"
+                             ng-style="{'min-width': item.percent + '%'}"></div>
                         <div class="red-text" style="margin-left: 4px">{{priceFormat(item.price)}}</div>
                         <div class="flex"></div>
                         <div>{{amountFormat(item.amount)}}</div>
                     </div>
                 </div>
-                <div class="row align-start-center">
-                    <div class="flex" style="border-bottom: 1px solid rgba(0, 0, 0, 0.2);"></div>
-                </div>
+                <md-divider></md-divider>
                 <div class="col align-start" style="height: calc(20px * 6)">
-                    <div class="row align-start-center" style="height: 20px;" ng-repeat="item in buy"
+                    <div class="row align-start-center" ng-repeat="item in buy" style="height: 20px; position: relative"
                          ng-click="buyLineClick($index)">
-                        <div class="green-back"
-                             style="position: absolute; width: 120px; height: 20px; opacity: 0.09;"></div>
+                        <div class="green-back" style="position: absolute; height: 100%; opacity: 0.09;"
+                             ng-style="{'min-width': item.percent + '%'}"></div>
                         <div class="green-text" style="margin-left: 4px">{{priceFormat(item.price)}}</div>
                         <div class="flex"></div>
                         <div>{{amountFormat(item.amount)}}</div>
@@ -184,67 +197,55 @@
             </div>
         </div>
 
-        <div class="row shadow-black size12" style="height: 40px; margin-top: 16px">
-            <div class="flex col" ng-repeat="item in bottomTabs" ng-click="selectBottomTab($index   )">
-                <div class="flex row align-center-center ripple">{{item}}</div>
-                <div class="blue-back" style="height: 1px;" ng-show="bottommarketIndex == $index"></div>
-            </div>
-        </div>
-        <div class="col" ng-show="bottommarketIndex == 0">
-            <div class="col" ng-repeat="groupIndex in [0, 1]">
-                <div class="row" style="margin-top: 12px;"
-                     ng-show="$index == 0 && (active || []).length > 0">
-                    <div class="line gray-text size14">{{groupNames[groupIndex]}}</div>
-                    <div class="flex"></div>
-                    <div class="line red-text size14" ng-click="cancelAll()">Cancel all</div>
-                </div>
-                <div class="line gray-text" style="margin-top: 12px;"
-                     ng-show="$index == 1 && (history || []).length > 0">
-                    {{groupNames[groupIndex]}}
-                </div>
-                <div class="col" ng-repeat="item in (groupIndex == 0 ? active : history)">
-                    <div class="row line align-start-center"
-                         style="padding-top: 12px; padding-bottom: 12px;">
-                        <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
-                        <div class="col" style="margin-left: 7px">
-                            <div class="size16">{{item.ticker}}</div>
-                            <div class="gray-text size12">{{timeFormat(item.timestamp)}}</div>
+        <md-tabs md-selected="ordersIndex" md-autoselect md-stretch-tabs md-dynamic-height>
+            <md-tab ng-repeat="categoryIndex in [0, 1]"
+                    label="{{[coin.ticker, str.all][$index]}} {{str.orders}}">
+                <div class="col">
+                    <div class="col"
+                         ng-repeat="ordersCategory in [[coinActiveOrders, coinHistoryOrders], [allActiveOrders, allHistoryOrders]][categoryIndex]">
+                        <div class="row size12 line" style="margin-top: 12px;"
+                             ng-show="$index == 0 && ordersCategory.length > 0">
+                            <div class="flex gray-text">{{str.active}}</div>
+                            <div class="red-text" ng-click="cancelAll()">Cancel all</div>
                         </div>
-                        <div class="flex"></div>
-                        <div class="col align-start-end size13">
-                            <div class="size14">{{priceFormat(item.price)}}</div>
-                            <div>{{priceFormat(item.price * item.amount)}}</div>
+                        <div class="size12 line gray-text" style="margin-top: 12px;"
+                             ng-show="$index == 1 && ordersCategory.length > 0">
+                            {{str.history}}
                         </div>
-                        <div class="col align-start-end size13" style="min-width: 70px; margin-left: 10px">
-                            <div class="size14">{{amountFormat(item.filled) + "/" + amountFormat(item.amount)}}
-                            </div>
-                            <div>Filled {{priceFormat(item.filled * item.price)}}</div>
-                        </div>
+                        <div class="col" ng-repeat="item in ordersCategory">
+                            <div class="row line align-start-center"
+                                 style="padding-top: 12px; padding-bottom: 12px;">
+                                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                                <div class="col" style="margin-left: 7px">
+                                    <div class="size16">{{item.ticker}}</div>
+                                    <div class="gray-text size12">{{timeFormat(item.timestamp)}}</div>
+                                </div>
+                                <div class="flex"></div>
+                                <div class="col align-start-end size13">
+                                    <div class="size14">{{priceFormat(item.price)}}</div>
+                                    <div>{{priceFormat(item.price * item.amount)}}</div>
+                                </div>
+                                <div class="col align-start-end size13" style="min-width: 70px; margin-left: 10px">
+                                    <div class="size14">{{amountFormat(item.filled)}}/{{amountFormat(item.amount)}}
+                                    </div>
+                                    <div>{{percentFormat(item.filled / item.amount * 100)}}</div>
+                                </div>
 
-                        <div class="row align-center-center"
-                             style="min-width: 14px; height: 14px; border-radius: 50%; margin-left: 12px">
-                            <img src="img/cancel.svg" ng-show="item.status == 0"
-                                 ng-click="cancel(item.order_id)">
-                            <img src="img/success.svg" class="img-green" ng-show="item.status == 1">
-                            <img src="img/canceled.svg" ng-show="item.status == -1">
+                                <div class="row align-center-center"
+                                     style="min-width: 14px; height: 14px; border-radius: 50%; margin-left: 12px">
+                                    <img src="img/cancel.svg" class="img-red" ng-show="item.status == 0"
+                                         ng-click="cancel(item.order_id)">
+                                    <img src="img/success.svg" class="img-green" ng-show="item.status == 1">
+                                    <img src="img/canceled.svg" class="img-gray" ng-show="item.status == -1">
+                                </div>
+                            </div>
+                            <md-divider></md-divider>
                         </div>
                     </div>
-                    <md-divider></md-divider>
                 </div>
-            </div>
-        </div>
-        <div class="col" ng-show="bottommarketIndex == 1">
-        </div>
+            </md-tab>
+        </md-tabs>
     </md-tab>
-    <md-tab class="flex col" label="{{str.about}}">
-        <div class="row">
-            <div class="flex row align-center-center white-back-ripple" style="padding: 10px"
-                 ng-repeat="item in periods" ng-click="getSticks(item)">{{item}}
-            </div>
-        </div>
-        <div id="tradeChart" style="width: 100%; height: 300px"></div>
-    </md-tab>
-
     <div class="flex"></div>
 </md-tabs>
 
@@ -476,7 +477,7 @@
                         </div>
                     </div>
                     <div class="row align-center-center ripple red-back white-text size18"
-                         style="height: 40px; margin-top: 15px; border-radius: 2px"
+                         style="height: 40px; margin-top: 15px; border-radius: 3px"
                          ng-click="unstake(item)">
                         Unstake {{priceFormat(item.earned + item.amount)}} {{item.ticker}}
                     </div>
@@ -494,7 +495,7 @@
                     </div>
                 </div>
                 <div class="row align-center-center ripple blue-back white-text size18"
-                     style="height: 40px; margin-top: 15px; border-radius: 2px"
+                     style="height: 40px; margin-top: 15px; border-radius: 3px"
                      ng-click="selectStaking(item)">
                     Stake {{item.ticker}}
                 </div>
@@ -514,7 +515,7 @@
             </div>
 
             <div class="row align-center-center ripple blue-back white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 style="height: 40px; margin-top: 15px; border-radius: 3px"
                  ng-click="stake()">
                 Stake {{stakingAmount}} {{selectedStaking.ticker}}
             </div>
@@ -532,13 +533,13 @@
                 </div>
             </div>
             <div class="row align-center-center ripple blue-back white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 style="height: 40px; margin-top: 15px; border-radius: 3px"
                  ng-show="!item.rewarded"
                  ng-click="openDrop(item)">
                 Participate
             </div>
             <div class="row align-center-center ripple gray-back white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 2px"
+                 style="height: 40px; margin-top: 15px; border-radius: 3px"
                  ng-show="item.rewarded">
                 Rewarded
             </div>

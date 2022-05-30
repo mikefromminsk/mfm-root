@@ -65,4 +65,5 @@ price: 'Price',
 buy: 'Buy',
 sell: 'Sell',
 search: 'Search',
+all: 'All',
 }

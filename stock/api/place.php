@@ -7,8 +7,10 @@ $is_sell = get_int_required("is_sell");
 $price = get_int_required("price");
 $amount = get_int_required("amount");
 
-$response[order_id] = place($user_id, $ticker, $is_sell, $price, $amount);
+$order_id = place($user_id, $ticker, $is_sell, $price, $amount);
 
-$response[result] = $response[order_id] != null;
+if ($order_id == null) error("place error");
 
-echo json_encode($response);
+$response["result"] = true;
+
+include_once "orders.php";
