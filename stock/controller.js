@@ -7,13 +7,17 @@ App.config(function ($mdThemingProvider) {
 });
 var token = "123" || localStorage.getItem('token')
 
-App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
+App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) {
     $scope.str = str
     var orderbookTimer = null;
     var ticker = null || "SOL"
     if (token == null)
         localStorage.setItem('token', token = Math.random())
 
+    $scope.share = function (link) {
+        navigator.clipboard.writeText(link)
+        $mdToast.show($mdToast.simple().textContent(str.copied))
+    }
 
     $scope.tariffs = [
         {
@@ -226,7 +230,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         })
     }
 
-
     $scope.sendEmailCode = function () {
         $http({
             method: "POST",
@@ -251,14 +254,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         }).then(function (response) {
             updateUser()
         })
-    }
-
-
-    $scope.tcTimer = {
-        days: 12,
-        hours: 35,
-        minutes: 26,
-        seconds: 58,
     }
 
     function initDrops() {
@@ -286,15 +281,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
                 initDrops()
             })
         }
-    }
-
-    function initCompetitions() {
-        $http({
-            method: "POST",
-            url: "api/tc.php",
-        }).then(function (response) {
-            $scope.tc = response.data.tc
-        })
     }
 
     var stakingTimer;
@@ -362,22 +348,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         })
     }
 
-
-    $scope.selectTC = function (item) {
-        $scope.selectedTC = item
-        if (item != null)
-            $http({
-                method: "POST",
-                url: "api/tc_winners.php",
-                data: {
-                    ticker: item.ticker,
-                    start: item.start,
-                }
-            }).then(function (response) {
-                $scope.selectedTCWinners = response.data.winners
-            })
-
-    }
 
     $scope.openTrade = function (ticker) {
         $scope.coin = $scope.coins[ticker]
@@ -882,13 +852,10 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet) {
         $scope.earnIndex = index
         switch (index) {
             case 0:
-                initCompetitions();
+                initDrops();
                 break
             case 1:
                 initStaking();
-                break
-            case 2:
-                initDrops();
                 break
         }
     }

@@ -113,12 +113,12 @@
                     <md-content class="flex row align-center-center green-text" style="border-radius: 3px"
                                 ng-class="{'white-back': !is_sell, ' gray-back': is_sell}" ng-click="is_sell = false"
                                 md-ink-ripple>
-                        Buy
+                        {{str.buy}}
                     </md-content>
                     <md-content class="flex row align-center-center red-text" style="border-radius: 3px"
                                 ng-class="{'white-back': is_sell, ' gray-back': !is_sell}" ng-click="is_sell = true"
                                 md-ink-ripple>
-                        Sell
+                        {{str.sell}}
                     </md-content>
                 </div>
 
@@ -174,7 +174,8 @@
 
                 <!--orderbook-->
                 <div class="col align-end" style="height: calc(20px * 6)">
-                    <div class="row align-start-center" ng-repeat="item in sell" style="height: 20px; position: relative"
+                    <div class="row align-start-center" ng-repeat="item in sell"
+                         style="height: 20px; position: relative"
                          ng-click="sellLineClick($index)">
                         <div class="red-back" style="position: absolute; height: 100%; opacity: 0.09;"
                              ng-style="{'min-width': item.percent + '%'}"></div>
@@ -399,69 +400,25 @@
 
 <md-tabs class="page fade-animation" md-selected="earnIndex" md-autoselect md-swipe-content md-stretch-tabs
          ng-show="menuIndex == 2">
-    <md-tab class="flex line col white-back" label="{{str.competitions}}">
-        <div class="col white-back-ripple shadow-black" style="margin-top: 20px" ng-repeat="(ticker, item) in tc"
-             ng-click="selectTC(item)" ng-show="selectedTC == null">
-            <img src="img/rocket.svg" style="width: 100%; height: 140px;">
-            <div class="row align-start-center" style="margin: 8px 12px">
-                <img src="img/coin/{{ticker}}.svg" class="coin-logo">
-                <div class="col flex">
-                    <div class="size16">{{ticker}}</div>
-                    <div class="gray-text">{{coins[ticker].name}}</div>
+    <md-tab label="{{str.earn}}">
+        <md-content class="col shadow-black" ng-repeat="item in drops" style="padding: 12px; margin-top: 12px">
+            <img src="img/drop/{{item.ticker}}.png" style="width: 100%; height: auto">
+            <div class="col line col-content">
+                <div class="size16 weight6">
+                    {{str.invite_friend}} {{item.reward}} {{item.ticker}}
                 </div>
-                <div class="row align-center-center blue-back-ripple white-text" style="padding: 6px 12px"
-                     ng-click="openTrade(key)">
-                    Buy {{ticker}}
-                </div>
-            </div>
-        </div>
-
-        <div class="flex col white-back" ng-show="selectedTC != null">
-            <div class="row header line align-start-center">
-                <div class="white-back-ripple" style="border-radius: 50%">
-                    <img src="img/back.svg" style="width: 40px;height: 40px;" ng-click="selectTC(null)">
-                </div>
-            </div>
-            <div class="col line align-start-center">
-                <div class="row align-center-center">
-                    <img src="img/coin/{{selectedTC.ticker}}.svg" class="coin-logo">
-                </div>
-                <div class="weight5 multiline-text" style="text-align: center; line-height: 24px; margin-top: 20px">
-                    Get a chance to win a share of {{amountFormat(selectedTC.reward)}} {{selectedTC.ticker}} during the
-                    trading competition. Trade bug to win the biggest
-                    reward!
-                </div>
-                <div class="size8 gray-text" style="margin-top: 20px">Competition will finish after</div>
-                <div class="col" style="width: 170px">
-                    <div class="row" style="margin-top: 10px">
-                        <div class="flex col align-center-center" ng-repeat="(key, item) in tcTimer">
-                            <div class="size18 weight5">{{item}}</div>
-                            <div class="size8" style="margin-top: 8px">{{key}}</div>
-                        </div>
+                <md-content class="row align-start-center shadow-black gray-text"
+                            style=" border-radius: 3px; padding: 4px 12px; height: 40px"
+                            ng-click="share(item.link)" md-ink-ripple>
+                    <div class="flex">{{item.link}}</div>
+                    <div class="row align-center-center">
+                        <img class="img-blue" src="img/share.svg" style="width: 16px;height: 16px;">
                     </div>
-                    <div class="flex row align-center-center white-text blue-back-ripple"
-                         style="padding: 8px 0; margin-top: 12px" ng-click="openTrade(selectedTC.ticker)">Buy
-                        {{selectedTC.ticker}}
-                    </div>
-                </div>
+                </md-content>
             </div>
-            <div class="gray-back" style="height: 1px; margin-top: 12px"></div>
-            <div class="col line">
-                <div class="weight5" style="margin-top: 20px">Other participants</div>
-                <div class="col" ng-repeat="item in selectedTCWinners">
-                    <div class="row align-start-center" style="height: 60px;">
-                        <div>{{$index}}.</div>
-                        <div class="col" style="margin-left: 20px">
-                            <div>{{item.winner}}</div>
-                            <div class="gray-text size12" style="margin-top: 4px">{{amountFormat(item.traded)}}</div>
-                        </div>
-                    </div>
-                    <div class="gray-back" style="height: 1px;"></div>
-                </div>
-            </div>
-        </div>
-
+        </md-content>
     </md-tab>
+
     <md-tab class="flex line col white-back" label="{{str.staking}}">
         <div ng-show="selectedStaking == null">
             <div ng-show="stakes.length > 0">
@@ -518,30 +475,6 @@
                  style="height: 40px; margin-top: 15px; border-radius: 3px"
                  ng-click="stake()">
                 Stake {{stakingAmount}} {{selectedStaking.ticker}}
-            </div>
-        </div>
-    </md-tab>
-    <md-tab class="flex line col white-back" label="{{str.earn}}">
-        <div class="col shadow-black" ng-repeat="item in drops" style="padding: 12px; margin-top: 12px">
-            <div class="row align-start-center">
-                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
-                <div>{{item.ticker}}</div>
-                <div class="flex"></div>
-                <div class="col align-center-center">
-                    <div>Reward</div>
-                    <div class="green-text">{{item.reward}} {{item.ticker}}</div>
-                </div>
-            </div>
-            <div class="row align-center-center ripple blue-back white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 3px"
-                 ng-show="!item.rewarded"
-                 ng-click="openDrop(item)">
-                Participate
-            </div>
-            <div class="row align-center-center ripple gray-back white-text size18"
-                 style="height: 40px; margin-top: 15px; border-radius: 3px"
-                 ng-show="item.rewarded">
-                Rewarded
             </div>
         </div>
     </md-tab>

@@ -33,7 +33,6 @@ if ($ticker == USDT) {
     $ieo_user_id = createUser(random_key(users, user_id));
 }
 
-$tc_user_id = createUser(random_key(users, user_id));
 $staking_user_id = createUser(random_key(users, user_id));
 $drop_user_id = createUser(random_key(users, user_id));
 $domain_id = random_key(coins, domain_id, 8);
@@ -48,7 +47,6 @@ insertRow("coins",
         description => $description,
         supply => $supply,
         ieo_user_id => $ieo_user_id,
-        tc_user_id => $tc_user_id,
         staking_user_id => $staking_user_id,
         staking_apy => $staking_apy,
         drop_user_id => $drop_user_id,

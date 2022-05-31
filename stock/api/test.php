@@ -64,58 +64,6 @@ requestEquals("localhost/stock/api/place.php",
 requestEquals("localhost/stock/api/drop_start.php",
     array(token => $usdtOwner, ticker => GFC, type => SIMPLE, total => 5000, reward => 10), result, true);
 
-// tc
-$tccOwner = "424";
-$tccTrader1 = "4124";
-$tccTrader2 = "41244";
-requestEquals("localhost/stock/api/auth.php",
-    array("token" => $tccTrader1, "email" => "tccTrader1"), "result", null);
-requestEquals("localhost/stock/api/auth.php",
-    array("token" => $tccTrader2, "email" => "tccTrader2"), "result", null);
-requestEquals("localhost/stock/api/transfer.php",
-    array("token" => $usdtOwner, "to_email" => "tccTrader1", "ticker" => "USDT", "amount" => 50), "result", true);
-requestEquals("localhost/stock/api/transfer.php",
-    array("token" => $usdtOwner, "to_email" => "tccTrader2", "ticker" => "USDT", "amount" => 50), "result", true);
-requestEquals("localhost/stock/api/user.php",
-    array("token" => $tccTrader1), "balances.USDT.spot", 50);
-requestEquals("localhost/stock/api/user.php",
-    array("token" => $tccTrader2), "balances.USDT.spot", 50);
-
-requestEquals("localhost/stock/api/create_coin.php",
-    array(
-        "token" => $tccOwner,
-        "email" => "tccEmail",
-        "ticker" => "TCC",
-        "logo" => "http://localhost/stock/img/coin/TCC.svg",
-        "name" => "TC Coin",
-        "description" => "Coin for trading competitions",
-        "supply" => "10000",
-        "price" => "1",
-        "starter_supply" => "1",
-    ), "result", true);
-requestEquals("localhost/stock/api/place.php",
-    array("token" => $tccTrader1, "ticker" => "TCC", "is_sell" => "0", "price" => 1, "amount" => 1), "result", true);
-
-
-requestEquals("localhost/stock/api/place.php",
-    array("token" => $tccOwner, "ticker" => "TCC", "is_sell" => "1", "price" => 1, "amount" => 100), "result", true);
-
-$start = time() - 100;
-requestEquals("localhost/stock/api/tc_start.php",
-    array("token" => $tccOwner, "ticker" => "TCC", "start" => $start, "finish" => time() + 100, "reward" => 100), "result", true);
-
-requestEquals("localhost/stock/api/place.php",
-    array("token" => $tccTrader1, "ticker" => "TCC", "is_sell" => "0", "price" => 1, "amount" => 49), "result", true);
-
-requestEquals("localhost/stock/api/place.php",
-    array("token" => $tccTrader2, "ticker" => "TCC", "is_sell" => "0", "price" => 1, "amount" => 50), "result", true);
-
-requestEquals("localhost/stock/api/tc_finish.php",
-    array("ticker" => "TCC", "start" => $start), "result", true);
-
-requestEquals("localhost/stock/api/user.php",
-    array("token" => $tccTrader1), "balances.TCC.spot", 100);
-
 
 
 /*requestEquals("localhost/stock/api/email_send_code.php",

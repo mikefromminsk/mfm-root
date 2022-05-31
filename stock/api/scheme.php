@@ -6,6 +6,9 @@ query("DROP TABLE IF EXISTS `users`;");
 query("CREATE TABLE IF NOT EXISTS `users` (
     `user_id` int(11) NOT NULL AUTO_INCREMENT,
     `token` varchar(128) COLLATE utf8_bin NOT NULL,
+    `inviter` int(11) NULL,
+    `drop_id` int(11) NULL,
+    `referrer_code` varchar(15) COLLATE utf8_bin NULL,
     `email` varchar(128) COLLATE utf8_bin NULL,
     `email_confirmed` int(11) NOT NULL DEFAULT -1,
     `email_confirm_code` int(11) NULL,
@@ -32,7 +35,6 @@ query("CREATE TABLE IF NOT EXISTS `coins` (
   `change24` double NOT NULL DEFAULT 0,
   `user_id` int(11) NOT NULL,
   `ieo_user_id` int(11) NOT NULL,
-  `tc_user_id` int(11) NOT NULL,
   `staking_user_id` int(11) NOT NULL,
   `staking_apy` int(11) NOT NULL,
   `drop_user_id` int(11) NOT NULL,
@@ -66,15 +68,6 @@ query("CREATE TABLE IF NOT EXISTS `candles` (
     `high` double NOT NULL,
     `low` double NOT NULL,
     `volume` double NOT NULL
-    ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
-
-query("DROP TABLE IF EXISTS `tc`;");
-query("CREATE TABLE IF NOT EXISTS `tc` (
-    `ticker` varchar(10) COLLATE utf8_bin NOT NULL,
-    `start` int(11) NOT NULL,
-    `finish` int(11) NOT NULL,
-    `reward` double NOT NULL,
-    `rewarded` double DEFAULT 0
     ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 query("DROP TABLE IF EXISTS `trades`;");

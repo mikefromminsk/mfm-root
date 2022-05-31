@@ -191,14 +191,6 @@ function transfer($type, $from_user_id, $to_user_id, $ticker, $amount, $paramete
     return insertRowAndGetId(transfers, [type => $type, parameter => $parameter, from_user_id => $from_user_id, to_user_id => $to_user_id, ticker => $ticker, amount => $amount, time => time()]);
 }
 
-function tcWinners($ticker, $start)
-{
-    $tc = selectRowWhere(tc, [ticker => $ticker, start => $start]);
-    return select("select maker as winner, sum(amount) as traded "
-        . " from trades where ticker = '$ticker' and time >= $tc[start] and time <= $tc[finish] "
-        . " group by maker order by traded desc");
-}
-
 function stake($user_id, $ticker, $amount)
 {
     checkBalance($user_id, $ticker, $amount);
