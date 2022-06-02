@@ -1,5 +1,4 @@
 body {
-    background-color: #FAFAFA;
     color: black;
     font-family: "Fira Sans", sans-serif;
     font-weight: 400;
@@ -330,6 +329,10 @@ input:disabled{
 .green-back {
     background-color: rgb(2, 192, 118);
     border-radius: 2px;
+}
+
+.black-text {
+    color: rgb(0, 0, 0);
 }
 
 .white-text {

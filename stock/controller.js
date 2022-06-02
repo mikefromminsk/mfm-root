@@ -1,20 +1,32 @@
 var App = angular.module("App", ['ngMaterial', 'ngAnimate'])
 
-App.config(function ($mdThemingProvider) {
-    $mdThemingProvider.theme('default')
-        .accentPalette('indigo')
-    //.dark()
-});
 var token = "321" || localStorage.getItem('token')
+var night_mode = localStorage.getItem('night_mode') == 'dark'
 
-App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) {
+App.config(function ($mdThemingProvider) {
+    var theme = $mdThemingProvider.theme('default')
+        .accentPalette('indigo')
+    if (night_mode)
+        theme.dark()
+    $mdThemingProvider.enableBrowserColor({
+        theme: 'default',
+        palette: 'primary',
+    })
+});
+
+App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast, $mdTheming) {
     $scope.str = str
     var orderbookTimer = null;
     var ticker = null || "SOL"
     if (token == null)
         localStorage.setItem('token', token = Math.random())
 
-    $scope.night_mode = false
+    $scope.night_mode = night_mode
+    $scope.selectNightMode = function () {
+        $scope.night_mode = !$scope.night_mode
+        localStorage.setItem('night_mode', $scope.night_mode ? 'dark' : null)
+        location.reload()
+    }
 
     $scope.share = function (link) {
         navigator.clipboard.writeText(link)
@@ -579,13 +591,15 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
     })
 
     function filterCoins() {
+        if ($scope.coins == null) return
         var filtered_coins;
         if ($scope.search_text == "") {
             filtered_coins = Object.values($scope.coins)
         } else {
             var search = $scope.search_text.toLowerCase()
             filtered_coins = []
-            for (var coin in Object.values($scope.coins)) {
+            for (var key in $scope.coins) {
+                var coin = $scope.coins[key]
                 if (coin.name.toLowerCase().indexOf(search) != -1
                     || coin.ticker.toLowerCase().indexOf(search) != -1)
                     filtered_coins.push(coin)
@@ -670,12 +684,8 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
             return "+" + number + "%";
     }
 
-    $scope.changeBackColor = function (number) {
-        return {'green-back': number > 0, 'gray-back': number == 0, 'red-back': number < 0}
-    }
-
     $scope.percentColor = function (number) {
-        return {'green-text': number > 0, 'gray-text': number == 0, 'red-text': number < 0}
+        return {'green-text': number > 0, 'red-text': number < 0}
     }
 
     $scope.timeFormat = function (number) {
@@ -749,7 +759,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
         })
     }
 
-    $scope.go = function(url) {
+    $scope.go = function (url) {
         window.open(url, '_blank').focus();
     }
 
