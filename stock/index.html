@@ -38,6 +38,26 @@
 <md-tabs class="page fade-animation" md-selected="marketIndex" md-autoselect md-swipe-content md-stretch-tabs
          ng-show="menuIndex == 0">
     <md-tab class="col" label="{{str.market}}">
+
+        <div class="col line">
+            <div class="col col-content">
+                <div class="row">
+                    <div class="flex size10 gray-text">{{str.total_usd_balance}}</div>
+                    <div class="size10 gray-text">{{str.change24}}</div>
+                </div>
+                <div class="row">
+                    <div class="flex weight6 size18">{{priceFormat(total_usd_balance)}}</div>
+                    <div class="weight6" ng-class="percentColor(total_usd_change24)">
+                        {{percentFormat(total_usd_change24)}}
+                    </div>
+                </div>
+            </div>
+
+            <md-button class="flex md-raised md-primary" ng-click="login()" ng-show="user.email_confirmed != 1">
+                {{str.login_and_save_money}}
+            </md-button>
+        </div>
+
         <div class="row" style="height: 120px;">
             <div class="fade-animation" ng-repeat="item in banners" ng-show="bannerIndex == $index">
                 <img src="{{item}}" style="height: 120px; position: absolute; width: 100%">
@@ -62,45 +82,51 @@
                 </div>
             </div>
         </div>
-        <div class="row line gray-text size12" style="margin: 8px 0 4px 0">
-            <div class="flex row" style="margin-left: 38px">{{str.name}}</div>
+
+        <div class="row line gray-text size12 list-header">
+            <div class="flex row">{{str.asset}}</div>
             <div>{{str.price}}</div>
             <div class="row align-end" style="min-width: 90px;">{{str.balance}}</div>
         </div>
-        <md-divider></md-divider>
-        <div class="col " ng-repeat="item in filtered_coins">
-            <md-content class="row line align-start-center" ng-click="openCoin(item.ticker)" md-ink-ripple
-                        style="padding-top: 12px; padding-bottom: 12px;">
-                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
-                <div class="col flex">
-                    <div class="size16">{{item.ticker}}</div>
-                    <div class="gray-text size12">{{item.name}} $128.07B</div>
-                </div>
-                <div class="col align-start-end size13">
-                    <div class="size14">{{priceFormat(item.price)}}</div>
-                    <div class="green-text" style="">+3.75%</div>
-                </div>
-                {{item.ticket}}
+        <div class="col" ng-repeat="filtered_coins in [nonzero_coins, zero_coins]">
+            <div class="col" ng-repeat="item in filtered_coins">
+                <md-content class="row line align-start-center" ng-click="openCoin(item)"
+                            style="padding-top: 12px; padding-bottom: 12px;" md-ink-ripple>
+                    <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                    <div class="col flex">
+                        <div class="size16">{{item.ticker}}</div>
+                        <div class="gray-text size12">{{item.name}} {{priceFormat(item.price * item.supply)}}
+                        </div>
+                    </div>
+                    <div class="col align-start-end size13">
+                        <div class="size14">{{priceFormat(item.price)}}</div>
+                        <div class="green-text" ng-class="percentColor(item.change24)">
+                            {{changeFormat(item.change24)}}
+                        </div>
+                    </div>
+                    {{item.ticket}}
 
-                <div class="row align-end-center" style="min-width: 90px;">
-                    <div class="col" ng-show="!balances[item.ticker]">
-                        <div class="row align-center-center green-back-ripple white-text"
-                             style="border-radius: 3px; padding: 8px 11px;">
-                            {{str.buy}}
+                    <div class="row align-end-center" style="min-width: 90px;">
+                        <div class="col" ng-show="!balances[item.ticker]">
+                            <div class="row align-center-center green-back-ripple white-text"
+                                 style="border-radius: 3px; padding: 8px 11px;">
+                                {{str.buy}}
+                            </div>
+                        </div>
+                        <div class="col align-center-end size13"
+                             ng-show="balances[item.ticker]">
+                            <div class="size14">
+                                {{priceFormat(item.price * (balances[item.ticker].spot + balances[item.ticker].blocked))}}
+                            </div>
+                            <div class="">
+                                {{amountFormat(balances[item.ticker].spot + balances[item.ticker].blocked)}}
+                                {{item.ticker}}
+                            </div>
                         </div>
                     </div>
-                    <div class="col align-center-end size13"
-                         ng-show="balances[item.ticker]">
-                        <div class="size14">
-                            {{priceFormat(item.price * (balances[item.ticker].spot + balances[item.ticker].blocked))}}
-                        </div>
-                        <div class="">{{amountFormat(balances[item.ticker].spot + balances[item.ticker].blocked)}}
-                            {{item.ticker}}
-                        </div>
-                    </div>
-                </div>
-            </md-content>
-            <md-divider></md-divider>
+                </md-content>
+                <md-divider></md-divider>
+            </div>
         </div>
     </md-tab>
 
@@ -481,91 +507,175 @@
     <div class="flex"></div>
 </md-tabs>
 
-<div class="page fade-animation" ng-show="menuIndex == 3">
-    <div class="col white-back" style="padding: 12px; margin-top: 12px">
-        <div class="col" ng-show="user.email_confirmed == 1">
-            <div class="col align-center-center">
-                <img src="img/secure.svg" style="width: 50px; height: 50px;">
-                <div style="margin-top: 20px;">Your account protected</div>
-                <div style="margin-top: 12px;">{{user.email}}</div>
-            </div>
-        </div>
-        <div class="col" ng-show="user.email_confirmed <= 0">
-            <div class="col align-center-center">
-                <img src="img/unsecure.svg" style="width: 50px; height: 50px;">
-                <div style="margin: 20px 0;">Link email for save your money</div>
-            </div>
-            <div class="row align-start-end">
-                <div class="flex row input-wrapper" style="margin-top: 16px">
-                    <div class="input-label-top">Email</div>
-                    <input type="email" class="flex input" ng-model="user.email">
-                </div>
-                <md-button class="md-primary md-raised" ng-click="sendEmailCode()">
-                    Send Code
-                </md-button>
-            </div>
-        </div>
-        <div class="row align-start-end" ng-show="user.email_confirmed == 0">
-            <div class="row input-wrapper" style="margin-top: 16px"
-                 ng-show="user.email_confirmed == 0">
-                <div class="input-label-top">Code</div>
-                <input type="number" class="flex input" ng-model="user.email_confirm_code">
-            </div>
-            <md-button class="md-primary md-raised" ng-click="confirmEmailCode()">
-                Confirm code
-            </md-button>
-        </div>
-    </div>
-    <md-tabs class="flex" md-selected="walletIndex" md-autoselect md-swipe-content>
-        <md-tab label="{{str.balances}}">
-            <div class="col">
-                <md-content class="col" ng-repeat="(ticker, item) in balances" ng-click="selectBalance(item)"
-                            md-ink-ripple>
-                    <div class="row line align-start-center"
-                         style="padding-top: 12px; padding-bottom: 12px;">
-                        <img src="img/coin/{{ticker}}.svg" class="coin-logo">
-                        <div class="col">
-                            <div class="size16">{{ticker}}</div>
-                            <div class="gray-text size12">{{coins[ticker].name}} $128.07B</div>
-                        </div>
-                        <div class="flex"></div>
-                        <div class="col align-start-end size13">
-                            <div class="size14">{{priceFormat(coins[ticker].price)}}</div>
-                            <div ng-class="changeColor(coins[key].change24)">
-                                {{changeFormat(coins[ticker].change24)}}
-                            </div>
-                        </div>
-                        <div class="col align-start-end size13" style="min-width: 90px; margin-left: 10px">
-                            <div class="size14">{{priceFormat(item.spot + item.blocked)}}</div>
-                            <div>{{amountFormat(item.spot + item.blocked) + " " + ticker}}</div>
+<md-tabs class="page fade-animation" class="flex" md-selected="walletIndex" ng-show="menuIndex == 3"
+         md-autoselect md-swipe-content md-stretch-tabs>
+    <md-tab label="{{str.balances}}">
+        <div class="col">
+            <div class="col line">
+                <div class="col col-content">
+                    <div class="row">
+                        <div class="flex size10 gray-text">{{str.total_usd_balance}}</div>
+                        <div class="size10 gray-text">{{str.change24}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="flex weight6 size18">{{priceFormat(total_usd_balance)}}</div>
+                        <div class="weight6" ng-class="percentColor(total_usd_change24)">
+                            {{percentFormat(total_usd_change24)}}
                         </div>
                     </div>
-                    <md-divider></md-divider>
-                </md-content>
+                </div>
 
+                <md-button class="flex md-raised md-primary" ng-click="login()" ng-show="user.email_confirmed != 1">
+                    {{str.login_and_save_money}}
+                </md-button>
             </div>
-        </md-tab>
-        <md-tab label="{{str.transactions}}">
-            wefw
-        </md-tab>
-        <div class="flex"></div>
-    </md-tabs>
 
-    <div class="col" ng-show="walletIndex == 0">
 
-    </div>
+            <div class="row line gray-text size12 list-header">
+                <div class="flex row">{{str.asset}}</div>
+                <div>{{str.price}}</div>
+                <div class="row align-end" style="min-width: 90px;">{{str.balance}}</div>
+            </div>
+            <div class="col" ng-repeat="filtered_coins in [nonzero_coins, zero_coins]">
+                <div class="row line gray-text size12 list-header" ng-show="$index == 1">
+                    <div>{{str.other_assets}}</div>
+                </div>
+                <div class="col" ng-repeat="item in filtered_coins">
+                    <md-content class="row line align-start-center" ng-click="selectBalance(balances[item.ticker])"
+                                style="padding-top: 12px; padding-bottom: 12px;" md-ink-ripple>
+                        <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                        <div class="col flex">
+                            <div class="size16">{{item.ticker}}</div>
+                            <div class="gray-text size12">{{item.name}} {{priceFormat(item.price * item.supply)}}
+                            </div>
+                        </div>
+                        <div class="col align-start-end size13">
+                            <div class="size14">{{priceFormat(item.price)}}</div>
+                            <div class="green-text" ng-class="percentColor(item.change24)">
+                                {{changeFormat(item.change24)}}
+                            </div>
+                        </div>
+                        {{item.ticket}}
 
-    <div class="col" ng-show="walletIndex == 0">
+                        <div class="row align-end-center" style="min-width: 90px;">
+                            <div class="col" ng-show="!balances[item.ticker]">
+                                <div class="row align-center-center green-back-ripple white-text"
+                                     style="border-radius: 3px; padding: 8px 11px;">
+                                    {{str.buy}}
+                                </div>
+                            </div>
+                            <div class="col align-center-end size13"
+                                 ng-show="balances[item.ticker]">
+                                <div class="size14">
+                                    {{priceFormat(item.price * (balances[item.ticker].spot + balances[item.ticker].blocked))}}
+                                </div>
+                                <div class="">
+                                    {{amountFormat(balances[item.ticker].spot + balances[item.ticker].blocked)}}
+                                    {{item.ticker}}
+                                </div>
+                            </div>
+                        </div>
+                    </md-content>
+                    <md-divider></md-divider>
+                </div>
+            </div>
+        </div>
+    </md-tab>
+    <md-tab label="{{str.transfers}}">
+        <div class="row line gray-text size12 list-header">
+            <div>{{str.history}}</div>
+        </div>
+        <md-content class="row align-start-center" ng-repeat="item in transaction_history"
+                    ng-click="selectTransaction(item)" md-ink-ripple>
+            <div class="flex row line align-start-center"
+                 style="padding-top: 12px; padding-bottom: 12px;">
+                <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
+                <div class="col" style="margin-left: 7px">
+                    <div class="size16">{{str["transfer" + item.type] || item.type}}</div>
+                    <div class="gray-text size12">{{timeFormat(item.timestamp)}}</div>
+                </div>
+                <div class="flex"></div>
+                <div class="col align-start-end size13"
+                     ng-class="{'red-text': item.from_user_id == user.user_id, 'green-text': item.to_user_id == user.user_id}">
+                    <div class="size14">{{item.from_user_id == user.user_id ? "-" : "+"}}{{item.amount}} {{item.ticker}}</div>
+                    <div>{{priceFormat(item.amount * coins[item.ticker].price)}}</div>
+                </div>
+                <div class="row align-center-center"
+                     style="min-width: 14px; height: 14px; border-radius: 50%; margin-left: 12px">
+                    <img src="img/cancel.svg" class="img-red" ng-show="item.status == 0"
+                         ng-click="cancel(item.order_id)">
+                    <img src="img/success.svg" class="img-green" ng-show="item.status == 1">
+                    <img src="img/canceled.svg" class="img-gray" ng-show="item.status == -1">
+                </div>
+            </div>
+        </md-content>
+    </md-tab>
+    <md-tab label="{{str.settings}}">
+        <div class="col">
+            <div class="col">
+                <div class="row line gray-text size12 list-header">
+                    <div>{{str.account}}</div>
+                </div>
+                <md-content class="row line align-center-center setting" md-ink-ripple
+                            ng-click="user.email || login()">
+                    <img src="img/email.svg" class="img-black">
+                    <div class="flex line">{{str.email}}</div>
+                    <div>{{user.email || str.email_is_not_set}}</div>
+                </md-content>
+            </div>
 
-    </div>
-</div>
+            <div class="col">
+                <div class="row line gray-text size12 list-header">
+                    <div>{{str.settings}}</div>
+                </div>
+                <md-content class="row line align-center-center setting" ng-click="night_mode = !night_mode"
+                            md-ink-ripple
+                            style="height: 50px">
+                    <img src="img/night.svg" class="img-black">
+                    <div class="flex line">{{str.night_mode}}</div>
+                    <md-switch ng-model="night_mode"></md-switch>
+                </md-content>
+                <md-content class="row line align-center-center setting" ng-click="showLanguages()" md-ink-ripple
+                            style="height: 50px">
+                    <img src="img/language.svg" class="img-black">
+                    <div class="flex line">{{str.language}}</div>
+                    <div>{{str[user.lang || 'en']}}</div>
+                </md-content>
+            </div>
+
+            <div class="col">
+                <div class="row line gray-text size12 list-header">
+                    <div>{{str.about}}</div>
+                </div>
+                <md-content class="row line align-center-center setting" md-ink-ripple
+                            ng-click="go('https://github.com/gaiduduk/DarkNet')">
+                    <img src="img/info.svg" class="img-black">
+                    <div class="flex line">{{str.about_project}}</div>
+                </md-content>
+                <md-content class="row line align-center-center setting" md-ink-ripple
+                            ng-click="go('https://play.google.com/store/apps?hl=ru&gl=US')">
+                    <img src="img/star.svg" class="img-black">
+                    <div class="flex line">{{str.rate_us}}</div>
+                </md-content>
+                <md-content class="row line align-center-center setting" md-ink-ripple
+                            ng-click="showLanguages()">
+                    <img src="img/version.svg" class="img-black">
+                    <div class="flex line">{{str.version}}</div>
+                    <div>{{version}}</div>
+                </md-content>
+            </div>
+        </div>
+    </md-tab>
+    <div class="flex"></div>
+</md-tabs>
 
 
 <div class="row shadow-black size12 dialog"
      style="position: absolute; left: 0; bottom: 0; width: 100%;min-height: 40px;">
-    <div class="flex col" ng-repeat="item in menu">
+    <div class="col flex md-tab" ng-repeat="item in menu" style="padding: 0">
         <div class="blue-back fade-animation" style="height: 2px;" ng-show="menuIndex == $index"></div>
-        <md-content class="flex row align-center-center card-title" ng-click="selectMenu($index)" md-ink-ripple>
+        <md-content class="flex row align-center-center card-title" ng-click="selectMenu($index)"
+                    ng-class="{'blue-text': menuIndex == $index}" md-ink-ripple>
             {{item}}
         </md-content>
     </div>
@@ -586,7 +696,7 @@
     </md-tabs>
     <div class="row" style="margin: 30px">
         <md-button class="flex md-primary md-raised" ng-click="helloNext()">
-            Next {{helloIndex}}
+            {{str.next}} {{helloIndex}}
         </md-button>
     </div>
 </div>

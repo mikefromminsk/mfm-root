@@ -1,0 +1,22 @@
+<md-bottom-sheet>
+    <div class="col">
+        <div class="row align-start-end" >
+            <div class="flex row input-wrapper" style="margin-top: 16px">
+                <div class="input-label-top">Email</div>
+                <input type="email" class="flex input" ng-model="locals.user.email">
+            </div>
+            <md-button class="md-primary md-raised" ng-click="sendEmailCode()" ng-disabled="locals.user.email_confirmed != -1">
+                {{locals.str.send_code}}
+            </md-button>
+        </div>
+        <div class="row align-start-end" ng-disabled="locals.user.email_confirmed != 0"  >
+            <div class="flex row input-wrapper" style="margin-top: 16px">
+                <div class="input-label-top">Code</div>
+                <input type="number" class="flex input" ng-model="locals.user.email_confirm_code" ng-disabled="locals.user.email_confirmed != 0">
+            </div>
+            <md-button class="md-primary md-raised" ng-click="confirmEmailCode()" ng-disabled="locals.user.email_confirmed != 0">
+                {{locals.str.confirm_code}}
+            </md-button>
+        </div>
+    </div>
+</md-bottom-sheet>

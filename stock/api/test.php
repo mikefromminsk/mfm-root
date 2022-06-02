@@ -5,6 +5,7 @@ include_once "scheme.php";
 
 $usdtOwner = "123";
 $solOwner = "321";
+$dogeOwner = "141";
 
 requestEquals("localhost/stock/api/create_coin.php",
     array(
@@ -64,6 +65,22 @@ requestEquals("localhost/stock/api/place.php",
 requestEquals("localhost/stock/api/drop_start.php",
     array(token => $usdtOwner, ticker => GFC, type => SIMPLE, total => 5000, reward => 10), result, true);
 
+
+requestEquals("localhost/stock/api/create_coin.php",
+    array(
+        "token" => $dogeOwner,
+        "ticker" => "DOGE",
+        "logo" => "http://localhost/stock/img/coin/DOGE.svg",
+        "name" => "Dogecoin",
+        "description" => "Coin for dogs",
+        "supply" => "2000",
+        "price" => "1",
+        "starter_supply" => "1",
+    ), "result", true);
+
+
+requestEquals("localhost/stock/api/place.php",
+    array("token" => $solOwner, "ticker" => "SOL", "is_sell" => "0", "price" => 1, "amount" => 1), "result", true);
 
 
 /*requestEquals("localhost/stock/api/email_send_code.php",

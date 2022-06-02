@@ -90,6 +90,7 @@ query("CREATE TABLE IF NOT EXISTS `transfers` (
     `from_user_id` int(11) NOT NULL,
     `to_user_id` int(11) NOT NULL,
     `ticker` varchar(10) COLLATE utf8_bin NOT NULL,
+    `status` int(11) DEFAULT 1,
     `amount` int(11) NOT NULL,
     `time` int(11) NOT NULL,
    PRIMARY KEY (`transfer_id`)

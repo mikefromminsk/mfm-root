@@ -178,6 +178,11 @@ button {
     position: relative;
 }
 
+input:disabled{
+    pointer-events:none;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
 .input {
     height: 38px;
     outline: none;
@@ -295,6 +300,10 @@ button {
     filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(301deg) brightness(108%) contrast(101%);
 }
 
+.img-black {
+    filter: invert(0%) sepia(1%) saturate(7492%) hue-rotate(343deg) brightness(107%) contrast(95%);
+}
+
 .filter-blue {
 }
 
@@ -363,4 +372,20 @@ button {
 /* To remove the underline ripple */
 .mat-input-ripple.mat-form-field-ripple{
     background-color: transparent;
+}
+
+md-switch{
+    margin: 0;
+}
+
+.setting {
+    height: 50px;
+}
+
+.setting > img{
+    width: 20px;height: 20px;
+}
+
+.list-header{
+    margin: 16px 0 4px 0;
 }

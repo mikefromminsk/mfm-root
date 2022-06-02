@@ -5,7 +5,7 @@ App.config(function ($mdThemingProvider) {
         .accentPalette('indigo')
     //.dark()
 });
-var token = "123" || localStorage.getItem('token')
+var token = "321" || localStorage.getItem('token')
 
 App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) {
     $scope.str = str
@@ -13,6 +13,8 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
     var ticker = null || "SOL"
     if (token == null)
         localStorage.setItem('token', token = Math.random())
+
+    $scope.night_mode = false
 
     $scope.share = function (link) {
         navigator.clipboard.writeText(link)
@@ -227,32 +229,6 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
                     $mdBottomSheet.hide()
                 }
             }
-        })
-    }
-
-    $scope.sendEmailCode = function () {
-        $http({
-            method: "POST",
-            url: "api/email_send_code.php",
-            data: {
-                token: token,
-                email: $scope.user.email,
-            }
-        }).then(function (response) {
-            updateUser()
-        })
-    }
-
-    $scope.confirmEmailCode = function () {
-        $http({
-            method: "POST",
-            url: "api/email_confirm.php",
-            data: {
-                token: token,
-                email_confirm_code: $scope.user.email_confirm_code,
-            }
-        }).then(function (response) {
-            updateUser()
         })
     }
 
@@ -595,33 +571,44 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
     $scope.bannerIndex = 0
     var bannerTimer
 
-    $scope.filtered_coins = [];
+    $scope.nonzero_coins = [];
+    $scope.zero_coins = [];
     $scope.search_text = ""
     $scope.$watch('search_text', function (newValue) {
         filterCoins();
     })
 
     function filterCoins() {
+        var filtered_coins;
         if ($scope.search_text == "") {
-            $scope.filtered_coins = Object.values($scope.coins)
+            filtered_coins = Object.values($scope.coins)
         } else {
             var search = $scope.search_text.toLowerCase()
-            $scope.filtered_coins = []
+            filtered_coins = []
             for (var coin in Object.values($scope.coins)) {
                 if (coin.name.toLowerCase().indexOf(search) != -1
                     || coin.ticker.toLowerCase().indexOf(search) != -1)
-                    $scope.filtered_coins.push(coin)
+                    filtered_coins.push(coin)
             }
         }
-        $scope.filtered_coins.sort(function compare(a, b) {
+
+        $scope.nonzero_coins = [];
+        $scope.zero_coins = [];
+        for (var key in filtered_coins) {
+            if ($scope.balances[filtered_coins[key].ticker] != null)
+                $scope.nonzero_coins.push(filtered_coins[key]);
+            else
+                $scope.zero_coins.push(filtered_coins[key]);
+        }
+
+        $scope.nonzero_coins.sort(function compare(a, b) {
             let balanceA = $scope.balances[a.ticker]
             let balanceB = $scope.balances[b.ticker]
-            if (balanceA == null && balanceB != null) return 1;
-            if (balanceA != null && balanceB == null) return -1;
-            if (balanceA == null && balanceB == null) return a.price - b.price; // need volume
-            if (balanceA != null && balanceB != null)
-                return (b.price * (balanceB.spot + balanceB.blocked)) - (a.price * (balanceA.spot + balanceA.blocked));
-            return 0;
+            return (b.price * (balanceB.spot + balanceB.blocked)) - (a.price * (balanceA.spot + balanceA.blocked));
+        })
+
+        $scope.zero_coins.sort(function compare(a, b) {
+            return a.price * a.supply - b.price * b.supply;
         })
     }
 
@@ -687,7 +674,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
         return {'green-back': number > 0, 'gray-back': number == 0, 'red-back': number < 0}
     }
 
-    $scope.changeColor = function (number) {
+    $scope.percentColor = function (number) {
         return {'green-text': number > 0, 'gray-text': number == 0, 'red-text': number < 0}
     }
 
@@ -755,9 +742,21 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
         $http({method: "POST", url: "api/user.php", data: {token: token}}).then(function (response) {
             $scope.user = response.data.user
             $scope.balances = response.data.balances
+            $scope.version = response.data.version
+            calcTotal()
             if (callback != null)
                 callback()
         })
+    }
+
+    $scope.go = function(url) {
+        window.open(url, '_blank').focus();
+    }
+
+
+    function calcTotal() {
+        $scope.total_usd_balance = 0;
+        $scope.total_usd_change24 = 0;
     }
 
     function updateCoins(callback) {
@@ -773,7 +772,63 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
     var walletTimer
 
     function initWallet() {
+        $scope.search_text = ""
+        filterCoins()
         walletTimer = setInterval(updateUser, 1000)
+    }
+
+    $scope.login = function () {
+        $mdBottomSheet.show({
+            templateUrl: 'login.html',
+            locals: {
+                user: $scope.user,
+                str: str,
+                balance: $scope.balances[ticker]
+            },
+            controller: function ($scope, $mdBottomSheet, locals) {
+                $scope.locals = locals
+
+                $scope.sendEmailCode = function () {
+                    $http({
+                        method: "POST",
+                        url: "api/email_send_code.php",
+                        data: {
+                            token: token,
+                            email: $scope.locals.user.email,
+                        }
+                    }).then(function (response) {
+                        if (response.data.result)
+                            $scope.locals.user.email_confirmed = 0
+                    })
+                }
+
+                $scope.confirmEmailCode = function () {
+                    $http({
+                        method: "POST",
+                        url: "api/email_confirm.php",
+                        data: {
+                            token: token,
+                            email_confirm_code: $scope.locals.user.email_confirm_code,
+                        }
+                    }).then(function (response) {
+                        if (response.data.result == true)
+                            $mdBottomSheet.hide("success")
+                    })
+                }
+            }
+        }).then(function (result) {
+            if (result != null)
+                updateUser()
+        })
+    }
+
+
+    $scope.transaction_history = []
+
+    function initTransactions() {
+        $http({method: "POST", url: "api/transactions.php", data: {token: token}}).then(function (response) {
+            $scope.transaction_history = response.data.transaction_history
+        })
     }
 
 
@@ -797,7 +852,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
                 showMarket(0)
                 break
             case 1:
-                showStarter(1)
+                showStarter(0)
                 break
             case 2:
                 showEarn(0)
@@ -871,6 +926,9 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) 
         switch (index) {
             case 0:
                 initWallet();
+                break;
+            case 1:
+                initTransactions();
                 break;
         }
     }
