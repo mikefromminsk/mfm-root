@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="archivate.php">
+    <input type="text" name="package">
+    <input type="submit">
+</form>
+<form action="keys.php" enctype="multipart/form-data" method="post">
+    <input type="text" name="package">
+    <input type="file" name="archive" accept=“zip/*”>
+    <input type="submit">
+</form>
+<form action="put.php">
+    <input type="file" name="archive" accept=“zip/*”>
+    <input type="file" name="keys">
+    <input type="submit">
+</form>
+</body>
+</html>

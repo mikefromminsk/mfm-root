@@ -1,13 +1,13 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/utils.php";
+include_once "utils.php";
 
 $keys = get_required("keys");
 $domain_name = get_required_uppercase("domain_name");
 $domain_postfix_length = get_int_required("domain_postfix_length");
 
 description("hosting coin");
-if ($domain_name != "HRP"){
+if ($domain_name != "HRP") {
     $new_keys = array();
 
     $response["apply"] = 0;

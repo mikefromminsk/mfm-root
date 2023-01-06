@@ -31,8 +31,7 @@ sync_dir("..", "../../host2.com");
 sync_dir("..", "../../host3.com");*/
 
 
-
-$keys = requestEquals("localhost/domains/api/hosting.php",
+$keys = requestEquals("$host_name/domains/api/hosting.php",
     array(
         "domain_name" => "HRP",
         "domain_postfix_length" => 1,
