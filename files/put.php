@@ -2,7 +2,9 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
-$files = get_required("files");
+$files = get_required(files);
+
+$files = json_decode(file_get_contents($files[tmp_name]), true);
 
 description("set files");
 
@@ -13,7 +15,7 @@ $failed_list = [];
 foreach ($files as $new_file) {
     
     $path = $new_file["path"];
-    $prev_key_hash = hash_sha56($new_file["prev_key"]);
+    $prev_key_hash = hash("sha256",$new_file["prev_key"]);
     $fileExist = updateWhere("files", array(
         "archived" => 1,
     ), array(

@@ -14,9 +14,10 @@
     <input type="file" name="archive" accept=“zip/*”>
     <input type="submit">
 </form>
-<form action="put.php">
+<form action="put.php" enctype="multipart/form-data" method="post">
+    <input type="text" name="package">
+    <input type="file" name="files">
     <input type="file" name="archive" accept=“zip/*”>
-    <input type="file" name="keys">
     <input type="submit">
 </form>
 </body>
