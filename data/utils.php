@@ -10,12 +10,12 @@ define("DATA_STRING", 2);
 define("DATA_NUMBER", 3);
 define("DATA_BOOL", 4);
 define("DATA_NULL", 5);
+define("DATA_FILE", 6);
 
-function dataNew(array $path, $password, $create = true)
+function dataNew(array $path, $create = true)
 {
     array_unshift($path, explode('/', dirname($_SERVER['PHP_SELF']))[1]);
 
-    $password_checked = false;
     $data_id = null;
 
     foreach ($path as $index => $key) {
@@ -30,12 +30,6 @@ function dataNew(array $path, $password, $create = true)
             "data_key" => $key,
         ));
 
-        if ($data["data_password"] != null) {
-            if ($data["data_password"] != $password)
-                return null;
-            $password_checked = true;
-        }
-
         $data_id = $data["data_id"];
 
         if ($data_id == null) {
@@ -43,7 +37,6 @@ function dataNew(array $path, $password, $create = true)
                 $data_id = insertRowAndGetId("data", array(
                     "data_parent_id" => $data_parent_id,
                     "data_key" => $key,
-                    "data_password" => $password_checked === false && $index == sizeof($path) - 1 && $push === false ? $password : null,
                     "data_type" => DATA_MAP,
                 ));
             } else {
@@ -52,10 +45,6 @@ function dataNew(array $path, $password, $create = true)
         }
 
         if ($push !== false) {
-
-            /*if ($GLOBALS["test"] != null)
-                die(json_encode($keys));*/
-
             updateWhere("data", array(
                 "data_type" => DATA_ARRAY,
             ), array(
@@ -67,7 +56,6 @@ function dataNew(array $path, $password, $create = true)
             $data_id = insertRowAndGetId("data", array(
                 "data_parent_id" => $data_id,
                 "data_key" => $children_count,
-                "data_password" => $password_checked === false && $index == sizeof($path) - 1 ? $password : null,
                 "data_type" => DATA_MAP,
             ));
         }
@@ -90,6 +78,9 @@ function data_get_value($data, $level = -1, $asc = null, $offset = 0, $count = 1
         $result = doubleval($data["data_value"]);
     } else if ($data["data_type"] == DATA_STRING) {
         $result = $data["data_value"];
+    } else if ($data["data_type"] == DATA_FILE) {
+        $path = scalarWhere(hashes, path, [hash => $data["data_value"]]);
+        $result = file_get_contents($_SERVER["DOCUMENT_ROOT"] . $path);
     } else {
         $result = array();
         if ($level != 0) {
@@ -100,7 +91,6 @@ function data_get_value($data, $level = -1, $asc = null, $offset = 0, $count = 1
                 foreach ($children as $child)
                     $result[] = data_get_value($child, $level - 1);
             } else if ($data["data_type"] == DATA_MAP) {
-
                 foreach ($children as $child)
                     $result[$child["data_key"]] = data_get_value($child, $level - 1);
             }
@@ -128,16 +118,21 @@ function dataSetValue($data_id, &$result)
     } else if (is_null($result)) {
         return updateWhere("data", array("data_type" => DATA_NULL, "data_value" => $result), array("data_id" => $data_id));
     } else if (is_string($result)) {
-        return updateWhere("data", array("data_type" => DATA_STRING, "data_value" => $result), array("data_id" => $data_id));
+        if (strlen($result) > 64) {
+            $hash = md5($result);
+            $path = dataPath($data_id);
+            file_put_contents($_SERVER["DOCUMENT_ROOT"] . $path, $result);
+            insertRow("hashes", ["hash" => $hash, "path" => $path]);
+            return updateWhere("data", array("data_type" => DATA_FILE, "data_value" => $hash), array("data_id" => $data_id));
+        } else {
+            return updateWhere("data", array("data_type" => DATA_STRING, "data_value" => $result), array("data_id" => $data_id));
+        }
     } else if (is_array($result)) {
-
-
         if (is_assoc($result)) {
             updateWhere("data", array("data_type" => DATA_MAP, "data_value" => null), array("data_id" => $data_id));
         } else {
             updateWhere("data", array("data_type" => DATA_ARRAY, "data_value" => null), array("data_id" => $data_id));
         }
-
         $success = true;
         foreach ($result as $key => $value) {
             $child_data_id = insertRowAndGetId("data", array(
@@ -155,10 +150,10 @@ function dataSetValue($data_id, &$result)
 }
 
 /*TODO offset -10 count 10*/
-function dataGet(array $path, $password, $asc = null, $offset = 0, $count = 10000, $level = -1)
+function dataGet(array $path, $asc = null, $offset = 0, $count = 10000, $level = -1)
 {
     if ($offset < 0) {
-        $all_count = dataCount($path, $password);
+        $all_count = dataCount($path);
         if ($count == 10000)
             $count = abs($offset);
         if (abs($offset) > $all_count)
@@ -166,49 +161,49 @@ function dataGet(array $path, $password, $asc = null, $offset = 0, $count = 1000
         else
             $offset = $all_count + $offset;
     }
-    $data_id = dataNew($path, $password, false);
+    $data_id = dataNew($path, false);
     if ($data_id == null)
         return false;
     return data_get_value($data_id, $level, $asc, $offset, $count);
 }
 
-function dataInc(array $path, $password, $inc_val)
+function dataInc(array $path, $inc_val)
 {
-    $value = dataGet($path, $password);
+    $value = dataGet($path);
     $value = ($value ?: 0) + $inc_val;
-    dataSet($path, $password, $value);
+    dataSet($path, $value);
     return $value;
 }
 
-function dataDec(array $path, $password, $dec_val)
+function dataDec(array $path, $dec_val)
 {
-    return dataInc($path, $password, - $dec_val);
+    return dataInc($path, -$dec_val);
 }
 
-function dataSet(array $path, $password, $value)
+function dataSet(array $path, $value)
 {
-    $data_id = dataNew($path, $password);
+    $data_id = dataNew($path);
     if ($data_id == null) return false;
     return dataSetValue($data_id, $value);
 }
 
-function dataAdd(array $path, $password, $value)
+function dataAdd(array $path, $value)
 {
     $last = array_pop($path) . "[]";
     $path[] = $last;
-    return dataSet($path, $password, $value);
+    return dataSet($path, $value);
 }
 
-function dataCount(array $path, $password)
+function dataCount(array $path)
 {
-    $data_id = dataNew($path, $password, false);
+    $data_id = dataNew($path, false);
     if ($data_id == null) return false;
     return intval(scalarWhere("data", "count(*)", array("data_parent_id" => $data_id)));
 }
 
-function dataDel(array $path, $password)
+function dataDel(array $path)
 {
-    $data_id = dataNew($path, $password, false);
+    $data_id = dataNew($path, false);
     if ($data_id == null) return false;
     dataDeleteChildren($data_id);
     return query("delete from data where data_id = $data_id");
@@ -227,20 +222,58 @@ function dataDeleteChildren($data_id)
     }
 }
 
-function dataLike(array $path, $password, $like, $asc = null, $offset = 0, $count = 10000){
-    $data_id = dataNew($path, $password, false);
+function dataLike(array $path, $like, $asc = null, $offset = 0, $count = 10000)
+{
+    $data_id = dataNew($path, false);
     if ($data_id == null) return false;
     return selectList("select data_key from data where data_parent_id = $data_id and data_key like '$like' "
-        . ($asc != null ? " order by data_key " . ($asc == true ? " ASC ":  " DESC ") : "") . " limit $offset, $count");
+        . ($asc != null ? " order by data_key " . ($asc == true ? " ASC " : " DESC ") : "") . " limit $offset, $count");
 }
 
-function dataMapSet(array $path, $password, $key, $value){
-    dataSet(array_merge($path, ["keys", $key]), $password, $value);
-    dataSet(array_merge($path, ["vals", $value]), $password, $key);
+function dataMapSet(array $path, $key, $value)
+{
+    dataSet(array_merge($path, ["keys", $key]), $value);
+    dataSet(array_merge($path, ["vals", $value]), $key);
 }
 
-function dataMapDel(array $path, $password, $key){
-    $value = dataGet(array_merge($path, ["keys", $key]), $password);
-    dataDel(array_merge($path, ["keys", $key]), $password);
-    dataDel(array_merge($path, ["vals", $value]), $password);
+function dataMapDel(array $path, $key)
+{
+    $value = dataGet(array_merge($path, ["keys", $key]));
+    dataDel(array_merge($path, ["keys", $key]));
+    dataDel(array_merge($path, ["vals", $value]));
+}
+
+function dataPath($data_id)
+{
+    $node = selectRowWhere(data, [data_id => $data_id]);
+    if ($node[data_parent_id] == null)
+        return "";
+    return dataPath($node[data_parent_id]) . "/" . $node[data_key];
+}
+
+function dataMeta(array $path){
+    $data_id = dataNew($path, false);
+    return selectRowWhere(data, [data_id => $data_id]);
+}
+
+function dataChildren(array $path){
+    $data_id = dataNew($path, false);
+    return selectListWhere(data, data_key, [data_parent_id => $data_id]);
+}
+
+function dataSend(array $path, $fromAddress, $toAddress, $password, $next_hash, $amount){
+    if (dataGet(array_merge($path, [$fromAddress, amount])) < $amount) error("balance is not enough");
+    if (dataGet(array_merge($path, [$fromAddress, next_hash])) != md5($password)) error("password is not right: $passwordHash");
+
+    dataSet(array_merge($path, [$fromAddress, password]), $password);
+    dataSet(array_merge($path, [wallets, $fromAddress, next_hash]), $next_hash);
+
+    dataDec(array_merge($path, [$fromAddress, amount]), $amount);
+    dataInc(array_merge($path, [$toAddress, amount]), $amount);
+
+    /*return dataAdd([transactions], [
+        from => $fromAddress,
+        to => $toAddress,
+        amount => $amount,
+    ]);*/
 }

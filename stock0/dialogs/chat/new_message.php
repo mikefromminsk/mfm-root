@@ -21,7 +21,7 @@ $unread_messages = dataGet(["users", $opponent, "dialogs", $dialog_id], $pass);
 if ($unread_messages != null) dataDel(["users", $opponent, "dialogs", $dialog_id], $pass);
 dataSet(["users", $opponent, "dialogs", $dialog_id], $pass, $unread_messages + 1);
 
-$response["success"] = dataAdd(["dialogs", $dialog_id, "messages"], $pass, array(
+$response["success"] = dataAdd(["dialogs", $dialog_id, "messages"], array(
     "login" => $login,
     "text" => $text,
     "domain_name" => $domain_name,

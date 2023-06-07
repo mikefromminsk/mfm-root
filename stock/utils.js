@@ -23,6 +23,20 @@ function selectFile(contentType, callback) {
     input.click();
 }
 
+function selectFileData(contentType, callback){
+    selectFile(contentType, function (file) {
+        var reader = new FileReader();
+        reader.onload = function(evt) {
+            if(evt.target.readyState != 2) return;
+            if(evt.target.error) {
+                return;
+            }
+            callback(evt.target.result)
+        };
+        reader.readAsText(file);
+    })
+}
+
 function objectToForm(data) {
     var formData = new FormData();
     angular.forEach(data, function (value, key) {
