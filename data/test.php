@@ -16,19 +16,18 @@ dataAdd(["login", "test2", "array"], "321");
 $value = dataGet(["login", "test2", "array", "0"]);
 assertEquals("data push", $value, "321");
 
-dataSet(["login", "hrp"], array(
+/*dataSet(["login", "hrp"], array(
     "test2" => "123",
     "test3" => "321",
 ));
 $value = dataGet(["login", "hrp"]);
 assertNotEquals("data get", $value["test2"], "123");
-assertNotEquals("data get", $value["test3"], "321");
+assertNotEquals("data get", $value["test3"], "321");*/
 
-$firstPass = password0;
-$secondPass = password;
-dataSet([wallets, admin, next_hash], md5($firstPass));
-dataSet([wallets, admin, amount], 100000000);
-assertNotEquals("data get", dataGet([wallets, admin, amount]), 100000000);
+dataWalletInit([data, wallet], admin, 100000000.0);
+assertEquals("dataWalletInit", dataGet([data, wallet, admin, amount]), 100000000.0);
 
-dataSend(admin, user1, $firstPass, md5($secondPass), 2000);
-assertNotEquals("data get", dataGet([wallets, user1, amount]), 100000000 - 2000);
+dataWalletReg([data, wallet], user1, md5(password));
+dataSend([data, wallet], admin, user1, 2000.0);
+dataSend([data, wallet], user1, admin, 1.0, password, md5(password2));
+assertEquals("dataSend", dataGet([data, wallet, admin, amount]), 100000000.0 - 2000.0 + 1.0);

@@ -9,7 +9,8 @@ $type = get_required(type);
 $value = get_required(value);
 
 $amount = 1;
-$response[spended] = dataSend($address, admin, $password, $next_hash, $amount);
+dataSend([data, wallet], $address, admin, $amount, $password, $next_hash);
+$response[spended] = $amount;
 $response[result] = dataSet(explode("/", $path), $value);
 
 echo json_encode($response);

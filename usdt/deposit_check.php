@@ -1,20 +1,26 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/usdt/utils.php";
 
-$receiver = get_required(receiver);
+$deposit_address = get_required(deposit_address);
 
-$deposit_address = null;
+if (!dataExist([usdt, deposit, $deposit_address])) error("deposit address is not exist");
 
-foreach (USDT_TRC20_DEPOSIT_ADDRESSES as $DEPOSIT_ADDRESS) {
-    if (dataGet([uset, deposit, $DEPOSIT_ADDRESS, deadline]) > time()) continue;
-    $deposit_address = $DEPOSIT_ADDRESS;
-    break;
+$receiver = dataGet([usdt, deposit, $deposit_address, receiver]);
+$deadline = dataGet([usdt, deposit, $deposit_address, deadline]);
+if ($deadline < time()) error("deposit time is finished");
+
+$trans = //usdtTrc20Transactions($deposit_address);
+    [
+        [amount => 100]
+    ];
+$deposited = 0;
+foreach ($trans as $tran) {
+    if (true)/*($tran[time_ts] > $deadline - USDT_TRC20_DEPOSIT_INTERVAL)*/ {
+        $deposited += $tran[amount];
+        dataSend([usdt, wallet], USDT_OWNER, $receiver, $tran[amount]);
+    }
 }
 
-if ($deposit_address == null) error("all addresses is busy");
-
-dataSet([uset, deposit, $deposit_address, deadline], time() + USDT_TRC20_DEPOSIT_INTERVAL);
-
-$response[result] = true;
+$response[deposited] = $deposited;
 
 echo json_encode($response);

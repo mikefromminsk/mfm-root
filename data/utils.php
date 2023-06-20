@@ -201,6 +201,11 @@ function dataCount(array $path)
     return intval(scalarWhere("data", "count(*)", array("data_parent_id" => $data_id)));
 }
 
+function dataExist(array $path)
+{
+    return dataCount($path) !== false;
+}
+
 function dataDel(array $path)
 {
     $data_id = dataNew($path, false);
@@ -251,22 +256,49 @@ function dataPath($data_id)
     return dataPath($node[data_parent_id]) . "/" . $node[data_key];
 }
 
-function dataMeta(array $path){
+function dataMeta(array $path)
+{
     $data_id = dataNew($path, false);
     return selectRowWhere(data, [data_id => $data_id]);
 }
 
-function dataChildren(array $path){
+function dataChildren(array $path)
+{
     $data_id = dataNew($path, false);
     return selectListWhere(data, data_key, [data_parent_id => $data_id]);
 }
 
-function dataSend(array $path, $fromAddress, $toAddress, $password, $next_hash, $amount){
-    if (dataGet(array_merge($path, [$fromAddress, amount])) < $amount) error("balance is not enough");
-    if (dataGet(array_merge($path, [$fromAddress, next_hash])) != md5($password)) error("password is not right: $passwordHash");
+function dataAppName(){
+    $script_path = str_replace($_SERVER["DOCUMENT_ROOT"], "", $_SERVER["SCRIPT_NAME"]);
+    return str_split($script_path, "/")[1];
+}
+
+function dataWalletInit(array $path, $address, $amount) {
+    if (dataExist($path)) error("wallet is not empty");
+    dataSet(array_merge($path, [$address, amount]), $amount);
+    dataSet(array_merge($path, [$address, owner]), dataAppName());
+}
+
+function dataWalletReg(array $path, $address, $next_hash) {
+    if (dataExist(array_merge($path, [$address]))) error("address exist");
+    dataSet(array_merge($path, [$address, next_hash]), $next_hash);
+}
+
+function dataWalletBalance(array $path, $address) {
+    return dataGet(array_merge($path, [$address, amount])) ?: 0.0;
+}
+
+function dataSend(array $path, $fromAddress, $toAddress, $amount, $password = null, $next_hash = null)
+{
+    if (dataWalletBalance($path, $fromAddress) < $amount) error("balance is not enough");
+    if ($password == null || $next_hash == null) {
+        if (dataGet(array_merge($path, [$fromAddress, owner])) != dataAppName()) error("you are not owner of wallet");
+    } else {
+        if (dataGet(array_merge($path, [$fromAddress, next_hash])) != md5($password)) error("password is not right");
+    }
 
     dataSet(array_merge($path, [$fromAddress, password]), $password);
-    dataSet(array_merge($path, [wallets, $fromAddress, next_hash]), $next_hash);
+    dataSet(array_merge($path, [$fromAddress, next_hash]), $next_hash);
 
     dataDec(array_merge($path, [$fromAddress, amount]), $amount);
     dataInc(array_merge($path, [$toAddress, amount]), $amount);

@@ -2,6 +2,8 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/utils.php";
 
+const USDT_OWNER = 'admin';
+
 const USDT_TRC20_CONTRACT = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
 
 const USDT_TRC20_DEPOSIT_ADDRESSES = [
@@ -25,7 +27,7 @@ function usdtTrc20Transactions($wallet_address)
             && $trans["to_address"] == $wallet_address
             && $trans["finalResult"] == "SUCCESS") {
             $response[] = [
-                "quant" => $trans["quant"] / 1000000,
+                "amount" => $trans["quant"] / 1000000,
                 "time" => $trans["block_ts"]
             ];
         }
