@@ -1,13 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--https://material.angularjs.org/latest/-->
     <meta charset="UTF-8">
-    <title>Title</title>
+    <script src="/angular/angular.min.js"></script>
+    <link href="/angular/angular-material.min.css" rel="stylesheet">
+    <script src="/angular/angular-material.min.js"></script>
+    <script src="/data/utils.js"></script>
+    <script src="/md5/md5.js"></script>
+    <script src="/wallet/login.js"></script>
+    <script>
+        angular.module("App", ['ngMaterial', 'ngAnimate'])
+            .controller("Controller", function ($scope, $http, $mdBottomSheet) {
+                $scope.menuIndex = 0
+                $scope.login = function () {
+                    walletLogin($mdBottomSheet, "data/wallet", function () {
+                        refreshList();
+                    })
+                }
+
+                $scope.coins = {}
+
+                function checkWalletAddress(address) {
+                    dataGet(address, function (wallet) {
+                        if (wallet != null) {
+                            $scope.coins[address] = wallet
+                            $scope.$apply()
+                        }
+                    })
+                }
+
+                function refreshList() {
+                    checkWalletAddress("data/wallet")
+                    checkWalletAddress("usdt/wallet")
+                }
+
+
+                $scope.transactions = []
+
+                $scope.send = function (address, coin) {
+                    dataSend(address,
+                        coin)
+                }
+            })
+    </script>
 </head>
-<body>
-<form action="sign.php" enctype="multipart/form-data" method="post">
-  <input type="file" name="keys">
-  <input type="submit">
-</form>
+<body class="col" ng-app="App" ng-controller="Controller">
+<div class="row" style="background: #4F50FB">
+    <div class="flex col align-start-end">
+        <md-button class="md-raised md-primary" ng-click="login()">
+            Login
+        </md-button>
+    </div>
+</div>
+<md-tabs class="page fade-animation" class="flex" md-selected="menuIndex"
+         md-autoselect md-swipe-content md-stretch-tabs>
+    <md-tab label="Coins">
+        <div class="col" ng-repeat="(address, coin) in coins">
+            <div class="row align-start-center">
+                {{address}} {{coin.amount}}
+                <md-button class="md-raised md-primary" ng-click="send(address, coin)">
+                    Send
+                </md-button>
+            </div>
+        </div>
+    </md-tab>
+    <md-tab label="Transfers">
+    </md-tab>
+
+</md-tabs>
+
+
 </body>
 </html>

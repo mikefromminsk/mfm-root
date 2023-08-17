@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--https://material.angularjs.org/latest/-->
+  <meta charset="UTF-8">
+  <script src="/angular/angular.min.js"></script>
+  <link href="/angular/angular-material.min.css" rel="stylesheet">
+  <script src="/angular/angular-material.min.js"></script>
+  <script>
+    angular.module("App", ['ngMaterial', 'ngAnimate'])
+            .controller("Controller", function ($scope, $http) {
+              $scope.open = function (path) {
+                  document.getElementById("main-frame").src = path
+              }
+              $scope.open("deposit")
+            })
+  </script>
+</head>
+<body ng-app="App" ng-controller="Controller" class="col">
+<div class="row align-center-start" style="background: black">
+  <div class="row " style="width: 800px; color: white">
+    <md-button ng-click="open('deposit')">Deposit</md-button>
+    <md-button ng-click="open('withdraw')">Withdraw</md-button>
+  </div>
+</div>
+<div class="row align-center-start flex">
+  <iframe id="main-frame" class="fill" style="width: 800px; border: none">
+  </iframe>
+</div>
+</body>
+</html>
