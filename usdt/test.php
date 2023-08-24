@@ -2,7 +2,7 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/usdt/utils.php";
 
-dataWalletInit([usdt, wallet], USDT_OWNER, 1000.0);
+dataWalletInit([usdt, wallet], USDT_OWNER, md5(password), 1000.0);
 
 $receiver = "x29a100@gmail.com";
 
@@ -15,7 +15,7 @@ assertEquals("deposit_check",
     100);
 
 assertEquals("balance",
-    http_post_json("localhost/usdt/balance.php", [address => $receiver])[balance],
+    http_post_json("localhost/usdt/balance/balance.php", [address => $receiver])[amount],
     100);
 
 /*assertEquals("send",

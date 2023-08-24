@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--https://material.angularjs.org/latest/-->
+  <meta charset="UTF-8">
+  <script src="/angular/angular.min.js"></script>
+  <link href="/angular/angular-material.min.css" rel="stylesheet">
+  <script src="/angular/angular-material.min.js"></script>
+  <script src="/data/utils.js"></script>
+  <script>
+    angular.module("App", ['ngMaterial', 'ngAnimate'])
+            .controller("Controller", function ($scope, $http) {
+              $scope.receiver = "example@gmail.com"
+              $scope.deposit_address = ""
+              $scope.depositStart = function () {
+                post("start", {
+                  receiver: $scope.receiver
+                }, function (response) {
+                  $scope.deposit_address = response.deposit_address
+                  startDepositCheckTimer()
+                })
+              }
+              var CHECK_INTERVAL = 3
+              $scope.countDownTimer = 0
+              $scope.deposited = 0
+              var depositCheckTimer
+
+              function startDepositCheckTimer() {
+                $scope.countDownTimer = CHECK_INTERVAL
+                depositCheckTimer = setInterval(function () {
+                  $scope.countDownTimer -= 1
+                  $scope.$apply()
+                  if ($scope.countDownTimer % CHECK_INTERVAL == 0) {
+                    $scope.countDownTimer = CHECK_INTERVAL
+                    post("check", {
+                      deposit_address: $scope.deposit_address
+                    }, function (response) {
+                      $scope.deposited = response.deposited
+                      $scope.$apply()
+                      clearInterval(depositCheckTimer)
+                    })
+                  }
+                }, 1000)
+              }
+            })
+  </script>
+</head>
+<body ng-app="App" ng-controller="Controller" class="col" style="background: black; color: white">
+<div class="row align-center-start flex">
+  <div class="col" style="width: 800px">
+    <input type="email" ng-model="receiver" placeholder="example@gmail.com">
+    <md-button ng-click="depositStart()">Show deposit address</md-button>
+    <input type="text" ng-model="deposit_address" placeholder="0x93293256848984984323">
+    <span ng-show="countDownTimer && deposited == 0">{{countDownTimer}}</span>
+    <span ng-show="deposited > 0">SUCCESS deposited {{deposited}}</span>
+  </div>
+</div>
+</body>
+</html>

@@ -7,7 +7,7 @@ $password = get_required(password);
 $next_hash = get_required(next_hash);
 $amount = get_int_required(amount);
 
-dataSend([data, wallet], $fromAddress, $toAddress, $amount, $password, $next_hash);
+dataWalletSend([data, wallet], $fromAddress, $toAddress, $amount, $password, $next_hash);
 
 $response[reuslt] = true;
 

@@ -24,10 +24,22 @@ $value = dataGet(["login", "hrp"]);
 assertNotEquals("data get", $value["test2"], "123");
 assertNotEquals("data get", $value["test3"], "321");*/
 
-dataWalletInit([data, wallet], admin, 100000000.0);
-assertEquals("dataWalletInit", dataGet([data, wallet, admin, amount]), 100000000.0);
+dataWalletInit([data, wallet], admin, md5(password), 100000000.0);
+/**/assertEquals("dataWalletInit", dataGet([data, wallet, admin, amount]), 100000000.0);
 
 dataWalletReg([data, wallet], user1, md5(password));
-dataSend([data, wallet], admin, user1, 2000.0);
-dataSend([data, wallet], user1, admin, 1.0, password, md5(password2));
-assertEquals("dataSend", dataGet([data, wallet, admin, amount]), 100000000.0 - 2000.0 + 1.0);
+dataWalletSend([data, wallet], admin, user1, 2000.0, password, md5(password2));
+dataWalletSend([data, wallet], user1, admin, 1.0, password, md5(password2));
+/**/assertEquals("dataSend", dataGet([data, wallet, admin, amount]), 100000000.0 - 2000.0 + 1.0);
+
+//test contract spend
+
+dataWalletDelegate([data, wallet], user1, password2, "data/testDelegate");
+
+$_POST["gas_address"] = admin;
+$_POST["gas_password"] = password2;
+$_POST["gas_next_hash"] = md5(password3);
+commit("commit");
+
+assertEquals("testDelegate", http_post_json("localhost/data/testDelegate.php", [])[success], true);
+/**/assertEquals("balanceAfterBurn", strval(dataGet([data, wallet, user1, amount])), strval(1999 - FILE_ROW_SIZE));

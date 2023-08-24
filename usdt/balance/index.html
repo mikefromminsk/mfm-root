@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!--https://material.angularjs.org/latest/-->
+  <meta charset="UTF-8">
+  <script src="/angular/angular.min.js"></script>
+  <link href="/angular/angular-material.min.css" rel="stylesheet">
+  <script src="/angular/angular-material.min.js"></script>
+  <script src="/data/utils.js"></script>
+  <script>
+    angular.module("App", ['ngMaterial', 'ngAnimate'])
+            .controller("Controller", function ($scope, $http) {
+              $scope.address = "example@gmail.com"
+              $scope.getBalance = function () {
+                post("balance", {
+                  address: $scope.address
+                }, function (response) {
+                  $scope.balance = response.balance
+                })
+              }
+            })
+  </script>
+</head>
+<body ng-app="App" ng-controller="Controller" class="col" style="background: black; color: white">
+<div class="row align-center-start flex">
+  <div class="col" style="width: 800px">
+    <input type="email" ng-model="address" placeholder="example@gmail.com">
+    <md-button ng-click="getBalance()">Get Balance</md-button>
+    <div class="row" ng-show="balance != null">
+      <span>Current balance: </span>
+      <span>{{balance}}</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

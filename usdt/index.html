@@ -12,14 +12,17 @@
               $scope.open = function (path) {
                   document.getElementById("main-frame").src = path
               }
-              $scope.open("deposit")
+              $scope.open("reg")
             })
   </script>
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 <div class="row align-center-start" style="background: black">
   <div class="row " style="width: 800px; color: white">
+    <md-button ng-click="open('reg')">Create account</md-button>
     <md-button ng-click="open('deposit')">Deposit</md-button>
+    <md-button ng-click="open('balance')">Balance</md-button>
+    <md-button ng-click="open('send')">Send</md-button>
     <md-button ng-click="open('withdraw')">Withdraw</md-button>
   </div>
 </div>

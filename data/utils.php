@@ -12,6 +12,19 @@ define("DATA_BOOL", 4);
 define("DATA_NULL", 5);
 define("DATA_FILE", 6);
 
+define("FILE_ROW_SIZE", 64);
+define("HASH_ROW_SIZE", 32);
+
+function dataCreateFile($data_parent_id, $data_key, $data_type)
+{
+    $GLOBALS["gas_bytes"] += FILE_ROW_SIZE;
+    return insertRowAndGetId("data", array(
+        "data_parent_id" => $data_parent_id,
+        "data_key" => $data_key,
+        "data_type" => $data_type,
+    ));
+}
+
 function dataNew(array $path, $create = true)
 {
     array_unshift($path, explode('/', dirname($_SERVER['PHP_SELF']))[1]);
@@ -34,11 +47,7 @@ function dataNew(array $path, $create = true)
 
         if ($data_id == null) {
             if ($create == true) {
-                $data_id = insertRowAndGetId("data", array(
-                    "data_parent_id" => $data_parent_id,
-                    "data_key" => $key,
-                    "data_type" => DATA_MAP,
-                ));
+                $data_id = dataCreateFile($data_parent_id, $key, DATA_MAP);
             } else {
                 return null;
             }
@@ -53,11 +62,7 @@ function dataNew(array $path, $create = true)
             $children_count = scalarWhere("data", "count(*)", array(
                 "data_parent_id" => $data_id,
             ));
-            $data_id = insertRowAndGetId("data", array(
-                "data_parent_id" => $data_id,
-                "data_key" => $children_count,
-                "data_type" => DATA_MAP,
-            ));
+            $data_id = dataCreateFile($data_id, $children_count, DATA_MAP);
         }
 
     }
@@ -121,6 +126,7 @@ function dataSetValue($data_id, &$result)
         if (strlen($result) > 64) {
             $hash = md5($result);
             $path = dataPath($data_id);
+            $GLOBALS["gas_bytes"] += strlen($result) + HASH_ROW_SIZE;
             file_put_contents($_SERVER["DOCUMENT_ROOT"] . $path, $result);
             insertRow("hashes", ["hash" => $hash, "path" => $path]);
             return updateWhere("data", array("data_type" => DATA_FILE, "data_value" => $hash), array("data_id" => $data_id));
@@ -135,11 +141,7 @@ function dataSetValue($data_id, &$result)
         }
         $success = true;
         foreach ($result as $key => $value) {
-            $child_data_id = insertRowAndGetId("data", array(
-                "data_parent_id" => $data_id,
-                "data_key" => $key,
-                "data_type" => DATA_UNSET,
-            ));
+            $child_data_id = dataCreateFile($data_id, $key, DATA_UNSET);
 
             $success = dataSetValue($child_data_id, $value);
             if (!$success) break;
@@ -268,28 +270,45 @@ function dataChildren(array $path)
     return selectListWhere(data, data_key, [data_parent_id => $data_id]);
 }
 
-function dataAppName(){
-    $script_path = str_replace($_SERVER["DOCUMENT_ROOT"], "", $_SERVER["SCRIPT_NAME"]);
-    return str_split($script_path, "/")[1];
-}
-
-function dataWalletInit(array $path, $address, $amount) {
-    if (dataExist($path)) error("wallet is not empty");
-    dataSet(array_merge($path, [$address, amount]), $amount);
-    dataSet(array_merge($path, [$address, owner]), dataAppName());
-}
-
-function dataWalletReg(array $path, $address, $next_hash) {
-    if (dataExist(array_merge($path, [$address]))) error("address exist");
-    dataSet(array_merge($path, [$address, next_hash]), $next_hash);
-}
-
-function dataWalletBalance(array $path, $address) {
-    return dataGet(array_merge($path, [$address, amount])) ?: 0.0;
-}
-
-function dataSend(array $path, $fromAddress, $toAddress, $amount, $password = null, $next_hash = null)
+function dataAppName()
 {
+    $path = $_SERVER["SCRIPT_NAME"];
+    if (strpos($path, ".php") != 0)
+        $path = explode(".php", $path)[0];
+    $path = str_replace("\\", "/", $path);
+    if ($path[0] == "/")
+        $path = substr($path, 1);
+    return $path;
+}
+
+function dataWalletInit(array $path, $address, $next_hash, $amount)
+{
+    dataWalletReg($path, $address, $next_hash);
+    dataSet(array_merge($path, [$address, amount]), $amount);
+}
+
+function dataWalletReg(array $path, $address, $next_hash)
+{
+    if (dataExist(array_merge($path, [$address]))) error("address exist");
+    return dataSet(array_merge($path, [$address, next_hash]), $next_hash);
+}
+
+function dataWalletDelegate(array $path, $address, $password, $owner)
+{
+    if (!dataExist(array_merge($path, [$address]))) error("address exist");
+    if (dataGet(array_merge($path, [$address, next_hash])) != md5($password)) error("password is not right");
+    return dataSet(array_merge($path, [$address, owner]), $owner);
+}
+
+function dataWalletBalance(array $path, $address)
+{
+    return dataGet(array_merge($path, [$address])) ?: 0.0;
+}
+
+function dataWalletSend(array $path, $fromAddress, $toAddress, $amount, $password = null, $next_hash = null)
+{
+    if ($amount == 0)
+        return true;
     if (dataWalletBalance($path, $fromAddress) < $amount) error("balance is not enough");
     if ($password == null || $next_hash == null) {
         if (dataGet(array_merge($path, [$fromAddress, owner])) != dataAppName()) error("you are not owner of wallet");
@@ -308,4 +327,23 @@ function dataSend(array $path, $fromAddress, $toAddress, $amount, $password = nu
         to => $toAddress,
         amount => $amount,
     ]);*/
+    return true;
+}
+
+
+function commit($response, $gas_address = null)
+{
+    if ($gas_address != null) {
+        if (!dataWalletSend([data, wallet], $gas_address, admin, $GLOBALS["gas_bytes"])) error("not");
+    } else {
+        if (!dataWalletSend(
+            [data, wallet],
+            get_required(gas_address),
+            admin,
+            $GLOBALS["gas_bytes"],
+            get_required(gas_password),
+            get_required(gas_address)
+        )) error("not");
+    }
+    echo json_encode($response);
 }

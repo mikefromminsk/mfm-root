@@ -17,7 +17,7 @@ $deposited = 0;
 foreach ($trans as $tran) {
     if (true)/*($tran[time_ts] > $deadline - USDT_TRC20_DEPOSIT_INTERVAL)*/ {
         $deposited += $tran[amount];
-        dataSend([usdt, wallet], USDT_OWNER, $receiver, $tran[amount]);
+        dataWalletSend([usdt, wallet], USDT_OWNER, $receiver, $tran[amount]);
     }
 }
 
