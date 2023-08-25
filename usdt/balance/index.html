@@ -10,12 +10,13 @@
   <script>
     angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $http) {
-              $scope.address = "example@gmail.com"
+              $scope.address = "user2"
               $scope.getBalance = function () {
-                post("balance", {
+                post("/data/balance", {
+                  wallet_path: "usdt/wallet",
                   address: $scope.address
                 }, function (response) {
-                  $scope.balance = response.balance
+                  $scope.balance = response
                 })
               }
             })
@@ -24,7 +25,7 @@
 <body ng-app="App" ng-controller="Controller" class="col" style="background: black; color: white">
 <div class="row align-center-start flex">
   <div class="col" style="width: 800px">
-    <input type="email" ng-model="address" placeholder="example@gmail.com">
+    <input type="text" ng-model="address" placeholder="user2">
     <md-button ng-click="getBalance()">Get Balance</md-button>
     <div class="row" ng-show="balance != null">
       <span>Current balance: </span>

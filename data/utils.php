@@ -78,7 +78,7 @@ function data_get_value($data, $level = -1, $asc = null, $offset = 0, $count = 1
     if ($data["data_type"] == DATA_BOOL) {
         $result = boolval($data["data_value"]);
     } else if ($data["data_type"] == DATA_NUMBER) {
-        $result = floatval($data["data_value"]);
+        $result = doubleval($data["data_value"]);
     } else if ($data["data_type"] == DATA_STRING) {
         $result = $data["data_value"];
     } else if ($data["data_type"] == DATA_FILE) {
@@ -284,6 +284,7 @@ function dataWalletInit(array $path, $address, $next_hash, $amount)
     if (dataExist($path)) error("path exist");
     dataWalletReg($path, $address, $next_hash);
     dataSet(array_merge($path, [$address, amount]), $amount);
+    return dataWallet($path, $address);
 }
 
 function dataWalletReg(array $path, $address, $next_hash)
@@ -343,17 +344,18 @@ function dataWalletSend(array $path, $fromAddress, $toAddress, $amount, $passwor
 
 function commit($response, $gas_address = null)
 {
-    if ($gas_address != null) {
-        dataWalletSend([data, wallet], $gas_address, admin, $GLOBALS["gas_bytes"]);
-    } else {
-        dataWalletSend(
-            [data, wallet],
-            get_required(gas_address),
-            admin,
-            $GLOBALS["gas_bytes"],
-            get_required(gas_password),
-            get_required(gas_next_hash)
-        );
-    }
+    if ($GLOBALS["gas_bytes"] != 0)
+        if ($gas_address != null) {
+            dataWalletSend([data, wallet], $gas_address, admin, $GLOBALS["gas_bytes"]);
+        } else {
+            dataWalletSend(
+                [data, wallet],
+                get_required(gas_address),
+                admin,
+                $GLOBALS["gas_bytes"],
+                get_required(gas_password),
+                get_required(gas_next_hash)
+            );
+        }
     echo json_encode($response);
 }

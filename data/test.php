@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/data/init.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/data/schema.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/utils.php";
 
 dataSet(["login", "test1"], "123");
@@ -51,21 +51,30 @@ function gas(){
     ];
 }
 
-assertEquals("testReg", http_post_json("localhost/data/reg.php", [
-    address => usdt_reg,
-    next_hash => md5(password1),
-] + gas())[success], true);
+function sendGasForScript($address, $script){
+    assertEquals("testReg $script", http_post_json("localhost/data/reg.php", [
+            address => $address,
+            next_hash => md5(password1),
+        ] + gas())[success], true);
 
-assertEquals("testSend", http_post_json("localhost/data/send.php", [
-    fromAddress => admin,
-    toAddress => usdt_reg,
-    password => password . $gas_index,
-    next_hash => md5(password . ++$gas_index),
-    amount => 10000,
-] + gas())[success], true);
+    assertEquals("testSend $script", http_post_json("localhost/data/send.php", [
+            fromAddress => admin,
+            toAddress => $address,
+            password => password . $GLOBALS[gas_index],
+            next_hash => md5(password . ++$GLOBALS[gas_index]),
+            amount => 100000,
+        ] + gas())[success], true);
 
-assertEquals("testDelegate", http_post_json("localhost/data/delegate.php", [
-    address => usdt_reg,
-    password => password1,
-    script => "usdt/reg/reg",
-] + gas())[success], true);
+    assertEquals("testDelegate $script", http_post_json("localhost/data/delegate.php", [
+            address => $address,
+            password => password1,
+            script => $script,
+        ] + gas())[success], true);
+}
+
+
+sendGasForScript(usdt_reg, "usdt/reg/reg");
+sendGasForScript(usdt_deposit, "usdt/deposit/start");
+sendGasForScript(usdt_check, "usdt/deposit/check");
+
+echo $gas_index;

@@ -17,6 +17,6 @@ dataSet([usdt, deposit, $deposit_address, receiver], $receiver);
 dataSet([usdt, deposit, $deposit_address, deadline], time() + USDT_TRC20_DEPOSIT_INTERVAL);
 
 $response[deposit_address] = $deposit_address;
-$response[result] = true;
+$response[success] = true;
 
-echo json_encode($response);
+commit($response, usdt_deposit);

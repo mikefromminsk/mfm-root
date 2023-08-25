@@ -23,4 +23,4 @@ foreach ($trans as $tran) {
 
 $response[deposited] = $deposited;
 
-echo json_encode($response);
+commit($response, usdt_check);
