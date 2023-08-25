@@ -1,10 +1,17 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/data/test.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/usdt/utils.php";
 
-dataWalletInit([usdt, wallet], USDT_OWNER, md5(password), 1000.0);
+http_post_json("localhost/data/test/test.php", []);
+
+dataWalletInit([usdt, wallet], USDT_OWNER, md5(password), 1000000.0);
 
 $receiver = "x29a100@gmail.com";
+
+assertEquals("reg",
+    $deposit_address = http_post_json("localhost/usdt/deposit/reg/reg.php",
+        [address => $receiver, next_hash => md5(password)]),
+    true);
 
 assertNotEquals("deposit_start",
     $deposit_address = http_post_json("localhost/usdt/deposit/start.php", [receiver => $receiver])[deposit_address],

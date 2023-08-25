@@ -10,16 +10,21 @@
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $http) {
+                $scope.wallet_path =
                 $scope.address = "example@gmail.com"
-                $scope.createAccount = function () {
-                    wallet.nextHash("usdt/wallet/" + $scope.address, function (next_hash) {
-                        post("reg", {
-                            address: $scope.address,
-                            next_hash: next_hash
-                        }, function (response) {
-                            alert(response.success)
+                $scope.password = "password"
+                $scope.reg = function () {
+                    wallet.init($scope.address, $scope.password)
+                        .nextHash("usdt/wallet", function (next_hash) {
+                            post("/usdt/reg/reg", {
+                                address: $scope.address,
+                                next_hash: next_hash
+                            }, function (response) {
+                                alert(response.success)
+                            }, function (response) {
+                                alert(response.message)
+                            })
                         })
-                    })
                 }
             })
     </script>
@@ -28,7 +33,8 @@
 <div class="row align-center-start flex">
     <div class="col" style="width: 800px">
         <input type="email" ng-model="address" placeholder="example@gmail.com">
-        <md-button ng-click="createAccount()">Create account</md-button>
+        <input type="password" ng-model="password" placeholder="password">
+        <md-button ng-click="reg()">Create account</md-button>
         <div class="row" ng-show="balance != null">
             <span>Current balance: </span>
             <span>{{balance}}</span>

@@ -7,8 +7,6 @@ $password = get_required(password);
 $next_hash = get_required(next_hash);
 $amount = get_int_required(amount);
 
-dataWalletSend([data, wallet], $fromAddress, $toAddress, $amount, $password, $next_hash);
+$response[success] = dataWalletSend([data, wallet], $fromAddress, $toAddress, $amount, $password, $next_hash);
 
-$response[reuslt] = true;
-
-echo json_encode($response);
+commit($response);

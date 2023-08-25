@@ -1,12 +1,14 @@
-function post(url, params, success) {
+function post(url, params, success, error) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     xhr.onload = () => {
         if (xhr.readyState == 4 && xhr.status == 200) {
-            success(JSON.parse(xhr.response))
+            if (success != null)
+                success(JSON.parse(xhr.response))
         } else {
-            console.log(`Error: ${xhr.status}`)
+            if (error != null)
+                error(JSON.parse(xhr.response))
         }
     };
     xhr.send(JSON.stringify(params))
@@ -47,26 +49,27 @@ function dataInfo(path, callback) {
 var wallet = {
     username: "",
     password: "",
-    login: function (username, password) {
+    init: function (username, password) {
         this.username = username
         this.password = password
+        return this
     },
-    init: function () {
-        prompt("Please enter your name", "Harry Potter");
-    },
-    nextHash: function (app, callback) {
-        if (this.username == null || this.password == null){
+    nextHash: function (wallet_path, callback) {
+        if (this.username == null || this.password == null) {
             this.username = prompt("Please enter your name");
             this.password = prompt("Please enter your password");
         }
-        post(app + "/balance", {
-            address: this.username
+        post("/data/wallet", {
+            wallet_path: wallet_path,
+            address: this.username,
         }, function (response) {
-            calc_next_hash(response.prev_key)
+            calc_next_hash(response.next_hash)
+        }, function () {
+            calc_next_hash()
         })
-        var calc_next_hash = function (prev_key) {
+        var calc_next_hash = function (next_hash) {
             // approve password
-            callback(MD5(prev_key + this.password))
+            callback(MD5((next_hash || "") + wallet.username + wallet.password))
         }
     }
 }

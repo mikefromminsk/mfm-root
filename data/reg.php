@@ -6,4 +6,4 @@ $next_hash = get_required(next_hash);
 
 $response[success] = dataWalletReg([data, wallet], $address, $next_hash);
 
-commit($response, usdt);
+commit($response);
