@@ -6,21 +6,26 @@ $deposit_address = get_required(deposit_address);
 if (!dataExist([usdt, deposit, $deposit_address])) error("deposit address is not exist");
 
 $receiver = dataGet([usdt, deposit, $deposit_address, receiver]);
-$deadline = dataGet([usdt, deposit, $deposit_address, deadline]);
-if ($deadline < time()) error("deposit time is finished");
+$last_tx_time = dataGet([usdt, deposit, $deposit_address, last_tx_time]) ?: 0;
+//if ($deadline < time()) error("deposit time is finished");
 
-$trans = //usdtTrc20Transactions($deposit_address);
-    [
-        [amount => 100]
-    ];
+$trans = usdtTrc20Transactions($deposit_address);
+
 $deposited = 0;
 foreach ($trans as $tran) {
-    if (true)/*($tran[time_ts] > $deadline - USDT_TRC20_DEPOSIT_INTERVAL)*/ {
+    if ($tran[time] > $last_tx_time) {
         $deposited += $tran[amount];
-        dataWalletSend([usdt, wallet], USDT_OWNER, $receiver, $tran[amount]);
+        $last_tx_time = $tran[time];
     }
 }
 
+if ($deposited > 0) {
+    dataSet([usdt, deposit, $deposit_address, last_tx_time], $last_tx_time);
+    dataWalletSend([usdt, wallet], USDT_OWNER, $receiver, $deposited);
+}
+
+$response[last_tx_time] = $last_tx_time;
 $response[deposited] = $deposited;
+$response[trans] = $trans;
 
 commit($response, usdt_check);

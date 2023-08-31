@@ -38,13 +38,12 @@ assertEquals("usdt delegate", http_post_json("localhost/usdt/delegate.php", [
 assertEquals("deposit_check",
     http_post_json("localhost/usdt/deposit/check.php",
         [deposit_address => $deposit_address])[deposited],
-    100);
+    5);
 
 assertEquals("balance usdt",
     http_post_json("localhost/data/balance/balance.php",
         [address => $user1, wallet_path => "usdt/wallet"]),
-    100);
-
+    5);
 
 $user2 = "user2";
 
@@ -57,5 +56,5 @@ assertEquals("send usdt", http_post_json("localhost/usdt/send/send.php", [
     toAddress => $user2,
     password => password,
     next_hash => md5(password2),
-    amount => 89,
-] + gas())[sent], 89);
+    amount => 4,
+] + gas())[sent], 4);

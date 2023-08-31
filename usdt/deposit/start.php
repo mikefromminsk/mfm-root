@@ -3,10 +3,10 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/usdt/utils.php";
 
 $receiver = get_required(receiver);
 
-$deposit_address = null;
+if (dataWallet([usdt, wallet], $receiver) == null) error("address not exist");
 
 foreach (USDT_TRC20_DEPOSIT_ADDRESSES as $DEPOSIT_ADDRESS) {
-    //if (dataGet([usdt, deposit, $DEPOSIT_ADDRESS, deadline]) > time()) continue;
+    if (dataGet([usdt, deposit, $DEPOSIT_ADDRESS, deadline]) > time()) continue;
     $deposit_address = $DEPOSIT_ADDRESS;
     break;
 }

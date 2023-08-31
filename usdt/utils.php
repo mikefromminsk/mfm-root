@@ -7,10 +7,8 @@ const USDT_OWNER = 'admin';
 const USDT_TRC20_CONTRACT = 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t';
 
 const USDT_TRC20_DEPOSIT_ADDRESSES = [
-    "TL9LyHLHCtqaZ8pRvih7ozTsPoJRjzrDKR",
-    "TSXvWWCsysLQoPujPCEbYQySXP66ZvN57b",
     "TPWZ6TNgYBCh18Bf4EVfKesoHHRJ4w8SgT",
-    "TLt3t3rmLMg21AUuee5jW23N3ooawEStC2"
+    "TSXvWWCsysLQoPujPCEbYQySXP66ZvN57b",
 ];
 
 const USDT_TRC20_DEPOSIT_INTERVAL = 30 * 1000;
@@ -28,7 +26,9 @@ function usdtTrc20Transactions($wallet_address)
             && $trans["finalResult"] == "SUCCESS") {
             $response[] = [
                 "amount" => $trans["quant"] / 1000000,
-                "time" => $trans["block_ts"]
+                "time" => $trans["block_ts"],
+                "transaction_id" => $trans["transaction_id"],
+                "trans" => $trans
             ];
         }
     }

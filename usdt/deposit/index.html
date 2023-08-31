@@ -10,7 +10,7 @@
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $http) {
-                $scope.receiver = "example@gmail.com"
+                $scope.receiver = "user2"
                 $scope.deposit_address = ""
                 $scope.depositStart = function () {
                     post("start", {
