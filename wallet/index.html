@@ -5,21 +5,58 @@
     <meta charset="UTF-8">
     <script src="/angular/angular.min.js"></script>
     <link href="/angular/angular-material.min.css" rel="stylesheet">
+    <link href="binance_style.css" rel="stylesheet">
+    <link href="colors.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
     <script src="/angular/angular-material.min.js"></script>
     <script src="/data/utils.js"></script>
-    <script src="/md5/md5.js"></script>
-    <script src="/wallet/login.js"></script>
+    <script src="binance_format.js"></script>
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $http, $mdBottomSheet) {
                 $scope.menuIndex = 0
                 $scope.login = function () {
-                    walletLogin($mdBottomSheet, "data/wallet", function () {
+                    $mdBottomSheet.show({
+                        templateUrl: '/wallet/login.html',
+                        locals: {
+                            app: "data/wallet",
+                        },
+                        controller: function ($scope, $mdBottomSheet, locals) {
+                            $scope.locals = locals
+                            $scope.wallet = localStorage.getItem(locals.app)
+                            if ($scope.wallet != null) {
+                                $mdBottomSheet.hide($scope.wallet)
+                            } else {
+
+                            }
+                            $scope.wallet = {
+                                address: "user1",
+                                password: "password2",
+                            }
+                            $scope.login = function () {
+                                dataGet(locals.app + "/" + $scope.wallet.address, function (wallet) {
+                                    console.log(wallet)
+                                    if (md5($scope.wallet.password) == wallet.next_hash){
+                                        localStorage.setItem(locals.app, wallet)
+                                        $mdBottomSheet.hide(wallet)
+                                    }
+                                })
+                            }
+                        }
+                    }).then(function () {
                         refreshList();
                     })
                 }
 
-                $scope.coins = {}
+                $scope.coins = [
+                    "data/wallet",
+                    "usdt/wallet",
+                ]
+
+                $scope.unused_coins = [
+                    "bitcoin/wallet",
+                    "etherium/wallet",
+                ]
 
                 function checkWalletAddress(address) {
                     dataGet(address, function (wallet) {
@@ -31,45 +68,98 @@
                 }
 
                 function refreshList() {
-                    checkWalletAddress("data/wallet")
-                    checkWalletAddress("usdt/wallet")
+                    for (var coin in $scope.coins) {
+                        checkWalletAddress(coin)
+                    }
                 }
 
 
                 $scope.transactions = []
 
-                $scope.send = function (address, coin) {
-                    dataSend(address,
-                        coin)
+                $scope.options = function (wallet_path) {
+                    $mdBottomSheet.show({
+                        templateUrl: '/wallet/options.html',
+                        scope: $scope.$new(),
+                        locals: {
+                            wallet_path: wallet_path,
+                        },
+                        controller: function ($scope, $mdBottomSheet, locals) {
+                            $scope.locals = locals
+                            $scope.send = function () {
+                                sendDialog(wallet_path)
+                            }
+                        }
+                    }).then(function () {
+
+                    })
                 }
+
+                function sendDialog(wallet_path){
+                    $mdBottomSheet.show({
+                        templateUrl: '/wallet/send.html',
+                        scope: $scope.$new(),
+                        locals: {
+                            wallet_path: wallet_path,
+                        },
+                        controller: function ($scope, $mdBottomSheet, locals) {
+                            $scope.locals = locals
+                            $scope.send = function () {
+                                wallet.send(locals.wallet_path,
+                                    $scope.to_address,
+                                    $scope.amount,
+                                    function (result) {
+
+                                    })
+                            }
+                        }
+                    }).then(function () {
+
+                    })
+
+                }
+                addBinanceFormats($scope)
             })
+
+
     </script>
 </head>
 <body class="col" ng-app="App" ng-controller="Controller">
-<div class="row" style="background: #4F50FB">
-    <div class="flex col align-start-end">
-        <md-button class="md-raised md-primary" ng-click="login()">
-            Login
-        </md-button>
+<div class="row row-content align-start-center blue-back">
+    <img class="coin img-white" src="img/logo.svg"/>
+    <div class="row flex input-wrapper">
+        <input type="text" class="flex input white-back-ripple" ng-model="search_text" placeholder="Search"
+               style=" border-radius: 20px; padding-top: 1px" >
+    </div>
+    <div ng-click="login()" class="blue-back-ripple">
+        <img class="coin" src="img/security.svg"/>
     </div>
 </div>
-<md-tabs class="page fade-animation" class="flex" md-selected="menuIndex"
-         md-autoselect md-swipe-content md-stretch-tabs>
-    <md-tab label="Coins">
-        <div class="col" ng-repeat="(address, coin) in coins">
-            <div class="row align-start-center">
-                {{address}} {{coin.amount}}
-                <md-button class="md-raised md-primary" ng-click="send(address, coin)">
-                    Send
-                </md-button>
-            </div>
-        </div>
-    </md-tab>
-    <md-tab label="Transfers">
-    </md-tab>
-
-</md-tabs>
-
-
+<div class="col col-content row-content">
+    <span>Your coins</span>
+</div>
+<div class="col" ng-repeat="item in coins">
+    <div class="row align-start-center row-content white-back-ripple"
+                ng-click="options(item)">
+        <img class="coin" src="img/coin.svg">
+        <span class="flex size14">{{tickerFormat(item)}}</span>
+        <span>{{priceFormat(100)}}</span>
+    </div>
+    <div class="divider"></div>
+</div>
+<div class="col col-content row-content">
+    <span >Other coins</span>
+</div>
+<div class="col" ng-repeat="item in unused_coins">
+    <div class="row align-start-center row-content white-back-ripple">
+        <img class="coin" src="img/coin.svg">
+        <span class="flex size14">{{tickerFormat(item)}}</span>
+        <md-switch ng-model="data.cb2">
+        </md-switch>
+    </div>
+    <div class="divider"></div>
+</div>
+<md-button class="md-fab md-primary" style="position: absolute; right: 30px; bottom: 40px">
+    <md-icon md-svg-src="img/plus.svg" class="img-white"></md-icon>
+</md-button>
 </body>
 </html>

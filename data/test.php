@@ -58,8 +58,8 @@ function sendGasForScript($address, $script){
         ] + gas())[success], true);
 
     assertEquals("testSend $script", http_post_json("localhost/data/send.php", [
-            fromAddress => admin,
-            toAddress => $address,
+            from_address => admin,
+            to_address => $address,
             password => password . $GLOBALS[gas_index],
             next_hash => md5(password . ++$GLOBALS[gas_index]),
             amount => 100000,

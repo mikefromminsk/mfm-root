@@ -52,8 +52,8 @@ assertEquals("reg", http_post_json("localhost/usdt/reg/reg.php",
     true);
 
 assertEquals("send usdt", http_post_json("localhost/usdt/send/send.php", [
-    fromAddress => $user1,
-    toAddress => $user2,
+    from_address => $user1,
+    to_address => $user2,
     password => password,
     next_hash => md5(password2),
     amount => 4,

@@ -1,0 +1,143 @@
+.black-text {
+    color: rgb(0, 0, 0);
+}
+
+.white-text {
+    color: rgb(255, 255, 255);
+}
+
+.blue-text {
+    color: #4F50FB;
+}
+
+.blue-back {
+    background-color: #4F50FB;
+    border-radius: 2px;
+}
+
+.green-text {
+    color: rgb(2, 192, 118);
+}
+
+.green-back {
+    background-color: rgb(2, 192, 118);
+    border-radius: 2px;
+}
+
+.white-back {
+    background-color: rgb(255, 255, 255);
+    border-radius: 2px;
+}
+
+.red-text {
+    color: rgb(248, 73, 96);
+}
+
+.red-back {
+    background-color: rgb(248, 73, 96);
+    border-radius: 2px;
+}
+
+.gray-text {
+    color: rgba(0, 0, 0, 0.66);
+}
+
+.gray-back {
+    background-color: rgb(222, 222, 222);
+    border-radius: 2px;
+}
+
+.img-blue {
+    filter: invert(34%) sepia(82%) saturate(5280%) hue-rotate(235deg) brightness(99%) contrast(98%);
+}
+
+.img-green {
+    filter: invert(54%) sepia(22%) saturate(7296%) hue-rotate(124deg) brightness(100%) contrast(98%);
+}
+
+.img-red {
+    filter: invert(35%) sepia(79%) saturate(2026%) hue-rotate(328deg) brightness(105%) contrast(94%);
+}
+
+.img-gray {
+    filter: invert(98%) sepia(1%) saturate(4021%) hue-rotate(178deg) brightness(121%) contrast(74%);
+}
+
+.img-white {
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(301deg) brightness(108%) contrast(101%);
+}
+
+.img-black {
+    filter: invert(0%) sepia(1%) saturate(7492%) hue-rotate(343deg) brightness(107%) contrast(95%);
+}
+
+.size8 {
+    font-size: 8px;
+}
+
+.size10 {
+    font-size: 10px;
+}
+
+.size12 {
+    font-size: 12px;
+}
+
+.size13 {
+    font-size: 13px;
+}
+
+.size14 {
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.size16 {
+    font-size: 16px;
+}
+
+.size18 {
+    font-size: 18px;
+}
+
+.size20 {
+    font-size: 20px;
+}
+
+.size24 {
+    font-size: 24px;
+}
+
+.size32 {
+    font-size: 32px;
+    line-height: 42px;
+}
+
+.normal-text {
+    font-weight: 400;
+}
+
+.medium-text {
+    font-weight: 500;
+}
+
+.bold-text {
+    font-weight: 600;
+}
+
+.big-text {
+    font-weight: 700;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.shadow-black {
+    box-shadow: 0 0 2px 0 #b4b4b4;
+}
+
+.shadow-blue {
+    box-shadow: 0 0 2px 0 #4F50FB;
+}
+

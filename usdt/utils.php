@@ -18,7 +18,7 @@ function usdtTrc20Transactions($wallet_address)
 {
     $contract_address = USDT_TRC20_CONTRACT;
     $trans_response = http_get_json("https://apilist.tronscanapi.com/api/new/token_trc20/transfers"
-        . "?limit=20&start=0&contract_address=$contract_address&toAddress=$wallet_address");
+        . "?limit=20&start=0&contract_address=$contract_address&to_address=$wallet_address");
     $response = [];
     foreach ($trans_response["token_transfers"] as $trans) {
         if ($trans["contract_address"] == $contract_address

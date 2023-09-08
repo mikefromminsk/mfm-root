@@ -22,21 +22,6 @@ function dataGet(path, callback) {
     })
 }
 
-function dataSend(path,
-                  fromAddress,
-                  toAddress,
-                  password,
-                  next_hash,
-                  amount,
-                  callback) {
-
-    post(path, a, {
-        path: path,
-    }, function (response) {
-        callback(response)
-    })
-}
-
 function dataInfo(path, callback) {
     post("/data/get.php", {
         path: path,
@@ -68,9 +53,26 @@ var wallet = {
             calc_next_hash()
         })
         var calc_next_hash = function (next_hash) {
-            // approve password
-            callback(MD5((next_hash || "") + wallet.username + wallet.password))
+            var password = MD5((next_hash || "") + wallet.username + wallet.password)
+            callback(MD5(password), password, wallet.username)
         }
+    },
+    send: function (wallet_path, to_address, amount) {
+        this.nextHash(wallet_path, function (next_hash, password, username) {
+            post("/data/wallet", {
+                wallet_path: wallet_path,
+                from_address: username,
+                to_address: to_address,
+                password: password,
+                next_hash: next_hash,
+                amount: amount,
+            }, function (response) {
+
+            }, function () {
+
+            })
+        })
+        
     }
 }
 

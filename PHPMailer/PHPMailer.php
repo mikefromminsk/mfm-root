@@ -4752,7 +4752,7 @@ class PHPMailer
      *
      * @return array
      */
-    public function getToAddresses()
+    public function getto_addresses()
     {
         return $this->to;
     }
@@ -4785,7 +4785,7 @@ class PHPMailer
      *
      * @return array
      */
-    public function getReplyToAddresses()
+    public function getReplyto_addresses()
     {
         return $this->ReplyTo;
     }

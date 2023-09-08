@@ -311,31 +311,31 @@ function dataWalletBalance(array $path, $address)
     return dataGet(array_merge($path, [$address, amount])) ?: 0.0;
 }
 
-function dataWalletSend(array $path, $fromAddress, $toAddress, $amount, $password = null, $next_hash = null)
+function dataWalletSend(array $path, $from_address, $to_address, $amount, $password = null, $next_hash = null)
 {
     if ($amount == 0)
         return true;
 
-    if (dataWalletBalance($path, $fromAddress) < $amount)
-        error(implode("/", $path) . "/$fromAddress balance is not enough");
-    if (dataWallet($path, $toAddress) == null) error("receiver not exist");
+    if (dataWalletBalance($path, $from_address) < $amount)
+        error(implode("/", $path) . "/$from_address balance is not enough");
+    if (dataWallet($path, $to_address) == null) error("receiver not exist");
     if ($password == null || $next_hash == null) {
-        if (dataGet(array_merge($path, [$fromAddress, script])) != dataAppName())
-            error("script cannot use " . implode("/", $path) . "/$fromAddress address");
+        if (dataGet(array_merge($path, [$from_address, script])) != dataAppName())
+            error("script cannot use " . implode("/", $path) . "/$from_address address");
     } else {
-        if (dataGet(array_merge($path, [$fromAddress, next_hash])) != md5($password))
+        if (dataGet(array_merge($path, [$from_address, next_hash])) != md5($password))
             error("password is not right");
     }
 
-    dataSet(array_merge($path, [$fromAddress, password]), $password);
-    dataSet(array_merge($path, [$fromAddress, next_hash]), $next_hash);
+    dataSet(array_merge($path, [$from_address, password]), $password);
+    dataSet(array_merge($path, [$from_address, next_hash]), $next_hash);
 
-    dataDec(array_merge($path, [$fromAddress, amount]), $amount);
-    dataInc(array_merge($path, [$toAddress, amount]), $amount);
+    dataDec(array_merge($path, [$from_address, amount]), $amount);
+    dataInc(array_merge($path, [$to_address, amount]), $amount);
 
     /*return dataAdd([transactions], [
-        from => $fromAddress,
-        to => $toAddress,
+        from => $from_address,
+        to => $to_address,
         amount => $amount,
     ]);*/
     return true;

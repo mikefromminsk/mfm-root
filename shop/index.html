@@ -7,21 +7,28 @@
     <link href="/angular/angular-material.min.css" rel="stylesheet">
     <script src="/angular/angular-material.min.js"></script>
     <link href="style.css" rel="stylesheet">
+    <link href="/flex/colors.css" rel="stylesheet">
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $http) {
                 $scope.apps = [
                     {
+                        type: "wallet",
+                        title: "Wallet",
+                        url: "/wallet",
+                        logo: "img/wallet.svg",
+                    },
+                    {
                         type: "dialog",
                         title: "Tether",
                         url: "/usdt",
-                        logo: "/home/img/tether.svg",
+                        logo: "img/tether.svg",
                     },
                     {
                         type: "page",
                         title: "Stocks",
-                        url: "/stocks",
-                        logo: "/stocks/"
+                        url: "/stock",
+                        logo: "/stock/"
                     },
                 ]
 
@@ -33,7 +40,7 @@
 </head>
 <body ng-app="App" ng-controller="Controller" class="col">
 <div class="row align-center" style="background: black">
-    <div class="row page">
+    <div class="row page white-text">
         <md-button>Home</md-button>
         <md-button>Stocks</md-button>
     </div>

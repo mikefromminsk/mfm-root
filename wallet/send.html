@@ -1,18 +1,17 @@
 <md-bottom-sheet>
-    <md-content class="col">
-        <div class="col align-start-end" >
-            <div class="flex row input-wrapper" style="margin-top: 16px">
-                <div class="input-label-top">Email</div>
-                <input type="email" class="flex input" ng-model="wallet.address">
-            </div>
-            <div class="flex row input-wrapper" style="margin-top: 16px">
-                <div class="input-label-top">Password</div>
-                <input type="password" class="flex input" ng-model="wallet.password">
-            </div>
-            <md-button class="md-primary md-raised" ng-click="login()"
-                       ng-disabled="wallet == null || wallet.address == null || wallet.password == null">
-                Login
-            </md-button>
+    <md-content class="col col-content">
+        <div class="size16">Send {{tickerFormat(locals.wallet_path)}}</div>
+        <div class="flex row input-wrapper" style="margin-top: 16px">
+            <div class="input-label-top">To address</div>
+            <input type="text" class="flex input" ng-model="to_address">
         </div>
+        <div class="flex row input-wrapper" style="margin-top: 16px">
+            <div class="input-label-top">Amount</div>
+            <input type="number" class="flex input" ng-model="amount">
+        </div>
+        <md-button class="md-primary md-raised flex" ng-click="send()"
+                   ng-disabled="to_address == null || amount == null">
+            Send
+        </md-button>
     </md-content>
 </md-bottom-sheet>
