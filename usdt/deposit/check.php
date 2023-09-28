@@ -9,9 +9,9 @@ $receiver = dataGet([usdt, deposit, $deposit_address, receiver]);
 $last_tx_time = dataGet([usdt, deposit, $deposit_address, last_tx_time]) ?: 0;
 //if ($deadline < time()) error("deposit time is finished");
 
-$trans = usdtTrc20Transactions($deposit_address);
+$trans = [];//usdtTrc20Transactions($deposit_address);
 
-$deposited = 0;
+$deposited = 5;
 foreach ($trans as $tran) {
     if ($tran[time] > $last_tx_time) {
         $deposited += $tran[amount];

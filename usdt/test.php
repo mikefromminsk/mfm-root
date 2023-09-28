@@ -6,17 +6,17 @@ http_post_json("localhost/data/test/test.php", []);
 
 $user1 = "user1";
 
-$gas_index = 15;
+$gas_index = 17;
 function gas()
 {
     return [
         gas_address => admin,
-        gas_password => password . $GLOBALS["gas_index"],
+        gas_key => password . $GLOBALS["gas_index"],
         gas_next_hash => md5(password . (++$GLOBALS["gas_index"])),
     ];
 }
 
-assertEquals("reg", http_post_json("localhost/data/create.php",
+assertEquals("init usdt", http_post_json("localhost/data/create.php",
     [path => "usdt/wallet", address => admin, next_hash => md5(password), amount => 10000] + gas())[wallet][amount],
     10000);
 
@@ -24,16 +24,16 @@ assertEquals("reg", http_post_json("localhost/usdt/reg/reg.php",
     [address => $user1, next_hash => md5(password)])[success],
     true);
 
-assertNotEquals("deposit_start",
-    $deposit_address = http_post_json("localhost/usdt/deposit/start.php",
-        [receiver => $user1])[deposit_address],
-    null);
-
 assertEquals("usdt delegate", http_post_json("localhost/usdt/delegate.php", [
         address => USDT_OWNER,
         password => password,
         script => "usdt/deposit/check",
     ] + gas())[success], true);
+
+assertNotEquals("deposit_start",
+    $deposit_address = http_post_json("localhost/usdt/deposit/start.php",
+        [receiver => $user1])[deposit_address],
+    null);
 
 assertEquals("deposit_check",
     http_post_json("localhost/usdt/deposit/check.php",
@@ -45,10 +45,10 @@ assertEquals("balance usdt",
         [address => $user1, wallet_path => "usdt/wallet"]),
     5);
 
-$user2 = "user2";
+$user2 = "test1";
 
 assertEquals("reg", http_post_json("localhost/usdt/reg/reg.php",
-    [address => $user2, next_hash => md5(password)])[success],
+    [address => $user2, next_hash => md5("usdt/wallettest1password")])[success],
     true);
 
 assertEquals("send usdt", http_post_json("localhost/usdt/send/send.php", [

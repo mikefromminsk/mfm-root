@@ -1,0 +1,14 @@
+<md-bottom-sheet>
+    <md-content class="col col-content">
+        <div class="row">
+            <div class="size16 flex">{{tickerFormat(locals.wallet_path)}}</div>
+            <div class="size16">{{amountFormat(100)}}</div>
+        </div>
+        <md-button class="md-raised md-primary" ng-click="giveaway()">
+            Giveaway {{tickerFormat(locals.wallet_path)}}
+        </md-button>
+        <md-button class="md-raised md-primary" ng-click="sendDialog()">
+            Send {{tickerFormat(locals.wallet_path)}}
+        </md-button>
+    </md-content>
+</md-bottom-sheet>

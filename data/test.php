@@ -35,19 +35,26 @@ assertEquals("dataSend", dataGet([data, wallet, admin, amount]), 100000000.0 - 2
 dataWalletDelegate([data, wallet], user1, password2, "data/testDelegate");
 
 $_POST["gas_address"] = admin;
-$_POST["gas_password"] = password2;
+$_POST["gas_key"] = password2;
 $_POST["gas_next_hash"] = md5(password3);
 commit("commit");
 
 assertEquals("testDelegate", http_post_json("localhost/data/testDelegate.php", [])[success], true);
 assertEquals("balanceAfterBurn", strval(dataGet([data, wallet, user1, amount])), strval(1999 - FILE_ROW_SIZE));
 
-$gas_index = 3;
+dataWalletReg([data, wallet], reg, md5(password));
+dataWalletDelegate([data, wallet], reg, password, "data/reg");
+dataWalletSend([data, wallet], admin, reg, 10000.0, password3, md5(password4));
+
+dataWalletReg([data, wallet], test1, md5(md5("data/wallettest1password")));
+dataWalletSend([data, wallet], admin, test1, 200.0, password4, md5(password5));
+
+$gas_index = 5;
 function gas(){
     return [
         gas_address => admin,
-        gas_password => password . $GLOBALS["gas_index"],
-        gas_next_hash => md5(password . (++$GLOBALS["gas_index"])),
+        gas_key => password . $GLOBALS[gas_index],
+        gas_next_hash => md5(password . (++$GLOBALS[gas_index])),
     ];
 }
 
@@ -55,7 +62,7 @@ function sendGasForScript($address, $script){
     assertEquals("testReg $script", http_post_json("localhost/data/reg.php", [
             address => $address,
             next_hash => md5(password1),
-        ] + gas())[success], true);
+        ])[success], true);
 
     assertEquals("testSend $script", http_post_json("localhost/data/send.php", [
             from_address => admin,
@@ -73,6 +80,7 @@ function sendGasForScript($address, $script){
 }
 
 
+sendGasForScript(gas_giveaway, "data/giveaway");
 sendGasForScript(usdt_reg, "usdt/reg/reg");
 sendGasForScript(usdt_deposit, "usdt/deposit/start");
 sendGasForScript(usdt_check, "usdt/deposit/check");

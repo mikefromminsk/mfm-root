@@ -281,7 +281,7 @@ function dataAppName()
 
 function dataWalletInit(array $path, $address, $next_hash, $amount)
 {
-    if (dataExist($path)) error("path exist");
+    if (dataExist($path)) error("path " . implode("/", $path) . " exist");
     dataWalletReg($path, $address, $next_hash);
     dataSet(array_merge($path, [$address, amount]), $amount);
     return dataWallet($path, $address);
@@ -293,10 +293,10 @@ function dataWalletReg(array $path, $address, $next_hash)
     return dataSet(array_merge($path, [$address, next_hash]), $next_hash);
 }
 
-function dataWalletDelegate(array $path, $address, $password, $script)
+function dataWalletDelegate(array $path, $address, $key, $script)
 {
     if (!dataExist(array_merge($path, [$address]))) error(implode("/", $path) . "/$address not exist");
-    if (dataGet(array_merge($path, [$address, next_hash])) != md5($password)) error("password is not right");
+    if (dataGet(array_merge($path, [$address, next_hash])) != md5($key)) error("key is not right");
     return dataSet(array_merge($path, [$address, script]), $script);
 }
 
@@ -311,7 +311,7 @@ function dataWalletBalance(array $path, $address)
     return dataGet(array_merge($path, [$address, amount])) ?: 0.0;
 }
 
-function dataWalletSend(array $path, $from_address, $to_address, $amount, $password = null, $next_hash = null)
+function dataWalletSend(array $path, $from_address, $to_address, $amount, $key = null, $next_hash = null)
 {
     if ($amount == 0)
         return true;
@@ -319,15 +319,15 @@ function dataWalletSend(array $path, $from_address, $to_address, $amount, $passw
     if (dataWalletBalance($path, $from_address) < $amount)
         error(implode("/", $path) . "/$from_address balance is not enough");
     if (dataWallet($path, $to_address) == null) error("receiver not exist");
-    if ($password == null || $next_hash == null) {
+    if ($key == null || $next_hash == null) {
         if (dataGet(array_merge($path, [$from_address, script])) != dataAppName())
             error("script cannot use " . implode("/", $path) . "/$from_address address");
     } else {
-        if (dataGet(array_merge($path, [$from_address, next_hash])) != md5($password))
-            error("password is not right");
+        if (dataGet(array_merge($path, [$from_address, next_hash])) != md5($key))
+            error("key is not right");
     }
 
-    dataSet(array_merge($path, [$from_address, password]), $password);
+    dataSet(array_merge($path, [$from_address, key]), $key);
     dataSet(array_merge($path, [$from_address, next_hash]), $next_hash);
 
     dataDec(array_merge($path, [$from_address, amount]), $amount);
@@ -353,7 +353,7 @@ function commit($response, $gas_address = null)
                 get_required(gas_address),
                 admin,
                 $GLOBALS["gas_bytes"],
-                get_required(gas_password),
+                get_required(gas_key),
                 get_required(gas_next_hash)
             );
         }

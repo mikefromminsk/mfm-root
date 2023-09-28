@@ -8,4 +8,4 @@ $wallet_path = explode("/", $wallet_path);
 
 $response = dataWallet($wallet_path, $address);
 
-echo json_encode($response);
+commit($response);

@@ -156,3 +156,20 @@ md-switch{
     background-size: 100%;
     transition: background 0s;
 }
+
+md-menu-item>* {
+    padding: 0;
+}
+
+.success .md-toast-content  {
+    background: green;
+}
+.error .md-toast-content  {
+    background: red;
+}
+.info .md-toast-content  {
+    background: orange;
+}
+.warning .md-toast-content  {
+    background: purple;
+}

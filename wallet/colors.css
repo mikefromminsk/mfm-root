@@ -12,7 +12,6 @@
 
 .blue-back {
     background-color: #4F50FB;
-    border-radius: 2px;
 }
 
 .green-text {
@@ -21,12 +20,10 @@
 
 .green-back {
     background-color: rgb(2, 192, 118);
-    border-radius: 2px;
 }
 
 .white-back {
     background-color: rgb(255, 255, 255);
-    border-radius: 2px;
 }
 
 .red-text {
@@ -35,7 +32,6 @@
 
 .red-back {
     background-color: rgb(248, 73, 96);
-    border-radius: 2px;
 }
 
 .gray-text {
@@ -44,7 +40,6 @@
 
 .gray-back {
     background-color: rgb(222, 222, 222);
-    border-radius: 2px;
 }
 
 .img-blue {
