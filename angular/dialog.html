@@ -1,0 +1,16 @@
+<md-bottom-sheet>
+  <md-content class="col col-content">
+    <p class="size16">Login</p>
+    <div class="flex row input-wrapper">
+      <div class="input-label-top">Email</div>
+      <input type="text" class="flex input" ng-model="address">
+    </div>
+    <div class="flex row input-wrapper">
+      <div class="input-label-top">Password</div>
+      <input type="password" class="flex input" ng-model="password">
+    </div>
+    <md-button class="md-primary md-raised" ng-click="login()" ng-disabled="address == '' || password == ''">
+      Login
+    </md-button>
+  </md-content>
+</md-bottom-sheet>

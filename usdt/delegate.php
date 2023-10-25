@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/data/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 
 $address = get_required(address);
 $password = get_required(password);

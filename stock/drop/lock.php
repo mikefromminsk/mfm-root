@@ -9,7 +9,7 @@ $amount = get_int_required(amount);
 
 dataWalletSend([usdt, wallet], $from_address, $to_address, $amount, $password, $next_hash);
 
-$response[sent] = $amount;
+$response[sended] = $amount;
 $response[reuslt] = true;
 
 echo json_encode($response);

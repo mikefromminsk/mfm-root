@@ -11,19 +11,17 @@
     <script src="/angular/angular-material.min.js"></script>
     <!--https://material.angularjs.org/latest/-->
 
-    <script src="/data/utils.js"></script>
+    <script src="/wallet/utils.js"></script>
     <link href="/angular/binance_style.css" rel="stylesheet">
     <link href="/angular/colors.css" rel="stylesheet">
+
+    <script src="/vote/create/controller.js"></script>
+
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $mdBottomSheet) {
                 $scope.mainAction = function () {
-                    $mdBottomSheet.show({
-                        templateUrl: 'dialog.html',
-                        controller: function ($scope, $mdBottomSheet) {
-                        }
-                    }).then(function () {
-                    })
+                    voteCreate($mdBottomSheet)
                 }
                 $scope.$watch('search_text', function (newValue) {
                     $scope.value = newValue;
@@ -40,7 +38,6 @@
 </div>
 <div class="row align-center-start">
     <div class="flex col col-content" style="max-width: 800px">
-        <p>Title</p>
         <div class="col" ng-repeat="i in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]">
             <div class="row content md-whiteframe-2dp">
                 <p>Card {{value}}</p>
@@ -49,7 +46,7 @@
         <md-button class="md-fab md-raised md-primary"
                    style="position:fixed; right: 50px; bottom: 50px"
                    ng-click="mainAction()">
-            <md-icon md-svg-src="img/icons/cake.svg"></md-icon>
+            <Add></Add>
         </md-button>
     </div>
 </div>

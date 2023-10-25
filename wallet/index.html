@@ -8,12 +8,12 @@
     <link rel="icon" type="image/x-icon" href="img/fav.svg">
     <script src="/angular/angular.min.js"></script>
     <link href="/angular/angular-material.min.css" rel="stylesheet">
-    <link href="binance_style.css" rel="stylesheet">
-    <link href="colors.css" rel="stylesheet">
+    <link href="/angular/binance_style.css" rel="stylesheet">
+    <link href="/angular/colors.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <script src="/angular/angular-material.min.js"></script>
-    <script src="/data/utils.js"></script>
-    <script src="binance_format.js"></script>
+    <script src="/wallet/utils.js"></script>
+    <script src="formats.js"></script>
 
 
     <script src="/swap/options/controller.js"></script>
@@ -36,25 +36,20 @@
                 }
 
                 $scope.coins = {
-                    "data/wallet": {},
-                    "usdt/wallet": {}
+                    "data": {},
+                    "usdt": {}
                 }
-
-                $scope.unused_coins = [
-                    "bitcoin/wallet",
-                    "etherium/wallet",
-                ]
 
                 function updateBalances() {
                     for (let path of Object.keys($scope.coins)) {
-                        wallet.balance(path, function (balance) {
+                        wallet.balance(path + "/wallet", function (balance) {
                             $scope.coins[path].balance = balance
                             $scope.$apply()
                         })
                     }
                 }
 
-                if (localStorage.getItem(wallet.STORE_USERNAME)){
+                if (localStorage.getItem(wallet.STORE_USERNAME)) {
                     updateBalances()
                 }
 
@@ -71,8 +66,41 @@
                     openLaunchDialog($mdBottomSheet, $mdToast, updateBalances)
                 }
 
+                $scope.$watch('search_text', function (newValue) {
+                    if (newValue == null) return;
+                    if (newValue == "") {
+                        $scope.unused_coins = recomended_tokens
+                        $scope.$apply()
+                    } else {
+                        post('/swap/search/search.php', {
+                            search_text: newValue
+                        }, function (response) {
+                            var list = response.result
+                            for (let path of Object.keys($scope.coins)) {
+                                var index = list.indexOf(path);
+                                if (index !== -1)
+                                    list.splice(index, 1);
+                            }
+                            $scope.unused_coins = list
+                            $scope.$apply()
+                        })
+                    }
+                })
 
-                addBinanceFormats($scope)
+
+                $scope.addToFavorites = function (item) {
+                    localStorage.setItem()
+                    alert(item)
+                }
+
+                var recomended_tokens = [
+                    "bitcoin",
+                    "etherium",
+                ]
+
+                $scope.unused_coins = recomended_tokens
+
+                addFormats($scope)
             })
     </script>
 </head>
@@ -128,8 +156,7 @@
     <div class="row align-start-center row-content white-back-ripple">
         <img class="coin" src="img/coin.svg">
         <span class="flex size14">{{tickerFormat(item)}}</span>
-        <md-switch ng-model="data.cb2">
-        </md-switch>
+        <md-switch ng-click="addToFavorites(item)"/>
     </div>
     <div class="divider"></div>
 </div>
