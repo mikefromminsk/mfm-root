@@ -30,7 +30,7 @@ function addFormats($scope){
         return round(number, 0) + "%";
     }
 
-    $scope.tickerFormat = function (wallet_path) {
-        return wallet_path.replace('/wallet', '').toUpperCase()
+    $scope.tickerFormat = function (ticker) {
+        return ticker.toUpperCase()
     }
 }

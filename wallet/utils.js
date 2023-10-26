@@ -10,8 +10,12 @@ function post(url, params, success, error) {
                 if (success != null)
                     success(JSON.parse(xhr.response))
             } else {
-                if (error != null)
-                    error(JSON.parse(xhr.response))
+                try {
+                    var response = JSON.parse(xhr.response)
+                    window.showError(response.message, error)
+                } catch (e) {
+                    window.showError(xhr.responseText, error)
+                }
             }
         }
     };
@@ -68,6 +72,25 @@ function dataInfo(path, callback) {
     })
 }
 
+function showError(message, error) {
+    if (window.$mdToast != null) {
+        window.$mdToast.show(window.$mdToast.simple().textContent(message))
+    } else {
+        alert(message)
+    }
+    if (error)
+        error(message)
+}
+
+function showSuccess(message, success) {
+    if (window.$mdToast != null) {
+        window.$mdToast.show(window.$mdToast.simple().textContent(message))
+    } else {
+        alert(message)
+    }
+    if (success)
+        success(message)
+}
 
 var wallet = {
     username: null,
@@ -75,6 +98,20 @@ var wallet = {
     GAS_PATH: "data/wallet",
     STORE_USERNAME: "STORE_USERNAME",
     STORE_PASSWORD: "STORE_PASSWORD",
+    STORE_DOMAINS: "STORE_DOMAINS",
+    auth: function (success, error) {
+        if (wallet.username == null || wallet.password == null) {
+            let username = localStorage.getItem(wallet.STORE_USERNAME)
+            let password = localStorage.getItem(wallet.STORE_PASSWORD)
+            if (username == null || password == null) {
+                username = prompt("Enter your username")
+                password = prompt("Enter your password")
+            }
+            this.login(username, password, success)
+        } else {
+            success(wallet.username, wallet.password)
+        }
+    },
     login: function (username, password, success, error) {
         if (!username || !password) {
             if (error)
@@ -89,21 +126,12 @@ var wallet = {
                     wallet.username = username
                     wallet.password = password
                     if (success)
-                        success(wallet.username)
+                        success(wallet.username, wallet.password)
                 } else {
-                    if (error)
-                        error("password invalid")
+                    showError("password invalid", error)
                 }
-            }, function () {
-                wallet.reg(username, password, success, error)
-            })
+            }, error)
         }
-    },
-    logout: function () {
-        wallet.username = null
-        wallet.password = null
-        localStorage.removeItem(wallet.STORE_USERNAME)
-        localStorage.removeItem(wallet.STORE_PASSWORD)
     },
     reg: function (username, password, success, error) {
         post("/wallet/api/reg", {
@@ -113,29 +141,26 @@ var wallet = {
             wallet.login(username, password, success, error)
         }, error)
     },
-    auth: function (success, error) {
-        if (wallet.username == null || wallet.password == null) {
-            let username = localStorage.getItem(wallet.STORE_USERNAME)
-            let password = localStorage.getItem(wallet.STORE_PASSWORD)
-            if (username != null && password != null) {
-                this.login(username, password, success, error)
-            } else {
-                username = prompt("Enter your username")
-                password = prompt("Enter your password")
-                this.login(username, password, success, error)
-            }
-        } else {
-            success(wallet.username)
-        }
+    logout: function () {
+        wallet.username = null
+        wallet.password = null
+        localStorage.removeItem(wallet.STORE_USERNAME)
+        localStorage.removeItem(wallet.STORE_PASSWORD)
     },
-    calckey: function (wallet_path, success, error) {
-        wallet.auth(function () {
-            post("/wallet/api/wallet", {
-                wallet_path: wallet_path,
-                address: wallet.username,
-            }, function (response) {
-                if (success)
-                    success(wallet.calchash(wallet_path, wallet.username, wallet.password, response.prev_key))
+    calckey: function (path, success, error) {
+        wallet.auth(function (username, password) {
+            post("/data/api/get", {
+                path: path + "/" + username + "/prev_key",
+            }, function (prev_key) {
+                if (success) {
+                    var key = wallet.calchash(path, username, password, prev_key)
+                    success(
+                        key,
+                        md5(key),
+                        username,
+                        password
+                    )
+                }
             }, error)
         }, error)
     },
@@ -143,17 +168,17 @@ var wallet = {
         return md5(wallet_path + username + password + (key || ""))
     },
     postWithGas: function (url, params, success, error) {
-        wallet.calckey(wallet.GAS_PATH, function (key) {
-            params.gas_address = wallet.username
+        wallet.calckey(wallet.GAS_PATH, function (key, hash, username, password) {
+            params.gas_address = username
             params.gas_key = key
-            params.gas_next_hash = md5(wallet.calchash(wallet.GAS_PATH, wallet.username, wallet.password, key))
+            params.gas_next_hash = hash
             post(url, params, success, error)
         }, error)
     },
-    send: function (wallet_path, to_address, amount, success, error) {
-        wallet.nextHash(wallet_path, function (next_hash, password, username) {
+    send: function (path, to_address, amount, success, error) {
+        wallet.calckey(path, function (key, next_hash, username, password) {
             wallet.postWithGas("/wallet/api/send", {
-                wallet_path: wallet_path,
+                wallet_path: path,
                 from_address: username,
                 to_address: to_address,
                 password: password,
@@ -169,6 +194,25 @@ var wallet = {
                 address: wallet.username,
             }, success, error)
         }, error)
+    },
+    domains: function () {
+        var domains = localStorage.getItem(wallet.STORE_DOMAINS)
+        return domains == null ? [] : domains.split(',')
+    },
+    domainAdd: function (domain) {
+        if (wallet.domainExist(domain)) return;
+        var array = wallet.domains()
+        array.push(domain)
+        localStorage.setItem(wallet.STORE_DOMAINS, array.join(","))
+    },
+    domainDel: function (domain) {
+        if (!wallet.domainExist(domain)) return;
+        var array = wallet.domains()
+        array.splice(array.indexOf(domain), 1);
+        localStorage.setItem(wallet.STORE_DOMAINS, array.join(","))
+    },
+    domainExist: function (domain) {
+        return wallet.domains().indexOf(domain) != -1
     }
 }
 

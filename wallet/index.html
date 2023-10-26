@@ -17,44 +17,24 @@
 
 
     <script src="/swap/options/controller.js"></script>
-    <script src="/swap/launch/controller.js"></script>
+    <script src="/wallet/launch/controller.js"></script>
     <script src="/wallet/login/controller.js"></script>
-    <script src="/wallet/reg/controller.js"></script>
     <script src="/wallet/send/controller.js"></script>
 
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
             .controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) {
+                addFormats($scope)
+                window.$mdToast = $mdToast
+
                 $scope.menuIndex = 0
 
                 $scope.login = function () {
-                    openLoginDialog($mdBottomSheet, $mdToast, updateBalances)
-                }
-
-                $scope.reg = function () {
-                    openRegDialog($mdBottomSheet, $mdToast, updateBalances)
-                }
-
-                $scope.coins = {
-                    "data": {},
-                    "usdt": {}
-                }
-
-                function updateBalances() {
-                    for (let path of Object.keys($scope.coins)) {
-                        wallet.balance(path + "/wallet", function (balance) {
-                            $scope.coins[path].balance = balance
-                            $scope.$apply()
-                        })
-                    }
-                }
-
-                if (localStorage.getItem(wallet.STORE_USERNAME)) {
-                    updateBalances()
+                    openLoginDialog($mdBottomSheet, $mdToast, updateCoins)
                 }
 
                 $scope.options = function (wallet_path) {
-                    openOptionsDialog($mdBottomSheet, wallet_path, updateBalances)
+                    openOptionsDialog($mdBottomSheet, wallet_path, updateCoins)
                 }
 
                 $scope.logout = function () {
@@ -63,44 +43,81 @@
                 }
 
                 $scope.launch = function () {
-                    openLaunchDialog($mdBottomSheet, $mdToast, updateBalances)
+                    openLaunchDialog($mdBottomSheet, $mdToast, $scope.search_text, updateCoins)
                 }
 
+                $scope.show_launcher = false
                 $scope.$watch('search_text', function (newValue) {
                     if (newValue == null) return;
                     if (newValue == "") {
-                        $scope.unused_coins = recomended_tokens
-                        $scope.$apply()
+                        $scope.show_launcher = false
+                        updateCoins()
+                        loadRecs()
                     } else {
-                        post('/swap/search/search.php', {
+                        $scope.show_launcher = true
+                        post('/wallet/api/search', {
+                            path: "wallet/info",
                             search_text: newValue
                         }, function (response) {
-                            var list = response.result
-                            for (let path of Object.keys($scope.coins)) {
-                                var index = list.indexOf(path);
-                                if (index !== -1)
-                                    list.splice(index, 1);
-                            }
-                            $scope.unused_coins = list
+                            $scope.recs = response.result
+                            for (let coin of response.result)
+                                coin.isFavorite = wallet.domainExist(coin.domain)
+                            $scope.$apply()
+                        }, function () {
+                            $scope.recs = []
                             $scope.$apply()
                         })
                     }
                 })
 
+                $scope.coins = []
+                $scope.recs = []
 
-                $scope.addToFavorites = function (item) {
-                    localStorage.setItem()
-                    alert(item)
+                function updateCoins() {
+                    var domains = wallet.domains()
+                    if (domains.length == 0) {
+                        $scope.coins = []
+                    } else {
+                        post("/wallet/api/list", {
+                            domains: domains.join(",")
+                        }, function (response) {
+                            $scope.coins = response.result
+                            $scope.$apply()
+                        })
+                    }
                 }
 
-                var recomended_tokens = [
-                    "bitcoin",
-                    "etherium",
-                ]
+                function loadRecs() {
+                    var recDomains = [
+                        "data",
+                        "usdt",
+                    ]
+                    for (let domain of wallet.domains())
+                        if (recDomains.indexOf(domain) != -1)
+                            recDomains.splice(recDomains.indexOf(domain), 1)
+                    if (recDomains.length == 0) {
+                        $scope.recs = []
+                    } else {
+                        post("/wallet/api/list", {
+                            domains: recDomains.join(",")
+                        }, function (response) {
+                            $scope.recs = response.result
+                            $scope.$apply()
+                        })
+                    }
+                }
 
-                $scope.unused_coins = recomended_tokens
-
-                addFormats($scope)
+                updateCoins()
+                loadRecs()
+                $scope.toggleFavorite = function (domain) {
+                    if (wallet.domainExist(domain)){
+                        wallet.domainDel(domain)
+                    } else {
+                        wallet.domainAdd(domain)
+                    }
+                    updateCoins()
+                    loadRecs()
+                }
             })
     </script>
 </head>
@@ -122,14 +139,6 @@
                 <img class="coin" src="img/security.svg"/>
                 <span>Login</span>
             </md-menu-item>
-            <md-menu-item class="row row-content align-start-center white-back-ripple" ng-click="reg()">
-                <img class="coin" src="img/security.svg"/>
-                <span>Registration</span>
-            </md-menu-item>
-            <md-menu-item class="row row-content align-start-center white-back-ripple" ng-click="buyDialog()">
-                <img class="coin" src="img/usdt.svg"/>
-                <span>Deposit</span>
-            </md-menu-item>
             <md-menu-item class="row row-content align-start-center white-back-ripple" ng-click="logout()">
                 <img class="coin" src="img/usdt.svg"/>
                 <span>Logout</span>
@@ -144,21 +153,28 @@
     <div class="row align-start-center row-content white-back-ripple"
          ng-click="options(key)">
         <img class="coin" src="img/coin.svg">
-        <span class="flex size14">{{tickerFormat(key)}}</span>
-        <span>{{amountFormat(item['balance'])}}</span>
+        <span class="flex size14">{{tickerFormat(item.domain)}}</span>
+        <span>{{item.balance}}</span>
     </div>
     <div class="divider"></div>
 </div>
 <div class="col col-content row-content">
     <span>Other coins</span>
 </div>
-<div class="col" ng-repeat="item in unused_coins">
+<div class="col" ng-repeat="item in recs">
     <div class="row align-start-center row-content white-back-ripple">
         <img class="coin" src="img/coin.svg">
-        <span class="flex size14">{{tickerFormat(item)}}</span>
-        <md-switch ng-click="addToFavorites(item)"/>
+        <span class="flex size14">{{tickerFormat(item.domain)}}</span>
+        <md-switch ng-change="toggleFavorite(item.domain)"
+                   ng-model="item.isFavorite"/>
     </div>
     <div class="divider"></div>
+</div>
+<div class="row align-center-center white-back-ripple"
+     ng-click="launch()"
+     ng-show="show_launcher">
+    <md-button class="md-fab"></md-button>
+    Launch new coin
 </div>
 </body>
 </html>

@@ -22,27 +22,21 @@ function dataCreateRow($data_parent_id, $data_key, $data_type)
     ));
 }
 
-function dataNew(array $path, $filename = null, $create = false)
+function dataNew($path, $create = false)
 {
-    if (is_string($filename))
-        $filename = [$filename];
-    if (is_array($filename))
-        $path = array_merge($path, $filename);
-
+    if (is_array($path))
+        $path = implode("/", $path);
+    $path = explode("/", $path);
     $data_id = null;
-
     foreach ($path as $key) {
         if (!is_string($key))
             $key = "$key";
         $data_parent_id = $data_id;
-
         $data = selectRowWhere("data", array(
             "data_parent_id" => $data_parent_id,
             "data_key" => $key,
         ));
-
         $data_id = $data["data_id"];
-
         if ($data_id == null) {
             if ($create == true) {
                 $data_id = dataCreateRow($data_parent_id, $key, DATA_UNSET);
@@ -54,32 +48,32 @@ function dataNew(array $path, $filename = null, $create = false)
     return $data_id;
 }
 
-function dataSet(array $path_array, $result)
+function dataSet(array $path_array, $value)
 {
-    $data_id = dataNew($path_array, null, true);
+    $data_id = dataNew($path_array, true);
     if ($data_id == null) return false;
     dataDeleteChildren($data_id);
     $path = dataPath($data_id);
-    $data = [data_value => $result];
-    if (is_numeric($result) && !is_string($result)) {
+    $data = [data_value => $value];
+    if (is_numeric($value) && !is_string($value)) {
         $data[data_type] = DATA_NUMBER;
-    } else if (is_bool($result)) {
+    } else if (is_bool($value)) {
         $data[data_type] = DATA_BOOL;
-    } else if (is_null($result)) {
+    } else if (is_null($value)) {
         $data[data_type] = DATA_NULL;
-    } else if (is_string($result)) {
-        if (strlen($result) <= 64) {
+    } else if (is_string($value)) {
+        if (strlen($value) <= 64) {
             $data[data_type] = DATA_STRING;
         } else {
             $data[data_type] = DATA_FILE;
-            $data[data_value] = md5($result);
-            $GLOBALS[gas_bytes] += strlen($result) + HASH_ROW_SIZE;
-            file_put_contents($_SERVER[DOCUMENT_ROOT] . $path, $result);
+            $data[data_value] = md5($value);
+            $GLOBALS[gas_bytes] += strlen($value) + HASH_ROW_SIZE;
+            file_put_contents($_SERVER[DOCUMENT_ROOT] . $path, $value);
             insertRow(hashes, [hash => $data[data_value], path => $path]);
         }
-    } else if (is_array($result)) {
-        foreach ($result as $key => $value)
-            dataSet(array_merge($path_array, [$key]), $value);
+    } else if (is_array($value)) {
+        foreach ($value as $key => $subvalue)
+            dataSet(array_merge($path_array, [$key]), $subvalue);
     }
     updateWhere(data, $data, [data_id => $data_id]);
     $data[data_path] = $path;
@@ -87,9 +81,9 @@ function dataSet(array $path_array, $result)
 }
 
 
-function dataGet(array $path, array $filename = null)
+function dataGet(array $path)
 {
-    $data_id = dataNew($path, $filename);
+    $data_id = dataNew($path);
     if ($data_id == null)
         return null;
     if (is_numeric($data_id))
@@ -127,9 +121,9 @@ function dataDeleteChildren($data_id)
     }
 }
 
-function dataExist(array $path, $filename = null)
+function dataExist($path)
 {
-    $data_id = dataNew($path, $filename, false);
+    $data_id = dataNew($path);
     if ($data_id == null) return false;
     return intval(scalarWhere("data", "count(*)", array("data_parent_id" => $data_id))) !== false;
 }
@@ -184,4 +178,11 @@ function dataInc(array $path, $inc_val)
 function dataDec(array $path, $dec_val)
 {
     return dataInc($path, -$dec_val);
+}
+
+function dataSearch($path, $search_text)
+{
+    $data_id = dataNew($path);
+    if ($data_id == null) error("path '$path' not exist");
+    return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'");
 }

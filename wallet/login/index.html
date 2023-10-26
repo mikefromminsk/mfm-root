@@ -10,7 +10,7 @@
             <input type="password" class="flex input" ng-model="password">
         </div>
         <md-button class="md-primary md-raised" ng-click="login()" ng-disabled="address == '' || password == ''">
-            Login
+            {{mode == "login" ? "Login" : "Registration"}}
         </md-button>
     </md-content>
 </md-bottom-sheet>

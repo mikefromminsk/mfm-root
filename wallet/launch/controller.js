@@ -1,0 +1,28 @@
+function openLaunchDialog($mdBottomSheet, $mdToast, domain, success) {
+    $mdBottomSheet.show({
+        templateUrl: "/wallet/launch/index.html",
+        locals: {
+            domain: domain
+        },
+        controller: function ($scope, $mdBottomSheet, locals) {
+            $scope.path = (locals.domain || "") +  "/wallet"
+            $scope.amount = 1000000
+            $scope.launch = function () {
+                wallet.calckey($scope.path, function (key, next_hash, username, password) {
+                    postWithGas("/wallet/api/launch", {
+                        path: $scope.path,
+                        address: username,
+                        next_hash: next_hash,
+                        amount: $scope.amount,
+                    }, function () {
+                        wallet.domainAdd($scope.path.split('/')[0])
+                        window.showSuccess("token launched", success)
+                        $mdBottomSheet.hide()
+                    })
+                })
+            }
+        }
+    }).then(function () {
+        success()
+    })
+}
