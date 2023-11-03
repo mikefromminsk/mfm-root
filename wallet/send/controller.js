@@ -1,5 +1,5 @@
-function openSendDialog($mdBottomSheet, wallet_path, success) {
-    $mdBottomSheet.show({
+function openSendDialog(wallet_path, success) {
+    wallet.$mdBottomSheet.show({
         templateUrl: '/wallet/send/index.html',
         locals: {
             wallet_path: wallet_path,

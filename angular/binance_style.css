@@ -1,32 +1,76 @@
+body {
+    overflow: hidden;
+}
+
+/* angular fixes*/
 .md-button {
     margin: 0;
     height: 38px;
 }
+
+md-content {
+    background-color: transparent;
+}
+
+md-switch {
+    margin: 0;
+    overflow: hidden;
+}
+
+.md-ripple-container {
+    margin: 0;
+}
+
+md-bottom-sheet {
+    padding: 0;
+    bottom: 80px;
+}
+
+md-menu-item {
+    min-height: auto;
+    height: auto;
+}
+
+md-menu-content {
+    padding: 0;
+}
+
+/* angular fixes*/
 
 p {
     margin: 0;
     padding: 0;
 }
 
-.content {
-    padding: 16px;
+.col-content > * {
+    padding: 8px 16px 8px 16px;
+}
+
+.col-content > *:first-child {
+    padding-top: 16px;
+}
+
+.col-content > *:last-child {
+    padding-bottom: 16px;
 }
 
 .row-content > * {
     margin-left: 16px;
-    margin-top: 4px;
-    margin-bottom: 4px;
 }
 
 .row-content > *:last-child {
     margin-right: 16px;
 }
 
-.col-content > * {
+.input-content > * {
+    margin: 8px 16px 8px 16px;
+}
+
+.input-content > *:first-child {
     margin-top: 16px;
 }
 
-.col-content > *:last-child {
+.input-content > *:last-child {
     margin-bottom: 16px;
 }
 
@@ -76,22 +120,9 @@ input:disabled {
     padding-top: 1px
 }
 
-.coin {
+.img36 {
     width: 36px;
     height: 36px;
-}
-
-md-content {
-    background-color: transparent;
-}
-
-md-switch {
-    margin: 0;
-    overflow: hidden;
-}
-
-.md-ripple-container {
-    margin: 0;
 }
 
 /* Ripple effect */
@@ -152,7 +183,7 @@ md-switch {
     transition: background 0s;
 }
 
-.blue-back-ripple {
+.blue-back-ripple, .primary-button {
     background-color: #4F50FB;
     border: none;
     border-radius: 2px;
@@ -161,18 +192,14 @@ md-switch {
     transition: background 0.8s;
 }
 
-.blue-back-ripple:hover {
+.blue-back-ripple:hover, .primary-button:hover {
     background: #4F50FB radial-gradient(circle, transparent 1%, #4F50FB 1%) center/15000%;
 }
 
-.blue-back-ripple:active {
+.blue-back-ripple:active, .primary-button:active {
     background-color: #8e8eea;
     background-size: 100%;
     transition: background 0s;
-}
-
-md-menu-item > * {
-    padding: 0;
 }
 
 .success .md-toast-content {
@@ -189,4 +216,23 @@ md-menu-item > * {
 
 .warning .md-toast-content {
     background: purple;
+}
+
+.primary-button{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #4F50FB;
+    color: white;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.primary-button > * {
+    box-sizing: border-box;
+    margin-right: 4px;
+}
+
+.primary-button > *:last-child {
+    margin-right: 0;
 }

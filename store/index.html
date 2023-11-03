@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="icon" href="/wallet/logo.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="/angular/angular.min.js"></script>
+    <link href="/angular/angular-material.min.css" rel="stylesheet">
+    <script src="/angular/angular-material.min.js"></script>
+
+    <script src="/wallet/utils.js"></script>
+    <link href="/angular/binance_style.css" rel="stylesheet">
+    <link href="/angular/colors.css" rel="stylesheet">
+
+    <script src="domain/controller.js"></script>
+    <script src="uploader/controller.js"></script>
+
+    <script>
+        controller(function ($scope, $mdBottomSheet, $mdToast, $mdDialog, $http) {
+            window.$mdToast = $mdToast
+            window.$mdBottomSheet = $mdBottomSheet
+            window.$mdDialog = $mdDialog
+
+            $scope.newDomain = function () {
+                showNewDomain(function (domain) {
+                    alert(domain)
+                })
+            }
+
+            $scope.uploader = function () {
+                showUploader($http)
+            }
+            setTimeout(function () {
+                showUploader($http)
+            }, 400)
+        })
+    </script>
+</head>
+<body class="col" ng-app="App" ng-controller="Controller">
+<div class="row row-content blue-back">
+    <div class="row flex input-wrapper">
+        <input type="text" class="flex input search"
+               ng-model="search_text" placeholder="Choose domain name">
+    </div>
+    <md-menu md-position-mode="target-right target">
+        <img class="img36 img-white" src="img/menu.svg" ng-click="$mdMenu.open($event)"/>
+        <md-menu-content width="4" class="col-content">
+            <md-menu-item ng-click="newDomain()">
+                New domain
+            </md-menu-item>
+            <md-menu-item ng-click="uploader()">
+                Uploader
+            </md-menu-item>
+        </md-menu-content>
+    </md-menu>
+</div>
+<div class="row align-center-start">
+    <div class="flex col col-content" style="max-width: 800px">
+        <p>Title</p>
+        <div class="col" ng-repeat="i in [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]">
+            <div class="row content md-whiteframe-2dp">
+                <p>Card {{value}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

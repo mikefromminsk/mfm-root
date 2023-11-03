@@ -1,5 +1,5 @@
 <md-bottom-sheet>
-    <md-content class="col col-content">
+    <md-content class="col input-content">
         <div class="row">
             <div class="size16 flex">{{tickerFormat(locals.wallet_path)}}</div>
             <div class="size16">{{amountFormat(100)}}</div>
@@ -7,8 +7,8 @@
         <md-button class="md-raised md-primary" ng-click="giveaway()">
             Giveaway {{tickerFormat(locals.wallet_path)}}
         </md-button>
-        <md-button class="md-raised md-primary" ng-click="sendDialog()">
+        <div class="primary-button" ng-click="sendDialog()" ng-show="options['34ddc7c1919738b872759f3bf31169c5']">
             Send {{tickerFormat(locals.wallet_path)}}
-        </md-button>
+        </div>
     </md-content>
 </md-bottom-sheet>

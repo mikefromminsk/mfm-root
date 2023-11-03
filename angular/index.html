@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" href="/wallet/img/fav.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="/angular/angular.min.js"></script>
@@ -11,24 +11,23 @@
     <script src="/angular/angular-material.min.js"></script>
     <!--https://material.angularjs.org/latest/-->
 
-    <script src="/data/utils.js"></script>
+    <script src="/wallet/utils.js"></script>
     <link href="/angular/binance_style.css" rel="stylesheet">
     <link href="/angular/colors.css" rel="stylesheet">
     <script>
-        angular.module("App", ['ngMaterial', 'ngAnimate'])
-            .controller("Controller", function ($scope, $mdBottomSheet) {
-                $scope.mainAction = function () {
-                    $mdBottomSheet.show({
-                        templateUrl: 'dialog.html',
-                        controller: function ($scope, $mdBottomSheet) {
-                        }
-                    }).then(function () {
-                    })
-                }
-                $scope.$watch('search_text', function (newValue) {
-                    $scope.value = newValue;
+        controller(function ($scope, $mdBottomSheet, $mdToast) {
+            $scope.mainAction = function () {
+                $mdBottomSheet.show({
+                    templateUrl: 'dialog.html',
+                    controller: function ($scope, $mdBottomSheet) {
+                    }
+                }).then(function () {
                 })
+            }
+            $scope.$watch('search_text', function (newValue) {
+                $scope.value = newValue;
             })
+        })
     </script>
 </head>
 <body class="col" ng-app="App" ng-controller="Controller">

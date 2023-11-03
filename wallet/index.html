@@ -5,45 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet</title>
-    <link rel="icon" type="image/x-icon" href="img/fav.svg">
+    <link rel="icon" type="image/x-icon" href="logo.svg">
     <script src="/angular/angular.min.js"></script>
     <link href="/angular/angular-material.min.css" rel="stylesheet">
     <link href="/angular/binance_style.css" rel="stylesheet">
     <link href="/angular/colors.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
     <script src="/angular/angular-material.min.js"></script>
     <script src="/wallet/utils.js"></script>
     <script src="formats.js"></script>
+    <link href="style.css" rel="stylesheet">
 
 
-    <script src="/swap/options/controller.js"></script>
+    <script src="/wallet/options/controller.js"></script>
     <script src="/wallet/launch/controller.js"></script>
     <script src="/wallet/login/controller.js"></script>
     <script src="/wallet/send/controller.js"></script>
 
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
-            .controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast) {
+            .controller("Controller", function ($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 addFormats($scope)
                 window.$mdToast = $mdToast
+                window.$mdBottomSheet = $mdBottomSheet
+                window.$mdDialog = $mdDialog
 
                 $scope.menuIndex = 0
 
                 $scope.login = function () {
-                    openLoginDialog($mdBottomSheet, $mdToast, updateCoins)
+                    loginFunction(updateCoins)
                 }
 
-                $scope.options = function (wallet_path) {
-                    openOptionsDialog($mdBottomSheet, wallet_path, updateCoins)
+                $scope.options = function (domain) {
+                    openOptionsDialog(domain, updateCoins)
                 }
 
                 $scope.logout = function () {
                     wallet.logout()
-                    $mdToast.show($mdToast.simple().textContent("Success logout"))
+                    showSuccess("Success logout")
                 }
 
                 $scope.launch = function () {
-                    openLaunchDialog($mdBottomSheet, $mdToast, $scope.search_text, updateCoins)
+                    openLaunchDialog($scope.search_text, updateCoins)
                 }
 
                 $scope.show_launcher = false
@@ -110,7 +112,7 @@
                 updateCoins()
                 loadRecs()
                 $scope.toggleFavorite = function (domain) {
-                    if (wallet.domainExist(domain)){
+                    if (wallet.domainExist(domain)) {
                         wallet.domainDel(domain)
                     } else {
                         wallet.domainAdd(domain)
@@ -122,26 +124,23 @@
     </script>
 </head>
 <body class="col" ng-app="App" ng-controller="Controller">
-<div class="row row-content align-start-center blue-back">
-    <img class="coin img-red" src="img/fav.svg"/>
+<div class="row row-content align-start-center blue-back" style="padding: 4px 0">
+    <img class="img36 img-red" src="logo.svg"/>
     <div class="row flex input-wrapper">
-        <input type="text" class="flex input white-back-ripple" ng-model="search_text" placeholder="Search"
-               style=" border-radius: 20px; padding-top: 1px">
+        <input type="text" class="flex input" ng-model="search_text" placeholder="Search"
+               style="border-radius: 20px; padding-top: 1px">
     </div>
     <md-menu md-position-mode="target-right target">
-        <img class="coin img-white" src="img/menu.svg" ng-click="$mdMenu.open($event)"/>
-        <md-menu-content width="4">
-            <md-menu-item class="row row-content align-start-center white-back-ripple" ng-click="launch()">
-                <img class="coin" src="img/security.svg"/>
-                <span>Launch</span>
+        <img class="img36 img-white" src="img/menu.svg" ng-click="$mdMenu.open($event)"/>
+        <md-menu-content width="4" class="col-content">
+            <md-menu-item ng-click="launch()">
+                Launch
             </md-menu-item>
-            <md-menu-item class="row row-content align-start-center white-back-ripple" ng-click="login()">
-                <img class="coin" src="img/security.svg"/>
-                <span>Login</span>
+            <md-menu-item ng-click="login()">
+                Login
             </md-menu-item>
-            <md-menu-item class="row row-content align-start-center white-back-ripple" ng-click="logout()">
-                <img class="coin" src="img/usdt.svg"/>
-                <span>Logout</span>
+            <md-menu-item ng-click="logout()">
+                Logout
             </md-menu-item>
         </md-menu-content>
     </md-menu>
@@ -149,11 +148,11 @@
 <div class="col col-content row-content">
     <span>Your coins</span>
 </div>
-<div class="col" ng-repeat="(key, item) in coins">
+<div class="col" ng-repeat="item in coins">
     <div class="row align-start-center row-content white-back-ripple"
-         ng-click="options(key)">
-        <img class="coin" src="img/coin.svg">
-        <span class="flex size14">{{tickerFormat(item.domain)}}</span>
+         ng-click="options(item.domain)">
+        <img class="img36" src="img/coin.svg">
+        <p class="flex size14">{{tickerFormat(item.domain)}}</p>
         <span>{{item.balance}}</span>
     </div>
     <div class="divider"></div>
@@ -163,7 +162,7 @@
 </div>
 <div class="col" ng-repeat="item in recs">
     <div class="row align-start-center row-content white-back-ripple">
-        <img class="coin" src="img/coin.svg">
+        <img class="img36" src="img/coin.svg">
         <span class="flex size14">{{tickerFormat(item.domain)}}</span>
         <md-switch ng-change="toggleFavorite(item.domain)"
                    ng-model="item.isFavorite"/>
@@ -172,8 +171,9 @@
 </div>
 <div class="row align-center-center white-back-ripple"
      ng-click="launch()"
-     ng-show="show_launcher">
-    <md-button class="md-fab"></md-button>
+     ng-show="show_launcher"
+     style="padding: 12px">
+    <img src="/img/rocket.svg" class="img-blue">
     Launch new coin
 </div>
 </body>

@@ -144,19 +144,13 @@ function dataPath($data_id)
     return dataPath($node[data_parent_id]) . "/" . $node[data_key];
 }
 
-function dataMeta(array $path)
-{
-    $data_id = dataNew($path, false);
-    return selectRowWhere(data, [data_id => $data_id]);
-}
-
 function dataKeys(array $path)
 {
-    $data_id = dataNew($path, false);
+    $data_id = dataNew($path);
     return selectListWhere(data, data_key, [data_parent_id => $data_id]);
 }
 
-function dataAppName()
+function scriptPath()
 {
     $path = $_SERVER["SCRIPT_NAME"];
     if (strpos($path, ".php") != 0)
@@ -165,6 +159,11 @@ function dataAppName()
     if ($path[0] == "/")
         $path = substr($path, 1);
     return $path;
+}
+
+function getDomain()
+{
+    return explode("/", scriptPath())[0];
 }
 
 function dataInc(array $path, $inc_val)
@@ -182,7 +181,11 @@ function dataDec(array $path, $dec_val)
 
 function dataSearch($path, $search_text)
 {
-    $data_id = dataNew($path);
-    if ($data_id == null) error("path '$path' not exist");
-    return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'");
+    if ($path == "") {
+        return selectList("select data_key from `data` where data_parent_id is null and data_key like '$search_text%'");
+    } else {
+        $data_id = dataNew($path);
+        if ($data_id == null) error("path '$path' not exist");
+        return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'");
+    }
 }

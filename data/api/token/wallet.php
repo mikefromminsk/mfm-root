@@ -1,8 +1,9 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
-$wallet_path = get_required(wallet_path, "data/wallet");
 $address = get_path_required(address);
+
+$wallet_path = getDomain() . "/wallet";
 
 if (!dataExist([$wallet_path, $address])) error("wallet not exist");
 

@@ -1,5 +1,10 @@
 const DEBUG = true
 
+function controller(callback) {
+    angular.module("App", ['ngMaterial', 'ngAnimate'])
+        .controller("Controller", callback)
+}
+
 function post(url, params, success, error) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url);
@@ -56,6 +61,23 @@ function selectFile(success) {
     input.click()
 }
 
+function objectToForm(data) {
+    var formData = new FormData();
+    angular.forEach(data, function (value, key) {
+        formData.append(key, value);
+    });
+    return formData;
+}
+
+function downloadFile(uri) {
+    var link = document.createElement("a");
+    link.setAttribute('download', uri.split(/(\\|\/)/g).pop());
+    link.href = uri;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+}
+
 function dataGet(path, callback) {
     post("/data/api/get.php", {
         path: path,
@@ -95,6 +117,7 @@ function showSuccess(message, success) {
 var wallet = {
     username: null,
     password: null,
+    GAS_NAME: "data",
     GAS_PATH: "data/wallet",
     STORE_USERNAME: "STORE_USERNAME",
     STORE_PASSWORD: "STORE_PASSWORD",
@@ -103,11 +126,21 @@ var wallet = {
         if (wallet.username == null || wallet.password == null) {
             let username = localStorage.getItem(wallet.STORE_USERNAME)
             let password = localStorage.getItem(wallet.STORE_PASSWORD)
-            if (username == null || password == null) {
+            if ((username == null || password == null) && window.NativeAndroid != null) {
+                username = window.NativeAndroid.getItem(wallet.STORE_USERNAME)
+                password = window.NativeAndroid.getItem(wallet.STORE_PASSWORD)
+            }
+            if ((username == null || password == null) && window.loginFunction != null) {
+                window.loginFunction(function (username, password) {
+                    wallet.login(username, password, success)
+                })
+            } else if (username == null || password == null) {
                 username = prompt("Enter your username")
                 password = prompt("Enter your password")
+                wallet.login(username, password, success)
+            } else {
+                wallet.login(username, password, success)
             }
-            this.login(username, password, success)
         } else {
             success(wallet.username, wallet.password)
         }
@@ -117,12 +150,17 @@ var wallet = {
             if (error)
                 error()
         } else {
-            post("/wallet/api/wallet", {
+            post("/" + wallet.GAS_NAME + "/api/token/wallet", {
                 address: username,
             }, function (response) {
                 if (response.next_hash == md5(wallet.calchash(wallet.GAS_PATH, username, password, response.prev_key))) {
-                    localStorage.setItem(wallet.STORE_USERNAME, username)
-                    localStorage.setItem(wallet.STORE_PASSWORD, password)
+                    if (window.NativeAndroid != null) {
+                        window.NativeAndroid.setItem(wallet.STORE_USERNAME, username)
+                        window.NativeAndroid.setItem(wallet.STORE_PASSWORD, password)
+                    } else {
+                        localStorage.setItem(wallet.STORE_USERNAME, username)
+                        localStorage.setItem(wallet.STORE_PASSWORD, password)
+                    }
                     wallet.username = username
                     wallet.password = password
                     if (success)
@@ -134,7 +172,7 @@ var wallet = {
         }
     },
     reg: function (username, password, success, error) {
-        post("/wallet/api/reg", {
+        post("/" + wallet.GAS_NAME + "/api/token/reg", {
             address: username,
             next_hash: md5(wallet.calchash(wallet.GAS_PATH, username, password))
         }, function () {
@@ -173,26 +211,6 @@ var wallet = {
             params.gas_key = key
             params.gas_next_hash = hash
             post(url, params, success, error)
-        }, error)
-    },
-    send: function (path, to_address, amount, success, error) {
-        wallet.calckey(path, function (key, next_hash, username, password) {
-            wallet.postWithGas("/wallet/api/send", {
-                wallet_path: path,
-                from_address: username,
-                to_address: to_address,
-                password: password,
-                next_hash: next_hash,
-                amount: amount,
-            }, password, success, error)
-        })
-    },
-    balance: function (wallet_path, success, error) {
-        wallet.auth(function () {
-            post("/wallet/api/balance", {
-                wallet_path: wallet_path,
-                address: wallet.username,
-            }, success, error)
         }, error)
     },
     domains: function () {

@@ -5,7 +5,7 @@ $path = get_required(path);
 
 $path_array = explode("/", $path);
 
-$response = dataMeta($path_array);
+$response = dataKeys($path_array);
 if ($response == null) error("path '$path' not exist");
 
 $response[path] = dataPath($response[data_id]);

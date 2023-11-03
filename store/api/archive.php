@@ -1,9 +1,13 @@
 <?php
 
-$rootPath = $_SERVER["DOCUMENT_ROOT"] . "/test";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
+
+$domain = get_required(domain);
+
+$rootPath = $_SERVER["DOCUMENT_ROOT"] . "/" . $domain;
 
 $zip = new ZipArchive();
-$zip->open('file.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
+$zip->open($domain . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
 $filesToDelete = array();
 
@@ -21,4 +25,8 @@ foreach ($files as $name => $file) {
     }
 }
 $zip->close();
+
+$response[success] = true;
+
+echo json_encode($response);
 

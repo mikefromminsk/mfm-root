@@ -1,20 +1,20 @@
-function openLoginDialog($mdBottomSheet, $mdToast, success) {
-    $mdBottomSheet.show({
+function loginFunction(success) {
+    window.$mdDialog.show({
+        clickOutsideToClose: true,
         templateUrl: '/wallet/login/index.html',
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope, $mdDialog) {
             if (DEBUG) {
-                $scope.address = "test1"
-                $scope.password = "password"
+                $scope.address = "user"
+                $scope.password = "pass"
             }
             $scope.mode = "login"
             $scope.login = function () {
                 if ($scope.mode == "login") {
                     wallet.login($scope.address, $scope.password,
                         function () {
-                            $mdBottomSheet.hide()
+                            $mdDialog.hide()
                         }, function () {
-                            $mdToast.show($mdToast.simple()
-                                .textContent('login or username is invalid'))
+                            showError('login or username is invalid')
                             if (confirm('Do you want to create an account?')) {
                                 $scope.mode = "registration"
                                 $scope.login()
@@ -23,15 +23,16 @@ function openLoginDialog($mdBottomSheet, $mdToast, success) {
                 } else if ($scope.mode == "registration") {
                     wallet.reg($scope.address, $scope.password,
                         function () {
-                            $mdBottomSheet.hide()
+                            $mdDialog.hide()
                         }, function () {
-                            $mdToast.show($mdToast.simple()
-                                .textContent('login or username is invalid'))
+                            showError('login or username is invalid')
                         })
                 }
             }
         }
     }).then(function () {
-        success();
+        success()
+    }, function (message) {
+        showError(message)
     })
 }

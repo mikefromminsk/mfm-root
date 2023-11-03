@@ -48,7 +48,7 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
         error("$path $from_address balance is not enough");
     if (!dataExist([$path, $to_address])) error("receiver not exist");
     if ($key == null || $next_hash == null) {
-        if (dataGet([$path, $from_address, script]) != dataAppName())
+        if (dataGet([$path, $from_address, script]) != scriptPath())
             error("script cannot use " . implode("/", $path) . "/$from_address address");
     } else {
         if (dataGet([$path, $from_address, next_hash]) != md5($key))
