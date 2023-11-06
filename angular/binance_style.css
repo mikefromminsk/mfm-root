@@ -190,6 +190,7 @@ input:disabled {
     cursor: pointer;
     background-position: center;
     transition: background 0.8s;
+    text-transform: uppercase;
 }
 
 .blue-back-ripple:hover, .primary-button:hover {

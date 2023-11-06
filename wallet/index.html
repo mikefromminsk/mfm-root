@@ -44,7 +44,7 @@
                     showSuccess("Success logout")
                 }
 
-                $scope.launch = function () {
+                $scope.newCoin = function () {
                     openLaunchDialog($scope.search_text, updateCoins)
                 }
 
@@ -80,11 +80,14 @@
                     if (domains.length == 0) {
                         $scope.coins = []
                     } else {
-                        post("/wallet/api/list", {
-                            domains: domains.join(",")
-                        }, function (response) {
-                            $scope.coins = response.result
-                            $scope.$apply()
+                        wallet.auth(function () {
+                            post("/wallet/api/list", {
+                                domains: domains.join(","),
+                                address: wallet.username,
+                            }, function (response) {
+                                $scope.coins = response.result
+                                $scope.$apply()
+                            })
                         })
                     }
                 }
@@ -133,8 +136,8 @@
     <md-menu md-position-mode="target-right target">
         <img class="img36 img-white" src="img/menu.svg" ng-click="$mdMenu.open($event)"/>
         <md-menu-content width="4" class="col-content">
-            <md-menu-item ng-click="launch()">
-                Launch
+            <md-menu-item ng-click="newCoin()">
+                New coin
             </md-menu-item>
             <md-menu-item ng-click="login()">
                 Login

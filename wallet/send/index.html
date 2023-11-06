@@ -1,6 +1,6 @@
 <md-bottom-sheet>
-    <md-content class="col col-content">
-        <div class="size16">Send {{tickerFormat(locals.wallet_path)}}</div>
+    <md-content class="col input-content">
+        <div class="size16">Send {{locals.domain}}</div>
         <div class="flex row input-wrapper" style="margin-top: 16px">
             <div class="input-label-top">To address</div>
             <input type="text" class="flex input" ng-model="to_address">
@@ -11,7 +11,7 @@
         </div>
         <md-button class="md-primary md-raised flex" ng-click="send()"
                    ng-disabled="to_address == null || amount == null">
-            Send
+            Send {{locals.domain}}
         </md-button>
     </md-content>
 </md-bottom-sheet>

@@ -6,20 +6,21 @@ function openOptionsDialog(domain, success) {
         },
         controller: function ($scope, $mdBottomSheet, locals) {
             $scope.locals = locals
-            post("/wallet/api/options", {
+
+            post("/wallet/api/contracts", {
                 domain: domain,
             }, function (response) {
-                $scope.options = response.result
+                $scope.contracts = response.contracts
                 $scope.$apply()
             })
 
-            $scope.sendDialog = function (wallet_path) {
-                openSendDialog(wallet_path, success)
+            $scope.sendDialog = function (domain) {
+                openSendDialog(domain, success)
             }
 
             $scope.giveaway = function () {
                 wallet.auth(function (username) {
-                    post('/wallet/api/mining.php', {
+                    post("/" + $scope.contracts['d904b40c305d9eafb68583178dfec8e5'], {
                         address: username
                     }, function () {
                         success()

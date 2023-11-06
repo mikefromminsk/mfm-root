@@ -19,7 +19,7 @@ function openLaunchDialog(domain, success) {
                         next_hash: next_hash,
                         amount: $scope.amount,
                     }, function () {
-                        wallet.domainAdd($scope.path.split('/')[0])
+                        wallet.domainAdd($scope.path)
                         window.showSuccess("token launched", success)
                         $mdBottomSheet.hide()
                     })

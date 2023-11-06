@@ -172,7 +172,7 @@ var wallet = {
         }
     },
     reg: function (username, password, success, error) {
-        post("/" + wallet.GAS_NAME + "/api/token/reg", {
+        post("/" + wallet.GAS_NAME + "/api/token/free_reg", {
             address: username,
             next_hash: md5(wallet.calchash(wallet.GAS_PATH, username, password))
         }, function () {
@@ -201,6 +201,35 @@ var wallet = {
                 }
             }, error)
         }, error)
+    },
+    send: function (domain, to_address, amount, success, error) {
+        let wallet_path = domain + "/wallet"
+        post("/wallet/api/contracts", {
+            domain: domain
+        }, function (response) {
+            var script_path = response.contracts['34ddc7c1919738b872759f3bf31169c5']
+            if (script_path != null) {
+                wallet.calckey(wallet.GAS_PATH, function (gas_key, gas_next_hash, username, password) {
+                    wallet.calckey(wallet_path, function (key, hash, username, password) {
+                        if (domain == wallet.GAS_NAME) {
+                            gas_next_hash = wallet.calchash(wallet.GAS_PATH, username, password, gas_key)
+                            gas_key = password
+                        }
+                        post("/" + script_path, {
+                            from_address: username,
+                            to_address: to_address,
+                            password: key,
+                            next_hash: hash,
+                            amount: amount,
+                            gas_address: username,
+                            gas_key: gas_key,
+                            gas_next_hash: gas_next_hash,
+                        }, success, error)
+                    }, error)
+                }, error)
+
+            }
+        })
     },
     calchash: function (wallet_path, username, password, key) {
         return md5(wallet_path + username + password + (key || ""))

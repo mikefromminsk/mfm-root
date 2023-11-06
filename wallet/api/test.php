@@ -24,7 +24,7 @@ assertEquals("testDelegate", http_post_json("localhost/wallet/api/testDelegate.p
 assertEquals("balanceAfterBurn", strval(dataGet([data, wallet, user1, amount])), strval(1999 - FILE_ROW_SIZE));
 
 dataWalletReg($data_path, reg, md5(password));
-dataWalletDelegate($data_path, reg, password, "wallet/api/reg");
+dataWalletDelegate($data_path, reg, password, "data/api/token/free_reg");
 dataWalletSend($data_path, admin, reg, 100000.0, password3, md5(password4));
 
 dataWalletReg($data_path, test1, dataWalletHash("data/wallet", "test1", "password"));
@@ -43,12 +43,12 @@ function gas(){
 }
 
 function sendGasForScript($address, $script){
-    assertEquals("testReg $script", http_post_json("localhost/wallet/api/reg.php", [
+    assertEquals("testReg $script", http_post_json("localhost/data/api/token/free_reg.php", [
         address => $address,
         next_hash => md5(password1),
     ])[success], true);
 
-    assertEquals("testSend $script", http_post_json("localhost/wallet/api/send.php", [
+    assertEquals("testSend $script", http_post_json("localhost/data/api/token/send.php", [
             from_address => admin,
             to_address => $address,
             password => password . $GLOBALS[gas_index],
@@ -56,16 +56,38 @@ function sendGasForScript($address, $script){
             amount => 100000,
         ] + gas())[success], true);
 
-    assertEquals("testDelegate $script", http_post_json("localhost/wallet/api/delegate.php", [
+    assertEquals("testDelegate $script", http_post_json("localhost/data/api/token/delegate.php", [
             address => $address,
             password => password1,
             script => $script,
         ] + gas())[success], true);
 }
 
-sendGasForScript(gas_giveaway, "data/giveaway");
+sendGasForScript(gas_giveaway, "data/api/token/drop");
 sendGasForScript(usdt_reg, "usdt/reg/reg");
 sendGasForScript(usdt_deposit, "usdt/deposit/start");
 sendGasForScript(usdt_check, "usdt/deposit/check");
+
+function installApp($domain){
+    $files = [];
+    foreach ($iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($_SERVER["DOCUMENT_ROOT"] . "/$domain",
+            RecursiveDirectoryIterator::SKIP_DOTS),
+        RecursiveIteratorIterator::SELF_FIRST) as $item) {
+        $subPath = $iterator->getSubPathName();
+        if($item->isDir()) {
+        } else {
+            $filepath = $domain . "/" . $subPath;
+            $filepath = implode("/", explode("\\", $filepath));
+            $file_hash = hash_file(md5, $_SERVER["DOCUMENT_ROOT"] . "\\" . $filepath);
+            $files[$file_hash] = $filepath;
+        }
+    }
+    dataSet([store, $domain], $files);
+    assertNotEquals("installApp $domain", sizeof(dataKeys([store, $domain])), 0);
+}
+
+installApp("data");
+installApp("gas");
 
 echo $gas_index;
