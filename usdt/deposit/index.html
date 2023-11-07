@@ -13,7 +13,7 @@
                 $scope.receiver = "user2"
                 $scope.deposit_address = ""
                 $scope.depositStart = function () {
-                    post("start", {
+                    post("start.php", {
                         receiver: $scope.receiver
                     }, function (response) {
                         $scope.deposit_address = response.deposit_address
@@ -32,7 +32,7 @@
                         $scope.$apply()
                         if ($scope.countDownTimer % CHECK_INTERVAL == 0) {
                             $scope.countDownTimer = CHECK_INTERVAL
-                            post("check", {
+                            post("check.php", {
                                 deposit_address: $scope.deposit_address
                             }, function (response) {
                                 $scope.deposited = response.deposited

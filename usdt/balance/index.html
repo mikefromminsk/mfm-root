@@ -12,7 +12,7 @@
             .controller("Controller", function ($scope, $http) {
               $scope.address = "user2"
               $scope.getBalance = function () {
-                post("/data/balance", {
+                post("/data/balance.php", {
                   wallet_path: "usdt/wallet",
                   address: $scope.address
                 }, function (response) {

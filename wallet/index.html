@@ -57,7 +57,7 @@
                         loadRecs()
                     } else {
                         $scope.show_launcher = true
-                        post('/wallet/api/search', {
+                        post('/wallet/api/search.php', {
                             path: "wallet/info",
                             search_text: newValue
                         }, function (response) {
@@ -81,7 +81,7 @@
                         $scope.coins = []
                     } else {
                         wallet.auth(function () {
-                            post("/wallet/api/list", {
+                            post("/wallet/api/list.php", {
                                 domains: domains.join(","),
                                 address: wallet.username,
                             }, function (response) {
@@ -103,7 +103,7 @@
                     if (recDomains.length == 0) {
                         $scope.recs = []
                     } else {
-                        post("/wallet/api/list", {
+                        post("/wallet/api/list.php", {
                             domains: recDomains.join(",")
                         }, function (response) {
                             $scope.recs = response.result
@@ -171,13 +171,6 @@
                    ng-model="item.isFavorite"/>
     </div>
     <div class="divider"></div>
-</div>
-<div class="row align-center-center white-back-ripple"
-     ng-click="launch()"
-     ng-show="show_launcher"
-     style="padding: 12px">
-    <img src="/img/rocket.svg" class="img-blue">
-    Launch new coin
 </div>
 </body>
 </html>

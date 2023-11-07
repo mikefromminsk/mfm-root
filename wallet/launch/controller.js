@@ -4,24 +4,38 @@ function openLaunchDialog(domain, success) {
         locals: {
             domain: domain
         },
-        controller: function ($scope, $mdBottomSheet, locals) {
+        controller: function ($scope, $mdBottomSheet, $http, locals) {
             $scope.domain = locals.domain
             $scope.amount = 1000000
             if (DEBUG) {
                 $scope.domain = "super"
             }
-            $scope.launch = function () {
-                let path = $scope.domain + "/wallet"
-                wallet.calckey(path, function (key, next_hash, username, password) {
-                    postWithGas("/wallet/api/launch", {
-                        path: path,
-                        address: username,
-                        next_hash: next_hash,
-                        amount: $scope.amount,
-                    }, function () {
-                        wallet.domainAdd($scope.path)
-                        window.showSuccess("token launched", success)
-                        $mdBottomSheet.hide()
+            $scope.download = function () {
+                downloadFile("/store/api/gas.zip")
+            }
+            $scope.upload = function () {
+                wallet.calckey(wallet.GAS_PATH, function (key, hash, username, password) {
+                    selectFile(function (file) {
+                        $http({
+                            method: 'POST',
+                            url: '/store/api/upload.php',
+                            headers: {
+                                'Content-Type': undefined
+                            },
+                            data: {
+                                domain: $scope.domain,
+                                file: file,
+                                gas_address: username,
+                                gas_key: key,
+                                gas_next_hash: hash,
+                            },
+                            transformRequest: objectToForm
+                        }).then(function (response) {
+                            postWithGas("/" + $scope.domain + "/api/token/init.php", {}, function () {
+                                showSuccess("Token " + $scope.domain + " launched")
+                                $mdBottomSheet.hide()
+                            })
+                        })
                     })
                 })
             }

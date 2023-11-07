@@ -3,6 +3,8 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
+echo json_encode("$host_name") . "\n";
+
 $data_path = "data/wallet";
 
 dataWalletInit($data_path, admin, md5(password), 100000000.0);
@@ -15,12 +17,13 @@ assertEquals("dataSend", dataGet([data, wallet, admin, amount]), 100000000.0 - 2
 
 dataWalletDelegate($data_path, user1, password2, "wallet/api/testDelegate");
 
-$_POST["gas_address"] = admin;
-$_POST["gas_key"] = password2;
-$_POST["gas_next_hash"] = md5(password3);
+$_POST[gas_address] = admin;
+$_POST[gas_key] = password2;
+$_POST[gas_next_hash] = md5(password3);
 commit("commit");
+echo "\n";
 
-assertEquals("testDelegate", http_post_json("localhost/wallet/api/testDelegate.php", [])[success], true);
+assertEquals("testDelegate", http_post_json("$host_name/wallet/api/testDelegate.php", [])[success], true);
 assertEquals("balanceAfterBurn", strval(dataGet([data, wallet, user1, amount])), strval(1999 - FILE_ROW_SIZE));
 
 dataWalletReg($data_path, reg, md5(password));
@@ -43,12 +46,12 @@ function gas(){
 }
 
 function sendGasForScript($address, $script){
-    assertEquals("testReg $script", http_post_json("localhost/data/api/token/free_reg.php", [
+    assertEquals("testReg $script", http_post_json($GLOBALS[host_name] . "/data/api/token/free_reg.php", [
         address => $address,
         next_hash => md5(password1),
     ])[success], true);
 
-    assertEquals("testSend $script", http_post_json("localhost/data/api/token/send.php", [
+    assertEquals("testSend $script", http_post_json($GLOBALS[host_name] . "/data/api/token/send.php", [
             from_address => admin,
             to_address => $address,
             password => password . $GLOBALS[gas_index],
@@ -56,7 +59,7 @@ function sendGasForScript($address, $script){
             amount => 100000,
         ] + gas())[success], true);
 
-    assertEquals("testDelegate $script", http_post_json("localhost/data/api/token/delegate.php", [
+    assertEquals("testDelegate $script", http_post_json($GLOBALS[host_name] . "/data/api/token/delegate.php", [
             address => $address,
             password => password1,
             script => $script,

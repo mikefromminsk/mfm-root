@@ -16,7 +16,7 @@
                 $scope.reg = function () {
                     wallet.init($scope.address, $scope.password)
                         .nextHash("usdt/wallet", function (next_hash) {
-                            post("/usdt/reg/reg", {
+                            post("/usdt/reg/reg.php", {
                                 address: $scope.address,
                                 next_hash: next_hash
                             }, function (response) {

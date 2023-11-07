@@ -20,6 +20,7 @@ foreach ($files as $name => $file) {
     if (!$file->isDir()) {
         $filePath = $file->getRealPath();
         $relativePath = substr($filePath, strlen($rootPath) + 1);
+        $relativePath = implode("/", explode(DIRECTORY_SEPARATOR, $relativePath));
         $zip->addFile($filePath, $relativePath);
         $filesToDelete[] = $filePath;
     }

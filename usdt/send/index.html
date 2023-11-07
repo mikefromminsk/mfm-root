@@ -14,7 +14,7 @@
                 $scope.receiver_address = "reciever@gmail.com"
                 $scope.address = "example@gmail.com"
                 $scope.getBalance = function () {
-                    post("balance", {
+                    post("balance.php", {
                         address: $scope.address
                     }, function (response) {
                         $scope.sent = response.sent

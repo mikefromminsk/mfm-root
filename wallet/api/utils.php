@@ -43,7 +43,10 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
 {
     if ($amount == 0)
         return true;
-
+    /*if ($from_address == emitter
+        && dataGet([$path])) {
+        //transactions
+    }*/
     if (dataWalletBalance($path, $from_address) < $amount)
         error("$path $from_address balance is not enough");
     if (!dataExist([$path, $to_address])) error("receiver dosent exist");

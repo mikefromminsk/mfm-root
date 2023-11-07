@@ -2,22 +2,15 @@ function showUploader($http) {
     window.$mdBottomSheet.show({
         templateUrl: '/store/uploader/index.html',
         controller: function ($scope, $mdBottomSheet) {
-            post("/store/api/apps", {}, function (response) {
+            post("/store/api/apps.php", {}, function (response) {
                 $scope.apps = response.result
             })
-
             $scope.upload = function (item) {
-                /*post("/store/api/archive.php", {
-                    domain: item.domain
-                }, function () {
-
-                })*/
-
                 wallet.calckey(wallet.GAS_PATH, function (key, hash, username, password) {
                     selectFile(function (file) {
                         $http({
                             method: 'POST',
-                            url: '/store/api/upload',
+                            url: '/store/api/upload.php',
                             headers: {
                                 'Content-Type': undefined
                             },

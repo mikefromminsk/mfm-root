@@ -150,7 +150,7 @@ var wallet = {
             if (error)
                 error()
         } else {
-            post("/" + wallet.GAS_NAME + "/api/token/wallet", {
+            post("/" + wallet.GAS_NAME + "/api/token/wallet.php", {
                 address: username,
             }, function (response) {
                 if (response.next_hash == md5(wallet.calchash(wallet.GAS_PATH, username, password, response.prev_key))) {
@@ -172,7 +172,7 @@ var wallet = {
         }
     },
     reg: function (username, password, success, error) {
-        post("/" + wallet.GAS_NAME + "/api/token/free_reg", {
+        post("/" + wallet.GAS_NAME + "/api/token/free_reg.php", {
             address: username,
             next_hash: md5(wallet.calchash(wallet.GAS_PATH, username, password))
         }, function () {
@@ -187,7 +187,7 @@ var wallet = {
     },
     calckey: function (path, success, error) {
         wallet.auth(function (username, password) {
-            post("/data/api/get", {
+            post("/data/api/get.php", {
                 path: path + "/" + username + "/prev_key",
             }, function (prev_key) {
                 if (success) {
@@ -204,7 +204,7 @@ var wallet = {
     },
     send: function (domain, to_address, amount, success, error) {
         let wallet_path = domain + "/wallet"
-        post("/wallet/api/contracts", {
+        post("/wallet/api/contracts.php", {
             domain: domain
         }, function (response) {
             var script_path = response.contracts['34ddc7c1919738b872759f3bf31169c5']
@@ -215,7 +215,7 @@ var wallet = {
                             gas_next_hash = wallet.calchash(wallet.GAS_PATH, username, password, gas_key)
                             gas_key = password
                         }
-                        post("/" + script_path, {
+                        post("/" + script_path + ".php", {
                             from_address: username,
                             to_address: to_address,
                             password: key,

@@ -14,14 +14,14 @@ if (dataGet([$domain, hash]) == $file_hash) error("archive was uploaded before")
 $zip = new ZipArchive;
 if ($zip->open($file[tmp_name]) !== TRUE) error("zip->open is false");
 
-$zip->extractTo($_SERVER["DOCUMENT_ROOT"] . "/" . $domain);
+$zip->extractTo($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $domain);
 dataSet([$domain, vote, last_uploaded], $file_hash);
 
 $files = [];
 for ($i = 0; $i < $zip->numFiles; $i++) {
     $filepath = $domain . "/" . $zip->getNameIndex($i);
     $filepath = implode("/", explode("\\", $filepath));
-    $file_hash = hash_file(md5, $_SERVER["DOCUMENT_ROOT"] . "\\" . $filepath);
+    $file_hash = hash_file(md5, $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $filepath);
     $files[$file_hash] = $filepath;
 }
 

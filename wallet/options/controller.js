@@ -7,7 +7,7 @@ function openOptionsDialog(domain, success) {
         controller: function ($scope, $mdBottomSheet, locals) {
             $scope.locals = locals
 
-            post("/wallet/api/contracts", {
+            post("/wallet/api/contracts.php", {
                 domain: domain,
             }, function (response) {
                 $scope.contracts = response.contracts
@@ -20,7 +20,7 @@ function openOptionsDialog(domain, success) {
 
             $scope.giveaway = function () {
                 wallet.auth(function (username) {
-                    post("/" + $scope.contracts['d904b40c305d9eafb68583178dfec8e5'], {
+                    post("/" + $scope.contracts['d904b40c305d9eafb68583178dfec8e5'] + ".php", {
                         address: username
                     }, function () {
                         success()

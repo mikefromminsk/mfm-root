@@ -7,7 +7,7 @@ function showNewDomain(success) {
                 if (newValue == "") {
                     $scope.domains = []
                 } else {
-                    post('/store/api/search', {
+                    post('/store/api/search.php', {
                         path: "/",
                         search_text: newValue
                     }, function (response) {
