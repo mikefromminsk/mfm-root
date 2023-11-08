@@ -116,6 +116,10 @@
     font-weight: 500;
 }
 
+.uppercase {
+    text-transform: uppercase;
+}
+
 .bold-text {
     font-weight: 600;
 }

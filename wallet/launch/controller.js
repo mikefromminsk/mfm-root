@@ -31,8 +31,12 @@ function openLaunchDialog(domain, success) {
                             },
                             transformRequest: objectToForm
                         }).then(function (response) {
-                            postWithGas("/" + $scope.domain + "/api/token/init.php", {}, function () {
+                            postContractWithGas($scope.domain, data10.init, {
+                                address: username,
+                                next_hash: md5(wallet.calchashStart($scope.domain + "/wallet")),
+                            }, function () {
                                 showSuccess("Token " + $scope.domain + " launched")
+                                wallet.domainAdd($scope.domain)
                                 $mdBottomSheet.hide()
                             })
                         })

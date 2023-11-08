@@ -42,21 +42,18 @@
                 $scope.logout = function () {
                     wallet.logout()
                     showSuccess("Success logout")
+                    updateCoins()
                 }
 
                 $scope.newCoin = function () {
                     openLaunchDialog($scope.search_text, updateCoins)
                 }
 
-                $scope.show_launcher = false
                 $scope.$watch('search_text', function (newValue) {
                     if (newValue == null) return;
                     if (newValue == "") {
-                        $scope.show_launcher = false
                         updateCoins()
-                        loadRecs()
                     } else {
-                        $scope.show_launcher = true
                         post('/wallet/api/search.php', {
                             path: "wallet/info",
                             search_text: newValue
@@ -90,9 +87,7 @@
                             })
                         })
                     }
-                }
 
-                function loadRecs() {
                     var recDomains = [
                         "data",
                         "usdt",
@@ -112,17 +107,36 @@
                     }
                 }
 
-                updateCoins()
-                loadRecs()
                 $scope.toggleFavorite = function (domain) {
-                    if (wallet.domainExist(domain)) {
-                        wallet.domainDel(domain)
-                    } else {
-                        wallet.domainAdd(domain)
+                    wallet.auth(function (username) {
+                        postContract(domain, data10.wallet, {
+                            address: username
+                        }, function () {
+                            addToStorage(domain)
+                        }, function () {
+                            postContractWithGas(domain, data10.reg, {
+                                address: username,
+                                next_hash: wallet.calchashStart(domain + "/wallet")
+                            }, function () {
+                                addToStorage(domain)
+                            })
+                        })
+                    })
+                    function addToStorage(domain) {
+                        if (wallet.domainExist(domain)) {
+                            wallet.domainDel(domain)
+                        } else {
+                            wallet.domainAdd(domain)
+                        }
+                        updateCoins()
                     }
-                    updateCoins()
-                    loadRecs()
                 }
+
+                $scope.username = function () {
+                    return wallet.username
+                }
+
+                updateCoins()
             })
     </script>
 </head>
@@ -143,30 +157,32 @@
                 Login
             </md-menu-item>
             <md-menu-item ng-click="logout()">
-                Logout
+                Logout {{username()}}
             </md-menu-item>
         </md-menu-content>
     </md-menu>
 </div>
-<div class="col col-content row-content">
+<div class="col col-content row-content" ng-show="coins.length">
     <span>Your coins</span>
 </div>
 <div class="col" ng-repeat="item in coins">
     <div class="row align-start-center row-content white-back-ripple"
-         ng-click="options(item.domain)">
+         ng-click="options(item.domain)"
+         style="padding: 8px 0 8px 0;">
         <img class="img36" src="img/coin.svg">
-        <p class="flex size14">{{tickerFormat(item.domain)}}</p>
+        <p class="flex size14 uppercase">{{item.domain}}</p>
         <span>{{item.balance}}</span>
     </div>
     <div class="divider"></div>
 </div>
-<div class="col col-content row-content">
-    <span>Other coins</span>
+<div class="col col-content row-content" ng-show="recs.length">
+    <span>Recommended coins</span>
 </div>
 <div class="col" ng-repeat="item in recs">
-    <div class="row align-start-center row-content white-back-ripple">
+    <div class="row align-start-center row-content white-back-ripple"
+         style="padding: 8px 0 8px 0;">
         <img class="img36" src="img/coin.svg">
-        <span class="flex size14">{{tickerFormat(item.domain)}}</span>
+        <span class="flex size14 uppercase">{{item.domain}}</span>
         <md-switch ng-change="toggleFavorite(item.domain)"
                    ng-model="item.isFavorite"/>
     </div>

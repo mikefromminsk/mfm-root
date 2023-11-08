@@ -6,8 +6,10 @@ function openSendDialog(domain, success) {
         },
         controller: function ($scope, $mdBottomSheet, locals) {
             $scope.locals = locals
-            $scope.to_address = 'admin'
-            $scope.amount = 2
+            if (DEBUG) {
+                $scope.to_address = 'user'
+                $scope.amount = 2
+            }
             $scope.send = function () {
                 wallet.send(locals.domain,
                     $scope.to_address,

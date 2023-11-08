@@ -31,6 +31,33 @@ function postWithGas(url, params, success, error) {
     wallet.postWithGas(url, params, success, error)
 }
 
+function contractExist(domain, contractHash, success, error) {
+    post("/wallet/api/contracts.php", {
+        domain: domain
+    }, function (response) {
+        var script_path = response.contracts[contractHash]
+        if (script_path != null) {
+            if (success)
+                success(script_path)
+        } else {
+            if (error)
+                error()
+        }
+    }, error)
+}
+
+function postContract(domain, contractHash, params, success, error) {
+    contractExist(domain, contractHash, function (script_path) {
+        post("/" + script_path, params, success, error)
+    }, error)
+}
+
+function postContractWithGas(domain, contractHash, params, success, error) {
+    contractExist(domain, contractHash, function (script_path) {
+        wallet.postWithGas("/" + script_path, params, success, error)
+    }, error)
+}
+
 function postForm(url, params, success, error) {
     const xhr = new XMLHttpRequest()
     const formData = new FormData()
@@ -114,6 +141,14 @@ function showSuccess(message, success) {
         success(message)
 }
 
+let data10 = {
+    send: '34ddc7c1919738b872759f3bf31169c5',
+    wallet: '7428bdd310dfca122d94a3527cc4e9df',
+    reg: '0902ce671e53ba0e175d78adc436b3ad',
+    drop: 'd904b40c305d9eafb68583178dfec8e5',
+    init: '772df88baecd34099df80f0e592a9bc7',
+}
+
 var wallet = {
     username: null,
     password: null,
@@ -184,6 +219,7 @@ var wallet = {
         wallet.password = null
         localStorage.removeItem(wallet.STORE_USERNAME)
         localStorage.removeItem(wallet.STORE_PASSWORD)
+        localStorage.removeItem(wallet.STORE_DOMAINS)
     },
     calckey: function (path, success, error) {
         wallet.auth(function (username, password) {
@@ -203,36 +239,30 @@ var wallet = {
         }, error)
     },
     send: function (domain, to_address, amount, success, error) {
-        let wallet_path = domain + "/wallet"
-        post("/wallet/api/contracts.php", {
-            domain: domain
-        }, function (response) {
-            var script_path = response.contracts['34ddc7c1919738b872759f3bf31169c5']
-            if (script_path != null) {
-                wallet.calckey(wallet.GAS_PATH, function (gas_key, gas_next_hash, username, password) {
-                    wallet.calckey(wallet_path, function (key, hash, username, password) {
-                        if (domain == wallet.GAS_NAME) {
-                            gas_next_hash = wallet.calchash(wallet.GAS_PATH, username, password, gas_key)
-                            gas_key = password
-                        }
-                        post("/" + script_path + ".php", {
-                            from_address: username,
-                            to_address: to_address,
-                            password: key,
-                            next_hash: hash,
-                            amount: amount,
-                            gas_address: username,
-                            gas_key: gas_key,
-                            gas_next_hash: gas_next_hash,
-                        }, success, error)
-                    }, error)
-                }, error)
-
-            }
-        })
+        wallet.calckey(wallet.GAS_PATH, function (gas_key, gas_next_hash, username, password) {
+            wallet.calckey(domain + "/wallet", function (key, hash, username, password) {
+                if (domain == wallet.GAS_NAME) {
+                    gas_next_hash = wallet.calchash(wallet.GAS_PATH, username, password, gas_key)
+                    gas_key = password
+                }
+                postContract(domain, data10.send, {
+                    from_address: username,
+                    to_address: to_address,
+                    password: key,
+                    next_hash: hash,
+                    amount: amount,
+                    gas_address: username,
+                    gas_key: gas_key,
+                    gas_next_hash: gas_next_hash,
+                }, success, error)
+            }, error)
+        }, error)
     },
     calchash: function (wallet_path, username, password, key) {
         return md5(wallet_path + username + password + (key || ""))
+    },
+    calchashStart: function (path) {
+        return md5(path + wallet.username + wallet.password)
     },
     postWithGas: function (url, params, success, error) {
         wallet.calckey(wallet.GAS_PATH, function (key, hash, username, password) {
