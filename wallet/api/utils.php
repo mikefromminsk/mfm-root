@@ -89,6 +89,33 @@ function commit($response, $gas_address = null)
     echo json_encode($response);
 }
 
-function dataWalletHash($path, $username, $password){
+function dataWalletHash($path, $username, $password)
+{
     return md5(md5($path . $username . $password));
+}
+
+function upload($domain, $filepath)
+{
+    $file_hash = hash_file(md5, $filepath);
+
+    //if (dataGet([$domain, vote, value]) != $file_hash) error("votes not equal to file");
+    if (dataGet([$domain, hash]) == $file_hash) error("archive was uploaded before");
+
+    $zip = new ZipArchive;
+    if ($zip->open($filepath) !== TRUE) error("zip->open is false");
+
+    $zip->extractTo($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $domain);
+    dataSet([$domain, vote, last_uploaded], $file_hash);
+
+    $files = [];
+    for ($i = 0; $i < $zip->numFiles; $i++) {
+        $filepath = $domain . "/" . $zip->getNameIndex($i);
+        $filepath = implode("/", explode("\\", $filepath));
+        $file_hash = hash_file(md5, $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $filepath);
+        $files[$file_hash] = $filepath;
+    }
+    dataSet([store, $domain], $files);
+    $zip->close();
+
+    return $files;
 }

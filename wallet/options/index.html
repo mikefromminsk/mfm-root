@@ -1,15 +1,15 @@
 <md-bottom-sheet>
     <md-content class="col input-content">
         <div class="row">
-            <div class="size16 flex">{{locals.domain}} options</div>
+            <div class="size16 flex uppercase">{{locals.domain}}</div>
             <div class="size16">{{balance}}</div>
         </div>
         <md-button class="md-raised md-primary" ng-click="giveaway()"
-                   ng-show="contracts['d904b40c305d9eafb68583178dfec8e5']">
+                   ng-show="contracts[data10.drop]">
             Drop {{locals.domain}}
         </md-button>
         <div class="primary-button" ng-click="sendDialog(locals.domain)"
-             ng-show="contracts['34ddc7c1919738b872759f3bf31169c5']">
+             ng-show="contracts[data10.send]">
             Send {{locals.domain}}
         </div>
     </md-content>

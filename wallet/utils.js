@@ -1,4 +1,4 @@
-const DEBUG = true
+const DEBUG = false
 
 function controller(callback) {
     angular.module("App", ['ngMaterial', 'ngAnimate'])
@@ -61,7 +61,7 @@ function postContractWithGas(domain, contractHash, params, success, error) {
 function postForm(url, params, success, error) {
     const xhr = new XMLHttpRequest()
     const formData = new FormData()
-    xhr.open("POST", "/updater/upload", true);
+    xhr.open("POST", url, true);
     xhr.onreadystatechange = () => {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
@@ -145,7 +145,7 @@ let data10 = {
     send: '34ddc7c1919738b872759f3bf31169c5',
     wallet: '7428bdd310dfca122d94a3527cc4e9df',
     reg: '0902ce671e53ba0e175d78adc436b3ad',
-    drop: 'd904b40c305d9eafb68583178dfec8e5',
+    drop: 'b4177495af9c7432844deb1d32a93db7',
     init: '772df88baecd34099df80f0e592a9bc7',
 }
 

@@ -71,26 +71,7 @@ sendGasForScript(usdt_reg, "usdt/reg/reg");
 sendGasForScript(usdt_deposit, "usdt/deposit/start");
 sendGasForScript(usdt_check, "usdt/deposit/check");
 
-function installApp($domain){
-    $files = [];
-    foreach ($iterator = new RecursiveIteratorIterator(
-        new RecursiveDirectoryIterator($_SERVER["DOCUMENT_ROOT"] . "/$domain",
-            RecursiveDirectoryIterator::SKIP_DOTS),
-        RecursiveIteratorIterator::SELF_FIRST) as $item) {
-        $subPath = $iterator->getSubPathName();
-        if($item->isDir()) {
-        } else {
-            $filepath = $domain . "/" . $subPath;
-            $filepath = implode("/", explode("\\", $filepath));
-            $file_hash = hash_file(md5, $_SERVER["DOCUMENT_ROOT"] . "\\" . $filepath);
-            $files[$file_hash] = $filepath;
-        }
-    }
-    dataSet([store, $domain], $files);
-    assertNotEquals("installApp $domain", sizeof(dataKeys([store, $domain])), 0);
-}
-
-installApp("data");
-installApp("gas");
+upload("data", $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/data.zip");
+assertNotEquals("installApp data", sizeof(dataKeys([store, data])), 0);
 
 echo $gas_index;

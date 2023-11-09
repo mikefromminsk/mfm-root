@@ -7,6 +7,7 @@ function openOptionsDialog(domain, success) {
         controller: function ($scope, $mdBottomSheet, locals) {
             $scope.locals = locals
             $scope.balance = 0
+            $scope.data10 = data10
             var domain = locals.domain
 
             postContract(domain, data10.wallet, {
