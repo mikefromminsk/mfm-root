@@ -138,6 +138,10 @@
                     return wallet.username
                 }
 
+                setInterval(function () {
+                    updateCoins()
+                }, 10000)
+
                 updateCoins()
             })
     </script>
@@ -164,8 +168,27 @@
         </md-menu-content>
     </md-menu>
 </div>
+<div class="row shadow-black gray-back"
+     style="padding: 16px"
+     ng-show="coins.length">
+    <div class="flex col">
+        <p class="size12">Total balance</p>
+        <p class="size16 bold-text" style="margin-top: 4px">{{formatPrice(12022.022)}}</p>
+    </div>
+    <div class="col align-end-end">
+        <p class="size12 uppercase">Gas</p>
+        <p class="size14 bold-text" style="margin-top: 4px">{{formatAmount(25050)}}</p>
+    </div>
+</div>
+<div class="row"
+     style="padding: 16px"
+     ng-hide="coins.length">
+    <div class="flex primary-button lowercase"
+         ng-click="login()"
+    >Login or Create account</div>
+</div>
 <div class="col col-content row-content" ng-show="coins.length">
-    <span>Your coins</span>
+    <p>Your coins</p>
 </div>
 <div class="col" ng-repeat="item in coins">
     <div class="row align-start-center row-content white-back-ripple"
@@ -173,18 +196,21 @@
          style="padding: 8px 0 8px 0;">
         <img class="img36" src="img/coin.svg">
         <p class="flex size14 uppercase">{{item.domain}}</p>
-        <span>{{item.balance}}</span>
+        <div class="col align-end-end">
+            <p>{{formatPrice(item.price * item.balance)}}</p>
+            <p class="size12 uppercase"  style="margin-top: 4px">{{formatAmount(item.balance) + " " + item.domain}}</p>
+        </div>
     </div>
     <div class="divider"></div>
 </div>
 <div class="col col-content row-content" ng-show="recs.length">
-    <span>Recommended coins</span>
+    <p>Recommended coins</p>
 </div>
 <div class="col" ng-repeat="item in recs">
     <div class="row align-start-center row-content white-back-ripple"
          style="padding: 8px 0 8px 0;">
         <img class="img36" src="img/coin.svg">
-        <span class="flex size14 uppercase">{{item.domain}}</span>
+        <p class="flex size14 uppercase">{{item.domain}}</p>
         <md-switch ng-change="toggleFavorite(item.domain)"
                    ng-model="item.isFavorite"/>
     </div>

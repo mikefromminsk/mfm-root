@@ -8,13 +8,13 @@ $domains = explode(",", $domains);
 
 foreach ($domains as $domain) {
     if ($domain == null) continue;
-    $wallet_path = dataGet([wallet, info, $domain, path]);
     $coin = [
         domain => $domain,
-        path => $wallet_path,
+        path => dataGet([wallet, info, $domain, path]),
+        price => dataGet([$domain, price]) ?: 13.05,
     ];
     if ($address != null)
-        $coin[balance] = dataWalletBalance($wallet_path, $address);
+        $coin[balance] = dataWalletBalance($coin[path], $address);
     $response[result][] = $coin;
 }
 

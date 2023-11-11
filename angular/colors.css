@@ -120,6 +120,10 @@
     text-transform: uppercase;
 }
 
+.lowercase {
+    text-transform: none;
+}
+
 .bold-text {
     font-weight: 600;
 }

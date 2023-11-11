@@ -3,13 +3,18 @@ function addFormats($scope){
         return +(Math.round(num + "e+" + precision) + "e-" + precision);
     }
     var numberFormat = new Intl.NumberFormat()
-    $scope.priceFormat = function (number) {
+    $scope.formatPrice = function (number) {
         return "$" + numberFormat.format(round(number, 2))
     }
-    $scope.amountFormat = function (number) {
+    $scope.formatAmount = function (number) {
+        if (number >= 1000000)
+            return round(number / 1000000, 2) + "M"
+        if (number >= 1000)
+            return round(number / 1000, 2) + "K"
         return round(number, 4) // K M B T
     }
-    $scope.changeFormat = function (number) {
+    $scope.formatPercent = function (number) {
+        number = round(number, 0)
         if (number < 0)
             return "-" + number + "%";
         else if (number == 0)
