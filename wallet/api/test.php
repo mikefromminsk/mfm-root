@@ -37,7 +37,8 @@ dataWalletReg($data_path, user, dataWalletHash("data/wallet", "user", "pass"));
 dataWalletSend($data_path, admin, user, 100000.0, password5, md5(password6));
 
 $gas_index = 6;
-function gas(){
+function gas()
+{
     return [
         gas_address => admin,
         gas_key => password . $GLOBALS[gas_index],
@@ -45,7 +46,8 @@ function gas(){
     ];
 }
 
-function sendGasForScript($address, $script){
+function sendGasForScript($address, $script)
+{
     assertEquals("testReg $script", http_post_json($GLOBALS[host_name] . "/data/api/token/free_reg.php", [
         address => $address,
         next_hash => md5(password1),
@@ -71,7 +73,42 @@ sendGasForScript(usdt_reg, "usdt/reg/reg");
 sendGasForScript(usdt_deposit, "usdt/deposit/start");
 sendGasForScript(usdt_check, "usdt/deposit/check");
 
+
+assertEquals("archive data", http_post_json($GLOBALS[host_name] . "/wallet/contracts/archive.php", [
+    domain => "data",
+])[success], true);
 upload("data", $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/data.zip");
-assertNotEquals("installApp data", sizeof(dataKeys([store, data])), 0);
+assertNotEquals("upload data", sizeof(dataKeys([store, "data"])), 0);
+
+
+assertEquals("archive usdt", http_post_json($GLOBALS[host_name] . "/wallet/contracts/archive.php", [
+    domain => "gas",
+])[success], true);
+
+upload("usdt", $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/gas.zip");
+assertNotEquals("upload usdt", sizeof(dataKeys([store, "usdt"])), 0);
+dataWalletInit("usdt/wallet", "admin", md5(pass), 10000000);
+
+
+upload("gas", $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/gas.zip");
+assertNotEquals("upload gas", sizeof(dataKeys([store, "gas"])), 0);
+dataWalletInit("gas/wallet", "admin", md5(pass), 10000000);
+
+
+assertEquals("ico sell", http_post_json($GLOBALS[host_name] . "/data/api/token/ico_sell.php", [
+    address => "admin",
+    key => "pass",
+    next_hash => md5(pass2),
+    amount => 100000,
+    price => 34,
+])[success], true);
+
+assertEquals("ico buy", http_post_json($GLOBALS[host_name] . "/data/api/token/ico_buy.php", [
+    address => "admin",
+    key => "pass",
+    next_hash => md5(pass2),
+    amount => 1000,
+])[success], true);
+
 
 echo $gas_index;

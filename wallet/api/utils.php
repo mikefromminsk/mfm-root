@@ -119,3 +119,31 @@ function upload($domain, $filepath)
 
     return $files;
 }
+
+function dataIcoSell($address, $key, $next_hash, $amount, $price)
+{
+    $domain = getDomain();
+    $wallet_path = $domain . "/wallet";
+    $usdt_path = "usdt/wallet";
+
+    dataWalletReg($wallet_path, "ico", md5(pass));
+    $sell_buy_contract_path = dataGet([store, $domain, "wefwefewf"]);
+    dataWalletDelegate($wallet_path, "ico",pass, $sell_buy_contract_path);
+    dataWalletSend($wallet_path, $address, "ico", $amount, $key, $next_hash);
+    dataSet([$domain, price], $price);
+
+    dataWalletReg($usdt_path, $domain . "_ico", md5(pass));
+}
+
+function dataIcoBuy($address, $key, $next_hash, $amount)
+{
+    $domain = getDomain();
+    $wallet_path = $domain . "/wallet";
+    $usdt_path = "usdt/wallet";
+
+    $token_price = dataGet([$domain, price]);
+    $total_usdt = $amount * $token_price;
+
+    dataWalletSend($usdt_path, $address, $domain . "_ico", $total_usdt, $key, $next_hash);
+    dataWalletSend($wallet_path, "ico", $address, $amount);
+}

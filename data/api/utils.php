@@ -150,6 +150,17 @@ function dataKeys(array $path)
     return selectListWhere(data, data_key, [data_parent_id => $data_id]);
 }
 
+function dataCount(array $path)
+{
+    $data_id = dataNew($path);
+    return select("select count(*) from `data` where data_parent_id = $data_id");
+}
+
+function dataHistory(array $path, $page = 1, $size = 20) {
+    return selectList("select * from history where data_path = '$path'"
+        ." offset " . (($page - 1) * $size) . " limit $size");
+}
+
 function scriptPath()
 {
     $path = $_SERVER["SCRIPT_NAME"];
