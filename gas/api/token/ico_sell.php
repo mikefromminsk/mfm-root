@@ -2,7 +2,7 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $address = get_required(address);
-$key = get_required(key);
+$key = get_string(key);
 $next_hash = get_required(next_hash);
 $amount = get_int_required(amount);
 $price = get_int_required(price);

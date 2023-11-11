@@ -127,7 +127,7 @@ function dataIcoSell($address, $key, $next_hash, $amount, $price)
     $usdt_path = "usdt/wallet";
 
     dataWalletReg($wallet_path, "ico", md5(pass));
-    $sell_buy_contract_path = dataGet([store, $domain, "wefwefewf"]);
+    $sell_buy_contract_path = dataGet([store, $domain, "d670072f06bf06183fb422b9c28f1d8b"]);
     dataWalletDelegate($wallet_path, "ico",pass, $sell_buy_contract_path);
     dataWalletSend($wallet_path, $address, "ico", $amount, $key, $next_hash);
     dataSet([$domain, price], $price);

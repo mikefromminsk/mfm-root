@@ -1,4 +1,14 @@
-const DEBUG = false
+const DEBUG = location.hostname == "localhost"
+
+let data10 = {
+    send: '34ddc7c1919738b872759f3bf31169c5',
+    wallet: '7428bdd310dfca122d94a3527cc4e9df',
+    reg: '0902ce671e53ba0e175d78adc436b3ad',
+    drop: 'b4177495af9c7432844deb1d32a93db7',
+    init: '772df88baecd34099df80f0e592a9bc7',
+    ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
+    ico_sell: '0a13f94d6e0d84c646e9d59972eac655',
+}
 
 function controller(callback) {
     angular.module("App", ['ngMaterial', 'ngAnimate'])
@@ -139,14 +149,6 @@ function showSuccess(message, success) {
     }
     if (success)
         success(message)
-}
-
-let data10 = {
-    send: '34ddc7c1919738b872759f3bf31169c5',
-    wallet: '7428bdd310dfca122d94a3527cc4e9df',
-    reg: '0902ce671e53ba0e175d78adc436b3ad',
-    drop: 'b4177495af9c7432844deb1d32a93db7',
-    init: '772df88baecd34099df80f0e592a9bc7',
 }
 
 var wallet = {

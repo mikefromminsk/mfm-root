@@ -1,0 +1,20 @@
+<md-bottom-sheet>
+    <md-content class="col input-content">
+        <p class="size16">Buy tokens</p>
+
+        <div class="flex row input-wrapper">
+            <div class="input-label-top">Amount to sell</div>
+            <input type="number" class="flex input" ng-model="amount">
+        </div>
+        <div class="flex row input-wrapper">
+            <div class="input-label-top">Price to sell</div>
+            <input type="number" class="flex input" ng-model="price">
+        </div>
+        <p>
+            Total USDT: {{amount * price}}
+        </p>
+        <div class="primary-button" ng-click="ico_sell()">
+            Sell
+        </div>
+    </md-content>
+</md-bottom-sheet>

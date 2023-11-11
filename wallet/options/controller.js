@@ -38,6 +38,14 @@ function openOptionsDialog(domain, success) {
                     })
                 })
             }
+
+            $scope.ico_sell = function (domain) {
+                openIcoSell(domain)
+            }
+
+            $scope.ico_buy = function (domain) {
+                openIcoBuy(domain)
+            }
         }
     })
 }
