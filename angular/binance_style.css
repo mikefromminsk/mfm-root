@@ -183,7 +183,8 @@ input:disabled {
     transition: background 0s;
 }
 
-.blue-back-ripple, .primary-button {
+.blue-back-ripple,
+.primary-button {
     background-color: #4F50FB;
     border: none;
     border-radius: 2px;
@@ -193,15 +194,25 @@ input:disabled {
     text-transform: uppercase;
 }
 
-.blue-back-ripple:hover, .primary-button:hover {
+.blue-back-ripple:hover,
+.primary-button:hover {
     background: #4F50FB radial-gradient(circle, transparent 1%, #4F50FB 1%) center/15000%;
 }
 
-.blue-back-ripple:active, .primary-button:active {
+.blue-back-ripple:active,
+.primary-button:active {
     background-color: #8e8eea;
     background-size: 100%;
     transition: background 0s;
 }
+
+.primary-button:disabled,
+.primary-button[disabled]{
+    color: rgba(0,0,0,0.38);
+    cursor: default;
+    background-color: rgba(0,0,0,0.12);
+}
+
 
 .success .md-toast-content {
     background: green;

@@ -151,6 +151,28 @@ function showSuccess(message, success) {
         success(message)
 }
 
+function getString(key, def) {
+    var value = new URLSearchParams(window.location.search).get(key)
+    if ((value == null || value == "") && window.NativeAndroid != null) {
+        value = window.NativeAndroid.getItem(key)
+    }
+    if ((value == null || value == "") && localStorage != null) {
+        value = localStorage.getItem(key)
+    }
+    if (value == null) value = ""
+    if (value == "" && def != null)
+        return def
+    return value
+}
+
+function setString(key, val) {
+    if (window.NativeAndroid != null) {
+        window.NativeAndroid.setItem(key, val)
+    } else {
+        localStorage.setItem(key, val)
+    }
+}
+
 var wallet = {
     username: null,
     password: null,
@@ -159,14 +181,14 @@ var wallet = {
     STORE_USERNAME: "STORE_USERNAME",
     STORE_PASSWORD: "STORE_PASSWORD",
     STORE_DOMAINS: "STORE_DOMAINS",
+    init: function () {
+        wallet.username = getString(wallet.STORE_USERNAME)
+        wallet.password = getString(wallet.STORE_PASSWORD)
+    },
     auth: function (success, error) {
         if (wallet.username == null || wallet.password == null) {
-            let username = localStorage.getItem(wallet.STORE_USERNAME)
-            let password = localStorage.getItem(wallet.STORE_PASSWORD)
-            if ((username == null || password == null) && window.NativeAndroid != null) {
-                username = window.NativeAndroid.getItem(wallet.STORE_USERNAME)
-                password = window.NativeAndroid.getItem(wallet.STORE_PASSWORD)
-            }
+            let username = getString(wallet.STORE_USERNAME)
+            let password = getString(wallet.STORE_PASSWORD)
             if ((username == null || password == null) && window.loginFunction != null) {
                 window.loginFunction(function (username, password) {
                     wallet.login(username, password, success)
@@ -191,13 +213,8 @@ var wallet = {
                 address: username,
             }, function (response) {
                 if (response.next_hash == md5(wallet.calchash(wallet.GAS_PATH, username, password, response.prev_key))) {
-                    if (window.NativeAndroid != null) {
-                        window.NativeAndroid.setItem(wallet.STORE_USERNAME, username)
-                        window.NativeAndroid.setItem(wallet.STORE_PASSWORD, password)
-                    } else {
-                        localStorage.setItem(wallet.STORE_USERNAME, username)
-                        localStorage.setItem(wallet.STORE_PASSWORD, password)
-                    }
+                    setString(wallet.STORE_USERNAME, username)
+                    setString(wallet.STORE_PASSWORD, password)
                     wallet.username = username
                     wallet.password = password
                     if (success)
@@ -219,9 +236,9 @@ var wallet = {
     logout: function () {
         wallet.username = null
         wallet.password = null
-        localStorage.removeItem(wallet.STORE_USERNAME)
-        localStorage.removeItem(wallet.STORE_PASSWORD)
-        localStorage.removeItem(wallet.STORE_DOMAINS)
+        setString(wallet.STORE_USERNAME, "")
+        setString(wallet.STORE_PASSWORD, "")
+        setString(wallet.STORE_DOMAINS, "")
     },
     calckey: function (path, success, error) {
         wallet.auth(function (username, password) {
@@ -275,25 +292,26 @@ var wallet = {
         }, error)
     },
     domains: function () {
-        var domains = localStorage.getItem(wallet.STORE_DOMAINS)
-        return domains == null ? [] : domains.split(',')
+        var domains = getString(wallet.STORE_DOMAINS)
+        return domains == null || domains == "" ? [] : domains.split(',')
     },
     domainAdd: function (domain) {
         if (wallet.domainExist(domain)) return;
         var array = wallet.domains()
         array.push(domain)
-        localStorage.setItem(wallet.STORE_DOMAINS, array.join(","))
+        setString(wallet.STORE_DOMAINS, array.join(","))
     },
     domainDel: function (domain) {
         if (!wallet.domainExist(domain)) return;
         var array = wallet.domains()
         array.splice(array.indexOf(domain), 1);
-        localStorage.setItem(wallet.STORE_DOMAINS, array.join(","))
+        setString(wallet.STORE_DOMAINS, array.join(","))
     },
     domainExist: function (domain) {
         return wallet.domains().indexOf(domain) != -1
     }
 }
+wallet.init()
 
 var md5 = function (string) {
     function RotateLeft(lValue, iShiftBits) {

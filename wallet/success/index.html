@@ -1,0 +1,19 @@
+<md-bottom-sheet>
+    <md-content class="col">
+        <div class="row shadow-black" style="height: 200px;">
+            <div class="flex col align-center-center green-back">
+                <img src="/wallet/img/success.svg" style="width: 120px; height: 120px;">
+            </div>
+        </div>
+        <div class="row" style="height: 180px;">
+            <div class="flex col align-start-center">
+                <p class="size16 bold-text" style="margin-top: 30px">Success</p>
+                <p class="size14" style="margin-top: 16px">{{locals.message}}</p>
+                <div class="primary-button lowercase size16"
+                     style="margin-top: 30px; border-radius: 16px; min-width: 110px"
+                     ng-click="close()">Okey
+                </div>
+            </div>
+        </div>
+    </md-content>
+</md-bottom-sheet>

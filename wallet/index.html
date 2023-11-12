@@ -22,6 +22,7 @@
     <script src="/wallet/send/controller.js"></script>
     <script src="/wallet/ico_sell/controller.js"></script>
     <script src="/wallet/ico_buy/controller.js"></script>
+    <script src="/wallet/success/controller.js"></script>
 
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
@@ -51,13 +52,17 @@
                     openLaunchDialog($scope.search_text, updateCoins)
                 }
 
+
+                $scope.coins = []
+                $scope.recs = []
+                var recDomains = []
+
                 $scope.$watch('search_text', function (newValue) {
                     if (newValue == null) return;
                     if (newValue == "") {
                         updateCoins()
                     } else {
                         post('/wallet/api/search.php', {
-                            path: "wallet/info",
                             search_text: newValue
                         }, function (response) {
                             $scope.recs = response.result
@@ -71,42 +76,29 @@
                     }
                 })
 
-                $scope.coins = []
-                $scope.recs = []
-
                 function updateCoins() {
-                    var domains = wallet.domains()
-                    if (domains.length == 0) {
-                        $scope.coins = []
-                    } else {
-                        wallet.auth(function () {
-                            post("/wallet/api/list.php", {
-                                domains: domains.join(","),
-                                address: wallet.username,
-                            }, function (response) {
-                                $scope.coins = response.result
-                                $scope.$apply()
-                            })
-                        })
-                    }
+                    post("/wallet/api/list.php", {
+                        domains: wallet.domains().join(","),
+                        address: wallet.username,
+                    }, function (response) {
+                        $scope.coins = response.result
+                        $scope.$apply()
+                    })
+                    post("/wallet/api/list.php", {
+                        domains: getRecsList().join(",")
+                    }, function (response) {
+                        $scope.recs = response.result
+                        $scope.$apply()
+                    })
+                }
 
-                    var recDomains = [
-                        "data",
-                        "usdt",
-                    ]
-                    for (let domain of wallet.domains())
-                        if (recDomains.indexOf(domain) != -1)
-                            recDomains.splice(recDomains.indexOf(domain), 1)
-                    if (recDomains.length == 0) {
-                        $scope.recs = []
-                    } else {
-                        post("/wallet/api/list.php", {
-                            domains: recDomains.join(",")
-                        }, function (response) {
-                            $scope.recs = response.result
-                            $scope.$apply()
-                        })
-                    }
+                function getRecsList() {
+                    var result = []
+                    var domains = wallet.domains()
+                    for (let domain of recDomains)
+                        if (domains.indexOf(domain) == -1)
+                            result.push(domain)
+                    return result
                 }
 
                 $scope.toggleFavorite = function (domain) {
@@ -124,6 +116,7 @@
                             })
                         })
                     })
+
                     function addToStorage(domain) {
                         if (wallet.domainExist(domain)) {
                             wallet.domainDel(domain)
@@ -142,7 +135,14 @@
                     updateCoins()
                 }, 10000)
 
-                updateCoins()
+                post("/wallet/api/search.php", {}, function (response) {
+                    recDomains = response.result
+                    updateCoins()
+                })
+
+                if (getString("email") != "" && wallet.password == "") {
+                    loginFunction(updateCoins)
+                }
             })
     </script>
 </head>
@@ -173,11 +173,11 @@
      ng-show="coins.length">
     <div class="flex col">
         <p class="size12">Total balance</p>
-        <p class="size16 bold-text" style="margin-top: 4px">{{formatPrice(12022.022)}}</p>
+        <p class="size16 bold-text" style="margin-top: 4px">{{formatPrice(0)}}</p>
     </div>
     <div class="col align-end-end">
         <p class="size12 uppercase">Gas</p>
-        <p class="size14 bold-text" style="margin-top: 4px">{{formatAmount(25050)}}</p>
+        <p class="size14 bold-text" style="margin-top: 4px">{{formatAmount(0)}}</p>
     </div>
 </div>
 <div class="row"
@@ -185,7 +185,8 @@
      ng-hide="coins.length">
     <div class="flex primary-button lowercase"
          ng-click="login()"
-    >Login or Create account</div>
+    >Login or Create account
+    </div>
 </div>
 <div class="col col-content row-content" ng-show="coins.length">
     <p>Your coins</p>
@@ -198,7 +199,7 @@
         <p class="flex size14 uppercase">{{item.domain}}</p>
         <div class="col align-end-end">
             <p>{{formatPrice(item.price * item.balance)}}</p>
-            <p class="size12 uppercase"  style="margin-top: 4px">{{formatAmount(item.balance) + " " + item.domain}}</p>
+            <p class="size12 uppercase" style="margin-top: 4px">{{formatAmount(item.balance) + " " + item.domain}}</p>
         </div>
     </div>
     <div class="divider"></div>

@@ -3,9 +3,16 @@ function loginFunction(success) {
         clickOutsideToClose: true,
         templateUrl: '/wallet/login/index.html',
         controller: function ($scope, $mdDialog) {
+            $scope.address = getString("email")
             if (DEBUG) {
-                $scope.address = "user"
+                if ($scope.address == "")
+                    $scope.address = "user"
                 $scope.password = "pass"
+            }
+            $scope.selectEmail = function () {
+                if (window.NativeAndroid != null) {
+                    window.NativeAndroid.selectEmail()
+                }
             }
             $scope.mode = "login"
             $scope.login = function () {
@@ -31,8 +38,7 @@ function loginFunction(success) {
             }
         }
     }).then(function () {
+        wallet.domainAdd(wallet.GAS_NAME)
         success()
-    }, function (message) {
-        showError(message)
     })
 }

@@ -6,6 +6,8 @@ $address = get_string(address);
 
 $domains = explode(",", $domains);
 
+$response[result] = [];
+
 foreach ($domains as $domain) {
     if ($domain == null) continue;
     $coin = [
@@ -17,7 +19,5 @@ foreach ($domains as $domain) {
         $coin[balance] = dataWalletBalance($coin[path], $address);
     $response[result][] = $coin;
 }
-
-if ($response[result] == null) error("nothing found");
 
 commit($response);

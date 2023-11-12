@@ -12,6 +12,8 @@ define("DATA_FILE", 4);
 define("FILE_ROW_SIZE", 64);
 define("HASH_ROW_SIZE", 32);
 
+define("PAGE_SIZE_DEFAULT", 20);
+
 function dataCreateRow($data_parent_id, $data_key, $data_type)
 {
     $GLOBALS["gas_bytes"] += FILE_ROW_SIZE;
@@ -128,14 +130,6 @@ function dataExist($path)
     return intval(scalarWhere("data", "count(*)", array("data_parent_id" => $data_id))) !== false;
 }
 
-function dataLike(array $path, $like, $asc = null, $offset = 0, $count = 10000)
-{
-    $data_id = dataNew($path, false);
-    if ($data_id == null) return false;
-    return selectList("select data_key from data where data_parent_id = $data_id and data_key like '$like' "
-        . ($asc != null ? " order by data_key " . ($asc == true ? " ASC " : " DESC ") : "") . " limit $offset, $count");
-}
-
 function dataPath($data_id)
 {
     $node = selectRowWhere(data, [data_id => $data_id]);
@@ -144,10 +138,11 @@ function dataPath($data_id)
     return dataPath($node[data_parent_id]) . "/" . $node[data_key];
 }
 
-function dataKeys(array $path)
+function dataKeys(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
+    $offset = ($page - 1) * $size;
     $data_id = dataNew($path);
-    return selectListWhere(data, data_key, [data_parent_id => $data_id]);
+    return selectList("select data_key from `data` where data_parent_id = $data_id limit $offset, $size");
 }
 
 function dataCount(array $path)
@@ -156,9 +151,10 @@ function dataCount(array $path)
     return select("select count(*) from `data` where data_parent_id = $data_id");
 }
 
-function dataHistory(array $path, $page = 1, $size = 20) {
-    return selectList("select * from history where data_path = '$path'"
-        ." offset " . (($page - 1) * $size) . " limit $size");
+function dataHistory(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
+{
+    $offset = ($page - 1) * $size;
+    return selectList("select * from history where data_path = '$path' limit $offset, $size");
 }
 
 function scriptPath()
@@ -190,13 +186,16 @@ function dataDec(array $path, $dec_val)
     return dataInc($path, -$dec_val);
 }
 
-function dataSearch($path, $search_text)
+function dataSearch($path, $search_text, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
+    $offset = ($page - 1) * $size;
     if ($path == "") {
-        return selectList("select data_key from `data` where data_parent_id is null and data_key like '$search_text%'");
+        return selectList("select data_key from `data` where data_parent_id is null and data_key like '$search_text%'"
+            . " limit $offset, $size");
     } else {
         $data_id = dataNew($path);
         if ($data_id == null) error("path '$path' not exist");
-        return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'");
+        return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'"
+            . " limit $offset, $size");
     }
 }
