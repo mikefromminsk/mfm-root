@@ -7,25 +7,25 @@ function openIcoSell(domain, success) {
         controller: function ($scope, $mdBottomSheet, locals) {
             $scope.domain = locals.domain
             if (DEBUG) {
-                $scope.amount = 1000000
-                $scope.price = 16
+                $scope.amount = 100
+                $scope.price = 3
             }
             $scope.ico_sell = function () {
-                wallet.auth(function (username) {
-                    postContract(domain, data10.ico_sell, {
+                wallet.calckey(domain + "/wallet", function (key, hash, username, password) {
+                    postContractWithGas(domain, data10.ico_sell, {
                         address: username,
-                        key: null,
-                        next_hash: wallet.calchashStart(domain + "/wallet/ico"),
+                        key: key,
+                        next_hash: hash,
                         amount: $scope.amount,
                         price: $scope.price,
                     }, function () {
-                        success()
                         $mdBottomSheet.hide()
                     })
                 })
             }
         }
     }).then(function () {
-        success()
+        if (success)
+            success()
     })
 }

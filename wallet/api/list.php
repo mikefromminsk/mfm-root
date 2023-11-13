@@ -13,7 +13,7 @@ foreach ($domains as $domain) {
     $coin = [
         domain => $domain,
         path => dataGet([wallet, info, $domain, path]),
-        price => dataGet([$domain, price]) ?: 13.05,
+        price => dataGet([$domain, price]) ?: 0,
     ];
     if ($address != null)
         $coin[balance] = dataWalletBalance($coin[path], $address);

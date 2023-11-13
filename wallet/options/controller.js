@@ -40,11 +40,11 @@ function openOptionsDialog(domain, success) {
             }
 
             $scope.ico_sell = function (domain) {
-                openIcoSell(domain)
+                openIcoSell(domain, success)
             }
 
             $scope.ico_buy = function (domain) {
-                openIcoBuy(domain)
+                openIcoBuy(domain, success)
             }
         }
     })

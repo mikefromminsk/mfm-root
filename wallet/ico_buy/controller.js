@@ -24,6 +24,7 @@ function openIcoBuy(domain, success) {
             }
         }
     }).then(function () {
-        success()
+        if (success)
+            success()
     })
 }

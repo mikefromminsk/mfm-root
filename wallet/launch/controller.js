@@ -26,6 +26,7 @@ function openLaunchDialog(domain, success) {
             }
         }
     }).then(function () {
-        success()
+        if (success)
+            success()
     })
 }

@@ -5,4 +5,4 @@ $address = get_required(address);
 
 $response = dataWalletBalance(getDomain() . "/wallet", $address);
 
-commit($response);
+include_once "free_commit.php";

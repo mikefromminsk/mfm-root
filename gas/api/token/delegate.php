@@ -7,4 +7,4 @@ $script = get_required(script);
 
 $response[success] = dataWalletDelegate(getDomain() . "/wallet", $address, $password, $script);
 
-include_once "free_commit.php";
+commit($response);

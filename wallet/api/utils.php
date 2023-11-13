@@ -4,7 +4,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 
 function dataWalletInit($path, $address, $next_hash, $amount)
 {
-    if (dataExist($path)) error("path " . implode("/", $path) . " exist");
+    if (dataExist($path)) error("path $path exist");
     dataWalletReg($path, $address, $next_hash);
     dataSet([$path, $address, amount], $amount);
     // for fast implement search
@@ -87,11 +87,6 @@ function commit($response, $gas_address = null)
             );
         }
     echo json_encode($response);
-}
-
-function dataWalletHash($path, $username, $password)
-{
-    return md5(md5($path . $username . $password));
 }
 
 function upload($domain, $filepath)
