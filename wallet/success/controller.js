@@ -11,6 +11,7 @@ function showSuccessDialog(message, success) {
             }
         }
     }).then(function () {
-        success()
+        if (success)
+            success()
     })
 }

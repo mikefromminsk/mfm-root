@@ -52,7 +52,7 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
     if (!dataExist([$path, $to_address])) error("receiver dosent exist");
     if ($key == null || $next_hash == null) {
         if (dataGet([$path, $from_address, script]) != scriptPath())
-            error("script cannot use " . implode("/", $path) . "/$from_address address");
+            error("script " . scriptPath() . " cannot use " . implode("/", $path) . "/$from_address address");
     } else {
         if (dataGet([$path, $from_address, next_hash]) != md5($key))
             error("key is not right");
@@ -123,13 +123,13 @@ function upload($domain, $filepath)
 function dataIcoSell($address, $key, $next_hash, $amount, $price)
 {
     $domain = getDomain();
-    $wallet_path = $domain . "/wallet";
+    $wallet_path = "$domain/wallet";
     $usdt_path = "usdt/wallet";
 
-    dataWalletReg($wallet_path, "ico", md5(pass));
+    dataWalletReg($wallet_path, ico, md5(pass));
     $sell_buy_contract_path = dataGet([store, $domain, "d670072f06bf06183fb422b9c28f1d8b"]);
-    dataWalletDelegate($wallet_path, "ico",pass, $sell_buy_contract_path);
-    dataWalletSend($wallet_path, $address, "ico", $amount, $key, $next_hash);
+    dataWalletDelegate($wallet_path, ico, pass, $sell_buy_contract_path);
+    dataWalletSend($wallet_path, $address, ico, $amount, $key, $next_hash);
     dataSet([$domain, price], $price);
 
     dataWalletReg($usdt_path, $domain . "_ico", md5(pass));
@@ -138,12 +138,12 @@ function dataIcoSell($address, $key, $next_hash, $amount, $price)
 function dataIcoBuy($address, $key, $next_hash, $amount)
 {
     $domain = getDomain();
-    $wallet_path = $domain . "/wallet";
+    $wallet_path = "$domain/wallet";
     $usdt_path = "usdt/wallet";
 
     $token_price = dataGet([$domain, price]);
     $total_usdt = $amount * $token_price;
 
     dataWalletSend($usdt_path, $address, $domain . "_ico", $total_usdt, $key, $next_hash);
-    dataWalletSend($wallet_path, "ico", $address, $amount);
+    dataWalletSend($wallet_path, ico, $address, $amount);
 }

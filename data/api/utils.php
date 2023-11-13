@@ -160,8 +160,6 @@ function dataHistory(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
 function scriptPath()
 {
     $path = $_SERVER["SCRIPT_NAME"];
-    if (strpos($path, ".php") != 0)
-        $path = explode(".php", $path)[0];
     $path = str_replace("\\", "/", $path);
     if ($path[0] == "/")
         $path = substr($path, 1);
