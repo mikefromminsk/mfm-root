@@ -3,6 +3,8 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
+// change gas token password
+
 function dataWalletHash($path, $username, $password)
 {
     return md5(md5($path . $username . $password));
@@ -13,12 +15,18 @@ echo json_encode("$host_name") . "\n";
 $gas_domain = "data";
 $gas_path = "$gas_domain/wallet";
 
-dataWalletInit($gas_path, admin, md5(pass), 100000000.0);
-assertEquals("dataWalletInit", dataGet([$gas_path, admin, amount]), 100000000.0);
+assertEquals("launch $gas_path", http_post_json($GLOBALS[host_name] . "/wallet/api/launch.php", [
+        domain => $gas_domain,
+        address => admin,
+        next_hash => md5(pass1),
+        amount => 100000000,
+    ] + gas())[message], "key is not right");
 
-dataWalletReg($gas_path, user1, md5(pass));
-dataWalletSend($gas_path, admin, user1, 2000.0, pass, md5(pass2));
-dataWalletSend($gas_path, user1, admin, 1.0, pass, md5(pass2));
+assertEquals("dataWalletInit", dataGet([$gas_path, admin, amount]), 100000000);
+
+dataWalletReg($gas_path, user1, md5(pass1));
+dataWalletSend($gas_path, admin, user1, 2000.0, pass1, md5(pass2));
+dataWalletSend($gas_path, user1, admin, 1.0, pass1, md5(pass2));
 assertEquals("dataSend", dataGet([$gas_path, admin, amount]), 100000000.0 - 2000.0 + 1.0);
 
 dataWalletDelegate($gas_path, user1, pass2, "wallet/api/testDelegate.php");
@@ -70,26 +78,27 @@ function send($domain, $address, $key = null, $hash = null, $amount = 10000, $sc
             ] + gas())[success]);
 }
 
-send($gas_domain, $gas_domain . "_drop", null, null, 10000, "$gas_domain/api/token/drop.php");
+send($gas_domain, $gas_domain . "_drop", null, null, 1000000, "$gas_domain/api/token/drop.php");
 send($gas_domain, $gas_domain . "_reg", null, null, 10000, "$gas_domain/api/token/free_reg.php");
 
-assertEquals("archive gas", http_post_json($GLOBALS[host_name] . "/wallet/contracts/archive.php", [
-    domain => "gas",
-])[success]);
-upload($gas_domain, $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/gas.zip");
-assertNotEquals("upload $gas_domain", sizeof(dataKeys([store, $gas_domain])), 0);
 
 $new_domain = "gas";
 $new_path = "$new_domain/wallet";
-upload($new_domain, $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/gas.zip");
-dataWalletInit($new_path, admin, md5(pass1), 10000000);
-assertEquals("init $new_path", dataGet([$new_path, admin, amount]), 10000000);
+assertEquals("launch $new_path", http_post_json($GLOBALS[host_name] . "/wallet/api/launch.php", [
+        domain => $new_domain,
+        address => admin,
+        next_hash => md5(pass1),
+        amount => 10000000,
+    ] + gas())[launched], 10000000);
 
 $quote_domain = "usdt";
 $quote_path = "$quote_domain/wallet";
-upload($quote_domain, $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/gas.zip");
-dataWalletInit($quote_path, admin, md5(pass1), 10000000);
-assertEquals("init $new_path", dataGet([$new_path, admin, amount]), 10000000);
+assertEquals("launch $quote_path", http_post_json($GLOBALS[host_name] . "/wallet/api/launch.php", [
+        domain => $quote_domain,
+        address => admin,
+        next_hash => md5(pass1),
+        amount => 10000000,
+    ] + gas())[launched], 10000000);
 
 $sell_amount = 10000;
 $sell_price = 3;

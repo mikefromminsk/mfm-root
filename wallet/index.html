@@ -110,7 +110,7 @@
                         }, function () {
                             postContractWithGas(domain, data10.reg, {
                                 address: username,
-                                next_hash: wallet.calchashStart(domain + "/wallet")
+                                next_hash: wallet.calcStartHash(domain + "/wallet")
                             }, function () {
                                 addToStorage(domain)
                             })

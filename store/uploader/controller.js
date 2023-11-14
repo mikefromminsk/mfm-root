@@ -6,7 +6,7 @@ function showUploader($http) {
                 $scope.apps = response.result
             })
             $scope.upload = function (item) {
-                wallet.calckey(wallet.GAS_PATH, function (key, hash, username, password) {
+                wallet.calcKey(wallet.GAS_PATH, function (key, hash, username, password) {
                     selectFile(function (file) {
                         $http({
                             method: 'POST',

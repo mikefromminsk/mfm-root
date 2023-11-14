@@ -2,23 +2,6 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 
-function dataWalletInit($path, $address, $next_hash, $amount)
-{
-    if (dataExist($path)) error("path $path exist");
-    dataWalletReg($path, $address, $next_hash);
-    dataSet([$path, $address, amount], $amount);
-    // for fast implement search
-    // problem with 2 tokens in one domain
-    $domain = explode("/", $path)[0];
-    dataSet([wallet, info, $domain], [
-        domain => $domain,
-        path => $path,
-        owner => $address,
-        amount => $amount,
-    ]);
-    return true;
-}
-
 function dataWalletReg($path, $address, $next_hash)
 {
     if (dataExist([$path, $address])) error(implode("/", $path) . "/$address exist");
@@ -58,7 +41,7 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
             error("key is not right");
     }
 
-    dataSet([$path, $from_address, key], $key);
+    dataSet([$path, $from_address, prev_key], $key);
     dataSet([$path, $from_address, next_hash], $next_hash);
 
     dataDec([$path, $from_address, amount], $amount);

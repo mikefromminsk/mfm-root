@@ -6,6 +6,7 @@ function showSuccessDialog(message, success) {
         },
         controller: function ($scope, locals, $mdBottomSheet) {
             $scope.locals = locals
+            new Audio("/wallet/success/payment_success.mp3").play()
             $scope.close = function () {
                 $mdBottomSheet.hide()
             }

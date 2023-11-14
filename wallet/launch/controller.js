@@ -12,16 +12,14 @@ function openLaunchDialog(domain, success) {
             }
             $scope.launch = function () {
                 postWithGas("/wallet/api/launch.php", {
-                    domain: $scope.domain
+                    domain: $scope.domain,
+                    address: wallet.username,
+                    next_hash: wallet.calcStartHash($scope.domain + "/wallet"),
+                    amount: 1000000,
                 }, function () {
-                    postContractWithGas($scope.domain, data10.init, {
-                        address: wallet.username,
-                        next_hash: md5(wallet.calchashStart($scope.domain + "/wallet")),
-                    }, function () {
-                        wallet.domainAdd($scope.domain)
-                        $mdBottomSheet.hide()
-                        showSuccessDialog("Token " + $scope.domain + " launched")
-                    })
+                    wallet.domainAdd($scope.domain)
+                    $mdBottomSheet.hide()
+                    showSuccessDialog("Token " + $scope.domain + " launched")
                 })
             }
         }

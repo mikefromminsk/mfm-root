@@ -1,20 +1,29 @@
 function openIcoBuy(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/ico_buy/index.html",
-        locals: {
-            domain: domain
-        },
-        controller: function ($scope, $mdBottomSheet, locals) {
-            $scope.domain = locals.domain
+        controller: function ($scope, $mdBottomSheet) {
             if (DEBUG) {
-                $scope.amount = 1000000
+                $scope.amount = 1
             }
+            postContract(domain, data10.wallet, {
+                address: wallet.username
+            }, function (response) {
+                $scope.balance = response.amount
+            })
+
+            post("/data/api/get.php", {
+                path: domain + "/price"
+            }, function (response) {
+                $scope.price = response
+                $scope.$apply()
+            })
+
             $scope.ico_buy = function () {
-                wallet.auth(function (username) {
-                    postContract(domain, data10.ico_buy, {
+                wallet.calcKey("usdt/wallet", function (key, hash, username) {
+                    postContractWithGas(domain, data10.ico_buy, {
                         address: username,
-                        key: null,
-                        next_hash: wallet.calchashStart(domain + "/wallet/ico"),
+                        key: key,
+                        next_hash: hash,
                         amount: $scope.amount,
                     }, function () {
                         success()

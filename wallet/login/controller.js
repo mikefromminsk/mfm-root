@@ -21,7 +21,6 @@ function loginFunction(success) {
                         function () {
                             $mdDialog.hide()
                         }, function () {
-                            showError('login or username is invalid')
                             if (confirm('Do you want to create an account?')) {
                                 $scope.mode = "registration"
                                 $scope.login()
