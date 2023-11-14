@@ -1,11 +1,8 @@
 function openLaunchDialog(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/launch/index.html",
-        locals: {
-            domain: domain
-        },
-        controller: function ($scope, $mdBottomSheet, $http, locals) {
-            $scope.domain = locals.domain
+        controller: function ($scope, $mdBottomSheet) {
+            $scope.domain = domain
             $scope.amount = 1000000
             if (DEBUG) {
                 $scope.domain = "super"

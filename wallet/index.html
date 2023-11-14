@@ -20,9 +20,12 @@
     <script src="/wallet/launch/controller.js"></script>
     <script src="/wallet/login/controller.js"></script>
     <script src="/wallet/send/controller.js"></script>
-    <script src="/wallet/ico_sell/controller.js"></script>
-    <script src="/wallet/ico_buy/controller.js"></script>
+    <script src="/wallet/ico/sell/controller.js"></script>
+    <script src="/wallet/ico/buy/controller.js"></script>
     <script src="/wallet/success/controller.js"></script>
+    <script src="/wallet/invite/create/controller.js"></script>
+    <script src="/wallet/invite/copy/controller.js"></script>
+    <script src="/wallet/invite/receive/controller.js"></script>
 
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
@@ -142,6 +145,10 @@
 
                 if (getString("email") != "" && wallet.password == "") {
                     loginFunction(updateCoins)
+                }
+
+                if (getString("invite_key") != "") {
+                    openInviteReceive(updateCoins)
                 }
             })
     </script>

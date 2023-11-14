@@ -9,6 +9,20 @@ let data10 = {
     init: '772df88baecd34099df80f0e592a9bc7',
     ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
     ico_sell: '0a13f94d6e0d84c646e9d59972eac655',
+    bonus_create: '49557ed8c5b6af9e67b9bce733102d50',
+    bonus_receive: 'd331eefac8a2da3bb601285a0734e6d8',
+}
+
+function rand(length) {
+    let result = '';
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        counter += 1;
+    }
+    return result;
 }
 
 function controller(callback) {
@@ -281,11 +295,15 @@ var wallet = {
             }, error)
         }, error)
     },
-    calcHash: function (wallet_path, username, password, key) {
-        return md5(wallet_path + username + password + (key || ""))
+    // rename to calcKey
+    calcHash: function (wallet_path, username, password, prev_key) {
+        return md5(wallet_path + username + password + (prev_key || ""))
+    },
+    calcStartKey: function (path) {
+        return md5(path + wallet.username + wallet.password)
     },
     calcStartHash: function (path) {
-        return md5(md5(path + wallet.username + wallet.password))
+        return md5(this.calcStartKey(path))
     },
     postWithGas: function (url, params, success, error) {
         wallet.calcKey(wallet.GAS_PATH, function (key, hash, username) {

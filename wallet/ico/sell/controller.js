@@ -1,6 +1,6 @@
 function openIcoSell(domain, success) {
     window.$mdBottomSheet.show({
-        templateUrl: "/wallet/ico_sell/index.html",
+        templateUrl: "/wallet/ico/sell/index.html",
         locals: {
             domain: domain
         },

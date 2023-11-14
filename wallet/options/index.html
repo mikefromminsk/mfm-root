@@ -9,19 +9,23 @@
             Drop {{locals.domain}}
         </md-button>
         <div class="row">
-            <div class="flex primary-button green-back" ng-click="ico_buy(locals.domain)"
+            <div class="flex primary-button green-back" ng-click="ico_buy()"
                        ng-show="contracts[data10.ico_buy]">
                 Buy {{locals.domain}}
             </div>
             <div style="width: 16px"></div>
-            <div class="flex primary-button red-back" ng-click="ico_sell(locals.domain)"
+            <div class="flex primary-button red-back" ng-click="ico_sell()"
                        ng-show="contracts[data10.ico_sell]">
                 Sell {{locals.domain}}
             </div>
         </div>
-        <div class="primary-button" ng-click="sendDialog(locals.domain)"
+        <div class="primary-button" ng-click="sendDialog()"
              ng-show="contracts[data10.send]">
             Send {{locals.domain}}
+        </div>
+        <div class="primary-button" ng-click="share()"
+             ng-show="contracts[data10.send]">
+            Share {{locals.domain}}
         </div>
     </md-content>
 </md-bottom-sheet>

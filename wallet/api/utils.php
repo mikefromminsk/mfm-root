@@ -125,3 +125,48 @@ function dataIcoBuy($address, $key, $next_hash, $amount)
     dataWalletSend($usdt_path, $address, $domain . "_ico", $total_usdt, $key, $next_hash);
     dataWalletSend($wallet_path, ico, $address, $amount);
 }
+
+function dataWalletBonusCreate($domain,
+                               $random_id,
+                               $from_address,
+                               $from_key,
+                               $from_next_hash,
+                               $amount,
+                               $invite_hash,
+                               $cancel_hash)
+{
+    $domain_receive = $domain . "_invite";
+
+    dataWalletSend($domain . "/wallet", $from_address, $domain . "_invite", $amount, $from_key, $from_next_hash);
+    dataSet([$domain, invite, $random_id], [
+        from_address => $from_address,
+        amount => $amount,
+        invite_hash => $invite_hash,
+        cancel_hash => $cancel_hash,
+    ]);
+    return true;
+}
+
+function dataWalletBonusRecieve($domain,
+                                $to_address,
+                                $invite_id,
+                                $invite_key)
+{
+    if (md5($invite_key) != dataGet([$domain, invite, $invite_id, invite_hash])) error("hash is not right");
+    $amount = dataGet([$domain, invite, $invite_id, amount]);
+    dataGet([$domain, invite, $invite_id, amount]);
+    dataWalletSend($domain . "/wallet", $domain . "_invite", $to_address, $amount);
+    return true;
+}
+
+function dataWalletBonusCancel($domain,
+                               $invite_id,
+                               $cancel_key)
+{
+    if (md5($cancel_key) != dataGet([$domain, invite, $invite_id, cancel_hash])) error("hash is not right");
+    $amount = dataGet([$domain, invite, $invite_id, amount]);
+    $from_address = dataGet([$domain, invite, $invite_id, from_address]);
+    dataGet([$domain, invite, $invite_id, amount]);
+    dataWalletSend($domain . "/wallet", $domain . "_invite", $from_address, $amount);
+    return true;
+}

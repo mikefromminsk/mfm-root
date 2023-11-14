@@ -1,14 +1,9 @@
 function openOptionsDialog(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/options/index.html',
-        locals: {
-            domain: domain,
-        },
-        controller: function ($scope, $mdBottomSheet, locals) {
-            $scope.locals = locals
+        controller: function ($scope, $mdBottomSheet) {
             $scope.balance = 0
             $scope.data10 = data10
-            var domain = locals.domain
 
             postContract(domain, data10.wallet, {
                 address: wallet.username,
@@ -24,7 +19,7 @@ function openOptionsDialog(domain, success) {
                 $scope.$apply()
             })
 
-            $scope.sendDialog = function (domain) {
+            $scope.sendDialog = function () {
                 openSendDialog(domain, success)
             }
 
@@ -39,12 +34,16 @@ function openOptionsDialog(domain, success) {
                 })
             }
 
-            $scope.ico_sell = function (domain) {
+            $scope.ico_sell = function () {
                 openIcoSell(domain, success)
             }
 
-            $scope.ico_buy = function (domain) {
+            $scope.ico_buy = function () {
                 openIcoBuy(domain, success)
+            }
+
+            $scope.share = function () {
+                openInvite(domain, success)
             }
         }
     })

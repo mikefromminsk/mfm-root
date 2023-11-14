@@ -1,0 +1,21 @@
+<md-bottom-sheet>
+    <md-content class="col">
+        <div class="row shadow-black" style="height: 200px;">
+            <div class="flex col align-center-center green-back">
+                <img src="/wallet/img/success.svg" style="width: 120px; height: 120px;">
+            </div>
+        </div>
+        <div class="row" style="height: 180px;">
+            <div class="flex col align-start-center">
+                <div class="flex row input-wrapper">
+                    <div class="input-label-top">Invite link for </div>
+                    <input type="text" class="flex input" ng-model="domain">
+                </div>
+                <div class="primary-button lowercase size16"
+                     style="margin-top: 30px; border-radius: 16px; min-width: 110px"
+                     ng-click="close()">Okey
+                </div>
+            </div>
+        </div>
+    </md-content>
+</md-bottom-sheet>

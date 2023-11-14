@@ -1,6 +1,6 @@
 function openIcoBuy(domain, success) {
     window.$mdBottomSheet.show({
-        templateUrl: "/wallet/ico_buy/index.html",
+        templateUrl: "/wallet/ico/buy/index.html",
         controller: function ($scope, $mdBottomSheet) {
             if (DEBUG) {
                 $scope.amount = 1
