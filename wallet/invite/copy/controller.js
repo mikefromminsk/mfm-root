@@ -4,12 +4,18 @@ function openInviteCopy(domain, amount, invite_id, invite_key, cancel_key, succe
         controller: function ($scope, $mdBottomSheet) {
             $scope.domain = domain
             $scope.amount = amount
-            // grid link hostname
-            $scope.amount = "http://" + window.location.hostname
+            $scope.link = "http://" + window.location.hostname + "/wallet"
                 + "?domain=" + domain
                 + "&amount=" + amount
                 + "&invite_id=" + invite_id
                 + "&invite_key=" + invite_key
+            $scope.copy = function () {
+                navigator.clipboard.writeText($scope.link)
+                showSuccess("Link copied")
+            }
+            $scope.close = function () {
+                $mdBottomSheet.hide()
+            }
         }
     }).then(function () {
         if (success)

@@ -12,6 +12,7 @@ foreach ($domains as $domain) {
     if ($domain == null) continue;
     $coin = [
         domain => $domain,
+        logo => "/wallet/img/coin.svg",
         path => dataGet([wallet, info, $domain, path]),
         price => dataGet([$domain, price]) ?: 0,
     ];

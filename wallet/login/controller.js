@@ -3,7 +3,7 @@ function loginFunction(success) {
         clickOutsideToClose: true,
         templateUrl: '/wallet/login/index.html',
         controller: function ($scope, $mdDialog) {
-            $scope.address = getString("email")
+            $scope.address = storage.getString("email")
             if (DEBUG) {
                 if ($scope.address == "")
                     $scope.address = "user"
@@ -37,7 +37,7 @@ function loginFunction(success) {
             }
         }
     }).then(function () {
-        wallet.domainAdd(wallet.GAS_NAME)
+        storage.pushToArray(storageKeys.domains, wallet.GAS_NAME)
         success()
     })
 }

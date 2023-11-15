@@ -5,15 +5,21 @@
                 <img src="/wallet/img/success.svg" style="width: 120px; height: 120px;">
             </div>
         </div>
-        <div class="row" style="height: 180px;">
+        <div class="row align-center-center" style="height: 180px;">
             <div class="flex col align-start-center">
-                <div class="flex row input-wrapper">
-                    <div class="input-label-top">Invite link for </div>
-                    <input type="text" class="flex input" ng-model="domain">
+                <div class="row">
+                    <div class="row input-wrapper">
+                        <div class="input-label-top">Invite link with {{amount}} {{domain}}</div>
+                        <input type="text" class="input" ng-model="link">
+                    </div>
+                    <div class="primary-button green-back"
+                         ng-click="copy()">
+                        copy
+                    </div>
                 </div>
                 <div class="primary-button lowercase size16"
                      style="margin-top: 30px; border-radius: 16px; min-width: 110px"
-                     ng-click="close()">Okey
+                     ng-click="close()">Close
                 </div>
             </div>
         </div>

@@ -61,27 +61,17 @@
                 var recDomains = []
 
                 $scope.$watch('search_text', function (newValue) {
-                    if (newValue == null) return;
-                    if (newValue == "") {
+                    post('/wallet/api/search.php', {
+                        search_text: newValue
+                    }, function (response) {
+                        recDomains = response.result
                         updateCoins()
-                    } else {
-                        post('/wallet/api/search.php', {
-                            search_text: newValue
-                        }, function (response) {
-                            $scope.recs = response.result
-                            for (let coin of response.result)
-                                coin.isFavorite = wallet.domainExist(coin.domain)
-                            $scope.$apply()
-                        }, function () {
-                            $scope.recs = []
-                            $scope.$apply()
-                        })
-                    }
+                    })
                 })
 
                 function updateCoins() {
                     post("/wallet/api/list.php", {
-                        domains: wallet.domains().join(","),
+                        domains: storage.getStringArray(storageKeys.domains).join(","),
                         address: wallet.username,
                     }, function (response) {
                         $scope.coins = response.result
@@ -93,11 +83,25 @@
                         $scope.recs = response.result
                         $scope.$apply()
                     })
+
+                    $scope.drops = storage.getObject(storageKeys.drops, [])
+                    if ($scope.drops.length > 0) {
+                        var dropDomains = []
+                        for (const drop of $scope.drops)
+                            dropDomains.push(drop.domain)
+                        post("/wallet/api/list.php", {
+                            domains: dropDomains.join(",")
+                        }, function (response) {
+                            for (const dropToken of response.result)
+                                $scope.dropTokens[dropToken.domain] = dropToken
+                            $scope.$apply()
+                        })
+                    }
                 }
 
                 function getRecsList() {
                     var result = []
-                    var domains = wallet.domains()
+                    var domains = storage.getStringArray(storageKeys.domains)
                     for (let domain of recDomains)
                         if (domains.indexOf(domain) == -1)
                             result.push(domain)
@@ -106,12 +110,12 @@
 
                 $scope.toggleFavorite = function (domain) {
                     wallet.auth(function (username) {
-                        postContract(domain, data10.wallet, {
+                        postContract(domain, contract.wallet, {
                             address: username
                         }, function () {
                             addToStorage(domain)
                         }, function () {
-                            postContractWithGas(domain, data10.reg, {
+                            postContractWithGas(domain, contract.reg, {
                                 address: username,
                                 next_hash: wallet.calcStartHash(domain + "/wallet")
                             }, function () {
@@ -121,10 +125,10 @@
                     })
 
                     function addToStorage(domain) {
-                        if (wallet.domainExist(domain)) {
-                            wallet.domainDel(domain)
+                        if (!storage.isArrayItemExist(storageKeys.domains, domain)) {
+                            storage.pushToArray(storageKeys.domains, domain)
                         } else {
-                            wallet.domainAdd(domain)
+                            storage.removeFromArray(storageKeys.domains, domain)
                         }
                         updateCoins()
                     }
@@ -136,19 +140,47 @@
 
                 setInterval(function () {
                     updateCoins()
-                }, 10000)
+                }, 20000)
 
-                post("/wallet/api/search.php", {}, function (response) {
-                    recDomains = response.result
-                    updateCoins()
-                })
-
-                if (getString("email") != "" && wallet.password == "") {
+                if (storage.getString("email") != "" && wallet.password == "") {
                     loginFunction(updateCoins)
                 }
 
-                if (getString("invite_key") != "") {
-                    openInviteReceive(updateCoins)
+                $scope.drops = storage.getObject(storageKeys.drops, [])
+                $scope.dropTokens = {}
+                if (storage.getString("invite_key") != "") {
+                    var invite_id = storage.getString("invite_id")
+                    var isExist = false
+                    for (const drop of $scope.drops)
+                        if (drop.invite_id == invite_id)
+                            isExist = true
+                    if (!isExist) {
+                        $scope.drops.push({
+                            domain: storage.getString("domain"),
+                            amount: storage.getString("amount"),
+                            invite_id: storage.getString("invite_id"),
+                            invite_key: storage.getString("invite_key"),
+                        })
+                        storage.setObject(storageKeys.drops, $scope.drops)
+                    }
+                }
+
+                $scope.receiveDrop = function (drop) {
+                    wallet.auth(function (username) {
+                        postContractWithGas(drop.domain, contract.bonus_receive, {
+                            invite_id: drop.invite_id,
+                            to_address: username,
+                            key: drop.invite_key,
+                        }, function () {
+                            var drops = []
+                            for (const item of storage.getObject(storageKeys.drops, []))
+                                if (item.invite_id != drop.invite_id)
+                                    drops.push(item)
+                            storage.setObject(storageKeys.drops, drops)
+                            updateCoins()
+                            showSuccessDialog("You have been received " + drop.amount + " " + drop.domain)
+                        })
+                    })
                 }
             })
     </script>
@@ -202,12 +234,25 @@
     <div class="row align-start-center row-content white-back-ripple"
          ng-click="options(item.domain)"
          style="padding: 8px 0 8px 0;">
-        <img class="img36" src="img/coin.svg">
+        <img class="img36" src="{{item.logo}}">
         <p class="flex size14 uppercase">{{item.domain}}</p>
         <div class="col align-end-end">
             <p>{{formatPrice(item.price * item.balance)}}</p>
             <p class="size12 uppercase" style="margin-top: 4px">{{formatAmount(item.balance) + " " + item.domain}}</p>
         </div>
+    </div>
+    <div class="divider"></div>
+</div>
+<div class="col col-content row-content" ng-show="drops.length">
+    <p>Drop coins</p>
+</div>
+<div class="col" ng-repeat="item in drops">
+    <div class="row align-start-center row-content white-back-ripple"
+         ng-click="receiveDrop(item)"
+         style="padding: 8px 0 8px 0;">
+        <img class="img36" src="{{dropTokens[item.domain].logo}}">
+        <p class="flex size14 uppercase">{{item.domain}}</p>
+        <div class="primary-button" ng-click="receive(item.invite_id)">Receive {{item.amount}} {{item.domain}}</div>
     </div>
     <div class="divider"></div>
 </div>
@@ -217,7 +262,7 @@
 <div class="col" ng-repeat="item in recs">
     <div class="row align-start-center row-content white-back-ripple"
          style="padding: 8px 0 8px 0;">
-        <img class="img36" src="img/coin.svg">
+        <img class="img36" src="{{item.logo}}">
         <p class="flex size14 uppercase">{{item.domain}}</p>
         <md-switch ng-change="toggleFavorite(item.domain)"
                    ng-model="item.isFavorite"/>

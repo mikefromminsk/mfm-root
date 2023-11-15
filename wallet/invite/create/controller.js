@@ -4,14 +4,14 @@ function openInvite(domain, success) {
         controller: function ($scope, $mdBottomSheet) {
             $scope.domain = domain
             if (DEBUG) {
-                $scope.amount = 100
+                $scope.amount = 1
             }
             $scope.create = function () {
                 var invite_id = rand(8);
                 let invite_create_path = domain + "/invite/" + invite_id + "/create"
                 let invite_cancel_path = domain + "/invite/" + invite_id + "/cancel"
                 wallet.calcKey(domain + "/wallet", function (key, hash, username) {
-                    postContractWithGas(domain, data10.bonus_create, {
+                    postContractWithGas(domain, contract.bonus_create, {
                         domain: domain,
                         invite_id: invite_id,
                         from_address: username,

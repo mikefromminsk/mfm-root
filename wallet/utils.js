@@ -1,16 +1,16 @@
 const DEBUG = location.hostname == "localhost"
 
-let data10 = {
+let contract = {
     send: '34ddc7c1919738b872759f3bf31169c5',
-    wallet: '7428bdd310dfca122d94a3527cc4e9df',
+    wallet: '7242feda3f24473a3f86d9bd886e4510',
     free_reg: '63aab45e9f08996695d2ddad5c8eac6a',
     reg: '0902ce671e53ba0e175d78adc436b3ad',
     drop: 'c160df2cdc5c96d6a9e9f61d01a47676',
     init: '772df88baecd34099df80f0e592a9bc7',
     ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
-    ico_sell: '0a13f94d6e0d84c646e9d59972eac655',
+    ico_sell: '8d0a5b6afe2082197857d58faef59655',
     bonus_create: '49557ed8c5b6af9e67b9bce733102d50',
-    bonus_receive: 'd331eefac8a2da3bb601285a0734e6d8',
+    bonus_receive: '989f95d89acd60e71caeb66d9e20b99a',
 }
 
 function rand(length) {
@@ -168,49 +168,87 @@ function showSuccess(message, success) {
         success(message)
 }
 
-function getString(key, def) {
-    var value = new URLSearchParams(window.location.search).get(key)
-    if ((value == null || value == "") && window.NativeAndroid != null) {
-        value = window.NativeAndroid.getItem(key)
-    }
-    if ((value == null || value == "") && localStorage != null) {
-        value = localStorage.getItem(key)
-    }
-    if (value == null) value = ""
-    if (value == "" && def != null)
-        return def
-    return value
+const storageKeys = {
+    username: "STORE_USERNAME",
+    password: "STORE_PASSWORD",
+    domains: "STORE_DOMAINS",
+    drops: "STORE_DROPS",
 }
 
-function setString(key, val) {
-    if (window.NativeAndroid != null) {
-        window.NativeAndroid.setItem(key, val)
-    } else {
-        localStorage.setItem(key, val)
+var storage = {
+    getString: function (key, def) {
+        var value = new URLSearchParams(window.location.search).get(key)
+        if ((value == null || value == "") && window.NativeAndroid != null) {
+            value = window.NativeAndroid.getItem(key)
+        }
+        if ((value == null || value == "") && localStorage != null) {
+            value = localStorage.getItem(key)
+        }
+        if (value == null) value = ""
+        if (value == "" && def != null)
+            return def
+        return value
+    },
+    setString: function (key, val) {
+        if (window.NativeAndroid != null) {
+            window.NativeAndroid.setItem(key, val)
+        } else {
+            localStorage.setItem(key, val)
+        }
+    },
+    getObject: function (key, def) {
+        return JSON.parse(storage.getString(key, JSON.stringify(def)))
+    },
+    setObject: function (key, obj) {
+        storage.setString(key, JSON.stringify(obj))
+    },
+    getStringArray: function (key) {
+        var string = this.getString(key)
+        return string == null || string == "" ? [] : string.split(',')
+    },
+    pushToArray: function (key, value) {
+        if (this.isArrayItemExist(key, value)) return;
+        var array = this.getStringArray(key)
+        array.push(value)
+        this.setString(key, array.join(","))
+    },
+    removeFromArray: function (key, value) {
+        if (!this.getStringArray(key, value)) return;
+        var array = this.getStringArray(key)
+        array.splice(array.indexOf(value), 1);
+        this.setString(key, array.join(","))
+    },
+    isArrayItemExist: function (key, value) {
+        return this.getStringArray(key).indexOf(value) != -1
+    },
+    clear: function () {
+        if (window.NativeAndroid != null) {
+            window.NativeAndroid.clear()
+        } else {
+            localStorage.clear()
+        }
     }
 }
 
 var wallet = {
-    username: null,
-    password: null,
+    username: "",
+    password: "",
     GAS_NAME: "data",
     GAS_PATH: "data/wallet",
-    STORE_USERNAME: "STORE_USERNAME",
-    STORE_PASSWORD: "STORE_PASSWORD",
-    STORE_DOMAINS: "STORE_DOMAINS",
     init: function () {
-        wallet.username = getString(wallet.STORE_USERNAME)
-        wallet.password = getString(wallet.STORE_PASSWORD)
+        wallet.username = storage.getString(storageKeys.username)
+        wallet.password = storage.getString(storageKeys.password)
     },
     auth: function (success, error) {
-        if (wallet.username == null || wallet.password == null) {
-            let username = getString(wallet.STORE_USERNAME)
-            let password = getString(wallet.STORE_PASSWORD)
-            if ((username == null || password == null) && window.loginFunction != null) {
+        if (wallet.username == "" || wallet.password == "") {
+            let username = storage.getString(storageKeys.username)
+            let password = storage.getString(storageKeys.password)
+            console.log(123123)
+            if ((username == "" || password == "") && window.loginFunction != null) {
                 window.loginFunction(function (username, password) {
                     wallet.login(username, password, success)
                 })
-            } else if (username == null || password == null) {
+            } else if (username == "" || password == "") {
                 username = prompt("Enter your username")
                 password = prompt("Enter your password")
                 wallet.login(username, password, success)
@@ -230,8 +268,8 @@ var wallet = {
                 address: username,
             }, function (response) {
                 if (response.next_hash == md5(wallet.calcHash(wallet.GAS_PATH, username, password, response.prev_key))) {
-                    setString(wallet.STORE_USERNAME, username)
-                    setString(wallet.STORE_PASSWORD, password)
+                    storage.setString(storageKeys.username, username)
+                    storage.setString(storageKeys.password, password)
                     wallet.username = username
                     wallet.password = password
                     if (success)
@@ -243,7 +281,7 @@ var wallet = {
         }
     },
     reg: function (username, password, success, error) {
-        postContract(wallet.GAS_NAME, data10.free_reg, {
+        postContract(wallet.GAS_NAME, contract.free_reg, {
             address: username,
             next_hash: md5(wallet.calcHash(wallet.GAS_PATH, username, password))
         }, function () {
@@ -253,9 +291,7 @@ var wallet = {
     logout: function () {
         wallet.username = null
         wallet.password = null
-        setString(wallet.STORE_USERNAME, "")
-        setString(wallet.STORE_PASSWORD, "")
-        setString(wallet.STORE_DOMAINS, "")
+        storage.clear()
     },
     calcKey: function (path, success, error) {
         wallet.auth(function (username, password) {
@@ -282,7 +318,7 @@ var wallet = {
                     gas_next_hash = wallet.calcHash(wallet.GAS_PATH, username, password, gas_key)
                     gas_key = password
                 }
-                postContract(domain, data10.send, {
+                postContract(domain, contract.send, {
                     from_address: username,
                     to_address: to_address,
                     password: key,
@@ -313,25 +349,6 @@ var wallet = {
             post(url, params, success, error)
         }, error)
     },
-    domains: function () {
-        var domains = getString(wallet.STORE_DOMAINS)
-        return domains == null || domains == "" ? [] : domains.split(',')
-    },
-    domainAdd: function (domain) {
-        if (wallet.domainExist(domain)) return;
-        var array = wallet.domains()
-        array.push(domain)
-        setString(wallet.STORE_DOMAINS, array.join(","))
-    },
-    domainDel: function (domain) {
-        if (!wallet.domainExist(domain)) return;
-        var array = wallet.domains()
-        array.splice(array.indexOf(domain), 1);
-        setString(wallet.STORE_DOMAINS, array.join(","))
-    },
-    domainExist: function (domain) {
-        return wallet.domains().indexOf(domain) != -1
-    }
 }
 wallet.init()
 

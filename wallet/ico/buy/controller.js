@@ -5,7 +5,7 @@ function openIcoBuy(domain, success) {
             if (DEBUG) {
                 $scope.amount = 1
             }
-            postContract(domain, data10.wallet, {
+            postContract(domain, contract.wallet, {
                 address: wallet.username
             }, function (response) {
                 $scope.balance = response.amount
@@ -20,7 +20,7 @@ function openIcoBuy(domain, success) {
 
             $scope.ico_buy = function () {
                 wallet.calcKey("usdt/wallet", function (key, hash, username) {
-                    postContractWithGas(domain, data10.ico_buy, {
+                    postContractWithGas(domain, contract.ico_buy, {
                         address: username,
                         key: key,
                         next_hash: hash,

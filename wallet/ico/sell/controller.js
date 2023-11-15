@@ -12,8 +12,7 @@ function openIcoSell(domain, success) {
             }
             $scope.ico_sell = function () {
                 wallet.calcKey(domain + "/wallet", function (key, hash, username) {
-                    postContractWithGas(domain, data10.ico_sell, {
-                        address: username,
+                    postContractWithGas(domain, contract.ico_sell, {
                         key: key,
                         next_hash: hash,
                         amount: $scope.amount,

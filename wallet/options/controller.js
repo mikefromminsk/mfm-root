@@ -3,9 +3,9 @@ function openOptionsDialog(domain, success) {
         templateUrl: '/wallet/options/index.html',
         controller: function ($scope, $mdBottomSheet) {
             $scope.balance = 0
-            $scope.data10 = data10
+            $scope.data10 = contract
 
-            postContract(domain, data10.wallet, {
+            postContract(domain, contract.wallet, {
                 address: wallet.username,
             }, function (response) {
                 $scope.balance = response.amount
@@ -25,7 +25,7 @@ function openOptionsDialog(domain, success) {
 
             $scope.giveaway = function () {
                 wallet.auth(function (username) {
-                    postContract(domain, data10.drop, {
+                    postContract(domain, contract.drop, {
                         address: username
                     }, function () {
                         success()

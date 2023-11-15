@@ -14,7 +14,7 @@ function openLaunchDialog(domain, success) {
                     next_hash: wallet.calcStartHash($scope.domain + "/wallet"),
                     amount: 1000000,
                 }, function () {
-                    wallet.domainAdd($scope.domain)
+                    storage.pushToArray(storageKeys.domains, $scope.domain)
                     $mdBottomSheet.hide()
                     showSuccessDialog("Token " + $scope.domain + " launched")
                 })
