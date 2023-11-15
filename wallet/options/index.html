@@ -1,31 +1,34 @@
 <md-bottom-sheet>
     <md-content class="col input-content">
-        <div class="row">
-            <div class="size16 flex uppercase">{{locals.domain}}</div>
-            <div class="size16">{{balance}}</div>
+        <div class="row align-start-center">
+            <div class="flex row size16">{{domain.toUpperCase() + " options"}}</div>
+            <div class="col align-start-end">
+                <p class="size12">Balance</p>
+                <p class="size16" style="margin-top: 2px">{{formatAmount(balance)}}</p>
+            </div>
         </div>
         <md-button class="md-raised md-primary" ng-click="giveaway()"
                    ng-show="contracts[data10.drop]">
-            Drop {{locals.domain}}
+            Drop {{domain}}
         </md-button>
         <div class="row">
             <div class="flex primary-button green-back" ng-click="ico_buy()"
                        ng-show="contracts[data10.ico_buy]">
-                Buy {{locals.domain}}
+                Buy {{domain}}
             </div>
             <div style="width: 16px"></div>
             <div class="flex primary-button red-back" ng-click="ico_sell()"
                        ng-show="contracts[data10.ico_sell]">
-                Sell {{locals.domain}}
+                Sell {{domain}}
             </div>
         </div>
         <div class="primary-button" ng-click="sendDialog()"
              ng-show="contracts[data10.send]">
-            Send {{locals.domain}}
+            Send {{domain}}
         </div>
         <div class="primary-button" ng-click="share()"
              ng-show="contracts[data10.send]">
-            Share {{locals.domain}}
+            Share {{domain}}
         </div>
     </md-content>
 </md-bottom-sheet>

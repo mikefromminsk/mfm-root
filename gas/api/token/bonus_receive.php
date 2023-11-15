@@ -1,14 +1,12 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
-$invite_id = get_required(invite_id);
+$invite_key = get_required(invite_key);
 $to_address = get_required(to_address);
-$key = get_required(key);
 
 $response[success] = dataWalletBonusRecieve(
     getDomain(),
-    $to_address,
-    $invite_id,
-    $key);
+    $invite_key,
+    $to_address);
 
 commit($response);

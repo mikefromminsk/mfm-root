@@ -31,11 +31,11 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
         //transactions
     }*/
     if (dataWalletBalance($path, $from_address) < $amount)
-        error("$path $from_address balance is not enough");
-    if (!dataExist([$path, $to_address])) error("receiver dosent exist");
+        error("$from_address balance is not enough in wallet $path");
+    if (!dataExist([$path, $to_address])) error("$to_address receiver doesn't exist");
     if ($key == null || $next_hash == null) {
         if (dataGet([$path, $from_address, script]) != scriptPath())
-            error("script " . scriptPath() . " cannot use " . implode("/", $path) . "/$from_address address");
+            error("script " . scriptPath() . " cannot use $path/$from_address address");
     } else {
         if (dataGet([$path, $from_address, next_hash]) != md5($key))
             error("key is not right");
@@ -104,9 +104,11 @@ function dataIcoSell($key, $next_hash, $amount, $price)
     $wallet_path = "$domain/wallet";
     $owner_address = dataGet([wallet, info, $domain, owner]);
     if (!dataExist(["usdt/wallet", $owner_address])) error("usdt address is not init");
-    dataWalletReg($wallet_path, ico, md5(pass));
-    $contract_path = dataGet([store, $domain, "d670072f06bf06183fb422b9c28f1d8b"]);
-    dataWalletDelegate($wallet_path, ico, pass, $contract_path);
+    if (!dataExist([$wallet_path, ico])) {
+        dataWalletReg($wallet_path, ico, md5(pass));
+        $contract_path = dataGet([store, $domain, "d670072f06bf06183fb422b9c28f1d8b"]);
+        dataWalletDelegate($wallet_path, ico, pass, $contract_path);
+    }
     dataWalletSend($wallet_path, $owner_address, ico, $amount, $key, $next_hash);
     dataSet([$domain, price], $price);
 }
@@ -123,41 +125,33 @@ function dataIcoBuy($to_address, $key, $next_hash, $amount)
 }
 
 function dataWalletBonusCreate($domain,
-                               $random_id,
                                $from_address,
                                $from_key,
                                $from_next_hash,
                                $amount,
-                               $invite_hash,
-                               $cancel_hash)
+                               $invite_hash)
 {
     $wallet_path = $domain . "/wallet";
-    $invite_address = $domain . "_invite";
+    $invite_address = $domain . "_bonus";
+    if (dataExist([$domain, invite, $invite_hash])) error("drop exists");
     if (!dataExist([$wallet_path, $invite_address])) {
-        error(json_encode([$wallet_path, $invite_address, next_hash]));
         dataWalletReg($wallet_path, $invite_address, md5(pass));
-        $contract_path = dataGet([store, $domain, "989f95d89acd60e71caeb66d9e20b99a"]);
-        dataWalletDelegate($wallet_path, $invite_address, pass, $contract_path);
+        $bonus_receive_contract_hash = dataGet([store, $domain, "8ed91430a15c6a19477b83c4debd6c60"]);
+        dataWalletDelegate($wallet_path, $invite_address, pass, $bonus_receive_contract_hash);
     }
     dataWalletSend($wallet_path, $from_address, $invite_address, $amount, $from_key, $from_next_hash);
-    dataSet([$domain, invite, $random_id], [
-        from_address => $from_address,
-        amount => $amount,
-        invite_hash => $invite_hash,
-        cancel_hash => $cancel_hash,
-    ]);
+    dataSet([$domain, bonus, $invite_hash, amount], $amount);
     return true;
 }
 
 function dataWalletBonusRecieve($domain,
-                                $to_address,
-                                $invite_id,
-                                $key)
+                                $invite_key,
+                                $to_address)
 {
-    if (md5($key) != dataGet([$domain, invite, $invite_id, invite_hash])) error("hash is not right");
-    $amount = dataGet([$domain, invite, $invite_id, amount]);
-    dataGet([$domain, invite, $invite_id, amount]);
-    dataWalletSend($domain . "/wallet", $domain . "_invite", $to_address, $amount);
-    // add cancel if to_address == invite.from_address and md5(key) == cancel_hash
+    $invite_hash = md5($invite_key);
+    $amount = dataGet([$domain, bonus, $invite_hash, amount]);
+    if ($amount == null) error("hash is not right");
+    dataWalletSend($domain . "/wallet", $domain . "_bonus", $to_address, $amount);
+    dataSet([$domain, bonus, $invite_hash, amount], 0);
     return true;
 }

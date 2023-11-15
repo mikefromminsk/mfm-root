@@ -2,7 +2,8 @@ function openOptionsDialog(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/options/index.html',
         controller: function ($scope, $mdBottomSheet) {
-            $scope.balance = 0
+            addFormats($scope)
+            $scope.domain = domain
             $scope.data10 = contract
 
             postContract(domain, contract.wallet, {

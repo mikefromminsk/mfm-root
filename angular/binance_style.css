@@ -23,6 +23,7 @@ md-switch {
 
 md-bottom-sheet {
     padding: 0;
+    border-top-width: 0;
     bottom: 80px;
 }
 

@@ -37,7 +37,7 @@ function loginFunction(success) {
             }
         }
     }).then(function () {
-        storage.pushToArray(storageKeys.domains, wallet.GAS_NAME)
+        storage.pushToArray(storageKeys.domains, wallet.gas_domain)
         success()
     })
 }

@@ -22,10 +22,10 @@
     <script src="/wallet/send/controller.js"></script>
     <script src="/wallet/ico/sell/controller.js"></script>
     <script src="/wallet/ico/buy/controller.js"></script>
-    <script src="/wallet/success/controller.js"></script>
+    <script src="/wallet/dialogs/success/controller.js"></script>
+    <script src="/wallet/dialogs/info/controller.js"></script>
     <script src="/wallet/invite/create/controller.js"></script>
     <script src="/wallet/invite/copy/controller.js"></script>
-    <script src="/wallet/invite/receive/controller.js"></script>
 
     <script>
         angular.module("App", ['ngMaterial', 'ngAnimate'])
@@ -140,7 +140,7 @@
 
                 setInterval(function () {
                     updateCoins()
-                }, 20000)
+                }, DEBUG ? 20000 : 10000)
 
                 if (storage.getString("email") != "" && wallet.password == "") {
                     loginFunction(updateCoins)
@@ -149,16 +149,14 @@
                 $scope.drops = storage.getObject(storageKeys.drops, [])
                 $scope.dropTokens = {}
                 if (storage.getString("invite_key") != "") {
-                    var invite_id = storage.getString("invite_id")
+                    var invite_key = storage.getString("invite_key")
                     var isExist = false
                     for (const drop of $scope.drops)
-                        if (drop.invite_id == invite_id)
+                        if (drop.invite_key == invite_key)
                             isExist = true
                     if (!isExist) {
                         $scope.drops.push({
                             domain: storage.getString("domain"),
-                            amount: storage.getString("amount"),
-                            invite_id: storage.getString("invite_id"),
                             invite_key: storage.getString("invite_key"),
                         })
                         storage.setObject(storageKeys.drops, $scope.drops)
@@ -166,21 +164,48 @@
                 }
 
                 $scope.receiveDrop = function (drop) {
-                    wallet.auth(function (username) {
-                        postContractWithGas(drop.domain, contract.bonus_receive, {
-                            invite_id: drop.invite_id,
-                            to_address: username,
-                            key: drop.invite_key,
-                        }, function () {
-                            var drops = []
-                            for (const item of storage.getObject(storageKeys.drops, []))
-                                if (item.invite_id != drop.invite_id)
-                                    drops.push(item)
-                            storage.setObject(storageKeys.drops, drops)
-                            updateCoins()
-                            showSuccessDialog("You have been received " + drop.amount + " " + drop.domain)
+                    if (wallet.username == "") {
+                        showInfoDialog("You need to login or create account", function () {
+                            loginFunction(updateCoins)
                         })
-                    })
+                    } else {
+                        postContract(wallet.gas_domain, contract.wallet, {
+                            address: wallet.username
+                        }, function (response) {
+                            if (response.amount == null) {
+                                showInfoDialog("You need to get " + wallet.gas_domain.toUpperCase() + " token", function () {
+                                    animateFocus("token_" + wallet.gas_domain + "_id")
+                                })
+                            } else {
+                                postContract(drop.domain, contract.wallet, {
+                                    address: wallet.username
+                                }, function () {
+                                    requestBonus()
+                                }, function () {
+                                    showInfoDialog("You need to enable " + drop.domain.toUpperCase() + " token", function () {
+                                        animateFocus("search_wrapper")
+                                    })
+                                })
+                            }
+                        })
+                    }
+
+                    function requestBonus() {
+                        wallet.auth(function (username) {
+                            postContractWithGas(drop.domain, contract.bonus_receive, {
+                                to_address: username,
+                                invite_key: drop.invite_key,
+                            }, function () {
+                                var drops = []
+                                for (const item of storage.getObject(storageKeys.drops, []))
+                                    if (item.invite_key != drop.invite_key)
+                                        drops.push(item)
+                                storage.setObject(storageKeys.drops, drops)
+                                updateCoins()
+                                showSuccessDialog("You have been received " + drop.amount + " " + drop.domain, updateCoins)
+                            })
+                        })
+                    }
                 }
             })
     </script>
@@ -189,7 +214,11 @@
 <div class="row row-content align-start-center blue-back" style="padding: 4px 0">
     <img class="img36 img-red" src="logo.svg"/>
     <div class="row flex input-wrapper">
-        <input type="text" class="flex input" ng-model="search_text" placeholder="Search"
+        <input type="text"
+               id="search_wrapper"
+               class="flex input white-back-ripple"
+               ng-model="search_text"
+               placeholder="Search"
                style="border-radius: 20px; padding-top: 1px">
     </div>
     <md-menu md-position-mode="target-right target">
@@ -232,6 +261,7 @@
 </div>
 <div class="col" ng-repeat="item in coins">
     <div class="row align-start-center row-content white-back-ripple"
+         id="token_{{item.domain}}_id"
          ng-click="options(item.domain)"
          style="padding: 8px 0 8px 0;">
         <img class="img36" src="{{item.logo}}">
@@ -261,6 +291,7 @@
 </div>
 <div class="col" ng-repeat="item in recs">
     <div class="row align-start-center row-content white-back-ripple"
+         id="rec_{{item.domain}}_id"
          style="padding: 8px 0 8px 0;">
         <img class="img36" src="{{item.logo}}">
         <p class="flex size14 uppercase">{{item.domain}}</p>
