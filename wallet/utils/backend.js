@@ -2,7 +2,6 @@ const DEBUG = location.hostname == "localhost"
 
 let contract = {
     send: '34ddc7c1919738b872759f3bf31169c5',
-    wallet: '7242feda3f24473a3f86d9bd886e4510',
     free_reg: '63aab45e9f08996695d2ddad5c8eac6a',
     reg: '0902ce671e53ba0e175d78adc436b3ad',
     drop: 'c160df2cdc5c96d6a9e9f61d01a47676',
@@ -11,6 +10,7 @@ let contract = {
     ico_sell: '8d0a5b6afe2082197857d58faef59655',
     bonus_create: 'c15a06590129c3854558b5ec282ffdad',
     bonus_receive: '8ed91430a15c6a19477b83c4debd6c60',
+    wallet: '7242feda3f24473a3f86d9bd886e4510',
 }
 
 function randomString(length) {
@@ -25,11 +25,6 @@ function randomString(length) {
     return result;
 }
 
-function controller(callback) {
-    angular.module("App", ['ngMaterial', 'ngAnimate'])
-        .controller("Controller", callback)
-}
-
 function post(url, params, success, error) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", url);
@@ -37,7 +32,7 @@ function post(url, params, success, error) {
     xhr.onload = () => {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                if (success != null)
+                if (success)
                     success(JSON.parse(xhr.response))
             } else {
                 try {
@@ -90,10 +85,10 @@ function postForm(url, params, success, error) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
-                if (success != null)
+                if (success)
                     success(JSON.parse(xhr.response))
             } else {
-                if (error != null)
+                if (error)
                     error(JSON.parse(xhr.response))
             }
         }
@@ -103,84 +98,13 @@ function postForm(url, params, success, error) {
     xhr.send(formData)
 }
 
-function selectFile(success) {
-    var input = document.createElement('input')
-    input.type = 'file'
-    input.onchange = e => {
-        if (success != null)
-            success(e.target.files[0])
-    }
-    input.click()
-}
-
-function objectToForm(data) {
-    var formData = new FormData();
-    angular.forEach(data, function (value, key) {
-        formData.append(key, value);
-    });
-    return formData;
-}
-
-function downloadFile(uri) {
-    var link = document.createElement("a");
-    link.setAttribute('download', uri.split(/(\\|\/)/g).pop());
-    link.href = uri;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-}
-
 function dataGet(path, callback) {
     post("/data/api/get.php", {
         path: path,
     }, function (response) {
-        callback(response)
+        if (callback)
+            callback(response)
     })
-}
-
-function dataInfo(path, callback) {
-    post("/data/api/get.php", {
-        path: path,
-    }, function (response) {
-        callback(response)
-    })
-}
-
-function animateFocus(id) {
-    document.getElementById(id).animate(
-        [
-            {transform: "translateY(0px)"},
-            {transform: "translateY(1px)"},
-            {transform: "translateY(-1px)"},
-            {transform: "translateY(0px)"},
-        ],
-        {
-            duration: 300,
-            iterations: 5,
-        },
-    )
-}
-
-function showError(message, error) {
-    if (error) {
-        error(message)
-    } else {
-        if (window.$mdToast != null) {
-            window.$mdToast.show(window.$mdToast.simple().textContent(message))
-        } else {
-            alert(message)
-        }
-    }
-}
-
-function showSuccess(message, success) {
-    if (window.$mdToast != null) {
-        window.$mdToast.show(window.$mdToast.simple().textContent(message))
-    } else {
-        alert(message)
-    }
-    if (success)
-        success(message)
 }
 
 const storageKeys = {
@@ -190,64 +114,10 @@ const storageKeys = {
     drops: "STORE_DROPS",
 }
 
-var storage = {
-    getString: function (key, def) {
-        var value = new URLSearchParams(window.location.search).get(key)
-        if ((value == null || value == "") && window.NativeAndroid != null) {
-            value = window.NativeAndroid.getItem(key)
-        }
-        if ((value == null || value == "") && localStorage != null) {
-            value = localStorage.getItem(key)
-        }
-        if (value == null) value = ""
-        if (value == "" && def != null)
-            return def
-        return value
-    },
-    setString: function (key, val) {
-        if (window.NativeAndroid != null) {
-            window.NativeAndroid.setItem(key, val)
-        } else {
-            localStorage.setItem(key, val)
-        }
-    },
-    getObject: function (key, def) {
-        return JSON.parse(storage.getString(key, JSON.stringify(def)))
-    },
-    setObject: function (key, obj) {
-        storage.setString(key, JSON.stringify(obj))
-    },
-    getStringArray: function (key) {
-        var string = this.getString(key)
-        return string == null || string == "" ? [] : string.split(',')
-    },
-    pushToArray: function (key, value) {
-        if (this.isArrayItemExist(key, value)) return;
-        var array = this.getStringArray(key)
-        array.push(value)
-        this.setString(key, array.join(","))
-    },
-    removeFromArray: function (key, value) {
-        if (!this.getStringArray(key, value)) return;
-        var array = this.getStringArray(key)
-        array.splice(array.indexOf(value), 1);
-        this.setString(key, array.join(","))
-    },
-    isArrayItemExist: function (key, value) {
-        return this.getStringArray(key).indexOf(value) != -1
-    },
-    clear: function () {
-        if (window.NativeAndroid != null) {
-            window.NativeAndroid.clear()
-        } else {
-            localStorage.clear()
-        }
-    }
-}
-
 var wallet = {
     username: "",
     password: "",
+    quote_domain: "usdt",
     gas_domain: "data",
     gas_path: "data/wallet",
     init: function () {
@@ -258,7 +128,6 @@ var wallet = {
         if (wallet.username == "" || wallet.password == "") {
             let username = storage.getString(storageKeys.username)
             let password = storage.getString(storageKeys.password)
-            console.log(123123)
             if ((username == "" || password == "") && window.loginFunction != null) {
                 window.loginFunction(function (username, password) {
                     wallet.login(username, password, success)
@@ -365,7 +234,61 @@ var wallet = {
         }, error)
     },
 }
-wallet.init()
+
+
+var storage = {
+    getString: function (key, def) {
+        var value = new URLSearchParams(window.location.search).get(key)
+        if ((value == null || value == "") && window.NativeAndroid != null) {
+            value = window.NativeAndroid.getItem(key)
+        } else if ((value == null || value == "") && localStorage != null) {
+            value = localStorage.getItem(key)
+        }
+        if (value == null) value = ""
+        if (value == "" && def != null)
+            return def
+        return value
+    },
+    setString: function (key, val) {
+        if (window.NativeAndroid != null) {
+            window.NativeAndroid.setItem(key, val)
+        } else {
+            localStorage.setItem(key, val)
+        }
+    },
+    getObject: function (key, def) {
+        return JSON.parse(storage.getString(key, JSON.stringify(def)))
+    },
+    setObject: function (key, obj) {
+        storage.setString(key, JSON.stringify(obj))
+    },
+    getStringArray: function (key) {
+        var string = this.getString(key)
+        return string == null || string == "" ? [] : string.split(',')
+    },
+    pushToArray: function (key, value) {
+        if (this.isArrayItemExist(key, value)) return;
+        var array = this.getStringArray(key)
+        array.push(value)
+        this.setString(key, array.join(","))
+    },
+    removeFromArray: function (key, value) {
+        if (!this.getStringArray(key, value)) return;
+        var array = this.getStringArray(key)
+        array.splice(array.indexOf(value), 1);
+        this.setString(key, array.join(","))
+    },
+    isArrayItemExist: function (key, value) {
+        return this.getStringArray(key).indexOf(value) != -1
+    },
+    clear: function () {
+        if (window.NativeAndroid != null) {
+            window.NativeAndroid.clear()
+        } else {
+            localStorage.clear()
+        }
+    }
+}
 
 var md5 = function (string) {
     function RotateLeft(lValue, iShiftBits) {
@@ -570,3 +493,6 @@ var md5 = function (string) {
     var temp = WordToHex(a) + WordToHex(b) + WordToHex(c) + WordToHex(d);
     return temp.toLowerCase();
 }
+
+
+wallet.init()

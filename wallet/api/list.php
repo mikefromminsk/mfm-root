@@ -8,17 +8,23 @@ $domains = explode(",", $domains);
 
 $response[result] = [];
 
-foreach ($domains as $domain) {
-    if ($domain == null) continue;
-    $coin = [
+function getTokenData($domain, $address = null){
+    $path = dataGet([wallet, info, $domain, path]);
+    return [
         domain => $domain,
         logo => "/wallet/img/coin.svg",
-        path => dataGet([wallet, info, $domain, path]),
+        path => $path,
         price => dataGet([$domain, price]) ?: 0,
+        balance => $address != null ? dataWalletBalance($path, $address) : null,
     ];
-    if ($address != null)
-        $coin[balance] = dataWalletBalance($coin[path], $address);
+}
+
+foreach ($domains as $domain) {
+    if ($domain == null) continue;
+    $coin = getTokenData($domain, $address);
     $response[result][] = $coin;
 }
+
+$response[gas] = getTokenData(data, $address);
 
 commit($response);

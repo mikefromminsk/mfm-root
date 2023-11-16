@@ -9,11 +9,7 @@ function loginFunction(success) {
                     $scope.address = "user"
                 $scope.password = "pass"
             }
-            $scope.selectEmail = function () {
-                if (window.NativeAndroid != null) {
-                    window.NativeAndroid.selectEmail()
-                }
-            }
+            setFocus("first_input")
             $scope.mode = "login"
             $scope.login = function () {
                 if ($scope.mode == "login") {

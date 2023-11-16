@@ -26,7 +26,7 @@ dataSet([wallet, info, $domain], [
     domain => $domain,
     path => $wallet_path,
     owner => $address,
-    amount => $amount,
+    total => $amount,
 ]);
 
 $response[success] = true;

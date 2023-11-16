@@ -11,10 +11,14 @@
     <link href="/angular/binance_style.css" rel="stylesheet">
     <link href="/angular/colors.css" rel="stylesheet">
     <script src="/angular/angular-material.min.js"></script>
-    <script src="/wallet/utils.js"></script>
-    <script src="formats.js"></script>
+    <script src="/wallet/utils/formats.js"></script>
+    <script src="/wallet/utils/backend.js"></script>
+    <script src="/wallet/utils/ui.js"></script>
     <link href="style.css" rel="stylesheet">
 
+
+    <script src="/wallet/dialogs/success/controller.js"></script>
+    <script src="/wallet/dialogs/info/controller.js"></script>
 
     <script src="/wallet/options/controller.js"></script>
     <script src="/wallet/launch/controller.js"></script>
@@ -22,8 +26,6 @@
     <script src="/wallet/send/controller.js"></script>
     <script src="/wallet/ico/sell/controller.js"></script>
     <script src="/wallet/ico/buy/controller.js"></script>
-    <script src="/wallet/dialogs/success/controller.js"></script>
-    <script src="/wallet/dialogs/info/controller.js"></script>
     <script src="/wallet/invite/create/controller.js"></script>
     <script src="/wallet/invite/copy/controller.js"></script>
 
@@ -55,7 +57,6 @@
                     openLaunchDialog($scope.search_text, updateCoins)
                 }
 
-
                 $scope.coins = []
                 $scope.recs = []
                 var recDomains = []
@@ -74,6 +75,7 @@
                         domains: storage.getStringArray(storageKeys.domains).join(","),
                         address: wallet.username,
                     }, function (response) {
+                        $scope.gas = response.gas
                         $scope.coins = response.result
                         $scope.$apply()
                     })
@@ -134,10 +136,6 @@
                     }
                 }
 
-                $scope.username = function () {
-                    return wallet.username
-                }
-
                 setInterval(function () {
                     updateCoins()
                 }, DEBUG ? 20000 : 10000)
@@ -165,28 +163,12 @@
 
                 $scope.receiveDrop = function (drop) {
                     if (wallet.username == "") {
-                        showInfoDialog("You need to login or create account", function () {
-                            loginFunction(updateCoins)
-                        })
-                    } else {
-                        postContract(wallet.gas_domain, contract.wallet, {
-                            address: wallet.username
-                        }, function (response) {
-                            if (response.amount == null) {
-                                showInfoDialog("You need to get " + wallet.gas_domain.toUpperCase() + " token", function () {
-                                    animateFocus("token_" + wallet.gas_domain + "_id")
-                                })
-                            } else {
-                                postContract(drop.domain, contract.wallet, {
-                                    address: wallet.username
-                                }, function () {
+                        wallet.auth(function () {
+                            hasBalance(wallet.gas_domain, function () {
+                                hasToken(drop.domain, function () {
                                     requestBonus()
-                                }, function () {
-                                    showInfoDialog("You need to enable " + drop.domain.toUpperCase() + " token", function () {
-                                        animateFocus("search_wrapper")
-                                    })
                                 })
-                            }
+                            })
                         })
                     }
 
@@ -207,15 +189,24 @@
                         })
                     }
                 }
+
+                $scope.totalBalance = function () {
+                    var totalBalance = 0
+                    for (const coin of $scope.coins)
+                        totalBalance += coin.price * coin.balance
+                    return totalBalance
+                }
+                $scope.wallet = wallet
             })
     </script>
 </head>
-<body class="col" ng-app="App" ng-controller="Controller">
+<body class="col" ng-app="App" ng-controller="Controller" style="overflow: auto">
 <div class="row row-content align-start-center blue-back" style="padding: 4px 0">
     <img class="img36 img-red" src="logo.svg"/>
     <div class="row flex input-wrapper">
         <input type="text"
                id="search_wrapper"
+               autocapitalize="off"
                class="flex input white-back-ripple"
                ng-model="search_text"
                placeholder="Search"
@@ -227,11 +218,11 @@
             <md-menu-item ng-click="newCoin()">
                 New coin
             </md-menu-item>
-            <md-menu-item ng-click="login()">
+            <md-menu-item ng-click="login()" ng-hide="wallet.username">
                 Login
             </md-menu-item>
-            <md-menu-item ng-click="logout()">
-                Logout {{username()}}
+            <md-menu-item ng-click="logout()" ng-show="wallet.username">
+                Logout {{wallet.username}}
             </md-menu-item>
         </md-menu-content>
     </md-menu>
@@ -241,19 +232,19 @@
      ng-show="coins.length">
     <div class="flex col">
         <p class="size12">Total balance</p>
-        <p class="size16 bold-text" style="margin-top: 4px">{{formatPrice(0)}}</p>
+        <p class="size16 bold-text" style="margin-top: 4px">{{formatPrice(totalBalance())}}</p>
     </div>
     <div class="col align-end-end">
-        <p class="size12 uppercase">Gas</p>
-        <p class="size14 bold-text" style="margin-top: 4px">{{formatAmount(0)}}</p>
+        <p class="size12 uppercase">{{gas.domain}}</p>
+        <p class="size14 bold-text" style="margin-top: 4px">{{formatAmount(gas.balance)}}</p>
     </div>
 </div>
 <div class="row"
      style="padding: 16px"
      ng-hide="coins.length">
     <div class="flex primary-button lowercase"
-         ng-click="login()"
-    >Login or Create account
+         ng-click="login()">
+        Login or Create account
     </div>
 </div>
 <div class="col col-content row-content" ng-show="coins.length">
@@ -261,7 +252,7 @@
 </div>
 <div class="col" ng-repeat="item in coins">
     <div class="row align-start-center row-content white-back-ripple"
-         id="token_{{item.domain}}_id"
+         id="{{item.domain}}_id"
          ng-click="options(item.domain)"
          style="padding: 8px 0 8px 0;">
         <img class="img36" src="{{item.logo}}">
@@ -272,6 +263,14 @@
         </div>
     </div>
     <div class="divider"></div>
+</div>
+<div class="row"
+     style="padding: 16px"
+     ng-show="wallet.username">
+    <div class="flex primary-button lowercase"
+         ng-click="newCoin()">
+        New coin
+    </div>
 </div>
 <div class="col col-content row-content" ng-show="drops.length">
     <p>Drop coins</p>
@@ -291,7 +290,6 @@
 </div>
 <div class="col" ng-repeat="item in recs">
     <div class="row align-start-center row-content white-back-ripple"
-         id="rec_{{item.domain}}_id"
          style="padding: 8px 0 8px 0;">
         <img class="img36" src="{{item.logo}}">
         <p class="flex size14 uppercase">{{item.domain}}</p>

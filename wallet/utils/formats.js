@@ -6,12 +6,15 @@ function addFormats($scope){
     $scope.formatPrice = function (number) {
         return "$" + numberFormat.format(round(number, 2))
     }
-    $scope.formatAmount = function (number) {
+    $scope.formatAmount = function (number, domain) {
         if (number >= 1000000)
             return round(number / 1000000, 2) + "M"
         if (number >= 1000)
             return round(number / 1000, 2) + "K"
-        return round(number, 4) // K M B T
+        return round(number, 4) + (" " + (domain || "").toUpperCase())
+    }
+    $scope.formatTicker = function (domain) {
+        return (domain || "").toUpperCase()
     }
     $scope.formatPercent = function (number) {
         number = round(number, 0)
