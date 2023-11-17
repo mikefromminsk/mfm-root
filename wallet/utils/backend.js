@@ -51,11 +51,26 @@ function postWithGas(url, params, success, error) {
     wallet.postWithGas(url, params, success, error)
 }
 
+var domainContracts = {}
+
+function getContracts(domain, success) {
+    if (domainContracts[domain] != null) {
+        setTimeout(function () {
+            success(domainContracts[domain])
+        })
+    } else {
+        post("/wallet/api/contracts.php", {
+            domain: domain
+        }, function (response) {
+            domainContracts[domain] = response.contracts
+            success(response.contracts)
+        })
+    }
+}
+
 function contractExist(domain, contractHash, success, error) {
-    post("/wallet/api/contracts.php", {
-        domain: domain
-    }, function (response) {
-        var script_path = response.contracts[contractHash]
+    getContracts(domain, function (contracts) {
+        var script_path = contracts[contractHash]
         if (script_path != null) {
             if (success)
                 success(script_path)
@@ -63,7 +78,7 @@ function contractExist(domain, contractHash, success, error) {
             if (error)
                 error()
         }
-    }, error)
+    })
 }
 
 function postContract(domain, contractHash, params, success, error) {

@@ -1,4 +1,4 @@
-function openInvite(domain, success) {
+function openInvite($rootScope, domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/invite/create/index.html",
         controller: function ($scope, $mdBottomSheet) {

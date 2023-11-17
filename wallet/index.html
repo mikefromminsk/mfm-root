@@ -6,201 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wallet</title>
     <link rel="icon" type="image/x-icon" href="logo.svg">
-    <script src="/angular/angular.min.js"></script>
-    <link href="/angular/angular-material.min.css" rel="stylesheet">
-    <link href="/angular/binance_style.css" rel="stylesheet">
-    <link href="/angular/colors.css" rel="stylesheet">
-    <script src="/angular/angular-material.min.js"></script>
-    <script src="/wallet/utils/formats.js"></script>
-    <script src="/wallet/utils/backend.js"></script>
-    <script src="/wallet/utils/ui.js"></script>
-    <link href="style.css" rel="stylesheet">
-
-
-    <script src="/wallet/dialogs/success/controller.js"></script>
-    <script src="/wallet/dialogs/info/controller.js"></script>
-
-    <script src="/wallet/options/controller.js"></script>
-    <script src="/wallet/launch/controller.js"></script>
-    <script src="/wallet/login/controller.js"></script>
-    <script src="/wallet/send/controller.js"></script>
-    <script src="/wallet/ico/sell/controller.js"></script>
-    <script src="/wallet/ico/buy/controller.js"></script>
-    <script src="/wallet/invite/create/controller.js"></script>
-    <script src="/wallet/invite/copy/controller.js"></script>
-
-    <script>
-        angular.module("App", ['ngMaterial', 'ngAnimate'])
-            .controller("Controller", function ($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
-                addFormats($scope)
-                window.$mdToast = $mdToast
-                window.$mdBottomSheet = $mdBottomSheet
-                window.$mdDialog = $mdDialog
-
-                $scope.menuIndex = 0
-
-                $scope.login = function () {
-                    loginFunction(updateCoins)
-                }
-
-                $scope.options = function (domain) {
-                    openOptionsDialog(domain, updateCoins)
-                }
-
-                $scope.logout = function () {
-                    wallet.logout()
-                    showSuccess("Success logout")
-                    updateCoins()
-                }
-
-                $scope.newCoin = function () {
-                    openLaunchDialog($scope.search_text, updateCoins)
-                }
-
-                $scope.coins = []
-                $scope.recs = []
-                var recDomains = []
-
-                $scope.$watch('search_text', function (newValue) {
-                    post('/wallet/api/search.php', {
-                        search_text: newValue
-                    }, function (response) {
-                        recDomains = response.result
-                        updateCoins()
-                    })
-                })
-
-                function updateCoins() {
-                    post("/wallet/api/list.php", {
-                        domains: storage.getStringArray(storageKeys.domains).join(","),
-                        address: wallet.username,
-                    }, function (response) {
-                        $scope.gas = response.gas
-                        $scope.coins = response.result
-                        $scope.$apply()
-                    })
-                    post("/wallet/api/list.php", {
-                        domains: getRecsList().join(",")
-                    }, function (response) {
-                        $scope.recs = response.result
-                        $scope.$apply()
-                    })
-
-                    $scope.drops = storage.getObject(storageKeys.drops, [])
-                    if ($scope.drops.length > 0) {
-                        var dropDomains = []
-                        for (const drop of $scope.drops)
-                            dropDomains.push(drop.domain)
-                        post("/wallet/api/list.php", {
-                            domains: dropDomains.join(",")
-                        }, function (response) {
-                            for (const dropToken of response.result)
-                                $scope.dropTokens[dropToken.domain] = dropToken
-                            $scope.$apply()
-                        })
-                    }
-                }
-
-                function getRecsList() {
-                    var result = []
-                    var domains = storage.getStringArray(storageKeys.domains)
-                    for (let domain of recDomains)
-                        if (domains.indexOf(domain) == -1)
-                            result.push(domain)
-                    return result
-                }
-
-                $scope.toggleFavorite = function (domain) {
-                    wallet.auth(function (username) {
-                        postContract(domain, contract.wallet, {
-                            address: username
-                        }, function () {
-                            addToStorage(domain)
-                        }, function () {
-                            postContractWithGas(domain, contract.reg, {
-                                address: username,
-                                next_hash: wallet.calcStartHash(domain + "/wallet")
-                            }, function () {
-                                addToStorage(domain)
-                            })
-                        })
-                    })
-
-                    function addToStorage(domain) {
-                        if (!storage.isArrayItemExist(storageKeys.domains, domain)) {
-                            storage.pushToArray(storageKeys.domains, domain)
-                        } else {
-                            storage.removeFromArray(storageKeys.domains, domain)
-                        }
-                        updateCoins()
-                    }
-                }
-
-                setInterval(function () {
-                    updateCoins()
-                }, DEBUG ? 20000 : 10000)
-
-                if (storage.getString("email") != "" && wallet.password == "") {
-                    loginFunction(updateCoins)
-                }
-
-                $scope.drops = storage.getObject(storageKeys.drops, [])
-                $scope.dropTokens = {}
-                if (storage.getString("invite_key") != "") {
-                    var invite_key = storage.getString("invite_key")
-                    var isExist = false
-                    for (const drop of $scope.drops)
-                        if (drop.invite_key == invite_key)
-                            isExist = true
-                    if (!isExist) {
-                        $scope.drops.push({
-                            domain: storage.getString("domain"),
-                            invite_key: storage.getString("invite_key"),
-                        })
-                        storage.setObject(storageKeys.drops, $scope.drops)
-                    }
-                }
-
-                $scope.receiveDrop = function (drop) {
-                    if (wallet.username == "") {
-                        wallet.auth(function () {
-                            hasBalance(wallet.gas_domain, function () {
-                                hasToken(drop.domain, function () {
-                                    requestBonus()
-                                })
-                            })
-                        })
-                    }
-
-                    function requestBonus() {
-                        wallet.auth(function (username) {
-                            postContractWithGas(drop.domain, contract.bonus_receive, {
-                                to_address: username,
-                                invite_key: drop.invite_key,
-                            }, function () {
-                                var drops = []
-                                for (const item of storage.getObject(storageKeys.drops, []))
-                                    if (item.invite_key != drop.invite_key)
-                                        drops.push(item)
-                                storage.setObject(storageKeys.drops, drops)
-                                updateCoins()
-                                showSuccessDialog("You have been received " + drop.amount + " " + drop.domain, updateCoins)
-                            })
-                        })
-                    }
-                }
-
-                $scope.totalBalance = function () {
-                    var totalBalance = 0
-                    for (const coin of $scope.coins)
-                        totalBalance += coin.price * coin.balance
-                    return totalBalance
-                }
-                $scope.wallet = wallet
-            })
-    </script>
+    <style>
+        .image {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50px;
+            height: 50px;
+            margin:-25px 0 0 -25px;
+            -webkit-animation:spin 1s linear infinite;
+            -moz-animation:spin 1s linear infinite;
+        }
+        @-moz-keyframes spin {
+            100% { -moz-transform: rotate(360deg); }
+        }
+        @-webkit-keyframes spin {
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform:rotate(360deg);
+            }
+        }
+    </style>
 </head>
-<body class="col" ng-app="App" ng-controller="Controller" style="overflow: auto">
+<body class="col" ng-app="App" ng-controller="Controller" style="overflow: hidden;" ng-style="{'overflow': 'auto'}">
+<div style="position: fixed; left:0; top: 0; width: 100%; height: 100%; background: white; z-index: 1" ng-style="{'visibility': showBody ? 'hidden' : 'visible'}">
+    <img class="image" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0ibm9uZSIgY2xhc3M9Imhkcy1mbGlnaHQtaWNvbi0tYW5pbWF0aW9uLWxvYWRpbmciPgoNPGcgZmlsbD0iIzAwMDAwMCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPgoNPHBhdGggZD0iTTggMS41YTYuNSA2LjUgMCAxMDAgMTMgNi41IDYuNSAwIDAwMC0xM3pNMCA4YTggOCAwIDExMTYgMEE4IDggMCAwMTAgOHoiIG9wYWNpdHk9Ii4yIi8+Cg08cGF0aCBkPSJNNy4yNS43NUEuNzUuNzUgMCAwMTggMGE4IDggMCAwMTggOCAuNzUuNzUgMCAwMS0xLjUgMEE2LjUgNi41IDAgMDA4IDEuNWEuNzUuNzUgMCAwMS0uNzUtLjc1eiIvPgoNPC9nPgoNPC9zdmc+" />
+</div>
 <div class="row row-content align-start-center blue-back" style="padding: 4px 0">
     <img class="img36 img-red" src="logo.svg"/>
     <div class="row flex input-wrapper">
@@ -227,76 +61,112 @@
         </md-menu-content>
     </md-menu>
 </div>
-<div class="row shadow-black gray-back"
-     style="padding: 16px"
-     ng-show="coins.length">
-    <div class="flex col">
-        <p class="size12">Total balance</p>
-        <p class="size16 bold-text" style="margin-top: 4px">{{formatPrice(totalBalance())}}</p>
-    </div>
-    <div class="col align-end-end">
-        <p class="size12 uppercase">{{gas.domain}}</p>
-        <p class="size14 bold-text" style="margin-top: 4px">{{formatAmount(gas.balance)}}</p>
-    </div>
-</div>
-<div class="row"
-     style="padding: 16px"
-     ng-hide="coins.length">
-    <div class="flex primary-button lowercase"
-         ng-click="login()">
-        Login or Create account
-    </div>
-</div>
-<div class="col col-content row-content" ng-show="coins.length">
-    <p>Your coins</p>
-</div>
-<div class="col" ng-repeat="item in coins">
-    <div class="row align-start-center row-content white-back-ripple"
-         id="{{item.domain}}_id"
-         ng-click="options(item.domain)"
-         style="padding: 8px 0 8px 0;">
-        <img class="img36" src="{{item.logo}}">
-        <p class="flex size14 uppercase">{{item.domain}}</p>
+<div class="col">
+    <div class="row shadow-black gray-back"
+         style="padding: 16px"
+         ng-show="activeDomains.length">
+        <div class="flex col">
+            <p class="size12">Total balance</p>
+            <p class="size16 bold-text" style="margin-top: 4px">
+                {{formatPrice(totalBalance())}}
+            </p>
+        </div>
         <div class="col align-end-end">
-            <p>{{formatPrice(item.price * item.balance)}}</p>
-            <p class="size12 uppercase" style="margin-top: 4px">{{formatAmount(item.balance) + " " + item.domain}}</p>
+            <p class="size12 uppercase">{{wallet.gas_domain}}</p>
+            <p class="size14 bold-text" style="margin-top: 4px">
+                {{formatAmount(coins[wallet.gas_domain].balance)}}
+            </p>
         </div>
     </div>
-    <div class="divider"></div>
-</div>
-<div class="row"
-     style="padding: 16px"
-     ng-show="wallet.username">
-    <div class="flex primary-button lowercase"
-         ng-click="newCoin()">
-        New coin
+    <div class="row"
+         style="padding: 16px"
+         ng-hide="wallet.username">
+        <div class="flex primary-button lowercase"
+             ng-click="login()">
+            Login or Create account
+        </div>
+    </div>
+    <div class="col col-content row-content" ng-show="activeDomains.length">
+        <p>Your coins</p>
+    </div>
+    <div class="col" ng-repeat="id in activeDomains">
+        <div class="row align-start-center row-content white-back-ripple"
+             id="{{id}}_id"
+             ng-click="options(id)"
+             style="padding: 8px 0 8px 0;">
+            <img class="img36" src="{{coins[id].logo}}">
+            <p class="flex size14 uppercase">{{id}}</p>
+            <p>{{formatPrice(coins[id].price)}}</p>
+            <div class="col align-end-end" style="min-width: 80px">
+                <p>{{formatPrice(coins[id].price * coins[id].balance)}}</p>
+                <p class="size12 uppercase" style="margin-top: 4px">
+                    {{formatAmount(coins[id].balance) + " " + coins[id].domain}}
+                </p>
+            </div>
+        </div>
+        <div class="divider"></div>
+    </div>
+    <div class="row"
+         style="padding: 16px"
+         ng-show="wallet.username">
+        <div class="flex primary-button lowercase"
+             ng-click="newCoin()">
+            New coin
+        </div>
+    </div>
+    <div class="col col-content row-content" ng-show="drops.length">
+        <p>Drop coins</p>
+    </div>
+    <div class="col" ng-repeat="item in drops">
+        <div class="row align-start-center row-content white-back-ripple"
+             ng-click="receiveDrop(item)"
+             style="padding: 8px 0 8px 0;">
+            <img class="img36" src="{{coin[item.domain].logo}}">
+            <p class="flex size14 uppercase">{{coin[item.domain].domain}}</p>
+            <div class="primary-button" ng-click="receive(item.invite_id)">
+                Receive {{formatAmount(coin[item.domain].amount, coin[item.domain].domain)}}
+            </div>
+        </div>
+        <div class="divider"></div>
+    </div>
+    <div class="col col-content row-content" ng-show="searchDomains.length">
+        <p>Recommended coins</p>
+    </div>
+    <div class="col" ng-repeat="id in searchDomains">
+        <div class="row align-start-center row-content white-back-ripple"
+             style="padding: 8px 0 8px 0;">
+            <img class="img36" src="{{coins[id].logo}}">
+            <p class="flex size14 uppercase">{{coins[id].domain}}</p>
+            <md-switch ng-change="toggleFavorite(id)" ng-model="coins[id].isFavorite"/>
+        </div>
+        <div class="divider"></div>
     </div>
 </div>
-<div class="col col-content row-content" ng-show="drops.length">
-    <p>Drop coins</p>
-</div>
-<div class="col" ng-repeat="item in drops">
-    <div class="row align-start-center row-content white-back-ripple"
-         ng-click="receiveDrop(item)"
-         style="padding: 8px 0 8px 0;">
-        <img class="img36" src="{{dropTokens[item.domain].logo}}">
-        <p class="flex size14 uppercase">{{item.domain}}</p>
-        <div class="primary-button" ng-click="receive(item.invite_id)">Receive {{item.amount}} {{item.domain}}</div>
-    </div>
-    <div class="divider"></div>
-</div>
-<div class="col col-content row-content" ng-show="recs.length">
-    <p>Recommended coins</p>
-</div>
-<div class="col" ng-repeat="item in recs">
-    <div class="row align-start-center row-content white-back-ripple"
-         style="padding: 8px 0 8px 0;">
-        <img class="img36" src="{{item.logo}}">
-        <p class="flex size14 uppercase">{{item.domain}}</p>
-        <md-switch ng-change="toggleFavorite(item.domain)"
-                   ng-model="item.isFavorite"/>
-    </div>
-    <div class="divider"></div>
-</div>
+<script src="/angular/angular.min.js"></script>
+<link href="/angular/angular-material.min.css" rel="stylesheet">
+<link href="/angular/binance_style.css" rel="stylesheet">
+<link href="/angular/colors.css" rel="stylesheet">
+<script src="/angular/angular-material.min.js"></script>
+<script src="/wallet/utils/formats.js"></script>
+<script src="/wallet/utils/backend.js"></script>
+<script src="/wallet/utils/ui.js"></script>
+<link href="style.css" rel="stylesheet">
+
+
+<script async src="/wallet/dialogs/success/controller.js"></script>
+<script async src="/wallet/dialogs/info/controller.js"></script>
+
+<script src="/wallet/login/controller.js"></script>
+<script src="/wallet/controller.js"></script>
+<script>
+    controller(main)
+</script>
+<script async src="/wallet/options/controller.js"></script>
+<script async src="/wallet/launch/controller.js"></script>
+<script async src="/wallet/send/controller.js"></script>
+<script async src="/wallet/ico/sell/controller.js"></script>
+<script async src="/wallet/ico/buy/controller.js"></script>
+<script async src="/wallet/invite/create/controller.js"></script>
+<script async src="/wallet/invite/copy/controller.js"></script>
 </body>
 </html>

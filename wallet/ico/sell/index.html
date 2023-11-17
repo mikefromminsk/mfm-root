@@ -1,19 +1,23 @@
 <md-bottom-sheet>
     <md-content class="col input-content">
-        <p class="size16">Sell tokens and set start price</p>
-        <div class="flex row input-wrapper">
-            <div class="input-label-top">Amount to sell</div>
-            <div class="input-label-right">max {{formatAmount(balance)}}</div>
-            <input id="first_input" type="number" class="flex input" ng-model="amount">
+        <p class="size16">Send tokens for ICO</p>
+        <div class="row">
+            <div class="filter blue-back-ripple"
+                 ng-class="{'active': item == selectedPortion}"
+                 ng-click="setPortion(item)"
+                 ng-repeat="item in portions">
+                {{item}}%
+            </div>
         </div>
         <div class="flex row input-wrapper">
-            <div class="input-label-top">Price to sell</div>
-            <input type="number" class="flex input" ng-model="price">
+            <div class="input-label-top">Price for a token</div>
+            <input type="number"
+                   id="first_input"
+                   class="flex input"
+                   ng-model="price">
         </div>
-        <p>
-            Total USDT: {{formatPrice(amount * price)}}
-        </p>
-        <div class="primary-button" ng-click="ico_sell()">
+        <p>For {{selectedPortion}}%({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
+        <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price">
             Sell
         </div>
     </md-content>

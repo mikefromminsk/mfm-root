@@ -1,7 +1,8 @@
-function openLaunchDialog(domain, success) {
+function openLaunchDialog($rootScope, domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/launch/index.html",
         controller: function ($scope, $mdBottomSheet) {
+            addFormats($scope)
             $scope.domain = domain
             $scope.amount = 1000000
             if (DEBUG) {
@@ -16,8 +17,8 @@ function openLaunchDialog(domain, success) {
                         amount: 1000000,
                     }, function () {
                         storage.pushToArray(storageKeys.domains, $scope.domain)
-                        $mdBottomSheet.hide()
-                        showSuccessDialog("Token " + $scope.domain + " launched")
+                        $rootScope.init()
+                        showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched")
                     })
                 })
             }

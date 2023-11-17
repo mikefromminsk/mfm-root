@@ -1,17 +1,28 @@
-function addFormats($scope){
-    function round(num, precision) {
-        return +(Math.round(num + "e+" + precision) + "e-" + precision);
+function addFormats($scope) {
+    $scope.round = function (num, precision) {
+        return +(Math.round(num + "e+" + precision) + "e-" + precision)
     }
-    var numberFormat = new Intl.NumberFormat()
+    function shortNumber(number) {
+        number = $scope.round(number, 2)
+        var numberFormat = new Intl.NumberFormat()
+        var result
+        if (number >= 1000000)
+            result = numberFormat.format($scope.round(number / 1000000, 2)) + "M"
+        else if (number >= 1000)
+            result = numberFormat.format($scope.round(number / 1000, 2)) + "K"
+        else
+            result = numberFormat.format($scope.round(number, 4))
+        return result
+    }
+
     $scope.formatPrice = function (number) {
-        return "$" + numberFormat.format(round(number, 2))
+        return "$" + shortNumber(number)
     }
     $scope.formatAmount = function (number, domain) {
-        if (number >= 1000000)
-            return round(number / 1000000, 2) + "M"
-        if (number >= 1000)
-            return round(number / 1000, 2) + "K"
-        return round(number, 4) + (" " + (domain || "").toUpperCase())
+        var result = shortNumber(number)
+        if (domain != null)
+            return result + " " + domain.toUpperCase()
+        return result
     }
     $scope.formatTicker = function (domain) {
         return (domain || "").toUpperCase()

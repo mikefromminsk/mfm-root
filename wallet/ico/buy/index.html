@@ -1,21 +1,27 @@
 <md-bottom-sheet>
     <md-content class="col input-content">
-        <div class="row align-start-center">
-            <p class="flex size16">Buy tokens for {{formatPrice(price)}}</p>
-            <div class="col align-start-end">
-                <p class="size12">Balance</p>
-                <p class="size16" style="margin-top: 2px">{{formatAmount(balance)}}</p>
+        <div class="row align-center-center">
+            <p class="size16">Price: {{formatPrice(price)}}</p>
+        </div>
+        <div class="row size12">
+            <p class="flex">You give</p>
+            <p>You get</p>
+        </div>
+        <div class="row">
+            <div class="flex row input-wrapper">
+                <div class="input-label-top">USDT</div>
+                <input type="number" class="flex input" ng-model="total" ng-change="calcAmount()">
+            </div>
+            <div class="flex row input-wrapper">
+                <div class="input-label-top">{{domain}}</div>
+                <input type="number" class="flex input" ng-model="amount" ng-change="calcTotal()">
             </div>
         </div>
-        <div class="flex row input-wrapper">
-            <div class="input-label-top">Amount to sell</div>
-            <div class="input-label-right">max {{balance}}</div>
-            <input id="first_input" type="number" class="flex input" ng-model="amount">
+        <div class="row size12">
+            <p class="flex">Available: {{formatAmount(balance)}}</p>
+            <p>Max: {{formatAmount(icoBalance, domain)}}</p>
         </div>
-        <p>
-            Total USDT: {{formatPrice(amount * price)}}
-        </p>
-        <div class="primary-button" ng-click="ico_buy()">
+        <div class="primary-button green-back" ng-click="ico_buy()" ng-disabled="!total">
             Buy
         </div>
     </md-content>
