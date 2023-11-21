@@ -116,12 +116,12 @@
     <div class="col col-content row-content" ng-show="drops.length">
         <p>Bonuses</p>
     </div>
-    <div class="col" ng-repeat="bonus in bonuses">
+    <div class="col" ng-repeat="item in bonuses">
         <div class="row align-start-center row-content white-back-ripple coin-line"
-             ng-click="receiveDrop(bonus)">
-            <img class="img36" src="{{coin[bonus.split(':')[0]].logo}}">
-            <p class="flex size14 uppercase">{{coin[bonus.split(':')[0]].domain}}</p>
-            <div class="primary-button green-back" ng-click="receiveBonus(bonus)">
+            ng-click="receiveBonus(item)">
+            <img class="img36" src="{{coins[item.domain].logo}}">
+            <p class="flex size14 uppercase">{{item.domain}}</p>
+            <div class="primary-button green-back">
                 Get
             </div>
         </div>

@@ -136,7 +136,7 @@ function dataWalletBonusCreate($domain,
     if (dataExist([$domain, invite, $invite_hash])) error("drop exists");
     if (!dataExist([$wallet_path, $invite_address])) {
         dataWalletReg($wallet_path, $invite_address, md5(pass));
-        $bonus_receive_contract_hash = dataGet([store, $domain, "8ed91430a15c6a19477b83c4debd6c60"]);
+        $bonus_receive_contract_hash = dataGet([store, $domain, "2e0f34870639c61f4e42053cb34cec9f"]);
         dataWalletDelegate($wallet_path, $invite_address, pass, $bonus_receive_contract_hash);
     }
     dataWalletSend($wallet_path, $from_address, $invite_address, $amount, $from_key, $from_next_hash);
@@ -153,5 +153,5 @@ function dataWalletBonusRecieve($domain,
     if ($amount == null) error("hash is not right");
     dataWalletSend($domain . "/wallet", $domain . "_bonus", $to_address, $amount);
     dataSet([$domain, bonus, $invite_hash, amount], 0);
-    return true;
+    return $amount;
 }

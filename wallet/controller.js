@@ -7,26 +7,26 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.menuIndex = 0
 
     $scope.login = function () {
-        loginFunction(updateCoins)
+        loginFunction(init)
     }
 
     $scope.options = function (domain) {
-        openOptionsDialog($scope, domain, updateCoins)
+        openOptionsDialog($scope, domain, init)
     }
 
     $scope.logout = function () {
         wallet.logout()
-        search()
-        showSuccess("Success logout")
+        showSuccess("Success logout", init)
     }
 
     $scope.newCoin = function () {
-        openLaunchDialog($scope, $scope.search_text, updateCoins)
+        openLaunchDialog($scope, $scope.search_text, init)
     }
 
-    $scope.init = function () {
+    function init() {
         $scope.activeDomains = storage.getStringArray(storageKeys.domains)
         $scope.searchDomains = []
+        $scope.bonuses = bonusesParse()
         search("")
     }
     $scope.drops = []
@@ -55,8 +55,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             domains[domain] = true
         for (const domain of $scope.searchDomains)
             domains[domain] = true
-        for (const bonus of storage.getStringArray(storageKeys.bonuses))
-            domains[bonus.split(":")[0]] = true
+        for (const bonus of $scope.bonuses)
+            domains[bonus.domain] = true
         post("/wallet/api/list.php", {
             domains: Object.keys(domains).join(","),
             address: wallet.username,
@@ -112,37 +112,43 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }, DEBUG ? 20000 : 10000)
 
 
-    $scope.receiveDrop = function (bonus) {
-        var domain = bonus.split(":")[0]
-        var key = bonus.split(":")[1]
-        if (wallet.username == "") {
-            wallet.auth(function () {
-                hasBalance(wallet.gas_domain, function () {
-                    hasToken(domain, function () {
-                        requestBonus()
+    $scope.receiveBonus = function (bonus) {
+        wallet.auth(function (username) {
+            hasBalance(wallet.gas_domain, function () {
+                hasToken(bonus.domain, function () {
+                    postContractWithGas(bonus.domain, contract.bonus_receive, {
+                        to_address: username,
+                        invite_key: bonus.key,
+                    }, function (response) {
+                        storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
+                        showSuccessDialog("You have been received " + $scope.formatAmount(response.received, bonus.domain), init)
+                    }, function () {
+                        storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
+                        showInfoDialog("Bonus is invalid", init)
                     })
-                })
-            })
-        }
-
-        function requestBonus() {
-            wallet.auth(function (username) {
-                postContractWithGas(domain, contract.bonus_receive, {
-                    to_address: username,
-                    invite_key: key,
-                }, function (response) {
-                    storage.removeFromArray(storageKeys.bonuses, bonus)
-                    showSuccessDialog("You have been received " + $scope.formatAmount(response.received, domain), updateCoins)
-                })
-            })
-        }
+                }, init)
+            }, init)
+        }, init)
     }
 
-    if (storage.getString("bonus") != "") {
-        storage.pushToArray(storageKeys.bonuses, storage.getString("bonus"))
+    function bonusesParse() {
+        var result = []
+        for (const bonus of storage.getStringArray(storageKeys.bonuses)) {
+            result.push({
+                bonus: bonus,
+                domain: bonus.split(":")[0],
+                key: bonus.split(":")[1],
+            })
+        }
+        return result
+    }
+
+    var referrer = storage.getString("referrer")
+    if (referrer != "") {
+        showSuccess(referrer)
+        storage.pushToArray(storageKeys.bonuses, referrer)
         storage.setString("bonus", "")
     }
-
     $scope.wallet = wallet
-    $scope.init()
+    init()
 }

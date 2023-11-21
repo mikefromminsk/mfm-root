@@ -9,7 +9,7 @@ let contract = {
     ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
     ico_sell: '8d0a5b6afe2082197857d58faef59655',
     bonus_create: 'c15a06590129c3854558b5ec282ffdad',
-    bonus_receive: '8ed91430a15c6a19477b83c4debd6c60',
+    bonus_receive: '2e0f34870639c61f4e42053cb34cec9f',
     wallet: '7242feda3f24473a3f86d9bd886e4510',
 }
 
@@ -144,9 +144,7 @@ var wallet = {
             let username = storage.getString(storageKeys.username)
             let password = storage.getString(storageKeys.password)
             if ((username == "" || password == "") && window.loginFunction != null) {
-                window.loginFunction(function (username, password) {
-                    wallet.login(username, password, success)
-                })
+                window.loginFunction(success)
             } else if (username == "" || password == "") {
                 username = prompt("Enter your username")
                 password = prompt("Enter your password")
@@ -163,7 +161,7 @@ var wallet = {
             if (error)
                 error()
         } else {
-            post("/" + wallet.gas_domain + "/api/token/wallet.php", {
+            postContract(wallet.gas_domain, contract.wallet, {
                 address: username,
             }, function (response) {
                 if (response.next_hash == md5(wallet.calcHash(wallet.gas_path, username, password, response.prev_key))) {

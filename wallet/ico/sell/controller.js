@@ -37,6 +37,7 @@ function openIcoSell($rootScope, domain, success) {
                             price: $scope.price,
                         }, function () {
                             showSuccessDialog("You open for sale " + $scope.formatTicker(domain))
+                            $mdBottomSheet.hide()
                         })
                     })
                 })

@@ -14,11 +14,11 @@ function loginFunction(success) {
                 $scope.in_progress = true
                 wallet.login($scope.address, $scope.password,
                     function () {
-                        $mdDialog.hide()
+                        $mdDialog.hide($scope.address, $scope.password)
                     }, function () {
                         wallet.reg($scope.address, $scope.password,
                             function () {
-                                $mdDialog.hide()
+                                $mdDialog.hide($scope.address, $scope.password)
                             }, function () {
                                 $scope.in_progress = false
                                 showError('login or username is invalid')
@@ -26,8 +26,9 @@ function loginFunction(success) {
                     })
             }
         }
-    }).then(function () {
+    }).then(function (username, password) {
         storage.pushToArray(storageKeys.domains, wallet.gas_domain)
-        success()
+        if (success)
+            success(username, password)
     })
 }

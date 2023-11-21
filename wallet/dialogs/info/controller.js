@@ -13,7 +13,7 @@ function showInfoDialog(message, success) {
     })
 }
 
-function hasToken(domain, success) {
+function hasToken(domain, success, error) {
     wallet.auth(function (username) {
         postContract(domain, contract.wallet, {
             address: username
@@ -21,19 +21,15 @@ function hasToken(domain, success) {
             if (success)
                 success(response)
         }, function () {
-            showInfoDialog("You need to find " + domain.toUpperCase() + " token", function () {
-                animateFocus("search_wrapper")
-            })
+            showInfoDialog("You need to find " + domain.toUpperCase() + " token", error)
         })
     })
 }
 
-function hasBalance(domain, success) {
+function hasBalance(domain, success, error) {
     hasToken(domain, function (response) {
         if (response.amount == null || response.amount == 0) {
-            showInfoDialog("You need to buy " + domain.toUpperCase() + " token", function () {
-                animateFocus(domain + "_id")
-            })
+            showInfoDialog("You need to buy " + domain.toUpperCase() + " token", error)
         } else {
             if (success)
                 success()
