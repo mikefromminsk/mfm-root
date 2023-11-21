@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!--https://material.angularjs.org/latest/-->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Wallet</title>
     <link rel="icon" type="image/x-icon" href="logo.svg">
     <style>
@@ -31,11 +30,12 @@
         }
     </style>
 </head>
-<body class="col" ng-app="App" ng-controller="Controller" style="overflow: hidden;" ng-style="{'overflow': 'auto'}">
+<body class="col" ng-app="App" ng-controller="Controller" style="overflow: hidden;">
 <div style="position: fixed; left:0; top: 0; width: 100%; height: 100%; background: white; z-index: 1" ng-style="{'visibility': showBody ? 'hidden' : 'visible'}">
     <img class="image" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0ibm9uZSIgY2xhc3M9Imhkcy1mbGlnaHQtaWNvbi0tYW5pbWF0aW9uLWxvYWRpbmciPgoNPGcgZmlsbD0iIzAwMDAwMCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPgoNPHBhdGggZD0iTTggMS41YTYuNSA2LjUgMCAxMDAgMTMgNi41IDYuNSAwIDAwMC0xM3pNMCA4YTggOCAwIDExMTYgMEE4IDggMCAwMTAgOHoiIG9wYWNpdHk9Ii4yIi8+Cg08cGF0aCBkPSJNNy4yNS43NUEuNzUuNzUgMCAwMTggMGE4IDggMCAwMTggOCAuNzUuNzUgMCAwMS0xLjUgMEE2LjUgNi41IDAgMDA4IDEuNWEuNzUuNzUgMCAwMS0uNzUtLjc1eiIvPgoNPC9nPgoNPC9zdmc+" />
 </div>
-<div class="row row-content align-start-center blue-back" style="padding: 4px 0">
+
+<div class="row row-content align-start-center blue-back" style="padding: 8px 0">
     <img class="img36 img-red" src="logo.svg"/>
     <div class="row flex input-wrapper">
         <input type="text"
@@ -61,7 +61,7 @@
         </md-menu-content>
     </md-menu>
 </div>
-<div class="col">
+<div class="flex col" style="overflow: auto">
     <div class="row shadow-black gray-back"
          style="padding: 16px"
          ng-show="activeDomains.length">
@@ -90,17 +90,16 @@
         <p>Your coins</p>
     </div>
     <div class="col" ng-repeat="id in activeDomains">
-        <div class="row align-start-center row-content white-back-ripple"
+        <div class="row align-start-center row-content white-back-ripple coin-line"
              id="{{id}}_id"
-             ng-click="options(id)"
-             style="padding: 8px 0 8px 0;">
+             ng-click="options(id)">
             <img class="img36" src="{{coins[id].logo}}">
             <p class="flex size14 uppercase">{{id}}</p>
             <p>{{formatPrice(coins[id].price)}}</p>
             <div class="col align-end-end" style="min-width: 80px">
                 <p>{{formatPrice(coins[id].price * coins[id].balance)}}</p>
-                <p class="size12 uppercase" style="margin-top: 4px">
-                    {{formatAmount(coins[id].balance) + " " + coins[id].domain}}
+                <p class="size10" style="margin-top: 4px">
+                    {{formatAmount(coins[id].balance)}}
                 </p>
             </div>
         </div>
@@ -115,16 +114,15 @@
         </div>
     </div>
     <div class="col col-content row-content" ng-show="drops.length">
-        <p>Drop coins</p>
+        <p>Bonuses</p>
     </div>
-    <div class="col" ng-repeat="item in drops">
-        <div class="row align-start-center row-content white-back-ripple"
-             ng-click="receiveDrop(item)"
-             style="padding: 8px 0 8px 0;">
-            <img class="img36" src="{{coin[item.domain].logo}}">
-            <p class="flex size14 uppercase">{{coin[item.domain].domain}}</p>
-            <div class="primary-button" ng-click="receive(item.invite_id)">
-                Receive {{formatAmount(coin[item.domain].amount, coin[item.domain].domain)}}
+    <div class="col" ng-repeat="bonus in bonuses">
+        <div class="row align-start-center row-content white-back-ripple coin-line"
+             ng-click="receiveDrop(bonus)">
+            <img class="img36" src="{{coin[bonus.split(':')[0]].logo}}">
+            <p class="flex size14 uppercase">{{coin[bonus.split(':')[0]].domain}}</p>
+            <div class="primary-button green-back" ng-click="receiveBonus(bonus)">
+                Get
             </div>
         </div>
         <div class="divider"></div>
@@ -133,8 +131,7 @@
         <p>Recommended coins</p>
     </div>
     <div class="col" ng-repeat="id in searchDomains">
-        <div class="row align-start-center row-content white-back-ripple"
-             style="padding: 8px 0 8px 0;">
+        <div class="row align-start-center row-content white-back-ripple coin-line">
             <img class="img36" src="{{coins[id].logo}}">
             <p class="flex size14 uppercase">{{coins[id].domain}}</p>
             <md-switch ng-change="toggleFavorite(id)" ng-model="coins[id].isFavorite"/>

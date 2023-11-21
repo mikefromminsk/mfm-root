@@ -4,6 +4,10 @@
     height: 38px;
 }
 
+*:focus {
+    outline: none;
+}
+
 md-content {
     background-color: transparent;
 }
@@ -123,61 +127,16 @@ input::-webkit-inner-spin-button {
 }
 
 /* Ripple effect */
-.white-back-ripple {
-    background-color: white;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    background-position: center;
-    transition: background 0.8s;
-}
-
-.white-back-ripple:hover {
-    background: white radial-gradient(circle, transparent 1%, white 1%) center/15000%;
-}
-
 .white-back-ripple:active {
     background-color: #d9d9d9;
-    background-size: 100%;
-    transition: background 0s;
-}
-
-.green-back-ripple {
-    background-color: rgb(2, 192, 118);
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    background-position: center;
-    transition: background 0.8s;
-}
-
-.green-back-ripple:hover {
-    background: rgb(2, 192, 118) radial-gradient(circle, transparent 1%, rgb(2, 192, 118) 1%) center/15000%;
 }
 
 .green-back-ripple:active {
     background-color: rgb(255, 255, 255);
-    background-size: 100%;
-    transition: background 0s;
-}
-
-.red-back-ripple {
-    background-color: rgb(248, 73, 96);
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    background-position: center;
-    transition: background 0.8s;
-}
-
-.red-back-ripple:hover {
-    background: rgb(248, 73, 96) radial-gradient(circle, transparent 1%, rgb(248, 73, 96) 1%) center/15000%;
 }
 
 .red-back-ripple:active {
     background-color: rgb(241, 137, 151);
-    background-size: 100%;
-    transition: background 0s;
 }
 
 .blue-back-ripple,
@@ -186,21 +145,12 @@ input::-webkit-inner-spin-button {
     border: none;
     border-radius: 2px;
     cursor: pointer;
-    background-position: center;
-    transition: background 0.8s;
     text-transform: uppercase;
-}
-
-.blue-back-ripple:hover,
-.primary-button:hover {
-    background: #4F50FB radial-gradient(circle, transparent 1%, #4F50FB 1%) center/15000%;
 }
 
 .blue-back-ripple:active,
 .primary-button:active {
     background-color: #8e8eea;
-    background-size: 100%;
-    transition: background 0s;
 }
 
 .primary-button:disabled,

@@ -16,7 +16,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     $scope.logout = function () {
         wallet.logout()
-        init()
         search()
         showSuccess("Success logout")
     }
@@ -26,12 +25,11 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.init = function () {
-        $scope.drops = storage.getObject(storageKeys.drops, [])
         $scope.activeDomains = storage.getStringArray(storageKeys.domains)
         $scope.searchDomains = []
         search("")
     }
-    $scope.init()
+    $scope.drops = []
     $scope.coins = {}
 
     function search(newValue) {
@@ -47,6 +45,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             updateCoins()
         })
     }
+
     $scope.$watch('search_text', search)
 
     function updateCoins() {
@@ -56,8 +55,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             domains[domain] = true
         for (const domain of $scope.searchDomains)
             domains[domain] = true
-        for (const drop of $scope.drops)
-            domains[drop.domain] = true
+        for (const bonus of storage.getStringArray(storageKeys.bonuses))
+            domains[bonus.split(":")[0]] = true
         post("/wallet/api/list.php", {
             domains: Object.keys(domains).join(","),
             address: wallet.username,
@@ -67,6 +66,16 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             $scope.showBody = true
             $scope.$apply()
         })
+    }
+
+    $scope.totalBalance = function () {
+        var totalBalance = 0
+        for (const domain of $scope.activeDomains.values()) {
+            var coin = $scope.coins[domain]
+            if (coin != null)
+                totalBalance += coin.price * coin.balance
+        }
+        return totalBalance
     }
 
     $scope.toggleFavorite = function (domain) {
@@ -85,6 +94,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             })
         })
 
+
         function addToStorage(domain) {
             if (!storage.isArrayItemExist(storageKeys.domains, domain)) {
                 storage.pushToArray(storageKeys.domains, domain)
@@ -92,7 +102,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 storage.removeFromArray(storageKeys.domains, domain)
             }
             $scope.activeDomains = storage.getStringArray(storageKeys.domains)
-            init()
+            $scope.search_text = ""
+            $scope.$apply()
         }
     }
 
@@ -100,30 +111,14 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         updateCoins()
     }, DEBUG ? 20000 : 10000)
 
-    if (storage.getString("email") != "" && wallet.password == "") {
-        loginFunction(updateCoins)
-    }
 
-    if (storage.getString("invite_key") != "") {
-        var invite_key = storage.getString("invite_key")
-        var isExist = false
-        for (const drop of $scope.drops)
-            if (drop.invite_key == invite_key)
-                isExist = true
-        if (!isExist) {
-            $scope.drops.push({
-                domain: storage.getString("domain"),
-                invite_key: storage.getString("invite_key"),
-            })
-            storage.setObject(storageKeys.drops, $scope.drops)
-        }
-    }
-
-    $scope.receiveDrop = function (drop) {
+    $scope.receiveDrop = function (bonus) {
+        var domain = bonus.split(":")[0]
+        var key = bonus.split(":")[1]
         if (wallet.username == "") {
             wallet.auth(function () {
                 hasBalance(wallet.gas_domain, function () {
-                    hasToken(drop.domain, function () {
+                    hasToken(domain, function () {
                         requestBonus()
                     })
                 })
@@ -132,30 +127,22 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
         function requestBonus() {
             wallet.auth(function (username) {
-                postContractWithGas(drop.domain, contract.bonus_receive, {
+                postContractWithGas(domain, contract.bonus_receive, {
                     to_address: username,
-                    invite_key: drop.invite_key,
-                }, function () {
-                    var drops = []
-                    for (const item of storage.getObject(storageKeys.drops, []))
-                        if (item.invite_key != drop.invite_key)
-                            drops.push(item)
-                    storage.setObject(storageKeys.drops, drops)
-                    updateCoins()
-                    showSuccessDialog("You have been received " + drop.amount + " " + drop.domain, updateCoins)
+                    invite_key: key,
+                }, function (response) {
+                    storage.removeFromArray(storageKeys.bonuses, bonus)
+                    showSuccessDialog("You have been received " + $scope.formatAmount(response.received, domain), updateCoins)
                 })
             })
         }
     }
 
-    $scope.totalBalance = function () {
-        var totalBalance = 0
-        for (const domain of $scope.activeDomains.values()) {
-            var coin = $scope.coins[domain]
-            if (coin != null)
-                totalBalance += coin.price * coin.balance
-        }
-        return totalBalance
+    if (storage.getString("bonus") != "") {
+        storage.pushToArray(storageKeys.bonuses, storage.getString("bonus"))
+        storage.setString("bonus", "")
     }
+
     $scope.wallet = wallet
+    $scope.init()
 }

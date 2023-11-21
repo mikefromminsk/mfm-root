@@ -126,7 +126,7 @@ const storageKeys = {
     username: "STORE_USERNAME",
     password: "STORE_PASSWORD",
     domains: "STORE_DOMAINS",
-    drops: "STORE_DROPS",
+    bonuses: "STORE_DROPS",
 }
 
 var wallet = {

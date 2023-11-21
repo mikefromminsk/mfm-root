@@ -30,6 +30,7 @@ function openIcoBuy($rootScope, domain, success) {
             }
 
             $scope.ico_buy = function () {
+                $scope.in_progress = true
                 wallet.calcKey("usdt/wallet", function (key, hash, username) {
                     postContractWithGas(domain, contract.ico_buy, {
                         address: username,
@@ -39,6 +40,8 @@ function openIcoBuy($rootScope, domain, success) {
                     }, function () {
                         success()
                         showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain))
+                    }, function () {
+                        $scope.in_progress = false
                     })
                 })
             }

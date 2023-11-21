@@ -10,26 +10,20 @@ function loginFunction(success) {
                 $scope.password = "pass"
             }
             setFocus("first_input")
-            $scope.mode = "login"
             $scope.login = function () {
-                if ($scope.mode == "login") {
-                    wallet.login($scope.address, $scope.password,
-                        function () {
-                            $mdDialog.hide()
-                        }, function () {
-                            if (confirm('Do you want to create an account?')) {
-                                $scope.mode = "registration"
-                                $scope.login()
-                            }
-                        })
-                } else if ($scope.mode == "registration") {
-                    wallet.reg($scope.address, $scope.password,
-                        function () {
-                            $mdDialog.hide()
-                        }, function () {
-                            showError('login or username is invalid')
-                        })
-                }
+                $scope.in_progress = true
+                wallet.login($scope.address, $scope.password,
+                    function () {
+                        $mdDialog.hide()
+                    }, function () {
+                        wallet.reg($scope.address, $scope.password,
+                            function () {
+                                $mdDialog.hide()
+                            }, function () {
+                                $scope.in_progress = false
+                                showError('login or username is invalid')
+                            })
+                    })
             }
         }
     }).then(function () {

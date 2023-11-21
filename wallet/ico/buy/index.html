@@ -21,7 +21,8 @@
             <p class="flex">Available: {{formatAmount(balance)}}</p>
             <p>Max: {{formatAmount(icoBalance, domain)}}</p>
         </div>
-        <div class="primary-button green-back" ng-click="ico_buy()" ng-disabled="!total">
+        <div class="primary-button green-back" ng-click="ico_buy()"
+             ng-disabled="!total || in_progress">
             Buy
         </div>
     </md-content>
