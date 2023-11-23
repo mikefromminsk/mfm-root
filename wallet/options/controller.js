@@ -4,6 +4,7 @@ function openOptionsDialog($rootScope, domain, success) {
         controller: function ($scope, $mdBottomSheet) {
             addFormats($scope)
             $scope.coin = $rootScope.coins[domain]
+            $scope.username = wallet.username
             $scope.contract = contract
 
             getContracts(domain, function (contracts) {

@@ -8,17 +8,19 @@
             </div>
         </div>
         <div class="primary-button" ng-click="giveaway()"
-                   ng-show="contracts[contract.drop]">
+             ng-show="contracts[contract.drop]">
             Drop {{coin.domain}}
         </div>
-        <div class="row">
-            <div class="flex primary-button green-back" ng-click="ico_buy()"
-                       ng-show="contracts[contract.ico_buy]">
+        <div class="row" ng-show="coin.price || coin.owner == username">
+            <div class="flex primary-button green-back"
+                 ng-click="ico_buy()"
+                 ng-show="contracts[contract.ico_buy] && coin.price">
                 Buy {{coin.domain}}
             </div>
-            <div style="width: 16px"></div>
-            <div class="flex primary-button red-back" ng-click="ico_sell()"
-                       ng-show="contracts[contract.ico_sell]">
+            <div style="width: 16px" ng-show="coin.price && coin.owner == username"></div>
+            <div class="flex primary-button red-back"
+                 ng-click="ico_sell()"
+                 ng-show="contracts[contract.ico_sell] && coin.owner == username">
                 Set price {{coin.domain}}
             </div>
         </div>

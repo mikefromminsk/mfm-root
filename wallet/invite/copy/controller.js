@@ -5,8 +5,14 @@ function openInviteCopy(domain, invite_key, success) {
             $scope.domain = domain
             $scope.link = window.location.protocol + "//" + window.location.hostname + "?bonus=" + domain + ":" + invite_key
             $scope.copy = function () {
-                //navigator.clipboard.writeText($scope.link)
-                //showSuccess("Link copied")
+                if (window.NativeAndroid != null) {
+                    window.NativeAndroid.share($scope.link)
+                } else {
+                    document.getElementById("link_input").focus();
+                    document.getElementById("link_input").select();
+                    document.execCommand("copy");
+                    showSuccess("Link copied")
+                }
             }
             $scope.close = function () {
                 $mdBottomSheet.hide()

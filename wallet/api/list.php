@@ -14,6 +14,7 @@ foreach ($domains as $domain) {
         domain => $domain,
         logo => "/wallet/img/coin.svg",
         path => $path,
+        owner => dataGet([wallet, info, $domain, owner]),
         price => dataGet([$domain, price]) ?: 0,
         balance => $address != null ? dataWalletBalance($path, $address) : null,
     ];

@@ -18,6 +18,5 @@ foreach ($ids as $id) {
 }
 
 $response[trans] = $trans;
-$response[ids] = json_encode($ids);
 
 commit($response);

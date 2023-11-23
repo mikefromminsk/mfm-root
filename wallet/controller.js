@@ -20,7 +20,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.newCoin = function () {
-        openLaunchDialog($scope, $scope.search_text, init)
+        openLaunchDialog($scope.search_text, init)
     }
 
     function init() {
