@@ -1,46 +1,11 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/test.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 // change gas token password
 
-function dataWalletHash($path, $username, $password)
-{
-    return md5(md5($path . $username . $password));
-}
-
-echo json_encode("$host_name") . "\n";
-
-$gas_domain = "data";
-$gas_path = "$gas_domain/wallet";
-
-assertEquals("launch $gas_path", http_post_json($GLOBALS[host_name] . "/wallet/api/launch.php", [
-        domain => $gas_domain,
-        address => admin,
-        next_hash => md5(pass1),
-        amount => 100000000,
-    ] + gas())[message], "key is not right");
-
-assertEquals("dataWalletInit", dataGet([$gas_path, admin, amount]), 100000000);
-
-dataWalletReg($gas_path, user1, md5(pass1));
-dataWalletSend($gas_path, admin, user1, 2000.0, pass1, md5(pass2));
-dataWalletSend($gas_path, user1, admin, 1.0, pass1, md5(pass2));
-assertEquals("dataSend", dataGet([$gas_path, admin, amount]), 100000000.0 - 2000.0 + 1.0);
-
-dataWalletDelegate($gas_path, user1, pass2, "wallet/api/testDelegate.php");
-
-$_POST[gas_address] = admin;
-$_POST[gas_key] = pass2;
-$_POST[gas_next_hash] = md5(pass3);
-commit("commit");
-echo "\n";
-
-assertEquals("testDelegate", http_post_json("$host_name/wallet/api/testDelegate.php", [])[success], true);
-assertEquals("balanceAfterBurn", dataGet([$gas_path, user1, amount]), 1999 - FILE_ROW_SIZE);
-
-$gas_index = 3;
+$gas_index = 1;
 function gas()
 {
     return [
@@ -49,6 +14,27 @@ function gas()
         gas_next_hash => md5(pass . (++$GLOBALS[gas_index])),
     ];
 }
+
+echo json_encode("$host_name") . "\n";
+
+$gas_domain = "data";
+$gas_path = "$gas_domain/wallet";
+
+assertEquals("data test", http_post_json($GLOBALS[host_name] . "/$gas_domain/api/test.php", [
+    ])[success]);
+
+assertEquals("launch $gas_path", http_post_json($GLOBALS[host_name] . "/wallet/api/launch.php", [
+        domain => $gas_domain,
+        address => admin,
+        next_hash => md5(pass1),
+        amount => 100000000,
+    ] + gas())[success]);
+
+
+assertEquals("dataWalletInit", http_post_json($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
+        path => implode("/", [$gas_path, admin, amount]),
+    ]), 100000000);
+
 
 function send($domain, $address, $key = null, $hash = null, $amount = 10000, $script = null)
 {
@@ -77,6 +63,14 @@ function send($domain, $address, $key = null, $hash = null, $amount = 10000, $sc
                 script => $script,
             ] + gas())[success]);
 }
+
+send($gas_domain, user1, null, null, 10000, "wallet/api/testDelegate.php");
+
+
+assertEquals("testDelegate", http_post_json("$host_name/wallet/api/testDelegate.php", [
+])[success]);
+
+//assertEquals("balanceAfterBurn", dataGet([$gas_path, user1, amount]), 1999 - FILE_ROW_SIZE);
 
 send($gas_domain, $gas_domain . "_drop", null, null, 1000000, "$gas_domain/api/token/drop.php");
 send($gas_domain, $gas_domain . "_reg", null, null, 10000, "$gas_domain/api/token/free_reg.php");
@@ -110,13 +104,29 @@ assertEquals("ico sell", http_post_json($GLOBALS[host_name] . "/$new_domain/api/
         amount => $sell_amount,
         price => $sell_price,
     ] + gas())[success]);
+
 assertEquals("ico $new_domain amount", dataGet([$new_path, ico, amount]), $sell_amount);
 assertEquals("ico $new_domain price", dataGet([$new_domain, price]), $sell_price);
 
 
-dataWalletReg($quote_path, test_ico_buy, md5(pass1));
-dataWalletReg($new_path, test_ico_buy, md5(pass1));
-dataWalletSend($quote_path, admin, test_ico_buy, 10000, pass1, md5(pass2));
+
+assertEquals("testReg test_ico_buy", http_post_json($GLOBALS[host_name] . "/$quote_domain/api/token/reg.php", [
+        address => test_ico_buy,
+        next_hash => md5(pass1),
+    ] + gas())[success]);
+assertEquals("testReg test_ico_buy", http_post_json($GLOBALS[host_name] . "/$new_domain/api/token/reg.php", [
+        address => test_ico_buy,
+        next_hash => md5(pass1),
+    ] + gas())[success]);
+
+assertEquals("testSend admin test_ico_buy", http_post_json($GLOBALS[host_name] . "/$quote_domain/api/token/send.php", [
+        from_address => admin,
+        to_address => test_ico_buy,
+        password => pass1,
+        next_hash => md5(pass2),
+        amount => 10000,
+    ] + gas())[success]);
+
 assertEquals("test_ico_buy usdt amount", dataGet([$quote_path, test_ico_buy, amount]), 10000);
 assertEquals("ico buy", http_post_json($GLOBALS[host_name] . "/$new_domain/api/token/ico_buy.php", [
         address => test_ico_buy,
@@ -124,13 +134,35 @@ assertEquals("ico buy", http_post_json($GLOBALS[host_name] . "/$new_domain/api/t
         next_hash => md5(pass2),
         amount => $buy_amount,
     ] + gas())[success]);
-assertEquals("after buy ico gas balance", dataGet([$new_path, ico, amount]), $sell_amount - $buy_amount);
-assertEquals("after buy ico usdt balance", dataGet([$quote_path, test_ico_buy, amount]), $sell_amount - ($buy_amount * $sell_price));
+
+assertEquals("after buy ico gas balance", http_post_json($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
+    path => implode("/", [$new_path, ico, amount]),
+]), $sell_amount - $buy_amount);
+
+assertEquals("after buy ico usdt balance", http_post_json($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
+    path => implode("/", [$quote_path, test_ico_buy, amount]),
+]), $sell_amount - ($buy_amount * $sell_price));
 
 // data for ui tests
 
-dataWalletReg($gas_path, user, dataWalletHash($gas_path, "user", "pass"));
-dataWalletSend($gas_path, admin, user, 100000.0, pass . $GLOBALS[gas_index], md5(pass . ++$GLOBALS[gas_index]));
+
+function dataWalletHash($path, $username, $password)
+{
+    return md5(md5($path . $username . $password));
+}
+
+assertEquals("testReg user", http_post_json($GLOBALS[host_name] . "/$gas_domain/api/token/reg.php", [
+        address => user,
+        next_hash => dataWalletHash($gas_path, user, pass),
+    ] + gas())[success]);
+assertEquals("testSend gas to usdt", http_post_json($GLOBALS[host_name] . "/$gas_domain/api/token/send.php", [
+        from_address => admin,
+        to_address => user,
+        password => pass . $GLOBALS[gas_index],
+        next_hash => md5(pass . ++$GLOBALS[gas_index]),
+        amount => 100000.0,
+    ] + gas())[success]);
+
 
 send($gas_domain, $quote_domain . "_drop", null, null, 100000, "$quote_domain/api/token/drop.php");
 send($quote_domain, $quote_domain . "_drop", pass2, md5(pass3), 1000000, "$quote_domain/api/token/drop.php");

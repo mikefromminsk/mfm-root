@@ -16,12 +16,16 @@ define("PAGE_SIZE_DEFAULT", 20);
 
 function dataCreateRow($data_parent_id, $data_key, $data_type)
 {
-    $GLOBALS["gas_bytes"] += FILE_ROW_SIZE;
-    return insertRowAndGetId("data", array(
-        "data_parent_id" => $data_parent_id,
-        "data_key" => $data_key,
-        "data_type" => $data_type,
-    ));
+    if ($GLOBALS[last_data_id] == null)
+        $GLOBALS[last_data_id] = scalar("select max(data_id) from `data`") ?: 1;
+    $GLOBALS[gas_bytes] += FILE_ROW_SIZE;
+    $data_id = ++$GLOBALS[last_data_id];
+    $GLOBALS[new_data][$data_id] = [
+        data_parent_id => $data_parent_id,
+        data_key => $data_key,
+        data_type => $data_type,
+    ];
+    return $data_id;
 }
 
 function dataNew($path, $create = false)
@@ -34,11 +38,14 @@ function dataNew($path, $create = false)
         if (!is_string($key))
             $key = "$key";
         $data_parent_id = $data_id;
-        $data = selectRowWhere("data", array(
-            "data_parent_id" => $data_parent_id,
-            "data_key" => $key,
-        ));
-        $data_id = $data["data_id"];
+        if ($GLOBALS[data_cache][$data_parent_id][$key] != null) {
+            $data_id = $GLOBALS[data_cache][$data_parent_id][$key];
+        } else {
+            $data_id = scalarWhere(data, data_id, [
+                data_parent_id => $data_parent_id,
+                data_key => $key,
+            ]);
+        }
         if ($data_id == null) {
             if ($create == true) {
                 $data_id = dataCreateRow($data_parent_id, $key, DATA_UNSET);
@@ -46,6 +53,7 @@ function dataNew($path, $create = false)
                 return null;
             }
         }
+        $GLOBALS[data_cache][$data_parent_id][$key] = $data_id;
     }
     return $data_id;
 }
@@ -55,7 +63,7 @@ function dataSet(array $path_array, $value)
     $data_id = dataNew($path_array, true);
     if ($data_id == null) return false;
     dataDeleteChildren($data_id);
-    $path = dataPath($data_id);
+    $path = implode("/", $path_array);
     $data = [data_value => $value];
     if (is_numeric($value) && !is_string($value)) {
         $data[data_type] = DATA_NUMBER;
@@ -77,11 +85,23 @@ function dataSet(array $path_array, $value)
         foreach ($value as $key => $subvalue)
             dataSet(array_merge($path_array, [$key]), $subvalue);
     }
-    updateWhere(data, $data, [data_id => $data_id]);
+    $GLOBALS[update_data][$data_id] = $data;
     $data[data_path] = $path;
-    insertRow(history, $data);
+    $GLOBALS[new_history][] = $data;
 }
 
+function dataNode($data_id){
+    $data = $GLOBALS[update_data][$data_id];
+    if ($data == null)
+        $data = $GLOBALS[new_data][$data_id];
+    if ($data == null)
+        $data = $GLOBALS[get_data][$data_id];
+    if ($data == null)  {
+        $data = selectRowWhere(data, [data_id => $data_id]);
+        $GLOBALS[get_data][$data_id] = $data;
+    }
+    return $data;
+}
 
 function dataGet(array $path)
 {
@@ -89,16 +109,16 @@ function dataGet(array $path)
     if ($data_id == null)
         return null;
     if (is_numeric($data_id))
-        $data_id = selectRowWhere("data", array("data_id" => $data_id));
-    if ($data_id["data_type"] == DATA_BOOL) {
-        $result = boolval($data_id["data_value"]);
-    } else if ($data_id["data_type"] == DATA_NUMBER) {
-        $result = doubleval($data_id["data_value"]);
-    } else if ($data_id["data_type"] == DATA_STRING) {
-        $result = $data_id["data_value"];
-    } else if ($data_id["data_type"] == DATA_FILE) {
-        $path = scalarWhere(hashes, path, [hash => $data_id["data_value"]]);
-        $result = file_get_contents($_SERVER["DOCUMENT_ROOT"] . $path);
+        $node = dataNode($data_id);
+    if ($node[data_type] == DATA_BOOL) {
+        $result = boolval($node[data_value]);
+    } else if ($node[data_type] == DATA_NUMBER) {
+        $result = doubleval($node[data_value]);
+    } else if ($node[data_type] == DATA_STRING) {
+        $result = $node[data_value];
+    } else if ($node[data_type] == DATA_FILE) {
+        $path = scalarWhere(hashes, path, [hash => $node[data_value]]);
+        $result = file_get_contents($_SERVER[DOCUMENT_ROOT] . $path);
     }
     return $result;
 }
@@ -127,15 +147,7 @@ function dataExist($path)
 {
     $data_id = dataNew($path);
     if ($data_id == null) return false;
-    return intval(scalarWhere("data", "count(*)", array("data_parent_id" => $data_id))) !== false;
-}
-
-function dataPath($data_id)
-{
-    $node = selectRowWhere(data, [data_id => $data_id]);
-    if ($node[data_parent_id] == null)
-        return $node[data_key];
-    return dataPath($node[data_parent_id]) . "/" . $node[data_key];
+    return true; //intval(scalarWhere(data, "count(*)", [data_parent_id => $data_id])) !== false;
 }
 
 function dataKeys(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
@@ -151,12 +163,11 @@ function dataCount(array $path)
     return select("select count(*) from `data` where data_parent_id = $data_id");
 }
 
-function dataHistory(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
+function dataHistory(array $path_array, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
     $offset = ($page - 1) * $size;
-    $data_id = dataNew($path);
-    $data_path = dataPath($data_id);
-    return selectList("select data_value from history where data_path = '$data_path' limit $offset, $size");
+    $path = explode("/", implode("/", $path_array));
+    return selectList("select data_value from history where data_path = '$path' limit $offset, $size");
 }
 
 function scriptPath()
@@ -197,5 +208,18 @@ function dataSearch($path, $search_text, $page = 1, $size = PAGE_SIZE_DEFAULT)
         if ($data_id == null) error("path '$path' not exist");
         return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'"
             . " limit $offset, $size");
+    }
+}
+
+function dataCommit()
+{
+    foreach ($GLOBALS[new_data] as $data_id => $data) {
+        insertRow(data, $data);
+    }
+    foreach ($GLOBALS[new_history] as $data) {
+        insertRow(history, $data);
+    }
+    foreach ($GLOBALS[update_data] as $data_id => $data) {
+        updateWhere(data, $data, [data_id => $data_id]);
     }
 }

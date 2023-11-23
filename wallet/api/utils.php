@@ -24,6 +24,9 @@ function dataWalletBalance($path, $address)
 
 function dataWalletSend($path, $from_address, $to_address, $amount, $key = null, $next_hash = null)
 {
+
+    //die(json_encode(md5($key)));
+    //die(json_encode(dataGet([$path, $from_address, next_hash])));
     if ($amount == 0)
         return true;
     if (dataWalletBalance($path, $from_address) < $amount)
@@ -59,7 +62,7 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
 
 function commit($response, $gas_address = null)
 {
-    if ($GLOBALS[gas_bytes] != 0)
+    if ($GLOBALS[gas_bytes] != 0) {
         if ($gas_address != null) {
             dataWalletSend("data/wallet",
                 $gas_address,
@@ -75,6 +78,8 @@ function commit($response, $gas_address = null)
                 get_required(gas_next_hash)
             );
         }
+        dataCommit();
+    }
     echo json_encode($response);
 }
 
