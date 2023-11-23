@@ -37,6 +37,10 @@ function openOptionsDialog($rootScope, domain, success) {
             $scope.share = function () {
                 openInvite($rootScope, domain, success)
             }
+
+            $scope.trans = function () {
+                openTransactions(domain)
+            }
         }
     })
 }

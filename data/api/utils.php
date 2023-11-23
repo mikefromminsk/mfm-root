@@ -134,7 +134,7 @@ function dataPath($data_id)
 {
     $node = selectRowWhere(data, [data_id => $data_id]);
     if ($node[data_parent_id] == null)
-        return "";
+        return $node[data_key];
     return dataPath($node[data_parent_id]) . "/" . $node[data_key];
 }
 
@@ -154,7 +154,9 @@ function dataCount(array $path)
 function dataHistory(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
     $offset = ($page - 1) * $size;
-    return selectList("select * from history where data_path = '$path' limit $offset, $size");
+    $data_id = dataNew($path);
+    $data_path = dataPath($data_id);
+    return selectList("select data_value from history where data_path = '$data_path' limit $offset, $size");
 }
 
 function scriptPath()

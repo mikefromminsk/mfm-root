@@ -26,10 +26,6 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
 {
     if ($amount == 0)
         return true;
-    /*if ($from_address == emitter
-        && dataGet([$path])) {
-        //transactions
-    }*/
     if (dataWalletBalance($path, $from_address) < $amount)
         error("$from_address balance is not enough in wallet $path");
     if (!dataExist([$path, $to_address])) error("$to_address receiver doesn't exist");
@@ -47,7 +43,17 @@ function dataWalletSend($path, $from_address, $to_address, $amount, $key = null,
     dataDec([$path, $from_address, amount], $amount);
     dataInc([$path, $to_address, amount], $amount);
 
-    /*dataAdd[transactions]*/
+    $domain = explode("/", $path)[0];
+    $last_trans = dataGet([$domain, last_trans]);
+    $next_trans = md5($last_trans . $from_address . $to_address . $amount);
+    dataSet([$domain, trans, $next_trans], [
+        from => $from_address,
+        to => $to_address,
+        amount => $amount,
+    ]);
+    dataSet([$domain, last_trans], $next_trans);
+    dataSet([$path, $from_address, last_trans], $next_trans);
+    dataSet([$path, $to_address, last_trans], $next_trans);
     return true;
 }
 

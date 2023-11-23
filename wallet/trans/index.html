@@ -1,0 +1,9 @@
+<md-bottom-sheet>
+    <md-content class="col input-content">
+        <div class="size16 uppercase">Transactions</div>
+        <div class="flex row" ng-repeat="item in trans">
+            <div class="flex size14">{{item.from == username ? item.to : item.from}}</div>
+            <div class="size14">{{(item.from == username ? "-" : "+") + formatAmount(item.amount, domain)}}</div>
+        </div>
+    </md-content>
+</md-bottom-sheet>
