@@ -4,12 +4,17 @@
         <div class="flex row input-wrapper">
             <div class="input-label-top">Name of token</div>
             <input id="launch_token_name"
+                   class="flex input lowercase"
                    autocapitalize="none"
                    type="text"
-                   class="flex input"
+                   minlength="3"
+                   maxlength="16"
+                   onkeypress="return event.charCode != 32"
                    ng-model="domain">
         </div>
-        <div class="primary-button" ng-click="launch()">
+        <div class="primary-button"
+             ng-click="launch()"
+             ng-disabled="!domain">
             Launch token
         </div>
     </md-content>

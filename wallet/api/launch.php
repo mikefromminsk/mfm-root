@@ -11,9 +11,10 @@ $contract = get_required(contract, "gas");
 
 $wallet_path = $domain . "/wallet";
 
+if (strlen($domain) < 3 || strlen($domain) > 16) error("domain length has to be between 3 and 16");
 if (dataExist($wallet_path)) error("path $wallet_path exist");
 
-http_post_json($GLOBALS[host_name] . "/wallet/contracts/archive.php", [
+http_post($GLOBALS[host_name] . "/wallet/contracts/archive.php", [
     domain => $contract,
 ]);
 

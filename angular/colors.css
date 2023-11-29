@@ -121,7 +121,7 @@
 }
 
 .lowercase {
-    text-transform: none;
+    text-transform: lowercase;
 }
 
 .bold-text {

@@ -2,6 +2,7 @@ function openSendDialog(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/send/index.html',
         controller: function ($scope, $mdBottomSheet) {
+            addFormats($scope)
             $scope.domain = domain
             if (DEBUG) {
                 $scope.to_address = 'user'
@@ -12,9 +13,9 @@ function openSendDialog(domain, success) {
                     $scope.to_address,
                     $scope.amount,
                     function () {
-                        $mdBottomSheet.hide()
+                        showSuccessDialog("Sent " + $scope.formatAmount($scope.amount, domain) + " success", success)
                     })
             }
         }
-    }).then(success)
+    })
 }

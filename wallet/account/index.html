@@ -1,0 +1,30 @@
+<md-bottom-sheet>
+    <md-content class="col">
+        <div class="row row-content align-start-center blue-back" style="padding: 8px 0">
+            <img class="img36 img-white"
+                 ng-click="back()"
+                 src="/wallet/img/back.svg"/>
+            <p class="flex size16 white-text"
+               style="margin-left: 16px">{{title}}</p>
+            <img class="img36 img-white"
+                 ng-click="logout()"
+                 ng-show="logged_in"
+                 src="/wallet/img/logout.svg"/>
+        </div>
+        <div class="col input-content">
+            <div class="row"
+                 ng-hide="logged_in">
+                <div class="flex primary-button lowercase"
+                     ng-click="login()">
+                    Login or Create account
+                </div>
+            </div>
+            <div class="row">
+                <div class="flex primary-button lowercase"
+                     ng-click="restart()">
+                    Restart UI
+                </div>
+            </div>
+        </div>
+    </md-content>
+</md-bottom-sheet>

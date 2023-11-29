@@ -166,7 +166,7 @@ function dataCount(array $path)
 function dataHistory(array $path_array, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
     $offset = ($page - 1) * $size;
-    $path = explode("/", implode("/", $path_array));
+    $path = implode("/", $path_array);
     return selectList("select data_value from history where data_path = '$path' limit $offset, $size");
 }
 

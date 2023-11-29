@@ -139,8 +139,11 @@ var wallet = {
         wallet.username = storage.getString(storageKeys.username)
         wallet.password = storage.getString(storageKeys.password)
     },
+    isLoggedIn: function () {
+        return !(wallet.username == "" || wallet.password == "")
+    },
     auth: function (success, error) {
-        if (wallet.username == "" || wallet.password == "") {
+        if (!this.isLoggedIn()) {
             let username = storage.getString(storageKeys.username)
             let password = storage.getString(storageKeys.password)
             if ((username == "" || password == "") && window.loginFunction != null) {

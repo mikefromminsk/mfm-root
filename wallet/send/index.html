@@ -3,15 +3,24 @@
         <div class="size16 uppercase">Send {{domain}}</div>
         <div class="flex row input-wrapper" style="margin-top: 16px">
             <div class="input-label-top">To address</div>
-            <input type="text" class="flex input" ng-model="to_address">
+            <input type="text"
+                   class="flex input"
+                   autocapitalize="none"
+                   minlength="3"
+                   maxlength="16"
+                   onkeypress="return event.charCode != 32"
+                   ng-model="to_address">
         </div>
         <div class="flex row input-wrapper" style="margin-top: 16px">
             <div class="input-label-top">Amount</div>
-            <input type="number" class="flex input" ng-model="amount">
+            <input type="number"
+                   autocapitalize="off"
+                   class="flex input"
+                   ng-model="amount">
         </div>
-        <md-button class="md-primary md-raised flex" ng-click="send()"
-                   ng-disabled="to_address == null || amount == null">
+        <div class="flex primary-button" ng-click="send()"
+                   ng-disabled="!to_address || !amount">
             Send {{locals.domain}}
-        </md-button>
+        </div>
     </md-content>
 </md-bottom-sheet>

@@ -1,0 +1,95 @@
+<md-bottom-sheet>
+    <md-content class="col">
+        <div class="row row-content align-start-center blue-back" style="padding: 8px 0">
+            <img class="img36 img-white"
+                 ng-click="back()"
+                 src="/wallet/img/back.svg"/>
+            <p class="flex size16 white-text"
+               ng-show="!search_opened">{{title}}</p>
+            <div class="flex row input-wrapper"
+                 ng-show="search_opened">
+                <input type="text"
+                       id="messages_search_input"
+                       autocapitalize="off"
+                       class="flex input white-back-ripple"
+                       ng-model="search_text"
+                       placeholder="Search"
+                       style="border-radius: 20px; padding-top: 1px">
+            </div>
+            <img class="img36 img-white"
+                 ng-click="toggleSearch()"
+                 src="/wallet/img/search.svg"/>
+        </div>
+        <div class="flex col col-content" ng-show="!to_address">
+            <div class="col" ng-repeat="item in dialogs">
+                <div class="row align-start-center row-content white-back-ripple coin-line"
+                     ng-click="selectToAddress(item)">
+                    <img class="img36 img-white"
+                         src="/wallet/img/user-circle.svg">
+                    <p class="flex size14 uppercase">{{item}}</p>
+                </div>
+                <div class="divider"></div>
+            </div>
+
+            <div class="col" ng-show="!dialogs.length">
+                <div class="flex row align-center-center size20 gray-text"
+                     style="margin: 50px 0">
+                    Nothing found
+                </div>
+            </div>
+
+            <div class="flex primary-button"
+                 ng-show="fcm_token != ''"
+                 ng-click="updateToken()">
+                Update token
+            </div>
+        </div>
+
+        <div class="flex col col-content" ng-show="to_address">
+            <div class="row row-content white-text"
+                 ng-repeat="item in messages">
+                <div class="flex row" ng-show="item.from_me">
+                    <div class="flex"></div>
+                    <div class="blue-back"
+                         style="margin-right: 20px; border-radius: 16px; padding: 8px 16px">
+                        {{item.text}}
+                    </div>
+                </div>
+                <div class="flex row" ng-hide="item.from_me">
+                    <div class="blue-back"
+                         style="margin-left: 20px; border-radius: 16px; padding: 8px 16px">
+                        {{item.text}}
+                    </div>
+                    <div class="flex"></div>
+                </div>
+            </div>
+            <div class="col" ng-show="!messages.length">
+                <div class="flex row align-center-center size20 gray-text"
+                     style="margin: 50px 0">
+                    Nothing found
+                </div>
+            </div>
+        </div>
+        <div style="height: 64px" ng-show="to_address"></div>
+        <div class="row row-content blue-back align-start-center"
+             style="position: absolute; height: 64px; width: 100%; left: 0; bottom: 0;"
+             ng-show="to_address">
+            <div class="flex row input-wrapper">
+                <input type="text"
+                       id="messages_send_input"
+                       autocapitalize="off"
+                       class="flex input white-back-ripple"
+                       ng-model="send_text"
+                       placeholder="Type message..."
+                       style="border-radius: 20px; padding-top: 1px">
+            </div>
+            <div class="row green-back-ripple green-back align-center-center"
+                 style="padding: 8px; border-radius: 300px;"
+                 ng-disabled="send_text"
+                 ng-click="send()">
+                <img class="img36 img-white"
+                     src="/wallet/img/send.svg"/>
+            </div>
+        </div>
+    </md-content>
+</md-bottom-sheet>

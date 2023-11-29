@@ -14,9 +14,12 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openOptionsDialog($scope, domain, init)
     }
 
-    $scope.logout = function () {
-        wallet.logout()
-        showSuccess("Success logout", init)
+    $scope.openAccount = function () {
+        openAccount(init)
+    }
+
+    $scope.openMessages = function () {
+        openMessages(init)
     }
 
     $scope.newCoin = function () {
@@ -46,6 +49,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     }
 
+    $scope.search_text = ''
     $scope.$watch('search_text', search)
 
     function updateCoins() {

@@ -38,7 +38,7 @@ p {
 }
 
 .col-content > * {
-    padding: 8px 16px 8px 16px;
+    padding: 8px 0;
 }
 
 .col-content > *:first-child {
@@ -79,7 +79,7 @@ input:disabled {
 }
 
 .input {
-    height: 56px;
+    height: 42px;
     outline: none;
     border-radius: 3px;
     font-size: 14px;

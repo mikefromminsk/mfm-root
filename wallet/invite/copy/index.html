@@ -10,7 +10,11 @@
                 <div class="row">
                     <div class="row input-wrapper">
                         <div class="input-label-top">Invite link with {{domain}}</div>
-                        <input type="text" id="link_input" class="input" ng-model="link">
+                        <input type="text"
+                               autocapitalize="off"
+                               id="link_input"
+                               class="input"
+                               ng-model="link">
                     </div>
                     <div class="primary-button lowercase green-back"
                          ng-click="copy()">
