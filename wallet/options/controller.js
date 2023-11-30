@@ -42,6 +42,10 @@ function openOptionsDialog($rootScope, domain, success) {
             $scope.trans = function () {
                 openTransactions(domain)
             }
+
+            $scope.contact = function () {
+                openMessages($scope.coin.owner, domain)
+            }
         }
     })
 }

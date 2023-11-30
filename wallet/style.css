@@ -7,3 +7,7 @@
 .coin-line {
     padding: 16px 0 16px 0;
 }
+
+md-bottom-sheet md-content{
+    max-height: 500px;
+}

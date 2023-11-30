@@ -19,7 +19,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.openMessages = function () {
-        openMessages(init)
+        openDialogs(init)
     }
 
     $scope.newCoin = function () {

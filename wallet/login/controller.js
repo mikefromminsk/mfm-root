@@ -11,6 +11,7 @@ function loginFunction(success) {
             }
             setFocus("first_input")
             $scope.login = function () {
+                // TODO validation
                 $scope.in_progress = true
                 wallet.login($scope.address, $scope.password,
                     function () {

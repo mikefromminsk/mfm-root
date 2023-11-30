@@ -9,7 +9,8 @@ define("DATA_NUMBER", 2);
 define("DATA_STRING", 3);
 define("DATA_FILE", 4);
 
-define("FILE_ROW_SIZE", 64);
+define("MAX_VALUE_SIZE", 256);
+define("FILE_ROW_SIZE", 256 + 64);
 define("HASH_ROW_SIZE", 32);
 
 define("PAGE_SIZE_DEFAULT", 20);
@@ -72,7 +73,7 @@ function dataSet(array $path_array, $value)
     } else if (is_null($value)) {
         $data[data_type] = DATA_NULL;
     } else if (is_string($value)) {
-        if (strlen($value) <= 64) {
+        if (strlen($value) <= MAX_VALUE_SIZE) {
             $data[data_type] = DATA_STRING;
         } else {
             $data[data_type] = DATA_FILE;
@@ -167,7 +168,7 @@ function dataHistory(array $path_array, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
     $offset = ($page - 1) * $size;
     $path = implode("/", $path_array);
-    return selectList("select data_value from history where data_path = '$path' limit $offset, $size");
+    return selectList("select data_value from history where data_path = '$path' order by id desc limit $offset, $size");
 }
 
 function scriptPath()
