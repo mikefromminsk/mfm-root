@@ -15,8 +15,6 @@ function gas()
     ];
 }
 
-echo json_encode("$host_name") . "\n";
-
 $gas_domain = "data";
 $gas_path = "$gas_domain/wallet";
 
@@ -30,6 +28,9 @@ assertEquals("launch $gas_path", http_post($GLOBALS[host_name] . "/wallet/api/la
         amount => 100000000,
     ] + gas())[success]);
 
+assertEquals("analytics $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
+        path => "analytics/$gas_domain/wallets/S60/value",
+    ]), 1);
 
 assertEquals("dataWalletInit", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
         path => implode("/", [$gas_path, admin, amount]),
@@ -66,6 +67,9 @@ function send($domain, $address, $key = null, $hash = null, $amount = 10000, $sc
 
 send($gas_domain, user1, null, null, 10000, "wallet/api/testDelegate.php");
 
+assertEquals("analytics data", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
+    path => "analytics/$gas_domain/wallets/S60/value",
+]), 2);
 
 assertEquals("testDelegate", http_post("$host_name/wallet/api/testDelegate.php", [
 ])[success]);
@@ -107,8 +111,9 @@ assertEquals("ico sell", http_post($GLOBALS[host_name] . "/$new_domain/api/token
 
 assertEquals("ico $new_domain amount", dataGet([$new_path, ico, amount]), $sell_amount);
 assertEquals("ico $new_domain price", dataGet([$new_domain, price]), $sell_price);
-
-
+assertEquals("analytics ico $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
+    path => "analytics/$new_domain/price/S60/open",
+]), $sell_price);
 
 assertEquals("testReg test_ico_buy", http_post($GLOBALS[host_name] . "/$quote_domain/api/token/reg.php", [
         address => test_ico_buy,

@@ -20,12 +20,11 @@ http_post($GLOBALS[host_name] . "/wallet/contracts/archive.php", [
 
 $response[files] = upload($domain, $_SERVER["DOCUMENT_ROOT"] . "/wallet/contracts/$contract.zip");
 
-dataWalletReg($wallet_path, $address, $next_hash);
+dataWalletReg($address, $next_hash, $domain);
 dataSet([$wallet_path, $address, amount], $amount);
 
 dataSet([wallet, info, $domain], [
     domain => $domain,
-    path => $wallet_path,
     owner => $address,
     total => $amount,
 ]);

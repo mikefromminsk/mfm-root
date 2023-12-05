@@ -59,7 +59,7 @@ function dataNew($path, $create = false)
     return $data_id;
 }
 
-function dataSet(array $path_array, $value)
+function dataSet(array $path_array, $value, $addHistory = true)
 {
     $data_id = dataNew($path_array, true);
     if ($data_id == null) return false;
@@ -87,17 +87,20 @@ function dataSet(array $path_array, $value)
             dataSet(array_merge($path_array, [$key]), $subvalue);
     }
     $GLOBALS[update_data][$data_id] = $data;
-    $data[data_path] = $path;
-    $GLOBALS[new_history][] = $data;
+    if ($addHistory) {
+        $data[data_path] = $path;
+        $GLOBALS[new_history][] = $data;
+    }
 }
 
-function dataNode($data_id){
+function dataNode($data_id)
+{
     $data = $GLOBALS[update_data][$data_id];
     if ($data == null)
         $data = $GLOBALS[new_data][$data_id];
     if ($data == null)
         $data = $GLOBALS[get_data][$data_id];
-    if ($data == null)  {
+    if ($data == null) {
         $data = selectRowWhere(data, [data_id => $data_id]);
         $GLOBALS[get_data][$data_id] = $data;
     }
@@ -155,13 +158,14 @@ function dataKeys(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
     $offset = ($page - 1) * $size;
     $data_id = dataNew($path);
+    if ($data_id == null) return [];
     return selectList("select data_key from `data` where data_parent_id = $data_id limit $offset, $size");
 }
 
 function dataCount(array $path)
 {
     $data_id = dataNew($path);
-    return select("select count(*) from `data` where data_parent_id = $data_id");
+    return scalar("select count(*) from `data` where data_parent_id = $data_id");
 }
 
 function dataHistory(array $path_array, $page = 1, $size = PAGE_SIZE_DEFAULT)
@@ -185,17 +189,17 @@ function getDomain()
     return explode("/", scriptPath())[0];
 }
 
-function dataInc(array $path, $inc_val)
+function dataInc(array $path, $inc_val, $addHistory = null)
 {
     $value = dataGet($path);
     $value = ($value ?: 0) + $inc_val;
-    dataSet($path, $value);
+    dataSet($path, $value, $addHistory);
     return $value;
 }
 
-function dataDec(array $path, $dec_val)
+function dataDec(array $path, $dec_val, $addHistory = null)
 {
-    return dataInc($path, -$dec_val);
+    return dataInc($path, -$dec_val, $addHistory);
 }
 
 function dataSearch($path, $search_text, $page = 1, $size = PAGE_SIZE_DEFAULT)

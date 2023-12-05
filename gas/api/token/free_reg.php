@@ -6,6 +6,6 @@ $next_hash = get_required(next_hash);
 
 $domain = getDomain();
 
-$response[success] = dataWalletReg($domain . "/wallet", $address, $next_hash);
+$response[success] = dataWalletReg($address, $next_hash);
 
 commit($response, $domain . "_reg");
