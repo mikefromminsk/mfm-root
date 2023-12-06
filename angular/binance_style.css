@@ -79,7 +79,7 @@ input:disabled {
 }
 
 .input {
-    height: 42px;
+    height: 38px;
     outline: none;
     border-radius: 3px;
     font-size: 14px;
@@ -121,9 +121,46 @@ input::-webkit-inner-spin-button {
     padding-top: 1px
 }
 
+.img38 {
+    width: 38px;
+    height: 38px;
+}
+
 .img36 {
     width: 36px;
     height: 36px;
+}
+
+.img24 {
+    width: 24px;
+    height: 24px;
+}
+
+.img22 {
+    width: 22px;
+    height: 22px;
+}
+
+.img20 {
+    width: 20px;
+    height: 20px;
+}
+
+.img16 {
+    width: 16px;
+    height: 16px;
+}
+
+.radius8 {
+    border-radius: 8px;
+}
+
+.radius16 {
+    border-radius: 16px;
+}
+
+.radius12 {
+    border-radius: 12px;
 }
 
 /* Ripple effect */
@@ -148,13 +185,25 @@ input::-webkit-inner-spin-button {
     text-transform: uppercase;
 }
 
+.button {
+    color: var(--accent);
+    padding: 8px 16px;
+    size: 14px;
+    border-radius: 8px;
+    border: var(--accent) solid 2px;
+    cursor: pointer;
+}
+
 .blue-back-ripple:active,
-.primary-button:active {
+.primary-button:active,
+.button:active {
+    color: var(--white);
     background-color: #8e8eea;
 }
 
 .primary-button:disabled,
-.primary-button[disabled]{
+.primary-button[disabled],
+.button[disabled]{
     color: rgba(0,0,0,0.38);
     cursor: default;
     background-color: rgba(0,0,0,0.12);

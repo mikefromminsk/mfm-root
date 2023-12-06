@@ -4,10 +4,19 @@
     height: 1px;
 }
 
-.coin-line {
-    padding: 16px 0 16px 0;
+md-bottom-sheet md-content {
+    max-height: 500px;
 }
 
-md-bottom-sheet md-content{
-    max-height: 500px;
+
+.tab {
+    border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+    border-bottom: 2px solid #4F50FB;
+}
+
+.header {
+    background-color: var(--bottom);
 }

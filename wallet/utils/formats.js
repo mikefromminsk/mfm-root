@@ -14,7 +14,6 @@ function addFormats($scope) {
             result = numberFormat.format($scope.round(number, 4))
         return result
     }
-
     $scope.formatPrice = function (number) {
         return "$" + shortNumber(number)
     }
@@ -28,17 +27,23 @@ function addFormats($scope) {
         return (domain || "").toUpperCase()
     }
     $scope.formatPercent = function (number) {
-        number = round(number, 0)
+        if (number === undefined) return ""
+        if (number == 0) return "0%";
+        number = $scope.round(number, 0)
         if (number < 0)
             return "-" + number + "%";
-        else if (number == 0)
-            return "0%";
         else if (number > 0)
             return "+" + number + "%";
     }
 
     $scope.percentColor = function (number) {
-        return {'green-text': number > 0, 'red-text': number < 0}
+        if (number === undefined) return ""
+        if (number == 0)
+            return {'gray-text': true}
+        if (number > 0)
+            return {'green-text': true}
+        if (number < 0)
+            return {'red-text': true}
     }
 
     $scope.timeFormat = function (number) {
@@ -46,7 +51,7 @@ function addFormats($scope) {
     }
 
     $scope.percentFormat = function (number) {
-        return round(number, 0) + "%";
+        return $scope.round(number, 0) + "%";
     }
 
     $scope.tickerFormat = function (ticker) {

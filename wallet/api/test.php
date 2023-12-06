@@ -24,6 +24,7 @@ assertEquals("data test", http_post($GLOBALS[host_name] . "/$gas_domain/api/test
 assertEquals("launch $gas_path", http_post($GLOBALS[host_name] . "/wallet/api/launch.php", [
         domain => $gas_domain,
         address => admin,
+        category => L1,
         next_hash => md5(pass1),
         amount => 100000000,
     ] + gas())[success]);
@@ -96,6 +97,7 @@ assertEquals("launch $quote_path", http_post($GLOBALS[host_name] . "/wallet/api/
         address => admin,
         next_hash => md5(pass1),
         amount => 10000000,
+        category => STABLECOIN,
     ] + gas())[launched], 10000000);
 
 $sell_amount = 10000;

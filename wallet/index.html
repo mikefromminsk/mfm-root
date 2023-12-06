@@ -44,25 +44,28 @@
          src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0ibm9uZSIgY2xhc3M9Imhkcy1mbGlnaHQtaWNvbi0tYW5pbWF0aW9uLWxvYWRpbmciPgoNPGcgZmlsbD0iIzAwMDAwMCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPgoNPHBhdGggZD0iTTggMS41YTYuNSA2LjUgMCAxMDAgMTMgNi41IDYuNSAwIDAwMC0xM3pNMCA4YTggOCAwIDExMTYgMEE4IDggMCAwMTAgOHoiIG9wYWNpdHk9Ii4yIi8+Cg08cGF0aCBkPSJNNy4yNS43NUEuNzUuNzUgMCAwMTggMGE4IDggMCAwMTggOCAuNzUuNzUgMCAwMS0xLjUgMEE2LjUgNi41IDAgMDA4IDEuNWEuNzUuNzUgMCAwMS0uNzUtLjc1eiIvPgoNPC9nPgoNPC9zdmc+"/>
 </div>
 
-<div class="row row-content align-start-center blue-back" style="padding: 8px 0">
-    <img class="img36 img-white white-back-ripple"
+<div class="row p8 align-start-center blue-back">
+    <img class="img36 p4 img-white white-back-ripple"
          ng-click="openAccount()"
          src="/wallet/img/settings.svg"/>
-    <div class="row flex input-wrapper">
+    <div class="row flex input-wrapper ml4">
+        <img class="img20 img-gray200"
+             style="position: absolute; left: 8px; top: 11px"
+             src="/wallet/img/search.svg">
         <input type="text"
+               class="flex input white-back-ripple"
                id="search_wrapper"
                autocapitalize="off"
-               class="flex input white-back-ripple"
                ng-model="search_text"
                placeholder="Search"
-               style="border-radius: 20px; padding-top: 1px">
+               style="border-radius: 24px; padding-top: 1px; padding-left: 34px">
     </div>
-    <img class="img36 img-white white-back-ripple"
+    <img class="img36 ml4 p4 img-white white-back-ripple"
          ng-click="openMessages()"
-         src="/wallet/img/messages.svg"/>
+         src="/wallet/img/support.svg"/>
 </div>
 <div class="flex col" style="overflow: auto">
-    <div class="col col-content" ng-show="search_text == ''">
+    <div class="col" ng-show="search_text == ''">
         <div class="col row-content" ng-show="drops.length">
             <p>Bonuses</p>
         </div>
@@ -77,20 +80,13 @@
             </div>
             <div class="divider"></div>
         </div>
-        <div class="row row-content"
+        <div class="row mt16 mh16 align-start-center"
              ng-show="activeDomains.length">
             <div class="flex col">
-                <p class="size12">Total balance</p>
-                <p class="size16 bold-text" style="margin-top: 4px">
-                    {{formatPrice(totalBalance())}}
-                </p>
+                <p class="size14 gray400-text">Total balance</p>
+                <p class="mt4 size24">{{formatPrice(totalBalance())}}</p>
             </div>
-            <div class="col align-end-end">
-                <p class="size12 uppercase">{{wallet.gas_domain}}</p>
-                <p class="size14 bold-text" style="margin-top: 4px">
-                    {{formatAmount(coins[wallet.gas_domain].balance)}}
-                </p>
-            </div>
+            <div class="button">Deposit</div>
         </div>
         <div class="row row-content"
              ng-hide="wallet.username">
@@ -99,27 +95,26 @@
                 Login or Create account
             </div>
         </div>
-        <div class="col row-content" ng-show="activeDomains.length">
-            <p>Your coins</p>
+        <div class="mh16 mt16" ng-show="activeDomains.length">
+            <p class="size14 gray400-text">Your coins</p>
         </div>
         <div class="col" ng-repeat="id in activeDomains">
-            <div class="row align-start-center row-content white-back-ripple coin-line"
+            <div class="row ph16 pv8 align-start-center white-back-ripple"
                  id="{{id}}_id"
                  ng-click="options(id)">
                 <img class="img36" src="{{coins[id].logo}}">
-                <p class="flex size14 uppercase">{{id}}</p>
+                <p class="flex ml8 size16 uppercase medium">{{id}}</p>
                 <p>{{formatPrice(coins[id].price)}}</p>
                 <div class="col align-end-end" style="min-width: 80px">
                     <p>{{formatPrice(coins[id].price * coins[id].balance)}}</p>
-                    <p class="size10" style="margin-top: 4px">
+                    <p class="size10">
                         {{formatAmount(coins[id].balance)}}
                     </p>
                 </div>
             </div>
             <div class="divider"></div>
         </div>
-        <div class="row"
-             style="padding: 16px"
+        <div class="mh16 mt16 row"
              ng-show="wallet.username">
             <div class="flex primary-button"
                  ng-click="newCoin()">
@@ -127,28 +122,26 @@
             </div>
         </div>
     </div>
-    <div class="col col-content">
-        <div class="col row-content" ng-show="search_text != ''">
-            <p>Search results</p>
+    <div class="mh16 mt16" ng-show="search_text != ''">
+        <p class="size14 gray400-text">Search results</p>
+    </div>
+    <div class="mh16 mt16" ng-show="search_text == ''">
+        <p class="size14 gray400-text">Recommended coins</p>
+    </div>
+    <div class="col white-back-ripple" ng-repeat="id in searchDomains">
+        <div class="row pv8 row-content align-start-center">
+            <img class="img36"
+                 src="{{coins[id].logo}}">
+            <p class="flex size14 uppercase">{{coins[id].domain}}</p>
+            <md-switch ng-change="toggleFavorite(id)"
+                       ng-model="coins[id].isFavorite"/>
         </div>
-        <div class="col row-content" ng-show="search_text == ''">
-            <p>Recommended coins</p>
-        </div>
-        <div class="col" ng-repeat="id in searchDomains">
-            <div class="row row-content align-start-center white-back-ripple coin-line">
-                <img class="img36"
-                     src="{{coins[id].logo}}">
-                <p class="flex size14 uppercase">{{coins[id].domain}}</p>
-                <md-switch ng-change="toggleFavorite(id)"
-                           ng-model="coins[id].isFavorite"/>
-            </div>
-            <div class="divider"></div>
-        </div>
-        <div class="col" ng-show="!searchDomains.length">
-            <div class="flex row align-center-center size20 gray-text"
-                 style="margin-top: 50px">
-                Nothing found
-            </div>
+        <div class="divider"></div>
+    </div>
+    <div class="col" ng-show="!searchDomains.length">
+        <div class="flex row align-center-center size20 gray-text"
+             style="margin-top: 50px">
+            Nothing found
         </div>
     </div>
 </div>
