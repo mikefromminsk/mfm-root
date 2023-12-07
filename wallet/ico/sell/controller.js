@@ -1,7 +1,7 @@
 function openIcoSell($rootScope, domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/ico/sell/index.html",
-        controller: function ($scope) {
+        controller: function ($scope, $mdBottomSheet) {
             addFormats($scope)
             $scope.domain = domain
             if (DEBUG) {
@@ -28,7 +28,7 @@ function openIcoSell($rootScope, domain, success) {
             })
 
             $scope.ico_sell = function () {
-                hasBalance(wallet.quote_domain, function () {
+                hasToken(wallet.quote_domain, function () {
                     wallet.calcKey(domain + "/wallet", function (key, hash, username) {
                         postContractWithGas(domain, contract.ico_sell, {
                             key: key,
@@ -41,6 +41,10 @@ function openIcoSell($rootScope, domain, success) {
                         })
                     })
                 })
+            }
+
+            $scope.back = function () {
+                $mdBottomSheet.hide()
             }
         }
     }).then(function () {

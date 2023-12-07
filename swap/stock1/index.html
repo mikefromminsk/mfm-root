@@ -136,14 +136,14 @@
         <div id="tradeChart" style="width: 100%; height: 300px" ng-show="showChart"></div>
         <md-content class="row line" style="margin-top: 12px">
             <div class="col" style="width: 200px;">
-                <div class="row gray-back" style="height: 32px; padding: 1px; border-radius: 3px">
+                <div class="row gray400-back" style="height: 32px; padding: 1px; border-radius: 3px">
                     <md-content class="flex row align-center-center green-text" style="border-radius: 3px"
-                                ng-class="{'white-back': !is_sell, ' gray-back': is_sell}" ng-click="is_sell = false"
+                                ng-class="{'white-back': !is_sell, ' gray400-back': is_sell}" ng-click="is_sell = false"
                                 md-ink-ripple>
                         {{str.buy}}
                     </md-content>
                     <md-content class="flex row align-center-center red-text" style="border-radius: 3px"
-                                ng-class="{'white-back': is_sell, ' gray-back': !is_sell}" ng-click="is_sell = true"
+                                ng-class="{'white-back': is_sell, ' gray400-back': !is_sell}" ng-click="is_sell = true"
                                 md-ink-ripple>
                         {{str.sell}}
                     </md-content>
@@ -185,7 +185,7 @@
             </div>
             <div class="flex col" style="margin-left: 10px">
 
-                <md-content class="row gray-back size14" style="height: 32px; padding: 1px; border-radius: 3px">
+                <md-content class="row gray400-back size14" style="height: 32px; padding: 1px; border-radius: 3px">
                     <div class="flex row align-center-center" style="border-radius: 3px"
                          ng-class="{'white-back': showChart}" ng-click="showChartToggle()" md-ink-ripple>
                         Chart
@@ -362,7 +362,7 @@
                     <div class="size16">{{item.name}}</div>
                     <div class="size16 " style="margin-left: 4px">{{item.ticker}}</div>
                 </div>
-                <div class="row gray-back" style="margin-top: 20px; height: 3px">
+                <div class="row gray400-back" style="margin-top: 20px; height: 3px">
                     <div class="green-back" ng-style="{'min-width': (item.founded / item.total * 100) + '%'}"></div>
                     <div class="flex"></div>
                 </div>
@@ -388,7 +388,7 @@
         <md-content class="col line col-content">
             <div class="size16">{{selectedStarter.name}}</div>
             <div class="row multiline-text">{{selectedStarter.description}}</div>
-            <div class="row gray-back" style="margin-top: 20px; height: 3px">
+            <div class="row gray400-back" style="margin-top: 20px; height: 3px">
                 <div class="green-back"
                      ng-style="{'min-width': (selectedStarter.founded / selectedStarter.total * 100) + '%'}"></div>
                 <div class="flex"></div>

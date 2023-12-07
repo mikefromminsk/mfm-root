@@ -7,11 +7,12 @@ $coin[domain] = $domain;
 $coin[total] = dataGet([wallet, info, $domain, total]);
 $coin[owner] = dataGet([wallet, info, $domain, owner]);
 $coin[logo] = "/wallet/img/coin.svg";
-$coin[category] = dataGet([wallet, info, $domain, category]);
+$coin[category] = dataGet([wallet, info, $domain, category]) ?: UNKNOWN;
 
 function addValue(&$coin, $domain, $key)
 {
     $val = dataGet([analytics, $domain, $key, "S" . (60 * 60 * 24), open]);
+    if ($val == null) return;
     $val24h = 12;//dataGet([analytics, $domain, $key, "S" . (60 * 60 * 24), open]);
     $val7d = dataGet([analytics, $domain, $key, "S" . (60 * 60 * 24 * 7), open]);
     $coin[$key] = $val;

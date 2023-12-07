@@ -79,13 +79,19 @@ input:disabled {
 }
 
 .input {
-    height: 38px;
+    background-color: var(--gray100);
+    color: var(--black);
+    height: 42px;
     outline: none;
     border-radius: 3px;
-    font-size: 14px;
+    font-size: 16px;
     padding-left: 12px;
-    padding-top: 6px;
+    padding-top: 1px;
     border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+::placeholder {
+    color: var(--gray200);
 }
 
 input::-webkit-outer-spin-button,
@@ -98,17 +104,17 @@ input::-webkit-inner-spin-button {
     top: -6px;
     left: 10px;
     position: absolute;
-    background-color: white;
+    background-color: var(--gray100);
     font-size: 12px;
     padding: 0 4px;
-    color: rgb(132, 142, 156);
+    color: var(--gray400);
 }
 
 .input-label-right {
     right: 0;
     padding: 11px 8px;
     font-size: 14px;
-    color: rgb(132, 142, 156);
+    color: var(--gray400);
     position: absolute;
 }
 
@@ -129,6 +135,11 @@ input::-webkit-inner-spin-button {
 .img36 {
     width: 36px;
     height: 36px;
+}
+
+.img32 {
+    width: 32px;
+    height: 32px;
 }
 
 .img24 {
@@ -159,13 +170,17 @@ input::-webkit-inner-spin-button {
     border-radius: 16px;
 }
 
+.radius24 {
+    border-radius: 24px;
+}
+
 .radius12 {
     border-radius: 12px;
 }
 
 /* Ripple effect */
 .white-back-ripple:active {
-    background-color: #d9d9d9;
+    background-color: var(--gray200);
 }
 
 .green-back-ripple:active {
@@ -178,7 +193,7 @@ input::-webkit-inner-spin-button {
 
 .blue-back-ripple,
 .primary-button {
-    background-color: #4F50FB;
+    background-color: var(--accent);
     border: none;
     border-radius: 2px;
     cursor: pointer;
@@ -204,9 +219,9 @@ input::-webkit-inner-spin-button {
 .primary-button:disabled,
 .primary-button[disabled],
 .button[disabled]{
-    color: rgba(0,0,0,0.38);
+    color: var(--gray200);
     cursor: default;
-    background-color: rgba(0,0,0,0.12);
+    background-color: var(--gray300);
 }
 
 

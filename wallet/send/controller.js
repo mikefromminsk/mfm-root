@@ -1,7 +1,7 @@
 function openSendDialog(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/send/index.html',
-        controller: function ($scope) {
+        controller: function ($scope, $mdBottomSheet) {
             addFormats($scope)
             $scope.domain = domain
             if (DEBUG) {
@@ -21,6 +21,9 @@ function openSendDialog(domain, success) {
                         })
                         showSuccessDialog("Sent " + $scope.formatAmount($scope.amount, domain) + " success", success)
                     })
+            }
+            $scope.back = function () {
+                $mdBottomSheet.hide()
             }
         }
     })

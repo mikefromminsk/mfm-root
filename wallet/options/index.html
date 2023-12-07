@@ -1,24 +1,23 @@
-<md-bottom-sheet class="col" style="height: 100%">
-    <div class="row pl8 pr16 pv8 header align-start-center upper-back">
-        <div class="col white-back-ripple" ng-click="back()">
+<md-bottom-sheet class="col bottom-back" style="height: 100%">
+    <div class="row pl8 pr16 pv16 align-start-center upper-back">
+        <div class="col mr4 white-back-ripple" ng-click="back()">
             <img class="img38 p8 img-black gray100-back radius16" src="/wallet/img/back.svg">
         </div>
-        <img class="ml4 img24" src="{{profile.logo}}">
-        <p class="flex ml8 size16 uppercase medium">{{profile.domain}}</p>
-        <div class="col align-start-end">
-            <p class="size18 medium">{{formatPrice(profile.price)}}</p>
+        <img class="img32" src="{{profile.logo}}">
+        <div class="col flex ml8">
+            <p class="size16 bold uppercase medium">{{profile.domain}}</p>
+            <p class="size12 gray400-text">{{profile.owner}}</p>
         </div>
         <div class="col p8 ml8 align-center-center radius8 gray200-back white-back-ripple"
              ng-click="toggleFavorite()">
             <img class="img16 img-black"
-                 ng-show="coin.favorite"
+                 ng-show="!isFavorite"
                  src="/wallet/img/favorite.svg">
             <img class="img16 img-warning"
-                 ng-show="!coin.favorite"
+                 ng-show="isFavorite"
                  src="/wallet/img/favorite-selected.svg">
         </div>
     </div>
-    <div class="divider"></div>
     <!--<div class="row">
         <div class="flex pv8 col align-center-center size14 white-back-ripple tab"
              ng-repeat="item in tabs"
@@ -31,10 +30,52 @@
         <div class="row mt16 align-start-center">
             <div class="flex col">
                 <p class="size14 gray400-text">Account balance</p>
-                <p class="mt4 size24">{{formatPrice(coin.balance * coin.price)}}</p>
+                <p class="mt4 size24" ng-show="coin.price">{{formatPrice(coin.balance * coin.price)}}</p>
+                <p class="mt4 size24" ng-show="!coin.price">{{formatAmount(coin.balance, coin.domain)}}</p>
             </div>
             <div class="button">Deposit</div>
         </div>
+
+
+        <div class="row scrollable-horizontal align-center-start">
+            <div class="col align-start-center white-back-ripple"
+                 ng-show="contracts[contract.drop]"
+                 ng-click="giveaway()">
+                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
+                    <img class="img24 img-accent" src="/wallet/img/gift.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Drop</p>
+            </div>
+            <div class="col align-start-center white-back-ripple"
+                 ng-show="contracts[contract.drop]"
+                 ng-click="sendDialog()">
+                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
+                    <img class="img24 img-accent" src="/wallet/img/qr.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Send</p>
+            </div>
+            <div class="col align-start-center white-back-ripple"
+                 ng-click="contact()">
+                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
+                    <img class="img24 img-accent" src="/wallet/img/support.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Support</p>
+            </div>
+            <div class="col align-start-center white-back-ripple"
+                 ng-show="contracts[contract.bonus_create]"
+                 ng-click="share()">
+                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
+                    <img class="img24 img-accent" src="/wallet/img/mail.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Invite</p>
+            </div>
+        </div>
+
+        <div class="col mt16" ng-show="profile.category">
+            <p class="size16 gray400-text">About {{profile.domain.toUpperCase()}}</p>
+            <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
+        </div>
+
 
         <div class="row mt16 scrollable-horizontal">
             <div class="col mr16">
@@ -79,45 +120,6 @@
             </div>
         </div>
 
-        <div class="row scrollable-horizontal align-center-start">
-            <div class="col align-start-center white-back-ripple"
-                 ng-show="contracts[contract.drop]"
-                 ng-click="giveaway()">
-                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
-                    <img class="img24 img-accent" src="/wallet/img/gift.svg">
-                </div>
-                <p class="size12 mt4 gray400-text">Drop</p>
-            </div>
-            <div class="col align-start-center white-back-ripple"
-                 ng-show="contracts[contract.drop]"
-                 ng-click="sendDialog()">
-                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
-                    <img class="img24 img-accent" src="/wallet/img/qr.svg">
-                </div>
-                <p class="size12 mt4 gray400-text">Send</p>
-            </div>
-            <div class="col align-start-center white-back-ripple"
-                 ng-click="contact()">
-                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
-                    <img class="img24 img-accent" src="/wallet/img/support.svg">
-                </div>
-                <p class="size12 mt4 gray400-text">Support</p>
-            </div>
-            <div class="col align-start-center white-back-ripple"
-                 ng-show="contracts[contract.bonus_create]"
-                 ng-click="share()">
-                <div class="p8 mt16 mh16 radius12 gray200-back row align-center">
-                    <img class="img24 img-accent" src="/wallet/img/mail.svg">
-                </div>
-                <p class="size12 mt4 gray400-text">Invite</p>
-            </div>
-        </div>
-
-        <div class="col mt16" ng-show="profile.category">
-            <p class="size16 gray400-text">About {{profile.domain.toUpperCase()}}</p>
-            <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
-        </div>
-
         <div class="col mt16" ng-show="profile.category">
             <p class="size16 gray400-text">Токеномика</p>
             <div class="mt8 size14">
@@ -127,34 +129,27 @@
                 </div>
                 <div class="row">
                     <p class="flex">Circulation supply</p>
-                    <p>{{formatAmount(profile.circulation, profile.domain)}}</p>
-                </div>
-                <div class="row">
-                    <p class="flex">To be mined</p>
-                    <p>{{formatAmount(profile.blocked, profile.domain)}}</p>
+                    <p>{{formatAmount(profile.pie.circulation, profile.domain)}}</p>
                 </div>
                 <div class="row">
                     <p class="flex">For sale</p>
-                    <p>{{formatAmount(profile.ieo, profile.domain)}}</p>
-                </div>
-                <div class="row">
-                    <p class="flex">Transaction in progress</p>
-                    <p>{{formatAmount(profile.bonus, profile.domain)}}</p>
+                    <p>{{formatAmount(profile.pie.ico, profile.domain)}}</p>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row m16" ng-show="coin.price || coin.owner == username">
+    <div class="row p16 upper-back"
+         ng-show="coin.price || coin.owner == username">
         <div class="flex primary-button green-back"
              ng-click="ico_buy()"
              ng-show="contracts[contract.ico_buy] && coin.price">
-            Buy {{coin.domain}}
+            Buy {{formatDomain(coin.domain)}}
         </div>
         <div style="width: 16px" ng-show="coin.price && coin.owner == username"></div>
         <div class="flex primary-button red-back"
              ng-click="ico_sell()"
              ng-show="contracts[contract.ico_sell] && coin.owner == username">
-            Set price {{coin.domain}}
+            Sell {{formatDomain(coin.domain)}}
         </div>
     </div>
 </md-bottom-sheet>

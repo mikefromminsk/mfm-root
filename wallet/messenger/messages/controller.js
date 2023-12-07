@@ -37,6 +37,8 @@ function openMessages(to_address, success) {
 
             $scope.back = function () {
                 $mdBottomSheet.hide()
+                if (timer)
+                    clearInterval(timer)
             }
 
             loadMessages()

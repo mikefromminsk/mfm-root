@@ -3,7 +3,7 @@ function showInfoDialog(message, success) {
         templateUrl: '/wallet/dialogs/info/index.html',
         controller: function ($scope, $mdBottomSheet) {
             $scope.message = message
-            $scope.close = function () {
+            $scope.back = function () {
                 $mdBottomSheet.hide()
             }
         }

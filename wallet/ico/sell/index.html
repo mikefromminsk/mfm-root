@@ -1,6 +1,11 @@
-<md-bottom-sheet>
-    <md-content class="col input-content">
-        <p class="size16">Send tokens for ICO</p>
+<md-bottom-sheet class="col bottom-back">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 white-back-ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
+        </div>
+        <p class="flex size16 uppercase">Sell {{domain}}</p>
+    </div>
+    <div class="col input-content">
         <div class="row">
             <div class="filter blue-back-ripple"
                  ng-class="{'active': item == selectedPortion}"
@@ -20,5 +25,5 @@
         <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price">
             Set price
         </div>
-    </md-content>
+    </div>
 </md-bottom-sheet>

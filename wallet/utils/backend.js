@@ -1,15 +1,15 @@
 const DEBUG = location.hostname == "localhost"
 
 let contract = {
-    send: '34ddc7c1919738b872759f3bf31169c5',
-    free_reg: '63aab45e9f08996695d2ddad5c8eac6a',
-    reg: '0902ce671e53ba0e175d78adc436b3ad',
-    drop: 'c160df2cdc5c96d6a9e9f61d01a47676',
+    send: '6ca3ad3fb30b51001944d4d90c2080d4',
+    free_reg: '3d2a3f12adf303a58f8cb37c9ef51fa1',
+    reg: 'b6aea855e7418054e0af65f2816452d0',
+    drop: 'cd5ce018bfe962a3b8ae4117370edb04',
     init: '772df88baecd34099df80f0e592a9bc7',
     ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
     ico_sell: '8d0a5b6afe2082197857d58faef59655',
     bonus_create: 'c15a06590129c3854558b5ec282ffdad',
-    bonus_receive: '2e0f34870639c61f4e42053cb34cec9f',
+    bonus_receive: '4368a2e5a2df87493e3d15f640027372',
     wallet: '7242feda3f24473a3f86d9bd886e4510',
 }
 

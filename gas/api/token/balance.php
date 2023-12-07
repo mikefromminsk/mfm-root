@@ -3,6 +3,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $address = get_required(address);
 
-$response = dataWalletBalance(getDomain() . "/wallet", $address);
+$response = dataWalletBalance(getDomain(), $address);
 
-include_once "free_commit.php";
+commit($response);

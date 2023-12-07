@@ -5,8 +5,6 @@ function openIcoBuy($rootScope, domain, success) {
             addFormats($scope)
             $scope.domain = domain
 
-            hasToken(domain)
-            hasBalance(wallet.quote_domain)
             $scope.balance = $rootScope.coins[wallet.quote_domain].balance
             $scope.price = $rootScope.coins[domain].price
 
@@ -30,20 +28,28 @@ function openIcoBuy($rootScope, domain, success) {
             }
 
             $scope.ico_buy = function () {
-                $scope.in_progress = true
-                wallet.calcKey("usdt/wallet", function (key, hash, username) {
-                    postContractWithGas(domain, contract.ico_buy, {
-                        address: username,
-                        key: key,
-                        next_hash: hash,
-                        amount: $scope.amount,
-                    }, function () {
-                        success()
-                        showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain))
-                    }, function () {
-                        $scope.in_progress = false
+                hasToken(domain, function () {
+                    hasBalance(wallet.quote_domain, function () {
+                        $scope.in_progress = true
+                        wallet.calcKey("usdt/wallet", function (key, hash, username) {
+                            postContractWithGas(domain, contract.ico_buy, {
+                                address: username,
+                                key: key,
+                                next_hash: hash,
+                                amount: $scope.amount,
+                            }, function () {
+                                success()
+                                showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain))
+                            }, function () {
+                                $scope.in_progress = false
+                            })
+                        })
                     })
                 })
+            }
+
+            $scope.back = function () {
+                $mdBottomSheet.hide()
             }
         }
     }).then(function () {

@@ -2,26 +2,33 @@ function openAccount(success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/account/index.html',
         controller: function ($scope, $mdBottomSheet) {
-            $scope.logged_in = wallet.isLoggedIn()
-            $scope.title = wallet.isLoggedIn() ? wallet.username : "Settings"
+            $scope.version = storage.getString("version", "0.14")
+            $scope.model = storage.getString("model", window.navigator.userAgent)
+            $scope.wallet = wallet
 
             $scope.back = function () {
                 $mdBottomSheet.hide()
             }
             $scope.logout = function () {
                 wallet.logout()
-                showSuccess("Success logout", function () {
-                    $mdBottomSheet.hide()
-                })
             }
             $scope.login = function () {
                 loginFunction(function () {
-                    $mdBottomSheet.hide()
+                    $scope.$apply()
                 })
             }
             $scope.restart = function () {
                 location.reload(true)
             }
+
+            $scope.openMessages = function () {
+                openMessages("admin")
+            }
+
+            $scope.openPage = function () {
+                window.open("/wallet/clear")
+            }
+
         }
     }).then(success)
 }

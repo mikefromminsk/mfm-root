@@ -2,6 +2,7 @@ function addFormats($scope) {
     $scope.round = function (num, precision) {
         return +(Math.round(num + "e+" + precision) + "e-" + precision)
     }
+
     function shortNumber(number) {
         number = $scope.round(number, 2)
         var numberFormat = new Intl.NumberFormat()
@@ -14,20 +15,35 @@ function addFormats($scope) {
             result = numberFormat.format($scope.round(number, 4))
         return result
     }
+
     $scope.formatPrice = function (number) {
+        if (number == null)
+            number = 0;
         return "$" + shortNumber(number)
     }
     $scope.formatAmount = function (number, domain) {
+        if (number == null)
+            number = 0;
         var result = shortNumber(number)
-        if (domain != null)
+        if (domain != null) {
+            if (domain.length > 5)
+                domain = domain.substr(0, 3)
             return result + " " + domain.toUpperCase()
+        }
         return result
+    }
+    $scope.formatDomain = function (domain) {
+        if (domain == null) return ""
+        if (domain.length > 5)
+            domain = domain.substr(0, 3)
+        return domain
     }
     $scope.formatTicker = function (domain) {
         return (domain || "").toUpperCase()
     }
     $scope.formatPercent = function (number) {
-        if (number === undefined) return ""
+        if (number == null)
+            number = 0;
         if (number == 0) return "0%";
         number = $scope.round(number, 0)
         if (number < 0)
@@ -39,7 +55,7 @@ function addFormats($scope) {
     $scope.percentColor = function (number) {
         if (number === undefined) return ""
         if (number == 0)
-            return {'gray-text': true}
+            return {'gray400-text': true}
         if (number > 0)
             return {'green-text': true}
         if (number < 0)

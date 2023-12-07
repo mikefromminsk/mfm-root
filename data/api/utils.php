@@ -205,15 +205,10 @@ function dataDec(array $path, $dec_val, $addHistory = null)
 function dataSearch($path, $search_text, $page = 1, $size = PAGE_SIZE_DEFAULT)
 {
     $offset = ($page - 1) * $size;
-    if ($path == "") {
-        return selectList("select data_key from `data` where data_parent_id is null and data_key like '$search_text%'"
-            . " limit $offset, $size");
-    } else {
-        $data_id = dataNew($path);
-        if ($data_id == null) error("path '$path' not exist");
-        return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'"
-            . " limit $offset, $size");
-    }
+    $data_id = dataNew($path);
+    if ($data_id == null) error("path '$path' not exist");
+    return selectList("select data_key from `data` where data_parent_id = $data_id and data_key like '$search_text%'"
+        . " limit $offset, $size");
 }
 
 function dataCommit()

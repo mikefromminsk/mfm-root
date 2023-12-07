@@ -1,30 +1,40 @@
-<md-bottom-sheet>
-    <md-content class="col">
-        <div class="row row-content align-start-center blue-back" style="padding: 8px 0">
-            <img class="img36 img-white"
-                 ng-click="back()"
-                 src="/wallet/img/back.svg"/>
-            <p class="flex size16 white-text"
-               style="margin-left: 16px">{{title}}</p>
-            <img class="img36 img-white"
-                 ng-click="logout()"
-                 ng-show="logged_in"
-                 src="/wallet/img/logout.svg"/>
+<md-bottom-sheet class="col bottom-back" style="height: 100%">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 white-back-ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
-        <div class="col input-content">
-            <div class="row"
-                 ng-hide="logged_in">
-                <div class="flex primary-button lowercase"
-                     ng-click="login()">
-                    Login or Create account
-                </div>
+        <p class="flex size16 uppercase">Settings</p>
+    </div>
+    <div class="flex col input-content scrollable-vertical">
+        <div class="row mt16 align-start-end"
+             ng-show="wallet.username">
+            <div class="flex row input-wrapper">
+                <div class="input-label-top">Username</div>
+                <input class="flex input"
+                       type="text"
+                       ng-model="wallet.username">
             </div>
-            <div class="row">
-                <div class="flex primary-button lowercase"
-                     ng-click="restart()">
-                    Restart UI
-                </div>
+            <div class="button" ng-click="logout()">Logout</div>
+        </div>
+        <div class="row"
+             ng-hide="wallet.username">
+            <div class="flex primary-button" ng-click="login()">
+                Login or Create account
             </div>
         </div>
-    </md-content>
+        <div class="row align-start-center white-back-ripple" ng-click="restart()">
+            <img class="img36 p8 img-black" src="/wallet/img/reload.svg">
+            <p>Reload UI</p>
+        </div>
+        <div class="row align-start-center white-back-ripple" ng-click="openPage()">
+            <img class="img36 p8 img-black" src="/wallet/img/doc.svg">
+            <p>Privacy policy</p>
+        </div>
+        <div class="row align-start-center white-back-ripple" ng-click="openMessages()">
+            <img class="img36 p8 img-black" src="/wallet/img/support.svg">
+            <p>Contact with support</p>
+        </div>
+        <p class="gray400-text">{{model}}</p>
+        <p class="gray400-text">v{{version}}</p>
+    </div>
 </md-bottom-sheet>

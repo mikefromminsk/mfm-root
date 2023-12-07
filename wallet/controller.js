@@ -19,7 +19,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.openMessages = function () {
-        openDialogs(init)
+        openMessages("admin")
     }
 
     $scope.newCoin = function () {
@@ -28,24 +28,25 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     function init() {
         $scope.activeDomains = storage.getStringArray(storageKeys.domains)
-        $scope.searchDomains = []
         $scope.bonuses = bonusesParse()
+        updateCoins()
         search("")
     }
+
     $scope.drops = []
     $scope.coins = {}
 
     function search(newValue) {
         if (newValue == null) return
-        post('/wallet/api/search.php', {
-            search_text: (newValue || "")
+        post("/wallet/api/list.php", {
+            search_text: (newValue || ""),
+            address: wallet.username,
         }, function (response) {
-            var searchDomains = []
-            for (const domain of response.result)
-                if ($scope.activeDomains.indexOf(domain) == -1)
-                    searchDomains.push(domain)
-            $scope.searchDomains = searchDomains
-            updateCoins()
+            $scope.search_result = []
+            for (const coin of response.result)
+                if ($scope.activeDomains.indexOf(coin.domain) == -1)
+                    $scope.search_result.push(coin)
+            $scope.$apply()
         })
     }
 
@@ -56,8 +57,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         var domains = {}
         domains[wallet.gas_domain] = true
         for (const domain of $scope.activeDomains)
-            domains[domain] = true
-        for (const domain of $scope.searchDomains)
             domains[domain] = true
         for (const bonus of $scope.bonuses)
             domains[bonus.domain] = true
@@ -82,7 +81,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         return totalBalance
     }
 
-    $scope.toggleFavorite = function (domain) {
+    $scope.addFavorite = function (domain) {
         wallet.auth(function (username) {
             postContract(domain, contract.wallet, {
                 address: username
@@ -107,7 +106,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             }
             $scope.activeDomains = storage.getStringArray(storageKeys.domains)
             $scope.search_text = ""
-            $scope.$apply()
+            init()
         }
     }
 

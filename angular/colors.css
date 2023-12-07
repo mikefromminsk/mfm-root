@@ -18,45 +18,40 @@
     --warning: #FFA000;
 }
 
-
 .black-text {
-    color: rgb(0, 0, 0);
+    color: var(--black);
 }
 
 .white-text {
-    color: rgb(255, 255, 255);
+    color: var(--white);
 }
 
 .blue-text {
-    color: rgb(79, 80, 251);
+    color: var(--accent);
 }
 
 .blue-back {
-    background-color: rgb(79, 80, 251);
+    background-color: var(--accent);
 }
 
 .green-text {
-    color: rgb(2, 192, 118);
+    color: var(--green);
 }
 
 .green-back {
-    background-color: rgb(2, 192, 118);
+    background-color: var(--green);
 }
 
 .white-back {
-    background-color: rgb(255, 255, 255);
+    background-color: var(--white);
 }
 
 .red-text {
-    color: rgb(248, 73, 96);
+    color: var(--red);
 }
 
 .red-back {
-    background-color: rgb(248, 73, 96);
-}
-
-.gray-text {
-    color: rgba(0, 0, 0, 0.66);
+    background-color: var(--red);
 }
 
 .gray100-text {
@@ -79,20 +74,28 @@
     color: var(--gray500);
 }
 
-.gray-back {
-    background-color: rgb(222, 222, 222);
-}
-
 .gray200-back {
     background-color: var(--gray200);
 }
 
+.gray300-back {
+    background-color: var(--gray300);
+}
+
+.gray400-back {
+    background-color: var(--gray400);
+}
+
+.gray500-back {
+    background-color: var(--gray500);
+}
+
 .upper-back {
-    background-color: var(--upper);
+    background-color: var(--bottom);
 }
 
 .bottom-back {
-    background-color: var(--bottom);
+    background-color: var(--upper);
 }
 
 /*https://codepen.io/sosuke/pen/Pjoqqp*/
@@ -403,7 +406,7 @@
 }
 
 .p16 {
-    margin: 16px;
+    padding: 16px;
 }
 
 .pl16 {
@@ -465,7 +468,7 @@
 }
 
 .shadow-black {
-    box-shadow: 0 0 2px 0 #b4b4b4;
+    box-shadow: 0 0 3px 0 var(--gray300);
 }
 
 .shadow-blue {
@@ -477,6 +480,6 @@
 }
 
 .scrollable-vertical {
-    overflow: paged-y-controls;
+    overflow: auto;
 }
 

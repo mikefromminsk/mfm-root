@@ -1,55 +1,48 @@
-<md-bottom-sheet>
-    <md-content class="col" style="max-height: 500px">
-        <div class="row row-content align-start-center blue-back" style="padding: 8px 0">
-            <img class="img36 img-white"
-                 ng-click="back()"
-                 src="/wallet/img/back.svg"/>
-            <p class="flex size16 white-text uppercase">{{to_address}}</p>
+<md-bottom-sheet class="col bottom-back" style="height: 100%">
+    <div class="row pl8 pr16 pv16 align-start-center upper-back">
+        <div class="col mr4 white-back-ripple" ng-click="back()">
+            <img class="img38 p8 img-black gray100-back radius16" src="/wallet/img/back.svg">
         </div>
-        <div class="col col-content"
-             id="messages_scroll"
-             style="overflow: auto">
-            <div class="row white-text"
-                 ng-repeat="item in messages">
-                <div class="flex row row-content" ng-show="item.from_me">
-                    <div class="flex"></div>
-                    <div class="blue-back"
-                         style="border-radius: 16px; padding: 8px 16px">
-                        {{item.text}}
-                    </div>
-                </div>
-                <div class="flex row row-content" ng-hide="item.from_me">
-                    <div class="blue-back"
-                         style="border-radius: 16px; padding: 8px 16px">
-                        {{item.text}}
-                    </div>
-                    <div class="flex"></div>
+        <p class="flex size16 uppercase">{{to_address}}</p>
+    </div>
+    <div class="flex col col-content scrollable-vertical"
+         id="messages_scroll">
+        <div class="row"
+             ng-repeat="item in messages">
+            <div class="flex row row-content" ng-show="item.from_me">
+                <div class="flex"></div>
+                <div class="blue-back"
+                     style="border-radius: 16px; padding: 8px 16px">
+                    {{item.text}}
                 </div>
             </div>
-            <div class="col" ng-show="!messages.length">
-                <div class="flex row align-center-center size20 gray-text"
-                     style="margin: 50px 0">
-                    Nothing found
+            <div class="flex row row-content" ng-hide="item.from_me">
+                <div class="blue-back"
+                     style="border-radius: 16px; padding: 8px 16px">
+                    {{item.text}}
                 </div>
+                <div class="flex"></div>
             </div>
         </div>
-        <div class="row row-content blue-back align-start-center">
-            <div class="flex row input-wrapper">
-                <input type="text"
-                       id="messages_send_input"
-                       autocapitalize="off"
-                       class="flex input white-back-ripple"
-                       ng-model="send_text"
-                       placeholder="Type message..."
-                       style="border-radius: 20px; padding-top: 1px">
-            </div>
-            <div class="row green-back-ripple green-back align-center-center"
-                 style="padding: 8px; border-radius: 300px;"
-                 ng-disabled="send_text"
-                 ng-click="send()">
-                <img class="img36 img-white"
-                     src="/wallet/img/send.svg"/>
+        <div class="col" ng-show="!messages.length">
+            <div class="flex row align-center-center size20"
+                 style="margin: 50px 0">
+                Nothing found
             </div>
         </div>
-    </md-content>
+    </div>
+    <div class="row pv16 ph16 align-start-center gray200-back">
+        <div class="flex row input-wrapper">
+            <input type="text"
+                   id="messages_send_input"
+                   autocapitalize="off"
+                   class="flex input gray200-back"
+                   ng-model="send_text"
+                   placeholder="Type message..."
+                   style="padding-top: 1px; border: none">
+        </div>
+        <div class="col white-back-ripple" ng-click="send()" ng-disabled="send_text">
+            <img class="img38 img-black" src="/wallet/img/send.svg">
+        </div>
+    </div>
 </md-bottom-sheet>

@@ -1,5 +1,11 @@
+body{
+    color: var(--black);
+    font-size: 14px;
+    background-color: var(--bottom);
+}
+
 .divider {
-    background-color: rgba(158, 158, 158, 0.33);
+    background-color: var(--upper);
     width: 100%;
     height: 1px;
 }
@@ -7,7 +13,6 @@
 md-bottom-sheet md-content {
     max-height: 500px;
 }
-
 
 .tab {
     border-bottom: 2px solid transparent;
@@ -19,4 +24,27 @@ md-bottom-sheet md-content {
 
 .header {
     background-color: var(--bottom);
+}
+
+md-dialog {
+    max-width: none;
+    max-height: none;
+}
+
+#messages_send_input::placeholder{
+    color: var(--gray400);
+}
+
+.button-gray {
+    color: var(--accent);
+    padding: 8px 16px;
+    size: 14px;
+    border-radius: 8px;
+    border: var(--gray400) solid 2px;
+    cursor: pointer;
+}
+
+
+.img-fav {
+    filter: invert(100%) sepia(44%) saturate(7500%) hue-rotate(3deg) brightness(102%) contrast(102%);
 }

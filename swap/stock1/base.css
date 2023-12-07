@@ -353,11 +353,11 @@ input:disabled{
     border-radius: 2px;
 }
 
-.gray-text {
+.gray400-text {
     color: rgba(0, 0, 0, 0.66);
 }
 
-.gray-back {
+.gray400-back {
     background-color: rgb(222, 222, 222);
     border-radius: 2px;
 }

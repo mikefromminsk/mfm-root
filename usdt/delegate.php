@@ -5,6 +5,6 @@ $address = get_required(address);
 $password = get_required(password);
 $script = get_required(script);
 
-$response[success] = dataWalletDelegate([usdt, wallet], $address, $password, $script);
+$response[success] = dataWalletDelegate(usdt, $address, $password, $script);
 
 commit($response);

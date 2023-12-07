@@ -1,5 +1,11 @@
-<md-bottom-sheet>
-    <md-content class="col input-content">
+<md-bottom-sheet class="col bottom-back">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 white-back-ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
+        </div>
+        <p class="flex size16 uppercase">Buy {{domain}}</p>
+    </div>
+    <div class="col input-content">
         <div class="row align-center-center">
             <p class="size16">Price: {{formatPrice(price)}}</p>
         </div>
@@ -31,5 +37,5 @@
              ng-disabled="!total || in_progress">
             Buy
         </div>
-    </md-content>
+    </div>
 </md-bottom-sheet>

@@ -8,6 +8,9 @@ function openLaunchDialog(domain, success) {
             if (DEBUG) {
                 $scope.domain = "super"
             }
+            $scope.back = function () {
+                $mdBottomSheet.hide()
+            }
             $scope.launch = function () {
                 hasBalance(wallet.gas_domain, function () {
                     postWithGas("/wallet/api/launch.php", {
