@@ -35,23 +35,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.drops = []
     $scope.coins = {}
 
-    function search(newValue) {
-        if (newValue == null) return
-        post("/wallet/api/list.php", {
-            search_text: (newValue || ""),
-            address: wallet.username,
-        }, function (response) {
-            $scope.searchCoins = []
-            var domains = storage.getStringArray(storageKeys.domains)
-            for (const coin of response.result)
-                if (domains.indexOf(coin.domain) == -1)
-                    $scope.searchCoins.push(coin)
-            $scope.$apply()
-        })
-    }
-
     function recommendations() {
-        post("/wallet/api/list.php", {
+        post("/wallet/api/search.php", {
             search_text: "",
         }, function (response) {
             $scope.recommendedCoins = []
@@ -64,17 +49,34 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.search_text = ''
-    $scope.$watch('search_text', search)
-
-    function updateCoins() {
-        post("/wallet/api/list.php", {
-            domains: storage.getStringArray(storageKeys.domains).join(","),
-            address: wallet.username,
+    $scope.$watch('search_text', function (newValue) {
+        if (newValue == null) return
+        post("/wallet/api/search.php", {
+            search_text: (newValue || ""),
         }, function (response) {
-            $scope.activeCoins = response.result
-            $scope.showBody = true
+            $scope.searchCoins = []
+            var domains = storage.getStringArray(storageKeys.domains)
+            for (const coin of response.result)
+                if (domains.indexOf(coin.domain) == -1)
+                    $scope.searchCoins.push(coin)
             $scope.$apply()
         })
+    })
+
+    function updateCoins() {
+        var domains = storage.getStringArray(storageKeys.domains)
+        if (domains.length > 0) {
+            post("/wallet/api/list.php", {
+                domains: domains.join(","),
+                address: wallet.username,
+            }, function (response) {
+                $scope.activeCoins = response.result
+                $scope.showBody = true
+                $scope.$apply()
+            })
+        } else {
+            $scope.showBody = true
+        }
     }
 
     $scope.totalBalance = function () {

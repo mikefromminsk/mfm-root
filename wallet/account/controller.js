@@ -30,5 +30,8 @@ function openAccount(success) {
             }
 
         }
-    }).then(success)
+    }).then(function () {
+        if (success)
+            success()
+    })
 }

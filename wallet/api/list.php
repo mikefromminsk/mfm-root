@@ -1,15 +1,10 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
-$domains = get_string(domains);
-$search_text = get_string(search_text);
+$domains = get_required(domains);
 $address = get_string(address);
 
-if ($domains != null){
-    $domains = explode(",", $domains);
-} else {
-    $domains = dataSearch("wallet/info", $search_text) ?: [];
-}
+$domains = explode(",", $domains);
 
 $response[result] = [];
 
@@ -24,9 +19,8 @@ foreach ($domains as $domain) {
     ];
 }
 
-usort($response[result], function($a, $b)
-{
-    return - strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
+usort($response[result], function ($a, $b) {
+    return -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
 });
 
 
