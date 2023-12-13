@@ -35,16 +35,65 @@ md-dialog {
     color: var(--gray400);
 }
 
-.button-gray {
-    color: var(--accent);
-    padding: 8px 16px;
-    size: 14px;
-    border-radius: 8px;
-    border: var(--gray400) solid 2px;
-    cursor: pointer;
-}
-
 
 .img-fav {
     filter: invert(100%) sepia(44%) saturate(7500%) hue-rotate(3deg) brightness(102%) contrast(102%);
 }
+
+
+.filter {
+    color: var(--black);
+    padding: 8px 16px 8px 16px;
+    border-radius: 16px;
+    border: 1px solid var(--accent);
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.filter.active {
+    background-color: var(--accent);
+}
+
+
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.logo{
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+}
+

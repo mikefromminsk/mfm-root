@@ -71,7 +71,7 @@
         </div>
         <div class="col" ng-repeat="item in bonuses">
             <div class="row ph16 pv8 align-start-center white-back-ripple" ng-click="receiveBonus(item)">
-                <img class="img36" src="{{coins[item.domain].logo}}">
+                <img class="logo" src="{{genLogo(item.logo)}}">
                 <p class="flex size14 uppercase">{{item.domain}}</p>
                 <div class="primary-button green-back">
                     Get
@@ -79,46 +79,22 @@
             </div>
             <div class="divider"></div>
         </div>
-        <div class="row mt16 mh16 align-start-center" ng-show="activeDomains.length">
-            <div class="flex col">
-                <p class="size14 gray400-text">Total balance</p>
-                <p class="mt4 size24">{{formatPrice(totalBalance())}}</p>
-            </div>
-            <div class="button">Deposit</div>
-        </div>
+
         <div class="row ph16 pt16" ng-hide="wallet.username">
             <div class="flex primary-button"
                  ng-click="login()">
                 Login or Create account
             </div>
         </div>
-        <div class="row mh16 mt16 gray300-text" ng-show="activeDomains.length">
-            <p class="flex size14 gray400-text">Your coins</p>
-            <p class="size12">Price</p>
-            <p class="size12 row align-end" style="min-width: 80px">Balance</p>
-        </div>
-        <div class="col" ng-repeat="id in activeDomains">
-            <div class="row ph16 pv8 align-start-center white-back-ripple"
-                 id="{{id}}_id"
-                 ng-click="options(id)">
-                <img class="img32" src="{{coins[id].logo}}">
-                <div class="col flex ml8">
-                    <p class="size16 bold uppercase medium">{{id}}</p>
-                    <p class="size12 gray400-text">{{coins[id].owner}}</p>
-                </div>
-                <div class="col align-end-end">
-                    <p>{{formatPrice(coins[id].price)}}</p>
-                    <p class="size10 mt4" ng-class="percentColor(coins[id].price24hChange)">
-                        {{formatPercent(coins[id].price24hChange)}}
-                    </p>
-                </div>
-                <div class="col align-end-end" style="min-width: 80px">
-                    <p>{{formatPrice(coins[id].price * coins[id].balance)}}</p>
-                    <p class="size10 mt4">{{formatAmount(coins[id].balance)}}</p>
-                </div>
+
+        <div class="row mt16 mh16 align-start-center" ng-show="activeCoins.length">
+            <div class="flex col">
+                <p class="size14 gray400-text">Total balance</p>
+                <p class="mt4 size24">{{formatPrice(totalBalance())}}</p>
             </div>
-            <div class="divider"></div>
+            <div class="button">Deposit</div>
         </div>
+
         <div class="mh16 mt16 row"
              ng-show="wallet.username">
             <div class="flex primary-button"
@@ -126,35 +102,79 @@
                 New coin
             </div>
         </div>
+
+        <div class="row mh16 mt16 gray300-text" ng-show="activeCoins.length">
+            <p class="flex size14 gray400-text">Your coins</p>
+            <p class="size12">Price</p>
+            <p class="size12 row align-end" style="min-width: 80px">Balance</p>
+        </div>
+        <canvas class="img36" id="last_logo" width="50" height="50" style="display: none"></canvas>
+        <div class="col" ng-repeat="coin in activeCoins">
+            <div class="row ph16 pv8 align-start-center white-back-ripple"
+                 ng-click="options(coin)">
+                <img class="logo" src="{{genLogo(coin.logo)}}">
+                <div class="col flex ml8">
+                    <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                    <p class="size12 gray400-text">{{coin.owner}}</p>
+                </div>
+                <div class="col align-end-end">
+                    <p>{{formatPrice(coin.price)}}</p>
+                    <p class="size10 mt4" ng-class="percentColor(coin.price24hChange)">
+                        {{formatPercent(coin.price24hChange)}}
+                    </p>
+                </div>
+                <div class="col align-end-end" style="min-width: 80px">
+                    <p>{{formatPrice(coin.price * coin.balance)}}</p>
+                    <p class="size10 mt4">{{formatAmount(coin.balance)}}</p>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
+
+        <div class="mh16 mt16" ng-show="recommendedCoins.length">
+            <p class="size14 gray400-text">Recommended coins</p>
+        </div>
+        <div class="col white-back-ripple"
+             ng-repeat="coin in recommendedCoins"
+             ng-click="options(coin)">
+            <div class="row pv8 ph16 align-start-center">
+                <img class="logo" src="{{genLogo(coin.logo)}}">
+                <div class="col flex ml8">
+                    <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                    <p class="size12 gray400-text">{{coin.owner}}</p>
+                </div>
+                <div class="col ml8 align-center-center button-gray p8"
+                     ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
+                    <img class="img16 img-gray400" src="/wallet/img/favorite.svg">
+                </div>
+            </div>
+            <div class="divider"></div>
+        </div>
     </div>
     <div class="mh16 mt16" ng-show="search_text != ''">
         <p class="size14 gray400-text">Search results</p>
-    </div>
-    <div class="mh16 mt16" ng-show="search_text == ''">
-        <p class="size14 gray400-text">Recommended coins</p>
-    </div>
-    <div class="col white-back-ripple"
-         ng-repeat="coin in search_result"
-         ng-click="options(coin.domain)">
-        <div class="row pv8 ph16 align-start-center">
-            <img class="img32" src="{{coin.logo}}">
-            <div class="col flex ml8">
-                <p class="size16 bold uppercase medium">{{coin.domain}}</p>
-                <p class="size12 gray400-text">{{coin.owner}}</p>
+        <div class="col pv8 white-back-ripple"
+             ng-repeat="coin in searchCoins"
+             ng-click="options(coin)">
+            <div class="row pv8 align-start-center">
+                <img class="logo" src="{{genLogo(coin.logo)}}">
+                <div class="col flex ml8">
+                    <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                    <p class="size12 gray400-text">{{coin.owner}}</p>
+                </div>
+                <div class="col ml8 align-center-center button-gray p8"
+                     ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
+                    <img class="img16 img-gray400" src="/wallet/img/favorite.svg">
+                </div>
             </div>
-
-            <div class="col p8 ml8 align-center-center radius8"
-                 style="border: 1px solid var(--gray300)"
-                 ng-click="addFavorite(coin.domain); $event.stopPropagation()">
-                <img class="img16 img-gray400" src="/wallet/img/favorite.svg">
-            </div>
+            <div class="divider"></div>
         </div>
-        <div class="divider"></div>
-    </div>
-    <div class="col" ng-show="!searchDomains.length">
-        <div class="row align-center-center size20 gray400-text"
-             style="height: 200px">
-            Nothing found
+
+        <div class="col" ng-hide="searchCoins.length">
+            <div class="row align-center-center size20 gray400-text"
+                 style="height: 200px">
+                Nothing found
+            </div>
         </div>
     </div>
 </div>
@@ -173,8 +193,6 @@
 
 <script async src="/wallet/dialogs/success/controller.js"></script>
 <script async src="/wallet/dialogs/info/controller.js"></script>
-
-<script async src="/wallet/launch/canvas2svg.js"></script>
 
 <script src="/wallet/login/controller.js"></script>
 <script src="/wallet/controller.js"></script>

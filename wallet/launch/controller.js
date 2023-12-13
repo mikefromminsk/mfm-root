@@ -11,54 +11,67 @@ function openLaunchDialog(domain, success) {
             $scope.back = function () {
                 $mdBottomSheet.hide()
             }
-            $scope.launch = function () {
-                hasBalance(wallet.gas_domain, function () {
-                    postWithGas("/wallet/api/launch.php", {
-                        domain: $scope.domain,
-                        address: wallet.username,
-                        next_hash: wallet.calcStartHash($scope.domain + "/wallet"),
-                        amount: 1000000,
-                    }, function () {
-                        storage.pushToArray(storageKeys.domains, $scope.domain)
-                        showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched", success)
-                    })
-                })
+
+            $scope.selectedIndex = 0
+
+            $scope.category = Object.keys(tokenCategories)[0]
+
+            $scope.categories = tokenCategories
+            $scope.selectCategory = function (key) {
+                $scope.category = key
             }
-            setFocus("launch_token_name")
 
-
-            async function generateLogo() {
-                function hexString(t) {
-                    return [...new Uint8Array(t)].map(t => t.toString(16).padStart(2, "0")).join("")
+            $scope.next = function () {
+                if ($scope.selectedIndex < 3) {
+                    $scope.selectedIndex += 1;
+                } else {
+                    hasBalance(wallet.gas_domain, function () {
+                        postWithGas("/wallet/api/launch.php", {
+                            domain: $scope.domain,
+                            address: wallet.username,
+                            logo: $scope.logo,
+                            category: $scope.category,
+                            next_hash: wallet.calcStartHash($scope.domain + "/wallet"),
+                            amount: 1000000,
+                        }, function () {
+                            storage.pushToArray(storageKeys.domains, $scope.domain)
+                            $scope.startLaunching()
+                        })
+                    })
                 }
+            }
 
+            $scope.generate = async function () {
                 function getHash(t) {
                     let e = (new TextEncoder).encode(t);
                     return window.crypto.subtle.digest("SHA-1", e)
                 }
-
-                function getColor(t) {
-                    return "#" + t.slice(-6)
+                function hexString(t) {
+                    return [...new Uint8Array(t)].map(t => t.toString(16).padStart(2, "0")).join("")
                 }
-                let canvas = document.getElementById("logo_canvas")
-                let e = hexString(await getHash($scope.domain))
-                let wh = canvas.height / 5
-                let r = canvas.getContext("2d"), o = getColor(e);
-                for (let t = 0; t < 5; t++)
-                    for (let n = 0; n < 5; n++) {
-                        r.fillStyle = "white"
-                        r.moveTo(t + wh * n, wh * (n + 1))
-                        parseInt(e.charAt(3 * t + (n > 2 ? 4 - n : n)), 16) % 2 && (r.fillStyle = o)
-                        r.fillRect(wh * n, wh * t, wh, wh)
-                        r.stroke()
-                    }
+                $scope.logo = hexString(await getHash(randomString(4)))
             }
+            $scope.generate()
 
-            $scope.$watch(function (newValue) {
-                if (newValue == null) return
-                generateLogo()
-            })
-
+            $scope.stages = [
+                "Upload contracts",
+                "Initializing token",
+                "Global registration",
+            ]
+            $scope.stageIndex = -1
+            $scope.in_progress = false
+            $scope.startLaunching = function () {
+                $scope.in_progress = true
+                $scope.stageIndex += 1
+                $scope.$apply()
+                setTimeout(function () {
+                    if ($scope.stageIndex < $scope.stages.length - 1){
+                        $scope.startLaunching()
+                    } else {
+                        showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched", success)
+                    }
+                }, 3000)
+            }
         }
     }).then(function () {
         if (success)

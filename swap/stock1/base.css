@@ -303,9 +303,6 @@ input:disabled{
     filter: invert(0%) sepia(1%) saturate(7492%) hue-rotate(343deg) brightness(107%) contrast(95%);
 }
 
-.filter-blue {
-}
-
 .fullscreen {
     width: 100%;
     height: 100%;

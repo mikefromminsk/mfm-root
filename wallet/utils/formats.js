@@ -73,4 +73,26 @@ function addFormats($scope) {
     $scope.tickerFormat = function (ticker) {
         return ticker.toUpperCase()
     }
+
+    $scope.genLogo = function (logo) {
+        function getColor(t) {
+            return "#" + t.slice(-6)
+        }
+        let canvas = document.createElement("canvas")
+        canvas.width = 32
+        canvas.height = 32
+        let wh = canvas.height / 5
+        let context = canvas.getContext("2d")
+        let o = getColor(logo);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        for (let t = 0; t < 5; t++)
+            for (let n = 0; n < 5; n++) {
+                context.fillStyle = "transparent"
+                context.moveTo(t + wh * n, wh * (n + 1))
+                parseInt(logo.charAt(3 * t + (n > 2 ? 4 - n : n)), 16) % 2 && (context.fillStyle = o)
+                context.fillRect(wh * n, wh * t, wh, wh)
+                context.stroke()
+            }
+        return canvas.toDataURL()
+    }
 }

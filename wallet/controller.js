@@ -10,8 +10,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         loginFunction(init)
     }
 
-    $scope.options = function (domain) {
-        openOptionsDialog($scope, domain, init)
+    $scope.options = function (coin) {
+        openOptionsDialog($scope, coin, init)
     }
 
     $scope.openAccount = function () {
@@ -27,10 +27,9 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     function init() {
-        $scope.activeDomains = storage.getStringArray(storageKeys.domains)
         $scope.bonuses = bonusesParse()
         updateCoins()
-        search("")
+        recommendations()
     }
 
     $scope.drops = []
@@ -42,10 +41,24 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             search_text: (newValue || ""),
             address: wallet.username,
         }, function (response) {
-            $scope.search_result = []
+            $scope.searchCoins = []
+            var domains = storage.getStringArray(storageKeys.domains)
             for (const coin of response.result)
-                if ($scope.activeDomains.indexOf(coin.domain) == -1)
-                    $scope.search_result.push(coin)
+                if (domains.indexOf(coin.domain) == -1)
+                    $scope.searchCoins.push(coin)
+            $scope.$apply()
+        })
+    }
+
+    function recommendations() {
+        post("/wallet/api/list.php", {
+            search_text: "",
+        }, function (response) {
+            $scope.recommendedCoins = []
+            var domains = storage.getStringArray(storageKeys.domains)
+            for (const coin of response.result)
+                if (domains.indexOf(coin.domain) == -1)
+                    $scope.recommendedCoins.push(coin)
             $scope.$apply()
         })
     }
@@ -54,18 +67,11 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.$watch('search_text', search)
 
     function updateCoins() {
-        var domains = {}
-        domains[wallet.gas_domain] = true
-        for (const domain of $scope.activeDomains)
-            domains[domain] = true
-        for (const bonus of $scope.bonuses)
-            domains[bonus.domain] = true
         post("/wallet/api/list.php", {
-            domains: Object.keys(domains).join(","),
+            domains: storage.getStringArray(storageKeys.domains).join(","),
             address: wallet.username,
         }, function (response) {
-            for (const coin of response.result)
-                $scope.coins[coin.domain] = coin
+            $scope.activeCoins = response.result
             $scope.showBody = true
             $scope.$apply()
         })
@@ -73,15 +79,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     $scope.totalBalance = function () {
         var totalBalance = 0
-        for (const domain of $scope.activeDomains.values()) {
-            var coin = $scope.coins[domain]
-            if (coin != null)
+        if ($scope.activeCoins != null)
+            for (const coin of $scope.activeCoins)
                 totalBalance += coin.price * coin.balance
-        }
         return totalBalance
     }
 
-    $scope.addFavorite = function (domain) {
+    $scope.addFavorite = function (domain, success) {
         wallet.auth(function (username) {
             postContract(domain, contract.wallet, {
                 address: username
@@ -97,7 +101,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             })
         })
 
-
         function addToStorage(domain) {
             if (!storage.isArrayItemExist(storageKeys.domains, domain)) {
                 storage.pushToArray(storageKeys.domains, domain)
@@ -106,8 +109,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             }
             $scope.activeDomains = storage.getStringArray(storageKeys.domains)
             $scope.search_text = ""
-            init()
+            if (success)
+                success()
         }
+    }
+
+    $scope.toggleFavorite = function (domain) {
+        $scope.addFavorite(domain, init)
     }
 
     setInterval(function () {
@@ -154,4 +162,10 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
     $scope.wallet = wallet
     init()
+
+    window.tokenCategories = {
+        UNKNOWN: "Это цифровой актив, который используется для представления определенной ценности или права в блокчейн-системе. Он может быть использован для обеспечения безопасности и защиты данных, а также для доступа к определенным ресурсам или функциям в децентрализованной среде. Крипто токены могут быть созданы и управляться на основе различных стандартов, таких как ERC-20, ERC-721 и другие.",
+        L1: "Токен для оплаты газа в блокчейне - это цифровой токен, который используется для оплаты комиссий за выполнение транзакций в сети блокчейн. Он является необходимым элементом для обеспечения работы сети и поддержания ее безопасности. Количество токенов, необходимых для выполнения транзакции, зависит от сложности операции и текущей загруженности сети.",
+        STABLECOIN: "Stablecoin - это криптовалюта, которая призвана сохранять свою стоимость относительно определенного актива, такого как доллар США или золото. Она обычно используется для уменьшения волатильности криптовалютного рынка и обеспечения стабильности цены.",
+    }
 }

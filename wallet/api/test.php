@@ -25,6 +25,7 @@ assertEquals("launch $gas_path", http_post($GLOBALS[host_name] . "/wallet/api/la
         domain => $gas_domain,
         address => admin,
         category => L1,
+        logo => sha1($gas_domain),
         next_hash => md5(pass1),
         amount => 100000000,
     ] + gas())[success]);
@@ -87,6 +88,7 @@ assertEquals("launch $new_path", http_post($GLOBALS[host_name] . "/wallet/api/la
         domain => $new_domain,
         address => admin,
         next_hash => md5(pass1),
+        logo => sha1($new_domain),
         amount => 10000000,
     ] + gas())[launched], 10000000);
 
@@ -96,6 +98,7 @@ assertEquals("launch $quote_path", http_post($GLOBALS[host_name] . "/wallet/api/
         domain => $quote_domain,
         address => admin,
         next_hash => md5(pass1),
+        logo => sha1($quote_domain),
         amount => 10000000,
         category => STABLECOIN,
     ] + gas())[launched], 10000000);

@@ -1,31 +1,78 @@
-<md-bottom-sheet class="col bottom-back">
+<md-bottom-sheet class="col bottom-back" style="height: 100%">
     <div class="row ph8 pv16 align-start-center upper-back">
         <div class="col mr4 white-back-ripple" ng-click="back()">
             <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
         <p class="flex size16 uppercase">New coin</p>
     </div>
-    <div class="input-content">
-        <div class="row">
-            <div class="col">
-                <canvas class="img36" id="logo_canvas" width="36" height="36"></canvas>
+    <md-tabs class="flex" md-selected="selectedIndex">
+        <md-tab label="Name">
+            <div class="fill row align-center-center">
+                <div class="flex row">
+                    <div class="flex col align-start-center input-content">
+                        <h2>Type token name</h2>
+                        <div class="flex row input-wrapper">
+                            <input id="launch_token_name"
+                                   class="flex input lowercase"
+                                   autocapitalize="none"
+                                   type="text"
+                                   minlength="3"
+                                   maxlength="16"
+                                   onkeypress="return event.charCode != 32"
+                                   ng-model="domain">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="flex row ml16 input-wrapper">
-                <div class="input-label-top">Token name</div>
-                <input id="launch_token_name"
-                       class="flex input lowercase"
-                       autocapitalize="none"
-                       type="text"
-                       minlength="3"
-                       maxlength="16"
-                       onkeypress="return event.charCode != 32"
-                       ng-model="domain">
+        </md-tab>
+        <md-tab label="Category">
+            <div class="col input-content align-center scrollable-vertical">
+                <h2>Select token category</h2>
+                <div class="row wrap">
+                    <div class="filter"
+                         ng-class="{'active': category == key}"
+                         ng-repeat="(key, val) in categories"
+                         ng-click="selectCategory(key)">
+                        {{key}}
+                    </div>
+                </div>
+                <p>{{categories[category]}}</p>
             </div>
-        </div>
-        <div class="primary-button mt16"
-             ng-click="launch()"
-             ng-disabled="!domain">
-            Launch token
+        </md-tab>
+        <md-tab label="Logo">
+            <div class="fill col align-center-center input-content">
+                <h2>Choose logo</h2>
+                <img class="logo" src="{{genLogo(logo)}}">
+                <div class="button"
+                     ng-click="generate()">
+                    Generate
+                </div>
+            </div>
+        </md-tab>
+        <md-tab label="Launch">
+            <div class="fill col input-content">
+                <h2>Launch progress</h2>
+                <div class="row" ng-repeat="item in stages">
+                    <p class="flex">{{item}}</p>
+                    <div class="lds-ring"
+                         ng-show="$index == stageIndex"><div></div><div></div><div></div><div></div></div>
+                    <img class="img24"
+                         src="/wallet/img/success.svg"
+                         ng-show="$index < stageIndex"/>
+                    <div class="img24"
+                         ng-show="$index > stageIndex"></div>
+                </div>
+            </div>
+        </md-tab>
+    </md-tabs>
+    <div class="col">
+        <md-progress-linear md-mode="indeterminate" ng-show="in_progress"></md-progress-linear>
+        <div class="primary-button"
+             ng-click="next()"
+             ng-disabled="in_progress">
+            {{selectedIndex != 3
+                ? "Next"
+                : (in_progress ? "In progress" : "Launch")}}
         </div>
     </div>
 </md-bottom-sheet>

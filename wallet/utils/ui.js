@@ -1,6 +1,17 @@
 function controller(callback) {
-    angular.module("App", ['ngMaterial', 'ngAnimate'])
-        .controller("Controller", callback)
+    let app = angular.module("App", ['ngMaterial', 'ngAnimate'])
+    app.config(function($mdThemingProvider) {
+            $mdThemingProvider.theme('default')
+                .primaryPalette('indigo')
+                .accentPalette('grey');
+            // add light theme
+        $mdThemingProvider.theme('default')
+            .dark();
+        })
+
+   /* You supplied an invalid color palette for theme default's primary palette. Available palettes: red, pink, purple, deep-purple, ' +
+    'indigo, blue, light-blue, cyan, teal, green, light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey*/
+    app.controller("Controller", callback)
 }
 
 function selectFile(success) {

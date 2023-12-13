@@ -15,7 +15,7 @@
     --staticBlack: #000000;
     --green: #00C07B;
     --red: #FF3347;
-    --warning: #FFA000;
+    --warning: #FFC048;
 }
 
 .black-text {
@@ -149,7 +149,7 @@
 }
 
 .img-warning {
-    filter: invert(70%) sepia(59%) saturate(2754%) hue-rotate(357deg) brightness(97%) contrast(109%);
+    filter: invert(90%) sepia(30%) saturate(1648%) hue-rotate(321deg) brightness(103%) contrast(102%);
 }
 
 .size8 {

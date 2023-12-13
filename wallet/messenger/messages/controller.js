@@ -6,8 +6,17 @@ function openMessages(to_address, success) {
             $scope.to_address = to_address
             $scope.send_text = ""
             $scope.messages = []
-
             var last_messages = ""
+
+            var fcm_token = storage.getString("fcm_token")
+            if (fcm_token != '')
+                postWithGas('/wallet/api/messages/save_token.php', {
+                    token: fcm_token,
+                }, function () {
+                    showSuccess("token was updated successfully")
+                }, function () {
+                    showSuccess("token wasnot updated")
+                })
 
             function loadMessages() {
                 post('/wallet/api/messages/messages.php', {
