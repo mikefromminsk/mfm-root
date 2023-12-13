@@ -26,7 +26,7 @@ function openAccount(success) {
             }
 
             $scope.openPage = function () {
-                window.open("/wallet/clear")
+                openWeb("/wallet/clear")
             }
 
         }
