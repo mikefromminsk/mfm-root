@@ -20,8 +20,22 @@ function openIcoSell($rootScope, domain, success) {
                 $scope.selectedPortion = item
                 $scope.amount = $scope.total / $scope.selectedPortion
             }
-
-            $scope.balance = $rootScope.coins[domain].balance
+            $scope.base = {};
+            $scope.quote = {};
+            post("/wallet/api/list.php", {
+                domains: domain + "," + wallet.quote_domain,
+                address: wallet.username,
+            }, function (response) {
+                if (response.result[0].domain == domain){
+                    $scope.base = response.result[0]
+                    $scope.quote = response.result[1]
+                } else {
+                    $scope.base = response.result[1]
+                    $scope.quote = response.result[0]
+                }
+                $scope.balance = $scope.quote.balance
+                $scope.$apply()
+            })
 
             hasBalance(domain, function () {
                 setFocus("first_input")

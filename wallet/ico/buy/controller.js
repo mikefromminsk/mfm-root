@@ -5,9 +5,6 @@ function openIcoBuy($rootScope, domain, success) {
             addFormats($scope)
             $scope.domain = domain
 
-            $scope.balance = $rootScope.coins[wallet.quote_domain].balance
-            $scope.price = $rootScope.coins[domain].price
-
             postContract(domain, contract.wallet, {
                 address: "ico"
             }, function (response) {
@@ -15,15 +12,33 @@ function openIcoBuy($rootScope, domain, success) {
                 $scope.$apply()
             })
 
+            $scope.base = {};
+            $scope.quote = {};
+            post("/wallet/api/list.php", {
+                domains: domain + "," + wallet.quote_domain,
+                address: wallet.username,
+            }, function (response) {
+                if (response.result[0].domain == domain){
+                    $scope.base = response.result[0]
+                    $scope.quote = response.result[1]
+                } else {
+                    $scope.base = response.result[1]
+                    $scope.quote = response.result[0]
+                }
+                $scope.balance = $scope.quote.balance
+
+                $scope.balance = $scope.quote.balance
+                $scope.price = $scope.base.price
+                $scope.$apply()
+            })
+
             $scope.calcAmount = function () {
-                var coin = $rootScope.coins[domain]
-                $scope.amount = $scope.round($scope.total / coin.price, 2)
+                $scope.amount = $scope.round($scope.total / $scope.base.price, 2)
                 return $scope.amount
             }
 
             $scope.calcTotal = function () {
-                var coin = $rootScope.coins[domain]
-                $scope.total = $scope.round($scope.amount * coin.price, 2)
+                $scope.total = $scope.round($scope.amount * $scope.base.price, 2)
                 return $scope.amount
             }
 
