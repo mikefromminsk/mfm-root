@@ -92,7 +92,7 @@
                 <p class="size14 gray400-text">Total balance</p>
                 <p class="mt4 size24">{{formatPrice(totalBalance())}}</p>
             </div>
-            <div class="button">Deposit</div>
+            <div class="button" ng-click="openDeposit()">Deposit</div>
         </div>
 
         <div class="mh16 mt16 row"
@@ -190,9 +190,9 @@
 <script src="/wallet/utils/ui.js"></script>
 <link href="style.css" rel="stylesheet">
 
-
 <script async src="/wallet/dialogs/success/controller.js"></script>
 <script async src="/wallet/dialogs/info/controller.js"></script>
+<script src="/wallet/onboarding/controller.js"></script>
 
 <script src="/wallet/login/controller.js"></script>
 <script src="/wallet/controller.js"></script>

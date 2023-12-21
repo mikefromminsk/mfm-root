@@ -2,13 +2,11 @@ function openAccount(success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/account/index.html',
         controller: function ($scope, $mdBottomSheet) {
+            addFormats($scope)
             $scope.version = storage.getString("version", "0.14")
             $scope.model = storage.getString("model", window.navigator.userAgent)
             $scope.wallet = wallet
 
-            $scope.back = function () {
-                $mdBottomSheet.hide()
-            }
             $scope.logout = function () {
                 wallet.logout()
             }
@@ -26,7 +24,7 @@ function openAccount(success) {
             }
 
             $scope.openPage = function () {
-                openWeb("/wallet/clear")
+                openWeb("/wallet/docs/clear")
             }
 
         }

@@ -42,10 +42,6 @@ function openIcoSell($rootScope, domain, success) {
                     })
                 })
             }
-
-            $scope.back = function () {
-                $mdBottomSheet.hide()
-            }
         }
     }).then(function () {
         if (success)

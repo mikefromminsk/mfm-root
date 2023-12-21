@@ -1,15 +1,12 @@
 function openLaunchDialog(domain, success) {
-    window.$mdBottomSheet.show({
+    window.$mdDialog.show({
         templateUrl: "/wallet/launch/index.html",
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
             $scope.amount = 1000000
             if (DEBUG) {
                 $scope.domain = "super"
-            }
-            $scope.back = function () {
-                $mdBottomSheet.hide()
             }
 
             $scope.selectedIndex = 0
@@ -22,7 +19,23 @@ function openLaunchDialog(domain, success) {
             }
 
             $scope.next = function () {
-                if ($scope.selectedIndex < 3) {
+                if ($scope.selectedIndex == 0) {
+                    $scope.in_progress = true
+                    post('/data/api/search.php', {
+                        path: "wallet/info",
+                        search_text: $scope.domain,
+                    }, function (response) {
+                        if (response.result.indexOf($scope.domain) == -1){
+                            $scope.selectedIndex += 1;
+                        } else {
+                            showError($scope.domain.toUpperCase() + " domain exists")
+                        }
+                        $scope.in_progress = false
+                        $scope.$apply()
+                    })
+                } else if ($scope.selectedIndex == 1) {
+                    $scope.selectedIndex += 1;
+                } else if ($scope.selectedIndex == 2) {
                     $scope.selectedIndex += 1;
                 } else {
                     hasBalance(wallet.gas_domain, function () {
@@ -68,6 +81,7 @@ function openLaunchDialog(domain, success) {
                     if ($scope.stageIndex < $scope.stages.length - 1){
                         $scope.startLaunching()
                     } else {
+                        $scope.close()
                         showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched", success)
                     }
                 }, 3000)

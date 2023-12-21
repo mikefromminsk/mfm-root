@@ -3,6 +3,7 @@ function loginFunction(success) {
         clickOutsideToClose: true,
         templateUrl: '/wallet/login/index.html',
         controller: function ($scope, $mdDialog) {
+            addFormats($scope)
             $scope.address = storage.getString("email")
             if (DEBUG) {
                 if ($scope.address == "")

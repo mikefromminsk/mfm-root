@@ -22,9 +22,6 @@ function openSendDialog(domain, success) {
                         showSuccessDialog("Sent " + $scope.formatAmount($scope.amount, domain) + " success", success)
                     })
             }
-            $scope.back = function () {
-                $mdBottomSheet.hide()
-            }
         }
     })
 }

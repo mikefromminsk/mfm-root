@@ -75,6 +75,7 @@ function addFormats($scope) {
     }
 
     $scope.genLogo = function (logo) {
+        if (logo == null) return ""
         function getColor(t) {
             return "#" + t.slice(-6)
         }
@@ -94,5 +95,13 @@ function addFormats($scope) {
                 context.stroke()
             }
         return canvas.toDataURL()
+    }
+
+    $scope.back = function () {
+        window.$mdBottomSheet.hide()
+    }
+
+    $scope.close = function () {
+        window.$mdDialog.hide()
     }
 }

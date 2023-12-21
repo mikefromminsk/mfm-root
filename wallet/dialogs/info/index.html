@@ -4,13 +4,14 @@
             <img src="/wallet/img/info.svg" style="width: 120px; height: 120px;">
         </div>
     </div>
-    <div class="row" style="height: 180px;">
-        <div class="flex col align-start-center">
-            <p class="size14" style="margin-top: 46px">{{message}}</p>
-            <div class="primary-button lowercase size16"
-                 style="margin-top: 30px; border-radius: 16px; min-width: 110px"
-                 ng-click="back()">Ok
-            </div>
+    <div class="row" style="height: 150px;">
+        <div class="flex col align-center-center">
+            <p class="size16 bold" style="margin-top: 30px">Info</p>
+            <p class="size14" style="margin-top: 16px">{{message}}</p>
         </div>
+    </div>
+    <div class="flex row button align-center-center m16"
+         ng-click="back()">
+        Close
     </div>
 </md-bottom-sheet>

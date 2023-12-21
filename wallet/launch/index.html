@@ -1,6 +1,6 @@
-<md-bottom-sheet class="col bottom-back" style="height: 100%">
+<md-dialog class="fill col bottom-back">
     <div class="row ph8 pv16 align-start-center upper-back">
-        <div class="col mr4 white-back-ripple" ng-click="back()">
+        <div class="col mr4 white-back-ripple" ng-click="close()">
             <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
         <p class="flex size16 uppercase">New coin</p>
@@ -65,7 +65,8 @@
             </div>
         </md-tab>
     </md-tabs>
-    <div class="col">
+    <div class="col p16">
+        <div style="height: 5px" ng-hide="in_progress"></div>
         <md-progress-linear md-mode="indeterminate" ng-show="in_progress"></md-progress-linear>
         <div class="primary-button"
              ng-click="next()"
@@ -75,4 +76,4 @@
                 : (in_progress ? "In progress" : "Launch")}}
         </div>
     </div>
-</md-bottom-sheet>
+</md-dialog>

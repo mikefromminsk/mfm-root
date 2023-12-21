@@ -144,6 +144,7 @@ input::-webkit-inner-spin-button {
     border-radius: 8px;
     border: var(--accent) solid 2px;
     cursor: pointer;
+    text-align: center;
 }
 
 .button-gray {

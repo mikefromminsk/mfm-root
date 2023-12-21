@@ -3,7 +3,11 @@ function openInviteCopy(domain, invite_key, success) {
         templateUrl: "/wallet/invite/copy/index.html",
         controller: function ($scope, $mdBottomSheet) {
             $scope.domain = domain
-            $scope.link = window.location.protocol + "//" + window.location.hostname + "?bonus=" + domain + ":" + invite_key
+            var host = window.location.hostname
+            if (DEBUG) {
+                host = "192.168.100.7";
+            }
+            $scope.link = window.location.protocol + "//" + host + "?bonus=" + domain + ":" + invite_key
             $scope.copy = function () {
                 if (window.NativeAndroid != null) {
                     window.NativeAndroid.share($scope.link)
@@ -13,8 +17,6 @@ function openInviteCopy(domain, invite_key, success) {
                     document.execCommand("copy");
                     showSuccess("Link copied")
                 }
-            }
-            $scope.close = function () {
                 $mdBottomSheet.hide()
             }
         }

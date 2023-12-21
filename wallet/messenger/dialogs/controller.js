@@ -2,6 +2,7 @@ function openDialogs(success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/messenger/dialogs/index.html',
         controller: function ($scope, $mdBottomSheet) {
+            addFormats($scope)
             $scope.logged_in = wallet.isLoggedIn()
             $scope.title = wallet.isLoggedIn() ? wallet.username : "Settings"
             $scope.search_opened = true
@@ -45,10 +46,6 @@ function openDialogs(success) {
 
             $scope.selectToAddress = function (address) {
                 openMessages(address, success)
-            }
-
-            $scope.back = function () {
-                $mdBottomSheet.hide()
             }
         }
     }).then(success)

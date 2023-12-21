@@ -1,0 +1,31 @@
+<md-bottom-sheet class="fill col bottom-back">
+    <md-tabs class="flex" md-selected="selectedIndex">
+        <md-tab label="0">
+            <div class="fill col align-center-center">
+                <img src="/wallet/img/welcome.svg" style="width: 200px; height: 200px">
+                <h2 class="mt16 mh16">Welcome to DataChain Wallet</h2>
+            </div>
+        </md-tab>
+        <md-tab label="1">
+            <div class="fill col align-center-center">
+                <img src="/wallet/img/gas-station.svg" style="width: 200px; height: 200px">
+                <h2 class="mt16 mh16">For all actions you need Data token</h2>
+            </div>
+        </md-tab>
+        <md-tab label="2">
+            <div class="fill col align-center-center">
+                <img src="/wallet/img/gift-logo.svg" style="width: 200px; height: 200px">
+                <h2 class="mt16 mh16">Login and get Data tokens</h2>
+            </div>
+        </md-tab>
+    </md-tabs>
+    <div class="col p16">
+        <md-progress-linear md-mode="indeterminate" ng-show="in_progress"></md-progress-linear>
+        <div class="primary-button"
+             ng-click="next()">
+            {{selectedIndex != 2
+                ? "Next"
+                : "Login"}}
+        </div>
+    </div>
+</md-bottom-sheet>

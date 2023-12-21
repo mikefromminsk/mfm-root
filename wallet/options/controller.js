@@ -75,10 +75,6 @@ function openOptionsDialog($rootScope, coin, success) {
             $scope.contact = function () {
                 openMessages($scope.coin.owner, domain)
             }
-
-            $scope.back = function () {
-                $mdBottomSheet.hide()
-            }
         }
     }).then(function () {
         if (success)

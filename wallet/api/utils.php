@@ -35,7 +35,7 @@ function dataWalletSend($domain, $from_address, $to_address, $amount, $key = nul
     if ($amount == 0)
         return true;
     if (dataWalletBalance($domain, $from_address) < $amount)
-        error("$from_address balance is not enough in $domain wallet");
+        error(strtoupper($domain) . " balance is not enough in $from_address wallet");
     if (!dataExist([$domain, wallet, $to_address])) error("$to_address receiver doesn't exist");
     if ($key == null || $next_hash == null) {
         if (dataGet([$domain, wallet, $from_address, script]) != scriptPath())
