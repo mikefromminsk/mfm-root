@@ -33,7 +33,7 @@
                 <p class="mt4 size24" ng-show="coin.price">{{formatPrice(coin.balance * coin.price)}}</p>
                 <p class="mt4 size24" ng-show="!coin.price">{{formatAmount(coin.balance, coin.domain)}}</p>
             </div>
-            <div class="button">Deposit</div>
+            <div class="button" ng-click="openDeposit()">Deposit</div>
         </div>
         <div class="col align-center-center" style="height: 200px;" ng-hide="profile">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -57,13 +57,13 @@
                     </div>
                     <p class="size12 mt4 gray400-text">Send</p>
                 </div>
-                <div class="col align-start-center white-back-ripple"
+                <!--<div class="col align-start-center white-back-ripple"
                      ng-click="contact()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
                         <img class="img24 img-accent" src="/wallet/img/support.svg">
                     </div>
                     <p class="size12 mt4 gray400-text">Support</p>
-                </div>
+                </div>-->
                 <div class="col align-start-center white-back-ripple"
                      ng-show="contracts[contract.bonus_create]"
                      ng-click="share()">

@@ -25,6 +25,7 @@ function dataCreateRow($data_parent_id, $data_key, $data_type)
         data_parent_id => $data_parent_id,
         data_key => $data_key,
         data_type => $data_type,
+        data_time => time(),
     ];
     return $data_id;
 }
@@ -65,7 +66,10 @@ function dataSet(array $path_array, $value, $addHistory = true)
     if ($data_id == null) return false;
     dataDeleteChildren($data_id);
     $path = implode("/", $path_array);
-    $data = [data_value => $value];
+    $data = [
+        data_value => $value,
+        data_time => time(),
+        ];
     if (is_numeric($value) && !is_string($value)) {
         $data[data_type] = DATA_NUMBER;
     } else if (is_bool($value)) {
@@ -166,6 +170,13 @@ function dataCount(array $path)
 {
     $data_id = dataNew($path);
     return scalar("select count(*) from `data` where data_parent_id = $data_id");
+}
+
+function dataInfo(array $path)
+{
+    $data_id = dataNew($path);
+    $info = selectRowWhere(data, [data_id => $data_id]);
+    return $info;
 }
 
 function dataHistory(array $path_array, $page = 1, $size = PAGE_SIZE_DEFAULT)

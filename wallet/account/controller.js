@@ -19,10 +19,6 @@ function openAccount(success) {
                 location.reload(true)
             }
 
-            $scope.openMessages = function () {
-                openMessages("admin")
-            }
-
             $scope.openPage = function () {
                 openWeb("/wallet/docs/clear")
             }

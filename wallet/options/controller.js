@@ -72,8 +72,8 @@ function openOptionsDialog($rootScope, coin, success) {
                 openTransactions(domain)
             }
 
-            $scope.contact = function () {
-                openMessages($scope.coin.owner, domain)
+            $scope.openDeposit = function () {
+                $rootScope.openDeposit()
             }
         }
     }).then(function () {

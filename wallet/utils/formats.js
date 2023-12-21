@@ -16,6 +16,16 @@ function addFormats($scope) {
         return result
     }
 
+    $scope.formatSec = function (sec) {
+        var d = new Date(sec * 1000);
+        function format_two_digits(n) {
+            return n < 10 ? '0' + n : n;
+        }
+        var hours = format_two_digits(d.getHours());
+        var minutes = format_two_digits(d.getMinutes());
+        return hours + ":" + minutes;
+    }
+
     $scope.formatPrice = function (number) {
         if (number == null)
             number = 0;
@@ -76,9 +86,11 @@ function addFormats($scope) {
 
     $scope.genLogo = function (logo) {
         if (logo == null) return ""
+
         function getColor(t) {
             return "#" + t.slice(-6)
         }
+
         let canvas = document.createElement("canvas")
         canvas.width = 32
         canvas.height = 32

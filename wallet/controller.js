@@ -18,8 +18,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openAccount(init)
     }
 
-    $scope.openMessages = function () {
-        openMessages("admin")
+    $scope.openTransactions = function () {
+        openTransactions(wallet.gas_domain)
     }
 
     $scope.newCoin = function () {

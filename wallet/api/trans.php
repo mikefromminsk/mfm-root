@@ -14,6 +14,7 @@ foreach ($ids as $id) {
     $tran[from] = dataGet([$domain, trans, $id, from]);
     $tran[to] = dataGet([$domain, trans, $id, to]);
     $tran[amount] = dataGet([$domain, trans, $id, amount]);
+    $tran[time] = dataInfo([$domain, trans, $id, amount])[data_time];
     $trans[] = $tran;
 }
 

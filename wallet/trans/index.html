@@ -1,11 +1,16 @@
-<md-bottom-sheet>
-    <md-content class="col row-content">
-        <h2 class="size16 uppercase ">Transactions</h2>
-        <div class="input-content" style="overflow: auto">
-            <div class="row" ng-repeat="item in trans">
-                <div class="flex size14">{{item.from == username ? item.to : item.from}}</div>
-                <div class="size14">{{(item.from == username ? "-" : "+") + formatAmount(item.amount, domain)}}</div>
-            </div>
+<md-bottom-sheet class="col bottom-back" style="height: 100%">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 white-back-ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
-    </md-content>
+        <p class="flex size16 uppercase">{{domain}} Transactions</p>
+    </div>
+    <div class="col scrollable-vertical">
+        <div class="row radius8 gray200-back ph8 pv8 mt8 mh16"
+             ng-repeat="item in trans">
+            <p class="size14">{{item.from == username ? item.to : item.from}}</p>
+            <p class="flex size14 gray300-text ml4">{{formatSec(item.time)}}</p>
+            <p class="size14">{{(item.from == username ? "-" : "+") + formatAmount(item.amount, domain)}}</p>
+        </div>
+    </div>
 </md-bottom-sheet>
