@@ -12,15 +12,13 @@ function showInfoDialog(message, success) {
 }
 
 function hasToken(domain, success, error) {
-    wallet.auth(function (username) {
-        postContract(domain, contract.wallet, {
-            address: username
-        }, function (response) {
-            if (success)
-                success(response)
-        }, function () {
-            showInfoDialog("You need to find " + domain.toUpperCase() + " token", error)
-        })
+    postContract(domain, contract.wallet, {
+        address: wallet.address()
+    }, function (response) {
+        if (success)
+            success(response)
+    }, function () {
+        showInfoDialog("You need to find " + domain.toUpperCase() + " token", error)
     })
 }
 

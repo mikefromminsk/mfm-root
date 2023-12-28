@@ -27,7 +27,7 @@ assertEquals("launch $gas_path", http_post($GLOBALS[host_name] . "/wallet/api/la
         category => L1,
         logo => sha1($gas_domain),
         next_hash => md5(pass1),
-        amount => 100000000,
+        amount => 1000000000,
     ] + gas())[success]);
 
 assertEquals("analytics $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
@@ -36,7 +36,7 @@ assertEquals("analytics $gas_domain", http_post($GLOBALS[host_name] . "/$gas_dom
 
 assertEquals("dataWalletInit", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
         path => implode("/", [$gas_path, admin, amount]),
-    ]), 100000000);
+    ]), 1000000000);
 
 
 function send($domain, $address, $key = null, $hash = null, $amount = 10000, $script = null)

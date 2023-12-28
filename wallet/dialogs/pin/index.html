@@ -1,0 +1,41 @@
+<md-bottom-sheet  class="col bottom-back">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
+        </div>
+        <p class="flex size16 uppercase">Access for {{formatTicker(domain)}}</p>
+    </div>
+
+    <div class="col size20" style="max-width: 600px">
+        <div class="row align-center-center" style="margin: 40px 0">
+            <div class="pin-unfilled" ng-hide="pin.length >= 1"></div><div class="pin-filled" ng-show="pin.length >= 1">*</div>
+            <div class="pin-unfilled" ng-hide="pin.length >= 2"></div><div class="pin-filled" ng-show="pin.length >= 2">*</div>
+            <div class="pin-unfilled" ng-hide="pin.length >= 3"></div><div class="pin-filled" ng-show="pin.length >= 3">*</div>
+            <div class="pin-unfilled" ng-hide="pin.length >= 4"></div><div class="pin-filled" ng-show="pin.length >= 4">*</div>
+            <div class="pin-unfilled" ng-hide="pin.length >= 5"></div><div class="pin-filled" ng-show="pin.length >= 5">*</div>
+            <div class="pin-unfilled" ng-hide="pin.length >= 6"></div><div class="pin-filled" ng-show="pin.length >= 6">*</div>
+        </div>
+        <div class="row">
+            <div class="flex col align-center-center ripple pv16" ng-click="add('1')">1</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('2')">2</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('3')">3</div>
+        </div>
+        <div class="row">
+            <div class="flex col align-center-center ripple pv16" ng-click="add('4')">4</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('5')">5</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('6')">6</div>
+        </div>
+        <div class="row">
+            <div class="flex col align-center-center ripple pv16" ng-click="add('7')">7</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('8')">8</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('9')">9</div>
+        </div>
+        <div class="row">
+            <div class="flex col align-center-center ripple pv16"></div>
+            <div class="flex col align-center-center ripple pv16" ng-click="add('1')">0</div>
+            <div class="flex col align-center-center ripple pv16" ng-click="remove()">
+                <img class="img36 img-black" src="/wallet/img/delete.svg">
+            </div>
+        </div>
+    </div>
+</md-bottom-sheet>

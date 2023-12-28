@@ -1,4 +1,4 @@
-body{
+body {
     color: var(--black);
     font-size: 14px;
     background-color: var(--bottom);
@@ -12,6 +12,10 @@ body{
 
 md-bottom-sheet md-content {
     max-height: 500px;
+}
+
+md-bottom-sheet {
+    z-index: 10000;
 }
 
 .tab {
@@ -31,7 +35,7 @@ md-dialog {
     max-height: none;
 }
 
-#messages_send_input::placeholder{
+#messages_send_input::placeholder {
     color: var(--gray400);
 }
 
@@ -61,6 +65,7 @@ md-dialog {
     width: 24px;
     height: 24px;
 }
+
 .lds-ring div {
     box-sizing: border-box;
     display: block;
@@ -73,15 +78,19 @@ md-dialog {
     animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     border-color: #fff transparent transparent transparent;
 }
+
 .lds-ring div:nth-child(1) {
     animation-delay: -0.45s;
 }
+
 .lds-ring div:nth-child(2) {
     animation-delay: -0.3s;
 }
+
 .lds-ring div:nth-child(3) {
     animation-delay: -0.15s;
 }
+
 @keyframes lds-ring {
     0% {
         transform: rotate(0deg);
@@ -91,12 +100,27 @@ md-dialog {
     }
 }
 
-.logo{
+.logo {
     width: 32px;
     height: 32px;
     border-radius: 8px;
 }
 
-md-tabs-wrapper{
+md-tabs-wrapper {
     display: none;
+}
+
+
+.pin-unfilled, .pin-filled {
+    border: 1px solid var(--gray400);
+    border-radius: 4px;
+    width: 24px;
+    height: 32px;
+    margin-left: 8px;
+    text-align: center;
+    line-height: 32px;
+}
+
+.pin-filled {
+    border: 1px solid var(--green);
 }

@@ -16,9 +16,9 @@ function openIcoBuy($rootScope, domain, success) {
             $scope.quote = {};
             post("/wallet/api/list.php", {
                 domains: domain + "," + wallet.quote_domain,
-                address: wallet.username,
+                address: wallet.address(),
             }, function (response) {
-                if (response.result[0].domain == domain){
+                if (response.result[0].domain == domain) {
                     $scope.base = response.result[0]
                     $scope.quote = response.result[1]
                 } else {
@@ -44,27 +44,26 @@ function openIcoBuy($rootScope, domain, success) {
 
             $scope.ico_buy = function () {
                 hasToken(domain, function () {
-                    hasBalance(wallet.quote_domain, function () {
-                        $scope.in_progress = true
-                        wallet.calcKey("usdt/wallet", function (key, hash, username) {
-                            postContractWithGas(domain, contract.ico_buy, {
-                                address: username,
-                                key: key,
-                                next_hash: hash,
-                                amount: $scope.amount,
-                            }, function () {
-                                success()
-                                showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain))
-                            }, function () {
-                                $scope.in_progress = false
+                        hasBalance(wallet.quote_domain, function () {
+                            $scope.in_progress = true
+                            postContractWithGas(wallet.quote_domain, "", function (usdt_key, usdt_next_hash) {
+                                postContractWithGas(domain, contract.ico_buy, {
+                                    address: wallet.address(),
+                                    key: usdt_key,
+                                    next_hash: usdt_next_hash,
+                                    amount: $scope.amount,
+                                }, function () {
+                                    showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain), success)
+                                }, function () {
+                                    $scope.in_progress = false
+                                })
+                                return null
                             })
+
                         })
-                    })
-                })
+                    }
+                )
             }
         }
-    }).then(function () {
-        if (success)
-            success()
     })
 }

@@ -3,7 +3,7 @@
 background: var(--gray100);
 background: linear-gradient(135deg, var(--gray200), var(--gray100));">
     <div class="row ph8 pv16 align-start-center">
-        <div class="col mr4 white-back-ripple" ng-click="close()">
+        <div class="col mr4 ripple" ng-click="close()">
             <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
     </div>
@@ -22,7 +22,7 @@ background: linear-gradient(135deg, var(--gray200), var(--gray100));">
                        type="text"
                        autocapitalize="none"
                        onkeypress="return event.charCode != 32"
-                       ng-model="address">
+                       ng-model="username">
             </div>
             <div class="row input-wrapper">
                 <div class="input-label-top">Password</div>

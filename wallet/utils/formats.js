@@ -80,7 +80,7 @@ function addFormats($scope) {
         return $scope.round(number, 0) + "%";
     }
 
-    $scope.tickerFormat = function (ticker) {
+    $scope.formatTicker = function (ticker) {
         return ticker.toUpperCase()
     }
 

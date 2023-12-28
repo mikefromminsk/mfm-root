@@ -26,6 +26,17 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openLaunchDialog($scope.search_text, init)
     }
 
+    $scope.openPin = function () {
+        wallet.calcKey("gas", init, function (message) {
+            alert(message)
+        })
+        /*window.openPin(function (pin) {
+
+        })*/
+        /*console.log(encode("word", "wd"))
+        console.log(decode(encode("word", "wd"), "wd"))*/
+    }
+
     $scope.openDeposit = function () {
         showInfoDialog("Deposit is not available right now", init)
     }
@@ -72,7 +83,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         if (domains.length > 0) {
             post("/wallet/api/list.php", {
                 domains: domains.join(","),
-                address: wallet.username,
+                address: wallet.address(),
             }, function (response) {
                 $scope.activeCoins = response.result
                 $scope.showBody = true
@@ -92,18 +103,16 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.addFavorite = function (domain, success) {
-        wallet.auth(function (username) {
-            postContract(domain, contract.wallet, {
-                address: username
+        postContract(domain, contract.wallet, {
+            address: wallet.address()
+        }, function () {
+            addToStorage(domain)
+        }, function () {
+            postContractWithGas(domain, contract.reg, {
+                address: wallet.address(),
+                next_hash: wallet.calcStartHash(domain)
             }, function () {
                 addToStorage(domain)
-            }, function () {
-                postContractWithGas(domain, contract.reg, {
-                    address: username,
-                    next_hash: wallet.calcStartHash(domain + "/wallet")
-                }, function () {
-                    addToStorage(domain)
-                })
             })
         })
 
@@ -175,7 +184,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         STABLECOIN: "Stablecoin - это криптовалюта, которая призвана сохранять свою стоимость относительно определенного актива, такого как доллар США или золото. Она обычно используется для уменьшения волатильности криптовалютного рынка и обеспечения стабильности цены.",
     }
 
-    if (storage.getString("onboarding_showed") == ""){
+    if (storage.getString("onboarding_showed") == "") {
         storage.setString("onboarding_showed", "true")
         openOnboardingDialog(init)
     }

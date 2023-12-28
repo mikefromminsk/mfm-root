@@ -1,6 +1,5 @@
 <?php
 
-require_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/properties.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $from_address = get_required(gas_address);

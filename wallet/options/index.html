@@ -1,6 +1,6 @@
 <md-bottom-sheet class="col bottom-back" style="height: 100%">
     <div class="row pl8 pr16 pv16 align-start-center upper-back">
-        <div class="col mr4 white-back-ripple" ng-click="back()">
+        <div class="col mr4 ripple" ng-click="back()">
             <img class="img38 p8 img-black gray100-back radius16" src="/wallet/img/back.svg">
         </div>
         <img class="logo" src="{{genLogo(coin.logo)}}">
@@ -19,7 +19,7 @@
         </div>
     </div>
     <!--<div class="row">
-        <div class="flex pv8 col align-center-center size14 white-back-ripple tab"
+        <div class="flex pv8 col align-center-center size14 ripple tab"
              ng-repeat="item in tabs"
              ng-class="{'active': activeTabIndex == $index}"
              ng-click="selectTab($index)">
@@ -41,7 +41,7 @@
 
         <div class="col" ng-show="profile">
             <div class="row scrollable-horizontal align-center-start">
-                <div class="col align-start-center white-back-ripple"
+                <div class="col align-start-center ripple"
                      ng-show="contracts[contract.drop]"
                      ng-click="giveaway()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
@@ -49,7 +49,7 @@
                     </div>
                     <p class="size12 mt4 gray400-text">Drop</p>
                 </div>
-                <div class="col align-start-center white-back-ripple"
+                <div class="col align-start-center ripple"
                      ng-show="contracts[contract.drop]"
                      ng-click="sendDialog()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
@@ -57,14 +57,14 @@
                     </div>
                     <p class="size12 mt4 gray400-text">Send</p>
                 </div>
-                <!--<div class="col align-start-center white-back-ripple"
+                <!--<div class="col align-start-center ripple"
                      ng-click="contact()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
                         <img class="img24 img-accent" src="/wallet/img/support.svg">
                     </div>
                     <p class="size12 mt4 gray400-text">Support</p>
                 </div>-->
-                <div class="col align-start-center white-back-ripple"
+                <div class="col align-start-center ripple"
                      ng-show="contracts[contract.bonus_create]"
                      ng-click="share()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">

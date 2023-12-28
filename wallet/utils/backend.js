@@ -47,10 +47,6 @@ function post(url, params, success, error) {
     xhr.send(JSON.stringify(params))
 }
 
-function postWithGas(url, params, success, error) {
-    wallet.postWithGas(url, params, success, error)
-}
-
 var domainContracts = {}
 
 function getContracts(domain, success) {
@@ -82,15 +78,17 @@ function contractExist(domain, contractHash, success, error) {
 }
 
 function postContract(domain, contractHash, params, success, error) {
-    contractExist(domain, contractHash, function (script_path) {
-        post("/" + script_path, params, success, error)
-    }, error)
-}
+    if (contractHash.length == 32) {
+        contractExist(domain, contractHash, function (script_path) {
+            postWith(script_path)
+        }, error)
+    } else {
+        postWith(domain + "/" + contractHash)
+    }
 
-function postContractWithGas(domain, contractHash, params, success, error) {
-    contractExist(domain, contractHash, function (script_path) {
-        wallet.postWithGas("/" + script_path, params, success, error)
-    }, error)
+    function postWith(url) {
+        post("/" + url, params, success, error)
+    }
 }
 
 function postForm(url, params, success, error) {
@@ -124,92 +122,34 @@ function dataGet(path, callback) {
 
 const storageKeys = {
     username: "STORE_USERNAME",
-    password: "STORE_PASSWORD",
+    passhash: "STORE_PASSHASH",
     domains: "STORE_DOMAINS",
     bonuses: "STORE_DROPS",
 }
 
+
+function postContractWithGas(domain, contractHash, params, success, error) {
+    wallet.postContractWithGas(domain, contractHash, params, success, error)
+}
+
 var wallet = {
-    username: "",
-    password: "",
     quote_domain: "usdt",
     gas_domain: "data",
     gas_path: "data/wallet",
-    init: function () {
-        wallet.username = storage.getString(storageKeys.username)
-        wallet.password = storage.getString(storageKeys.password)
-    },
-    isLoggedIn: function () {
-        return !(wallet.username == "" || wallet.password == "")
-    },
-    auth: function (success, error) {
-        if (!this.isLoggedIn()) {
-            let username = storage.getString(storageKeys.username)
-            let password = storage.getString(storageKeys.password)
-            if ((username == "" || password == "") && window.loginFunction != null) {
-                window.loginFunction(success)
-            } else if (username == "" || password == "") {
-                username = prompt("Enter your username")
-                password = prompt("Enter your password")
-                wallet.login(username, password, success)
-            } else {
-                wallet.login(username, password, success)
-            }
-        } else {
-            success(wallet.username, wallet.password)
-        }
-    },
-    login: function (username, password, success, error) {
-        if (!username || !password) {
-            if (error)
-                error()
-        } else {
-            postContract(wallet.gas_domain, contract.wallet, {
-                address: username,
-            }, function (response) {
-                if (response.next_hash == md5(wallet.calcHash(wallet.gas_path, username, password, response.prev_key))) {
-                    storage.setString(storageKeys.username, username)
-                    storage.setString(storageKeys.password, password)
-                    wallet.username = username
-                    wallet.password = password
-                    if (success)
-                        success(wallet.username, wallet.password)
-                } else {
-                    showError("password invalid", error)
-                }
-            }, error)
-        }
-    },
-    reg: function (username, password, success, error) {
-        postContract(wallet.gas_domain, contract.free_reg, {
-            address: username,
-            next_hash: md5(wallet.calcHash(wallet.gas_path, username, password))
-        }, function () {
-            wallet.login(username, password, success, error)
-        }, error)
-    },
     logout: function () {
-        wallet.username = null
-        wallet.password = null
         storage.clear()
     },
+    address: function () {
+        return storage.getString(storageKeys.username)
+    },
     calcKey: function (path, success, error) {
-        wallet.auth(function (username, password) {
-            post("/data/api/get.php", {
-                path: path + "/" + username + "/prev_key",
-            }, function (prev_key) {
-                if (success) {
-                    var key = wallet.calcHash(path, username, password, prev_key)
-                    var next_hash = md5(wallet.calcHash(path, username, password, key))
-                    success(
-                        key,
-                        next_hash,
-                        username,
-                        password
-                    )
-                }
-            }, error)
-        }, error)
+        if (storage.getString(storageKeys.passhash) == "") {
+            error("Please login")
+        } else {
+            window.openPin(function (pin) {
+
+            })
+        }
     },
     send: function (domain, to_address, amount, success, error) {
         wallet.calcKey(wallet.gas_path, function (gas_key, gas_next_hash, username, password) {
@@ -232,22 +172,73 @@ var wallet = {
         }, error)
     },
     // rename to calcKey
-    calcHash: function (wallet_path, username, password, prev_key) {
-        return md5(wallet_path + username + password + (prev_key || ""))
+    calcHash: function (domain, username, password, prev_key) {
+        return md5(domain + username + password + (prev_key || ""))
     },
     calcStartKey: function (path) {
-        return md5(path + wallet.username + wallet.password)
+        return md5(path + wallet.address() + decode(storage.getString(storageKeys.passhash)))
     },
     calcStartHash: function (path) {
         return md5(this.calcStartKey(path))
     },
-    postWithGas: function (url, params, success, error) {
-        wallet.calcKey(wallet.gas_path, function (key, hash, username) {
-            params.gas_address = username
-            params.gas_key = key
-            params.gas_next_hash = hash
-            post(url, params, success, error)
-        }, error)
+    postContractWithGas: function (domain, contractHash, params, success, error) {
+        var isParamsFunction = typeof params === 'function'
+        if (contractHash.length == 32) {
+            contractExist(domain, contractHash, function (script_path) {
+                postWithGas(script_path)
+            }, error)
+        } else {
+            postWithGas(domain + "/" + contractHash)
+        }
+
+        function postWithGas(url) {
+            openPin(isParamsFunction ? domain : wallet.gas_domain, function (pin) {
+                function postCalcKeyHash(domain, success) {
+                    post("/data/api/get.php", {
+                        path: domain + "/wallet/" + wallet.address() + "/prev_key",
+                    }, function (prev_key) {
+                        calcKeyHash(domain, prev_key, success)
+                    }, error)
+                }
+
+                function calcKeyHash(domain, prev_key, success) {
+                    var passhash = storage.getString(storageKeys.passhash)
+                    var password = decode(passhash, pin)
+                    var key = wallet.calcHash(domain, wallet.address(), password, prev_key)
+                    var next_hash = md5(wallet.calcHash(domain, wallet.address(), password, key))
+                    success(key, next_hash)
+                }
+
+                if (isParamsFunction) {
+                    postCalcKeyHash(domain, function (key, next_hash) {
+                        params = params(key, next_hash)
+                        if (domain == wallet.gas_domain) {
+                            calcKeyHash(wallet.gas_domain, key, function (gas_key, gas_next_hash) {
+                                send(params, gas_key, gas_next_hash)
+                            })
+                        } else {
+                            calcGas(params)
+                        }
+                    })
+                } else {
+                    calcGas(params)
+                }
+
+                function calcGas(params) {
+                    postCalcKeyHash(wallet.gas_domain, function (gas_key, gas_next_hash){
+                        send(params, gas_key, gas_next_hash)
+                    })
+                }
+
+                function send(params, gas_key, gas_next_hash) {
+                    if (params == null) return
+                    params.gas_address = wallet.address()
+                    params.gas_key = gas_key
+                    params.gas_next_hash = gas_next_hash
+                    post("/" + url, params, success, error)
+                }
+            })
+        }
     },
 }
 
@@ -510,5 +501,22 @@ var md5 = function (string) {
     return temp.toLowerCase();
 }
 
+function reverse(s) {
+    return s.split("").reverse().join("");
+}
 
-wallet.init()
+function encode(word, pass) {
+    /*var result = ""
+    for (var i = 0; i < word.length; i++)
+        result += String.fromCharCode(word.charCodeAt(i) + pass.charCodeAt(i % pass.length))
+    return result*/
+    return reverse(word)
+}
+
+function decode(word, pass) {
+    /*var result = ""
+   for (var i = 0; i < word.length; i++)
+       result += String.fromCharCode(word.charCodeAt(i) - pass.charCodeAt(i % pass.length))
+   return result*/
+    return reverse(word)
+}

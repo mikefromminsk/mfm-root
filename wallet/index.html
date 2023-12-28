@@ -45,7 +45,7 @@
 </div>
 
 <div class="row ph8 pv16 align-start-center upper-back">
-    <div class="col mr4 white-back-ripple" ng-click="openAccount()">
+    <div class="col mr4 ripple" ng-click="openAccount()">
         <img class="img38 p8 img-black" src="/wallet/img/settings.svg">
     </div>
     <div class="row flex input-wrapper">
@@ -53,14 +53,14 @@
              style="position: absolute; left: 8px; top: 11px"
              src="/wallet/img/search.svg">
         <input type="text"
-               class="flex input white-back-ripple radius24"
+               class="flex input ripple radius24"
                id="search_wrapper"
                autocapitalize="off"
                ng-model="search_text"
                placeholder="Find any token"
                style="padding-left: 34px">
     </div>
-    <div class="col ml4 white-back-ripple" ng-click="openTransactions()">
+    <div class="col ml4 ripple" ng-click="openTransactions()">
         <img class="img38 p8 img-black" src="/wallet/img/transactions.svg">
     </div>
 </div>
@@ -70,7 +70,7 @@
             <p>Bonuses</p>
         </div>
         <div class="col" ng-repeat="item in bonuses">
-            <div class="row ph16 pv8 align-start-center white-back-ripple" ng-click="receiveBonus(item)">
+            <div class="row ph16 pv8 align-start-center ripple" ng-click="receiveBonus(item)">
                 <img class="logo" src="{{genLogo(item.logo)}}">
                 <p class="flex size14 uppercase">{{item.domain}}</p>
                 <div class="primary-button green-back">
@@ -80,14 +80,14 @@
             <div class="divider"></div>
         </div>
 
-        <div class="row ph16 pt16" ng-hide="wallet.username">
+        <div class="row ph16 pt16" ng-hide="wallet.address()">
             <div class="flex primary-button"
                  ng-click="login()">
                 Login or Create account
             </div>
         </div>
 
-        <div class="row mt16 mh16 align-start-center" ng-show="wallet.username">
+        <div class="row mt16 mh16 align-start-center" ng-show="wallet.address()">
             <div class="flex col">
                 <p class="size14 gray400-text">Total balance</p>
                 <p class="mt4 size24">{{formatPrice(totalBalance())}}</p>
@@ -96,10 +96,17 @@
         </div>
 
         <div class="mh16 mt16 row"
-             ng-show="wallet.username">
+             ng-show="wallet.address()">
             <div class="flex primary-button"
                  ng-click="newCoin()">
                 New coin
+            </div>
+        </div>
+
+        <div class="mh16 mt16 row">
+            <div class="flex primary-button"
+                 ng-click="openPin()">
+                Test
             </div>
         </div>
 
@@ -110,7 +117,7 @@
         </div>
         <canvas class="img36" id="last_logo" width="50" height="50" style="display: none"></canvas>
         <div class="col" ng-repeat="coin in activeCoins">
-            <div class="row ph16 pv8 align-start-center white-back-ripple"
+            <div class="row ph16 pv8 align-start-center ripple"
                  ng-click="options(coin)">
                 <img class="logo" src="{{genLogo(coin.logo)}}">
                 <div class="col flex ml8">
@@ -134,7 +141,7 @@
         <div class="mh16 mt16" ng-show="recommendedCoins.length">
             <p class="size14 gray400-text">Recommended coins</p>
         </div>
-        <div class="col white-back-ripple"
+        <div class="col ripple"
              ng-repeat="coin in recommendedCoins"
              ng-click="options(coin)">
             <div class="row pv8 ph16 align-start-center">
@@ -153,7 +160,7 @@
     </div>
     <div class="mh16 mt16" ng-show="search_text != ''">
         <p class="size14 gray400-text">Search results</p>
-        <div class="col pv8 white-back-ripple"
+        <div class="col pv8 ripple"
              ng-repeat="coin in searchCoins"
              ng-click="options(coin)">
             <div class="row pv8 align-start-center">
@@ -199,6 +206,7 @@
 <script>
     controller(main)
 </script>
+<script async src="/wallet/dialogs/pin/controller.js"></script>
 <script async src="/wallet/options/controller.js"></script>
 <script async src="/wallet/launch/controller.js"></script>
 <script async src="/wallet/send/controller.js"></script>

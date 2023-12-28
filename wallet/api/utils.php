@@ -72,13 +72,13 @@ function commit($response, $gas_address = null)
             dataWalletSend("data",
                 $gas_address,
                 admin,
-                $GLOBALS[gas_bytes]);
+                DEBUG ? 1 : $GLOBALS[gas_bytes]);
         } else {
             dataWalletSend(
                 "data",
                 get_required(gas_address),
                 admin,
-                $GLOBALS[gas_bytes],
+                DEBUG ? 1 : $GLOBALS[gas_bytes],
                 get_required(gas_key),
                 get_required(gas_next_hash)
             );

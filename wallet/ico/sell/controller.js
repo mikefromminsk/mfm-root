@@ -18,15 +18,15 @@ function openIcoSell($rootScope, domain, success) {
             $scope.selectedPortion = $scope.portions[2]
             $scope.setPortion = function (item) {
                 $scope.selectedPortion = item
-                $scope.amount = $scope.total / $scope.selectedPortion
+                $scope.amount = ($scope.base.balance / 100) * $scope.selectedPortion
             }
             $scope.base = {};
             $scope.quote = {};
             post("/wallet/api/list.php", {
                 domains: domain + "," + wallet.quote_domain,
-                address: wallet.username,
+                address: wallet.address(),
             }, function (response) {
-                if (response.result[0].domain == domain){
+                if (response.result[0].domain == domain) {
                     $scope.base = response.result[0]
                     $scope.quote = response.result[1]
                 } else {
@@ -43,22 +43,18 @@ function openIcoSell($rootScope, domain, success) {
 
             $scope.ico_sell = function () {
                 hasToken(wallet.quote_domain, function () {
-                    wallet.calcKey(domain + "/wallet", function (key, hash, username) {
-                        postContractWithGas(domain, contract.ico_sell, {
+                    postContractWithGas(domain, contract.ico_sell, function (key, hash) {
+                        return {
                             key: key,
                             next_hash: hash,
                             amount: $scope.amount,
                             price: $scope.price,
-                        }, function () {
-                            showSuccessDialog("You open for sale " + $scope.formatTicker(domain))
-                            $mdBottomSheet.hide()
-                        })
+                        }
+                    }, function () {
+                        showSuccessDialog("You open for sale " + $scope.formatTicker(domain), success)
                     })
                 })
             }
         }
-    }).then(function () {
-        if (success)
-            success()
     })
 }

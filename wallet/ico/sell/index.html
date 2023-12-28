@@ -1,6 +1,6 @@
 <md-bottom-sheet class="col bottom-back">
     <div class="row ph8 pv16 align-start-center upper-back">
-        <div class="col mr4 white-back-ripple" ng-click="back()">
+        <div class="col mr4 ripple" ng-click="back()">
             <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
         <p class="flex size16 uppercase">Sell {{domain}}</p>
@@ -21,7 +21,7 @@
                    class="flex input"
                    ng-model="price">
         </div>
-        <p>For {{selectedPortion}}%({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
+        <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
         <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price">
             Set price
         </div>

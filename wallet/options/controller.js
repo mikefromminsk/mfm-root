@@ -5,12 +5,13 @@ function openOptionsDialog($rootScope, coin, success) {
             addFormats($scope)
             $scope.coin = coin
             var domain = coin.domain
-            $scope.username = wallet.username
+            $scope.username = wallet.address()
             $scope.contract = contract
 
             function checkFavorite() {
                 $scope.isFavorite = storage.getStringArray(storageKeys.domains).indexOf(domain) != -1
             }
+
             checkFavorite()
 
             $scope.tabs = ["Info", "Transactions"]
@@ -47,12 +48,10 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.giveaway = function () {
-                wallet.auth(function (username) {
-                    postContract(domain, contract.drop, {
-                        address: username
-                    }, function (response) {
-                        showSuccessDialog("You have been received " + $scope.formatAmount(response.dropped, domain), success)
-                    })
+                postContract(domain, contract.drop, {
+                    address: wallet.address()
+                }, function (response) {
+                    showSuccessDialog("You have been received " + $scope.formatAmount(response.dropped, domain), success)
                 })
             }
 

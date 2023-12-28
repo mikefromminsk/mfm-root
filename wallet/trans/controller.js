@@ -4,10 +4,10 @@ function openTransactions(domain) {
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
-            $scope.username = wallet.username
+            $scope.username = wallet.address()
             post("/wallet/api/trans.php", {
                 domain: domain,
-                address: wallet.username,
+                address: wallet.address(),
             }, function (response) {
                 $scope.trans = response.trans
             })

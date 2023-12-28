@@ -15,6 +15,9 @@ foreach ($ids as $id) {
     $tran[to] = dataGet([$domain, trans, $id, to]);
     $tran[amount] = dataGet([$domain, trans, $id, amount]);
     $tran[time] = dataInfo([$domain, trans, $id, amount])[data_time];
+    // domain
+    // order id
+    // base amount
     $trans[] = $tran;
 }
 

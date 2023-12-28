@@ -1,36 +1,49 @@
 function loginFunction(success) {
     window.$mdDialog.show({
-        clickOutsideToClose: true,
         templateUrl: '/wallet/login/index.html',
-        controller: function ($scope, $mdDialog) {
+        controller: function ($scope) {
             addFormats($scope)
-            $scope.address = storage.getString("email")
+            $scope.username = ""
             if (DEBUG) {
-                if ($scope.address == "")
-                    $scope.address = "user"
+                if ($scope.username == "")
+                    $scope.username = "user"
                 $scope.password = "pass"
             }
             setFocus("first_input")
+
+            // TODO validation
             $scope.login = function () {
-                // TODO validation
                 $scope.in_progress = true
-                wallet.login($scope.address, $scope.password,
-                    function () {
-                        $mdDialog.hide($scope.address, $scope.password)
+                postContract(wallet.gas_domain, contract.wallet, {
+                    address: $scope.username,
+                }, function (response) {
+                    $scope.in_progress = false
+                    if (md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password, response.prev_key)) == response.next_hash) {
+                        setPin()
+                    } else {
+                        showError("password invalid")
+                    }
+                }, function () {
+                    $scope.in_progress = false
+                    postContract(wallet.gas_domain, contract.free_reg, {
+                        address: $scope.username,
+                        next_hash: md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
                     }, function () {
-                        wallet.reg($scope.address, $scope.password,
-                            function () {
-                                $mdDialog.hide($scope.address, $scope.password)
-                            }, function () {
-                                $scope.in_progress = false
-                                showError('login or username is invalid')
-                            })
+                        setPin()
                     })
+                })
             }
+
+            function setPin() {
+                openPin(wallet.gas_domain, function (pin) {
+                    storage.setString(storageKeys.username, $scope.username)
+                    storage.setString(storageKeys.passhash, encode($scope.password, pin))
+                    if (success)
+                        success()
+                    $scope.close()
+                })
+            }
+
         }
-    }).then(function (username, password) {
-        storage.pushToArray(storageKeys.domains, wallet.gas_domain)
-        if (success)
-            success(username, password)
     })
 }

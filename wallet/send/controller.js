@@ -1,7 +1,7 @@
 function openSendDialog(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/send/index.html',
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
             if (DEBUG) {
@@ -9,18 +9,17 @@ function openSendDialog(domain, success) {
                 $scope.amount = 2
             }
             $scope.send = function () {
-                wallet.send(domain,
-                    $scope.to_address,
-                    $scope.amount,
-                    function () {
-                        postWithGas('/wallet/api/messages/send.php', {
-                            to_address: $scope.to_address,
-                            message: "You have been received " + $scope.formatAmount($scope.amount, domain),
-                            token: storage.getString("fcm_token"),
-                        }, function () {
-                        })
-                        showSuccessDialog("Sent " + $scope.formatAmount($scope.amount, domain) + " success", success)
-                    })
+                postContractWithGas(domain, contract.send, function (key, next_hash) {
+                    return {
+                        from_address: wallet.address(),
+                        to_address: $scope.to_address,
+                        password: key,
+                        next_hash: next_hash,
+                        amount: $scope.amount,
+                    }
+                }, function () {
+                    showSuccessDialog("Sent " + $scope.formatAmount($scope.amount, domain) + " success", success)
+                })
             }
         }
     })

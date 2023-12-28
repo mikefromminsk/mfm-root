@@ -39,12 +39,12 @@ function openLaunchDialog(domain, success) {
                     $scope.selectedIndex += 1;
                 } else {
                     hasBalance(wallet.gas_domain, function () {
-                        postWithGas("/wallet/api/launch.php", {
+                        postContractWithGas("wallet", "api/launch.php", {
                             domain: $scope.domain,
-                            address: wallet.username,
+                            address: wallet.address(),
                             logo: $scope.logo,
                             category: $scope.category,
-                            next_hash: wallet.calcStartHash($scope.domain + "/wallet"),
+                            next_hash: wallet.calcStartHash($scope.domain),
                             amount: 1000000,
                         }, function () {
                             storage.pushToArray(storageKeys.domains, $scope.domain)
@@ -84,7 +84,7 @@ function openLaunchDialog(domain, success) {
                         $scope.close()
                         showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched", success)
                     }
-                }, 3000)
+                },  DEBUG ? 100 : 3000)
             }
         }
     }).then(function () {
