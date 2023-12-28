@@ -175,11 +175,15 @@ var wallet = {
     calcHash: function (domain, username, password, prev_key) {
         return md5(domain + username + password + (prev_key || ""))
     },
-    calcStartKey: function (path) {
-        return md5(path + wallet.address() + decode(storage.getString(storageKeys.passhash)))
+    calcStartKey: function (domain, success) {
+        window.openPin(domain, function (pin) {
+            success(md5(domain + wallet.address() + decode(storage.getString(storageKeys.passhash), pin)))
+        })
     },
-    calcStartHash: function (path) {
-        return md5(this.calcStartKey(path))
+    calcStartHash: function (domain, success) {
+        this.calcStartKey(domain, function (key) {
+            success(md5(key))
+        })
     },
     postContractWithGas: function (domain, contractHash, params, success, error) {
         var isParamsFunction = typeof params === 'function'
@@ -505,18 +509,22 @@ function reverse(s) {
     return s.split("").reverse().join("");
 }
 
-function encode(word, pass) {
-    /*var result = ""
-    for (var i = 0; i < word.length; i++)
-        result += String.fromCharCode(word.charCodeAt(i) + pass.charCodeAt(i % pass.length))
-    return result*/
-    return reverse(word)
+function encode(word, key) {
+    var output = "";
+    for (var i = 0; i < word.length; i++) {
+        var inp = word.charCodeAt(i);
+        var k = key.charCodeAt(i);
+        output += String.fromCharCode(inp ^ k);
+    }
+    return output
 }
 
-function decode(word, pass) {
-    /*var result = ""
-   for (var i = 0; i < word.length; i++)
-       result += String.fromCharCode(word.charCodeAt(i) - pass.charCodeAt(i % pass.length))
-   return result*/
-    return reverse(word)
+function decode(word, key) {
+    var output = "";
+    for (var i = 0; i < word.length; i++) {
+        var inp = word.charCodeAt(i);
+        var k = key.charCodeAt(i);
+        output += String.fromCharCode(inp ^ k);
+    }
+    return output
 }

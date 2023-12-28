@@ -108,9 +108,11 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         }, function () {
             addToStorage(domain)
         }, function () {
-            postContractWithGas(domain, contract.reg, {
-                address: wallet.address(),
-                next_hash: wallet.calcStartHash(domain)
+            postContractWithGas(domain, contract.reg, function (key, next_hash) {
+                return {
+                    address: wallet.address(),
+                    next_hash: next_hash
+                }
             }, function () {
                 addToStorage(domain)
             })

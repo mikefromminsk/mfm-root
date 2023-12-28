@@ -9,6 +9,7 @@ function openAccount(success) {
 
             $scope.logout = function () {
                 wallet.logout()
+                storage.setString("onboarding_showed", "true")
             }
             $scope.login = function () {
                 loginFunction(function () {
