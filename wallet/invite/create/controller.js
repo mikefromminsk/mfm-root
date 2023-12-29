@@ -7,6 +7,7 @@ function openInvite($rootScope, domain, success) {
             if (DEBUG) {
                 $scope.amount = 1
             }
+            setFocus("invite_coins")
             $scope.create = function () {
                 let invite_code = randomString(8)
                 postContractWithGas(domain, contract.bonus_create, function (key, next_hash) {

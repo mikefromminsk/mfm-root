@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/angular/binance_style.css" rel="stylesheet">
     <link href="/flex/flex.css" rel="stylesheet">
 </head>
 <body class="col align-center-center" style="
@@ -25,17 +24,18 @@
     }
 
     var bonus = getParam("bonus")
+    location.replace("/wallet" + (bonus ? "?bonus=" + bonus : ""));
 
-    if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
+    /*if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
         document.getElementById("android").style.display = "inherit"
     } else {
         document.getElementById("web").style.display = "inherit"
-        window.location.replace("/wallet" + (bonus ? "?bonus=" + bonus : ""));
+        location.replace("/wallet" + (bonus ? "?bonus=" + bonus : ""));
     }
 
     function openGooglePlay() {
-        window.location.href = "market://details?id=com.haiduk.crypto&referrer=" + bonus
-    }
+        location.href = "market://details?id=com.haiduk.crypto&referrer=" + bonus
+    }*/
 </script>
 </body>
 </html>
