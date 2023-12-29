@@ -59,6 +59,11 @@
                ng-model="search_text"
                placeholder="Find any token"
                style="padding-left: 34px">
+        <img class="img20 img-black ripple"
+             ng-click="search_text = ''"
+             ng-show="search_text != ''"
+             style="position: absolute; right: 8px; top: 11px"
+             src="/wallet/img/close.svg">
     </div>
     <div class="col ml4 ripple" ng-click="openTransactions()">
         <img class="img38 p8 img-black" src="/wallet/img/transactions.svg">
@@ -66,13 +71,16 @@
 </div>
 <div class="flex col scrollable-vertical">
     <div class="col" ng-show="search_text == ''">
-        <div class="col ph16" ng-show="drops.length">
+        <div class="col ph16" ng-show="bonuses.length">
             <p>Bonuses</p>
         </div>
         <div class="col" ng-repeat="item in bonuses">
             <div class="row ph16 pv8 align-start-center ripple" ng-click="receiveBonus(item)">
-                <img class="logo" src="{{genLogo(item.logo)}}">
-                <p class="flex size14 uppercase">{{item.domain}}</p>
+                <img class="logo" src="{{genLogo(bonusesCoins[item.domain].logo)}}">
+                <div class="col flex ml8">
+                    <p class="size16 bold uppercase medium">{{item.domain}}</p>
+                    <p class="size12 gray400-text">{{bonusesCoins[item.domain].owner}}</p>
+                </div>
                 <div class="primary-button green-back">
                     Get
                 </div>
@@ -171,7 +179,12 @@
                 </div>
                 <div class="col ml8 align-center-center button-gray p8"
                      ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
-                    <img class="img16 img-gray400" src="/wallet/img/favorite.svg">
+                    <img class="img16 img-gray400"
+                         src="/wallet/img/favorite.svg"
+                         ng-show="!coin.isFavorite">
+                    <img class="img16 img-warning"
+                         src="/wallet/img/favorite-selected.svg"
+                         ng-show="coin.isFavorite">
                 </div>
             </div>
             <div class="divider"></div>
@@ -186,16 +199,24 @@
     </div>
 </div>
 
-<script src="/angular/angular.min.js"></script>
-<link href="/angular/angular-material.min.css" rel="stylesheet">
-<link href="/angular/binance_style.css" rel="stylesheet">
-<link href="/angular/colors.css" rel="stylesheet">
-<link href="/angular/dark.css" rel="stylesheet">
-<script src="/angular/angular-material.min.js"></script>
+<script src="/node_modules/angular/angular.js"></script>
+<script src="/node_modules/angular-aria/angular-aria.js"></script>
+<script src="/node_modules/angular-animate/angular-animate.js"></script>
+<script src="/node_modules/angular-messages/angular-messages.js"></script>
+<script src="/node_modules/angular-material/angular-material.js"></script>
+
+<link href="/node_modules/angular-material/angular-material.min.css" rel="stylesheet">
+<script src="/node_modules/angular-material/angular-material.min.js"></script>
+
+<link href="/flex/flex.css" rel="stylesheet">
+<link href="/wallet/utils/base_style.css" rel="stylesheet">
+<link href="/wallet/utils/colors.css" rel="stylesheet">
+<link href="/wallet/utils/dark.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+
 <script src="/wallet/utils/formats.js"></script>
 <script src="/wallet/utils/backend.js"></script>
 <script src="/wallet/utils/ui.js"></script>
-<link href="style.css" rel="stylesheet">
 
 <script async src="/wallet/dialogs/success/controller.js"></script>
 <script async src="/wallet/dialogs/info/controller.js"></script>

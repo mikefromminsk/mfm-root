@@ -8,8 +8,8 @@ let contract = {
     init: '772df88baecd34099df80f0e592a9bc7',
     ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
     ico_sell: '8d0a5b6afe2082197857d58faef59655',
-    bonus_create: 'c15a06590129c3854558b5ec282ffdad',
-    bonus_receive: '4368a2e5a2df87493e3d15f640027372',
+    bonus_create: 'f11bb3db4f36d360158b446c41b1bd6a',
+    bonus_receive: '96eb30f335960041368dc63ee5e6ebec',
     wallet: '7242feda3f24473a3f86d9bd886e4510',
 }
 
@@ -124,7 +124,7 @@ const storageKeys = {
     username: "STORE_USERNAME",
     passhash: "STORE_PASSHASH",
     domains: "STORE_DOMAINS",
-    bonuses: "STORE_DROPS",
+    bonuses: "STORE_BONUSES",
 }
 
 
@@ -135,41 +135,11 @@ function postContractWithGas(domain, contractHash, params, success, error) {
 var wallet = {
     quote_domain: "usdt",
     gas_domain: "data",
-    gas_path: "data/wallet",
     logout: function () {
         storage.clear()
     },
     address: function () {
         return storage.getString(storageKeys.username)
-    },
-    calcKey: function (path, success, error) {
-        if (storage.getString(storageKeys.passhash) == "") {
-            error("Please login")
-        } else {
-            window.openPin(function (pin) {
-
-            })
-        }
-    },
-    send: function (domain, to_address, amount, success, error) {
-        wallet.calcKey(wallet.gas_path, function (gas_key, gas_next_hash, username, password) {
-            wallet.calcKey(domain + "/wallet", function (key, hash, username, password) {
-                if (domain == wallet.gas_domain) {
-                    gas_next_hash = wallet.calcHash(wallet.gas_path, username, password, gas_key)
-                    gas_key = password
-                }
-                postContract(domain, contract.send, {
-                    from_address: username,
-                    to_address: to_address,
-                    password: key,
-                    next_hash: hash,
-                    amount: amount,
-                    gas_address: username,
-                    gas_key: gas_key,
-                    gas_next_hash: gas_next_hash,
-                }, success, error)
-            }, error)
-        }, error)
     },
     // rename to calcKey
     calcHash: function (domain, username, password, prev_key) {

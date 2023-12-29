@@ -3,6 +3,17 @@ function openOnboardingDialog(success) {
         templateUrl: "/wallet/onboarding/index.html",
         controller: function ($scope, $mdBottomSheet) {
             addFormats($scope)
+            $scope.texts = [{
+                title: "Welcome to DataChain Wallet",
+                image: "/wallet/img/welcome.svg",
+            },{
+                title: "For all actions you need Data token",
+                image: "/wallet/img/gas-station.svg",
+            },{
+                title: "Login and get Data tokens",
+                image: "/wallet/img/gift-logo.svg",
+            },
+            ]
             $scope.selectedIndex = 0
             $scope.next = function () {
                 if ($scope.selectedIndex != 2) {

@@ -1,17 +1,13 @@
 function openIcoSell($rootScope, domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/ico/sell/index.html",
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
             if (DEBUG) {
                 $scope.price = 3
             }
-            dataGet("wallet/info/" + domain + "/total", function (total) {
-                $scope.total = total
-                $scope.setPortion($scope.selectedPortion)
-                $scope.$apply()
-            })
+
             $scope.total = 0
             $scope.amount = 0
             $scope.portions = [1, 5, 10, 15, 25]
@@ -34,6 +30,11 @@ function openIcoSell($rootScope, domain, success) {
                     $scope.quote = response.result[0]
                 }
                 $scope.balance = $scope.quote.balance
+                dataGet("wallet/info/" + domain + "/total", function (total) {
+                    $scope.total = total
+                    $scope.setPortion($scope.selectedPortion)
+                    $scope.$apply()
+                })
                 $scope.$apply()
             })
 

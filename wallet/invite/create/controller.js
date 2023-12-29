@@ -8,20 +8,18 @@ function openInvite($rootScope, domain, success) {
                 $scope.amount = 1
             }
             $scope.create = function () {
-                let invite_create_path = randomString(8)
-                wallet.calcKey(domain + "/wallet", function (key, hash, username) {
-                    postContractWithGas(domain, contract.bonus_create, {
-                        domain: domain,
-                        from_address: username,
-                        from_key: key,
-                        from_next_hash: hash,
+                let invite_code = randomString(8)
+                postContractWithGas(domain, contract.bonus_create, function (key, next_hash) {
+                    return {
+                        key: key,
+                        next_hash: next_hash,
                         amount: $scope.amount,
-                        invite_hash: wallet.calcStartHash(invite_create_path),
-                    }, function () {
-                        openInviteCopy(domain,
-                            wallet.calcStartKey(invite_create_path),
-                            success)
-                    })
+                        invite_next_hash: md5(invite_code),
+                    }
+                }, function () {
+                    openInviteCopy(domain,
+                        invite_code,
+                        success)
                 })
             }
         }

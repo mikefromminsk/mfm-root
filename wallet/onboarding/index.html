@@ -1,25 +1,19 @@
 <md-bottom-sheet class="fill col bottom-back">
     <md-tabs class="flex" md-selected="selectedIndex">
-        <md-tab label="0">
+        <md-tab label="$index" ng-repeat="item in texts">
             <div class="fill col align-center-center">
-                <img src="/wallet/img/welcome.svg" style="width: 200px; height: 200px">
-                <h2 class="mt16 mh16">Welcome to DataChain Wallet</h2>
-            </div>
-        </md-tab>
-        <md-tab label="1">
-            <div class="fill col align-center-center">
-                <img src="/wallet/img/gas-station.svg" style="width: 200px; height: 200px">
-                <h2 class="mt16 mh16">For all actions you need Data token</h2>
-            </div>
-        </md-tab>
-        <md-tab label="2">
-            <div class="fill col align-center-center">
-                <img src="/wallet/img/gift-logo.svg" style="width: 200px; height: 200px">
-                <h2 class="mt16 mh16">Login and get Data tokens</h2>
+                <img src="{{item.image}}" style="width: 200px; height: 200px">
+                <h2 class="mt16 mh16">{{item.title}}</h2>
             </div>
         </md-tab>
     </md-tabs>
     <div class="col p16">
+        <div class="mb16 flex row align-center-center">
+            <div ng-repeat="item in texts"
+                 class="radius8 gray200-back"
+                 ng-class="{'gray400-back': $index == selectedIndex}"
+                 style="margin-left: 3px; width: 5px; height: 5px;"></div>
+        </div>
         <md-progress-linear md-mode="indeterminate" ng-show="in_progress"></md-progress-linear>
         <div class="primary-button"
              ng-click="next()">

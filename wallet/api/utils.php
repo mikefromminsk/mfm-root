@@ -142,31 +142,31 @@ function dataIcoBuy($to_address, $key, $next_hash, $amount)
 }
 
 function dataWalletBonusCreate($domain,
-                               $from_address,
-                               $from_key,
-                               $from_next_hash,
+                               $address,
+                               $key,
+                               $next_hash,
                                $amount,
-                               $invite_hash)
+                               $invite_next_hash)
 {
-    if (dataExist([$domain, invite, $invite_hash])) error("drop exists");
+    if (dataExist([$domain, invite, $invite_next_hash])) error("drop exists");
     if (!dataExist([$domain, wallet, bonus])) {
         dataWalletReg(bonus, md5(pass), $domain);
-        $bonus_receive_contract_hash = dataGet([store, $domain, "2e0f34870639c61f4e42053cb34cec9f"]);
+        $bonus_receive_contract_hash = dataGet([store, $domain, "96eb30f335960041368dc63ee5e6ebec"]);
         dataWalletDelegate($domain, bonus, pass, $bonus_receive_contract_hash);
     }
-    dataWalletSend($domain, $from_address, bonus, $amount, $from_key, $from_next_hash);
-    dataSet([$domain, bonus, $invite_hash, amount], $amount);
+    dataWalletSend($domain, $address, bonus, $amount, $key, $next_hash);
+    dataSet([$domain, bonus, $invite_next_hash, amount], $amount);
     return true;
 }
 
-function dataWalletBonusRecieve($domain,
+function dataWalletBonusReceive($domain,
                                 $invite_key,
                                 $to_address)
 {
     $invite_hash = md5($invite_key);
     $amount = dataGet([$domain, bonus, $invite_hash, amount]);
     if ($amount == null) error("hash is not right");
-    dataWalletSend($domain . "/wallet", bonus, $to_address, $amount);
+    dataWalletSend($domain, bonus, $to_address, $amount);
     dataSet([$domain, bonus, $invite_hash, amount], 0);
     return $amount;
 }

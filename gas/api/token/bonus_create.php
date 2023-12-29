@@ -1,20 +1,18 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
-$from_address = get_required(from_address);
-$from_key = get_required(from_key);
-$from_next_hash = get_required(from_next_hash);
+$gas_address = get_required(gas_address);
+$key = get_required(key);
+$next_hash = get_required(next_hash);
 $amount = get_int_required(amount);
-$invite_hash = get_required(invite_hash);
-
-$domain = getDomain();
+$invite_next_hash = get_required(invite_next_hash);
 
 $response[success] = dataWalletBonusCreate(
-    $domain,
-    $from_address,
-    $from_key,
-    $from_next_hash,
+    getDomain(),
+    $gas_address,
+    $key,
+    $next_hash,
     $amount,
-    $invite_hash);
+    $invite_next_hash);
 
 commit($response);

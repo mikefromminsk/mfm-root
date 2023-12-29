@@ -65,6 +65,7 @@ function openLaunchDialog(domain, success) {
                     return [...new Uint8Array(t)].map(t => t.toString(16).padStart(2, "0")).join("")
                 }
                 $scope.logo = hexString(await getHash(randomString(4)))
+                $scope.$apply()
             }
             $scope.generate()
 

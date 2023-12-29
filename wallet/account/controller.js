@@ -12,16 +12,15 @@ function openAccount(success) {
                 storage.setString("onboarding_showed", "true")
             }
             $scope.login = function () {
-                loginFunction(function () {
-                    $scope.$apply()
-                })
+                $scope.back()
+                loginFunction(success)
             }
             $scope.restart = function () {
                 location.reload(true)
             }
 
             $scope.openPage = function () {
-                openWeb("/wallet/docs/clear")
+                openWeb(location.origin + "/wallet/docs/clear/index.html")
             }
 
         }
