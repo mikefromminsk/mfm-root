@@ -35,7 +35,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.openDeposit = function () {
-        showInfoDialog("Deposit is not available right now", init)
+        openDeposit(init)
     }
 
     function init() {
@@ -144,7 +144,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             } else {
                 storage.removeFromArray(storageKeys.domains, domain)
             }
-            $scope.activeDomains = storage.getStringArray(storageKeys.domains)
             $scope.search_text = ""
             if (success)
                 success()
@@ -179,8 +178,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     var bonus = storage.getString("bonus")
     if (bonus != "") {
-        if (!storage.isArrayItemExist(storageKeys.bonuses, bonus) || DEBUG) {
-            showSuccess(bonus)
+        if (!storage.isArrayItemExist(storageKeys.bonuses, bonus)) {
             storage.pushToArray(storageKeys.bonuses, bonus)
         } else {
             showInfoDialog("Bonus " + bonus + " was checked before")

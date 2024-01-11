@@ -1,0 +1,32 @@
+<md-bottom-sheet class="col bottom-back black-text">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
+        </div>
+        <p class="flex size16 uppercase">Deposit</p>
+        <div class="primary-button"
+             ng-click="clear()">
+            -
+        </div>
+    </div>
+    <div class="row m16 input-wrapper" style="margin-top: 50px">
+        <div class="input-label-top">Deposit address</div>
+        <input class="flex input"
+               type="text"
+               autocapitalize="off"
+               id="deposit_address"
+               ng-model="deposit_address">
+    </div>
+    <div class="flex row align-center-center mh16">
+        Deposit deadline {{timeFormat(deadline)}}
+    </div>
+    <div class="row align-center-center mt16">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+        <div class="ml8">Waiting for deposit ({{countDownTimer}})</div>
+    </div>
+    <div class="flex row button align-center-center m16"
+         style="margin-top: 20px"
+         ng-click="copy()">
+        Copy
+    </div>
+</md-bottom-sheet>

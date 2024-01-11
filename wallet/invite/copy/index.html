@@ -1,7 +1,7 @@
 <md-bottom-sheet class="col bottom-back black-text">
     <div class="row shadow-black" style="height: 200px;">
         <div class="flex col align-center-center green-back">
-            <img src="/wallet/img/success.svg" style="width: 120px; height: 120px;">
+            <div id="qrcode"></div>
         </div>
     </div>
     <div class="row m16 input-wrapper" style="margin-top: 50px">
@@ -12,8 +12,12 @@
                id="link_input"
                ng-model="link">
     </div>
-    <div class="flex row button align-center-center m16"
+    <div class="flex row primary-button align-center-center mh16"
          style="margin-top: 50px"
+         ng-click="share()">
+        Share
+    </div>
+    <div class="flex row button align-center-center m16"
          ng-click="copy()">
         Copy
     </div>

@@ -4,10 +4,7 @@ function openIcoSell($rootScope, domain, success) {
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
-            if (DEBUG) {
-                $scope.price = 3
-            }
-
+            $scope.price = 1
             $scope.total = 0
             $scope.amount = 0
             $scope.portions = [1, 5, 10, 15, 25]

@@ -1,13 +1,10 @@
-function openInvite($rootScope, domain, success) {
+function openInvite(domain, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/invite/create/index.html",
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
-            if (DEBUG) {
-                $scope.amount = 1
-            }
-            setFocus("invite_coins")
+            $scope.amount = 1
             $scope.create = function () {
                 let invite_code = randomString(8)
                 postContractWithGas(domain, contract.bonus_create, function (key, next_hash) {

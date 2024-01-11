@@ -194,4 +194,10 @@ assertEquals("ico $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/ap
         price => 0.1,
     ] + gas())[success]);
 
+send($quote_domain, $quote_domain . "_deposits", pass4, md5(pass5), 1000000, "$quote_domain/api/deposit_check.php");
+send($gas_domain, "usdt_check", null, null, 1000000, "$quote_domain/api/deposit_check.php");
+send($gas_domain, "usdt_deposit", null, null, 1000000, "$quote_domain/api/deposit_start.php");
+send($gas_domain, "usdt_clear", null, null, 1000000, "$quote_domain/api/clear.php");
+
+
 echo $gas_index;

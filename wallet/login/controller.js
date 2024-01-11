@@ -36,6 +36,7 @@ function loginFunction(success) {
 
             function setPin() {
                 openPin(wallet.gas_domain, function (pin) {
+                    storage.pushToArray(storageKeys.domains, wallet.gas_domain)
                     storage.setString(storageKeys.username, $scope.username)
                     storage.setString(storageKeys.passhash, encode($scope.password, pin))
                     if (success)

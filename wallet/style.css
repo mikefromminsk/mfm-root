@@ -18,6 +18,10 @@ md-bottom-sheet {
     z-index: 10000;
 }
 
+md-toast {
+    z-index: 10001;
+}
+
 .tab {
     border-bottom: 2px solid transparent;
 }

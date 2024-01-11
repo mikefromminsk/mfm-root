@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-    <META HTTP-EQUIV="EXPIRES" CONTENT="Mon, 22 Jul 2002 11:12:01 GMT">
+    <meta http-equiv="Cache-control" content="NO-CACHE">
     <title>Wallet</title>
     <link rel="icon" type="image/x-icon" href="logo.svg">
     <style>
@@ -229,6 +228,7 @@
 <script>
     controller(main)
 </script>
+<script async src="/node_modules/qrcodejs/qrcode.min.js"></script>
 <script async src="/wallet/dialogs/pin/controller.js"></script>
 <script async src="/wallet/options/controller.js"></script>
 <script async src="/wallet/launch/controller.js"></script>
@@ -240,5 +240,6 @@
 <script async src="/wallet/trans/controller.js"></script>
 <script async src="/wallet/account/controller.js"></script>
 <script async src="/wallet/web/controller.js"></script>
+<script async src="/wallet/deposit/controller.js"></script>
 </body>
 </html>

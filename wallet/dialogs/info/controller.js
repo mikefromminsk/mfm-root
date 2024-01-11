@@ -1,7 +1,7 @@
 function showInfoDialog(message, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/dialogs/info/index.html',
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
             addFormats($scope)
             $scope.message = message
         }

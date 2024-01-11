@@ -64,7 +64,7 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.share = function () {
-                openInvite($rootScope, domain, success)
+                openInvite(domain, success)
             }
 
             $scope.trans = function () {
