@@ -26,14 +26,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openLaunchDialog($scope.search_text, init)
     }
 
-    $scope.openPin = function () {
-        /*window.openPin(function (pin) {
-
-        })*/
-        /*console.log(encode("word", "wd"))
-        console.log(decode(encode("word", "wd"), "wd"))*/
-    }
-
     $scope.openDeposit = function () {
         openDeposit(init)
     }
@@ -80,6 +72,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             for (const coin of response.result)
                 if (domains.indexOf(coin.domain) == -1)
                     $scope.recommendedCoins.push(coin)
+            $scope.recommendedCoins = filterByCategory($scope.recommendedCoins)
             $scope.$apply()
         })
     }
@@ -97,6 +90,17 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     })
 
+    function filterByCategory(tokens) {
+        var result = tokens
+        if ($scope.selectedCategories.length > 0) {
+            result = []
+            for (let token of tokens)
+                if ($scope.selectedCategories.indexOf(token.category) != -1)
+                    result.push(token)
+        }
+        return result
+    }
+
     function updateCoins() {
         var domains = storage.getStringArray(storageKeys.domains)
         if (domains.length > 0) {
@@ -104,7 +108,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 domains: domains.join(","),
                 address: wallet.address(),
             }, function (response) {
-                $scope.activeCoins = response.result
+                $scope.activeCoins = filterByCategory(response.result)
                 $scope.showBody = true
                 $scope.$apply()
             })
@@ -141,6 +145,11 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         function addToStorage(domain) {
             if (!storage.isArrayItemExist(storageKeys.domains, domain)) {
                 storage.pushToArray(storageKeys.domains, domain)
+                post("/wallet/api/settings/save.php", {
+                    user: wallet.address(),
+                    key: "domains",
+                    value: domain,
+                })
             } else {
                 storage.removeFromArray(storageKeys.domains, domain)
             }
@@ -185,7 +194,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         }
     }
     $scope.wallet = wallet
-    init()
 
     window.tokenCategories = {
         UNKNOWN: "Это цифровой актив, который используется для представления определенной ценности или права в блокчейн-системе. Он может быть использован для обеспечения безопасности и защиты данных, а также для доступа к определенным ресурсам или функциям в децентрализованной среде. Крипто токены могут быть созданы и управляться на основе различных стандартов, таких как ERC-20, ERC-721 и другие.",
@@ -193,8 +201,38 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         STABLECOIN: "Stablecoin - это криптовалюта, которая призвана сохранять свою стоимость относительно определенного актива, такого как доллар США или золото. Она обычно используется для уменьшения волатильности криптовалютного рынка и обеспечения стабильности цены.",
     }
 
-    if (storage.getString("onboarding_showed") == "") {
-        storage.setString("onboarding_showed", "true")
+    $scope.categories = Object.keys(window.tokenCategories)
+    $scope.selectedCategories = storage.getStringArray(storageKeys.categories)
+
+    $scope.selectCategory = function (key) {
+        if (storage.isArrayItemExist(storageKeys.categories, key)) {
+            storage.removeFromArray(storageKeys.categories, key)
+        } else {
+            storage.pushToArray(storageKeys.categories, key)
+        }
+        $scope.selectedCategories = storage.getStringArray(storageKeys.categories)
+        init()
+    }
+
+    if (storage.getString(storageKeys.onboardingShowed) == "") {
+        storage.setString(storageKeys.onboardingShowed, "true")
         openOnboardingDialog(init)
     }
+
+    function updateHideBalance() {
+        $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
+    }
+    updateHideBalance()
+
+    $scope.hideBalances = function () {
+        storage.setString(storageKeys.hideBalances, "true")
+        updateHideBalance()
+    }
+
+    $scope.showBalances = function () {
+        storage.setString(storageKeys.hideBalances, "")
+        updateHideBalance()
+    }
+
+    init()
 }

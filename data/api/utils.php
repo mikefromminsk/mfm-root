@@ -82,7 +82,7 @@ function dataSet(array $path_array, $value, $addHistory = true)
         } else {
             $data[data_type] = DATA_FILE;
             $data[data_value] = md5($value);
-            $GLOBALS[gas_bytes] += strlen($value) + HASH_ROW_SIZE;
+            //$GLOBALS[gas_bytes] += strlen($value) + HASH_ROW_SIZE;
             file_put_contents($_SERVER[DOCUMENT_ROOT] . $path, $value);
             insertRow(hashes, [hash => $data[data_value], path => $path]);
         }
@@ -91,6 +91,7 @@ function dataSet(array $path_array, $value, $addHistory = true)
             dataSet(array_merge($path_array, [$key]), $subvalue);
     }
     $GLOBALS[update_data][$data_id] = $data;
+    $GLOBALS[gas_bytes] += 1;
     if ($addHistory) {
         $data[data_path] = $path;
         $GLOBALS[new_history][] = $data;

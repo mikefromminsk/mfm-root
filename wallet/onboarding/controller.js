@@ -19,9 +19,18 @@ function openOnboardingDialog(success) {
                 if ($scope.selectedIndex != 2) {
                     $scope.selectedIndex += 1;
                 } else {
-                    $scope.back()
-                    loginFunction(success)
+                    openLogin()
                 }
+            }
+            $scope.$watch('selectedIndex', function (newValue, oldValue) {
+                if (oldValue == 2) {
+                    openLogin()
+                }
+            })
+
+            function openLogin() {
+                $scope.back()
+                loginFunction(success)
             }
         }
     }).then(function () {

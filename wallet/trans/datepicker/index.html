@@ -1,0 +1,37 @@
+<md-bottom-sheet class="col bottom-back">
+    <div class="row ph8 pv16 align-start-center upper-back">
+        <div class="col mr4 ripple" ng-click="back()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
+        </div>
+        <p class="flex size16 uppercase">Select date</p>
+    </div>
+    <div class="row align-center m16">
+        <div class="col mr8">
+            <div class="button" ng-click="addDay()">+</div>
+            <div class="row p16 align-center-center">
+                {{day}}
+            </div>
+            <div class="button" ng-click="minusDay()">-</div>
+        </div>
+
+        <div class="col mr8" style="width: 30px">
+            <div class="button" ng-click="addMonth()">+</div>
+            <div class="row p16 align-center-center">
+                {{month + 1}}
+            </div>
+            <div class="button" ng-click="minusMonth()">-</div>
+        </div>
+
+        <div class="col mr8">
+            <div class="button" ng-click="addYear()">+</div>
+            <div class="row p16 align-center-center">
+                {{year}}
+            </div>
+            <div class="button" ng-click="minusYear()">-</div>
+        </div>
+    </div>
+    <div class="flex m16 button"
+         ng-click="select()">
+        Select
+    </div>
+</md-bottom-sheet>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Cache-control" content="NO-CACHE">
+    <meta name="theme-color" content="#000000">
     <title>Wallet</title>
     <link rel="icon" type="image/x-icon" href="logo.svg">
     <style>
@@ -99,7 +100,18 @@
         <div class="row mt16 mh16 align-start-center" ng-show="wallet.address()">
             <div class="flex col">
                 <p class="size14 gray400-text">Total balance</p>
-                <p class="mt4 size24">{{formatPrice(totalBalance())}}</p>
+                <div class="mt4 row align-start-center">
+                    <p class="size24" ng-show="hideBalance">*****</p>
+                    <p class="size24" ng-show="!hideBalance">{{formatPrice(totalBalance())}}</p>
+                    <img class="ml8 img20 img-black"
+                         src="/wallet/img/show.svg"
+                         ng-show="hideBalance"
+                         ng-click="showBalances()">
+                    <img class="ml8 img20 img-black"
+                         src="/wallet/img/hide.svg"
+                         ng-show="!hideBalance"
+                         ng-click="hideBalances()">
+                </div>
             </div>
             <div class="button" ng-click="openDeposit()">Deposit</div>
         </div>
@@ -119,12 +131,22 @@
             </div>
         </div>-->
 
+        <div class="row mt16 scrollable-horizontal size10 lowercase bold" style="width: 100%">
+            <div class="ml16"></div>
+            <div class="row ">
+                <div ng-repeat="item in categories"
+                     class="button radius16 mr4 pv4 ph8"
+                     ng-class="{'active': selectedCategories.indexOf(item) != -1}"
+                     ng-click="selectCategory(item)">
+                    {{item}}
+                </div>
+            </div>
+        </div>
         <div class="row mh16 mt16 gray300-text" ng-show="activeCoins.length">
             <p class="flex size14 gray400-text">Your coins</p>
             <p class="size12">Price</p>
             <p class="size12 row align-end" style="min-width: 80px">Balance</p>
         </div>
-        <canvas class="img36" id="last_logo" width="50" height="50" style="display: none"></canvas>
         <div class="col" ng-repeat="coin in activeCoins">
             <div class="row ph16 pv8 align-start-center ripple"
                  ng-click="options(coin)">
@@ -140,8 +162,10 @@
                     </p>
                 </div>
                 <div class="col align-end-end" style="min-width: 80px">
-                    <p>{{formatPrice(coin.price * coin.balance)}}</p>
-                    <p class="size10 mt4">{{formatAmount(coin.balance)}}</p>
+                    <p ng-show="hideBalance">*****</p>
+                    <p ng-show="!hideBalance">{{formatPrice(coin.price * coin.balance)}}</p>
+                    <p class="size10 mt4" ng-show="hideBalance">*****</p>
+                    <p class="size10 mt4" ng-show="!hideBalance">{{formatAmount(coin.balance)}}</p>
                 </div>
             </div>
             <div class="divider"></div>
@@ -241,5 +265,6 @@
 <script async src="/wallet/account/controller.js"></script>
 <script async src="/wallet/web/controller.js"></script>
 <script async src="/wallet/deposit/controller.js"></script>
+<script async src="/wallet/trans/datepicker/controller.js"></script>
 </body>
 </html>

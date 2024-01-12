@@ -19,6 +19,13 @@ function loginFunction(success) {
                 }, function (response) {
                     $scope.in_progress = false
                     if (md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password, response.prev_key)) == response.next_hash) {
+                        post("/wallet/api/settings/read.php", {
+                            key: "domains",
+                            user: $scope.username,
+                        }, function (response) {
+                            for (let setting of response.settings)
+                                storage.pushToArray(storageKeys.domains, setting)
+                        })
                         setPin()
                     } else {
                         showError("password invalid")
@@ -35,10 +42,12 @@ function loginFunction(success) {
             }
 
             function setPin() {
-                openPin(wallet.gas_domain, function (pin) {
+                openPin(null, function (pin) {
                     storage.pushToArray(storageKeys.domains, wallet.gas_domain)
                     storage.setString(storageKeys.username, $scope.username)
                     storage.setString(storageKeys.passhash, encode($scope.password, pin))
+                    if (pin != null)
+                        storage.setString(storageKeys.hasPin, true)
                     if (success)
                         success()
                     $scope.close()

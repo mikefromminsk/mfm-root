@@ -72,8 +72,22 @@ function addFormats($scope) {
             return {'red-text': true}
     }
 
-    $scope.timeFormat = function (number) {
+    $scope.formatTime = function (number) {
         return new Date(number * 1000).toLocaleString()
+    }
+
+    function padTo2Digits(num) {
+        return num.toString().padStart(2, '0');
+    }
+
+    $scope.formatDate = function (number) {
+        if (number == "") return ""
+        let date = new Date(number * 1000)
+        return [
+            padTo2Digits(date.getDate()),
+            padTo2Digits(date.getMonth() + 1),
+            date.getFullYear(),
+        ].join('.');
     }
 
     $scope.percentFormat = function (number) {

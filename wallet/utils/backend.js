@@ -123,8 +123,12 @@ function dataGet(path, callback) {
 const storageKeys = {
     username: "STORE_USERNAME",
     passhash: "STORE_PASSHASH",
+    hasPin: "STORE_HAS_PIN",
+    hideBalances: "STORE_HIDE_BALANCES",
     domains: "STORE_DOMAINS",
     bonuses: "STORE_BONUSES",
+    categories: "STORE_CATEGORIES",
+    onboardingShowed: "STORE_ONBOARDING_SHOWED",
 }
 
 
@@ -480,6 +484,7 @@ function reverse(s) {
 }
 
 function encode(word, key) {
+    if (key == null) return word
     var output = "";
     for (var i = 0; i < word.length; i++) {
         var inp = word.charCodeAt(i);
@@ -490,6 +495,7 @@ function encode(word, key) {
 }
 
 function decode(word, key) {
+    if (key == null) return word
     var output = "";
     for (var i = 0; i < word.length; i++) {
         var inp = word.charCodeAt(i);

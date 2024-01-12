@@ -1,5 +1,5 @@
 <md-bottom-sheet class="fill col bottom-back">
-    <md-tabs class="flex" md-selected="selectedIndex">
+    <md-tabs class="flex" md-selected="selectedIndex" md-swipe-content>
         <md-tab label="$index" ng-repeat="item in texts">
             <div class="fill col align-center-center">
                 <img src="{{item.image}}" style="width: 200px; height: 200px">
@@ -8,7 +8,8 @@
         </md-tab>
     </md-tabs>
     <div class="col p16">
-        <div class="mb16 flex row align-center-center">
+        <div class="mb16 flex row align-center-center"
+             ng-click="next()">
             <div ng-repeat="item in texts"
                  class="radius8 gray200-back"
                  ng-class="{'gray400-back': $index == selectedIndex}"

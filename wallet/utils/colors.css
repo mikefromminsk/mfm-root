@@ -476,10 +476,15 @@
 }
 
 .scrollable-horizontal {
-    overflow: paged-x-controls;
+    overflow: auto;
 }
 
 .scrollable-vertical {
     overflow: auto;
+}
+
+.scrollable-horizontal::-webkit-scrollbar,
+.scrollable-vertical::-webkit-scrollbar {
+    display: none;
 }
 

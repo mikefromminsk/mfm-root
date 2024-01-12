@@ -246,7 +246,7 @@
                                 <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                                 <div class="col" style="margin-left: 7px">
                                     <div class="size16">{{item.ticker}}</div>
-                                    <div class=" size12">{{timeFormat(item.timestamp)}}</div>
+                                    <div class=" size12">{{formatTime(item.timestamp)}}</div>
                                 </div>
                                 <div class="flex"></div>
                                 <div class="col align-start-end size13">
@@ -593,7 +593,7 @@
                 <img src="img/coin/{{item.ticker}}.svg" class="coin-logo">
                 <div class="col" style="margin-left: 7px">
                     <div class="size16">{{str["transfer" + item.type] || item.type}}</div>
-                    <div class=" size12">{{timeFormat(item.timestamp)}}</div>
+                    <div class=" size12">{{formatTime(item.timestamp)}}</div>
                 </div>
                 <div class="flex"></div>
                 <div class="col align-start-end size13"

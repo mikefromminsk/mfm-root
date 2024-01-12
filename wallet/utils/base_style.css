@@ -159,6 +159,14 @@ input::-webkit-inner-spin-button {
     background-color: #8e8eea;
 }
 
+.blue-back-ripple.active,
+.primary-button.active,
+.button.active,
+.button-gray.active {
+    color: var(--gray400);
+    background-color: var(--gray200);
+}
+
 .primary-button:disabled,
 .primary-button[disabled],
 .button[disabled],
@@ -201,6 +209,10 @@ input::-webkit-inner-spin-button {
 .img16 {
     width: 16px;
     height: 16px;
+}
+
+.radius4 {
+    border-radius: 4px;
 }
 
 .radius8 {
@@ -278,4 +290,8 @@ md-bottom-sheet {
     padding: 0;
     border-top-width: 0;
     bottom: 80px;
+}
+
+.nowrap{
+    white-space: nowrap;
 }

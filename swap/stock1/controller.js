@@ -688,7 +688,7 @@ App.controller("Controller", function ($scope, $http, $mdBottomSheet, $mdToast, 
         return {'green-text': number > 0, 'red-text': number < 0}
     }
 
-    $scope.timeFormat = function (number) {
+    $scope.formatTime = function (number) {
         return new Date(number * 1000).toLocaleString()
     }
 

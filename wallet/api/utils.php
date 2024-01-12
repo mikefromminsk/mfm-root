@@ -3,6 +3,8 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/analytics.php";
 
+$gas_domain = "data";
+
 function dataWalletReg($address, $next_hash, $domain = null)
 {
     if ($domain == null)
@@ -69,13 +71,14 @@ function commit($response, $gas_address = null)
 {
     if ($GLOBALS[gas_bytes] != 0) {
         if ($gas_address != null) {
-            dataWalletSend("data",
+            dataWalletSend(
+                $GLOBALS[gas_domain],
                 $gas_address,
                 admin,
                 DEBUG ? 1 : $GLOBALS[gas_bytes]);
         } else {
             dataWalletSend(
-                "data",
+                $GLOBALS[gas_domain],
                 get_required(gas_address),
                 admin,
                 DEBUG ? 1 : $GLOBALS[gas_bytes],
