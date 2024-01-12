@@ -147,7 +147,7 @@
             <p class="size12">Price</p>
             <p class="size12 row align-end" style="min-width: 80px">Balance</p>
         </div>
-        <div class="col" ng-repeat="coin in activeCoins">
+        <div class="col" ng-repeat="coin in filteredActiveCoins">
             <div class="row ph16 pv8 align-start-center ripple"
                  ng-click="options(coin)">
                 <img class="logo" src="{{genLogo(coin.logo)}}">

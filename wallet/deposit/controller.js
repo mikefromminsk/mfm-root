@@ -20,7 +20,7 @@ function openDeposit(success) {
             })
 
             $scope.clear = function () {
-                post("usdt/api/clear.php", {}, function () {
+                post("/usdt/api/clear.php", {}, function () {
                     showSuccess("success")
                 })
             }

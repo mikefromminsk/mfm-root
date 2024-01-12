@@ -101,6 +101,30 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         return result
     }
 
+    function checkTransfers(from, to) {
+        function showTopMessage(token) {
+            $mdToast.show($mdToast.simple().position('top').textContent(
+                "You received " + $scope.formatAmount(token.balance, token.domain)
+            ))
+            setTimeout(function () {
+                new Audio("/wallet/dialogs/success/payment_success.mp3").play()
+            })
+        }
+        for (let toToken of to) {
+            var found = false
+            for (let fromToken of from) {
+                if (toToken.domain == fromToken.domain) {
+                    found = true
+                    if (toToken.balance > fromToken.balance)
+                        showTopMessage(toToken)
+                }
+            }
+            if (!found && toToken.balance > 0) {
+                showTopMessage(toToken)
+            }
+        }
+    }
+
     function updateCoins() {
         var domains = storage.getStringArray(storageKeys.domains)
         if (domains.length > 0) {
@@ -108,12 +132,16 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 domains: domains.join(","),
                 address: wallet.address(),
             }, function (response) {
-                $scope.activeCoins = filterByCategory(response.result)
+                if ($scope.activeCoins != null)
+                    checkTransfers($scope.activeCoins, response.result)
+                $scope.activeCoins = response.result
+                $scope.filteredActiveCoins = filterByCategory(response.result)
                 $scope.showBody = true
                 $scope.$apply()
             })
         } else {
             $scope.activeCoins = []
+            $scope.filteredActiveCoins = []
             $scope.showBody = true
         }
     }
@@ -222,6 +250,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     function updateHideBalance() {
         $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
     }
+
     updateHideBalance()
 
     $scope.hideBalances = function () {
