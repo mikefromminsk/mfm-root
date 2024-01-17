@@ -30,6 +30,14 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openDeposit(init)
     }
 
+    $scope.openWithdrawal = function () {
+        openWithdrawal(init)
+    }
+
+    $scope.openUsdtTransactions = function () {
+        openUsdtTransactions(init)
+    }
+
     function init() {
         updateBonuses()
         updateCoins()
@@ -160,10 +168,10 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         }, function () {
             addToStorage(domain)
         }, function () {
-            postContractWithGas(domain, contract.reg, function (key, next_hash) {
+            postContractWithGas(domain, contract.reg, function (key) {
                 return {
                     address: wallet.address(),
-                    next_hash: next_hash
+                    next_hash: md5(key)
                 }
             }, function () {
                 addToStorage(domain)

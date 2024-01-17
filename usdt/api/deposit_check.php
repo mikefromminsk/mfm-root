@@ -85,4 +85,4 @@ if ($deposited > 0) {
 $response[last_block_ts] = $last_block_ts;
 $response[deposited] = $deposited;
 
-commit($response, usdt_check);
+commit($response, usdt_deposit_check);

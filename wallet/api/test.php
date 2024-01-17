@@ -195,10 +195,14 @@ assertEquals("ico $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/ap
     ] + gas())[success]);
 
 send($quote_domain, $quote_domain . "_deposits", pass4, md5(pass5), 1000000, "$quote_domain/api/deposit_check.php");
-send($gas_domain, "usdt_check", null, null, 1000000, "$quote_domain/api/deposit_check.php");
+send($gas_domain, "usdt_deposit_check", null, null, 1000000, "$quote_domain/api/deposit_check.php");
 send($gas_domain, "usdt_deposit", null, null, 1000000, "$quote_domain/api/deposit_start.php");
-send($gas_domain, "usdt_clear", null, null, 1000000, "$quote_domain/api/clear.php");
+send($gas_domain, "usdt_deposit_clear", null, null, 1000000, "$quote_domain/api/clear.php");
 send($gas_domain, "wallet_settings", null, null, 1000000, "wallet/api/settings/save.php");
+
+send($quote_domain, $quote_domain . "_withdrawals", pass5, md5(pass6), 1, "$quote_domain/api/withdrawal_success.php");
+send($gas_domain, "usdt_withdrawal_start", null, null, 1000000, "$quote_domain/api/withdrawal_start.php");
+send($gas_domain, "usdt_withdrawal_success", null, null, 1000000, "$quote_domain/api/withdrawal_success.php");
 
 
 echo $gas_index;

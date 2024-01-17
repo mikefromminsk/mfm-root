@@ -130,4 +130,20 @@ function addFormats($scope) {
     $scope.close = function () {
         window.$mdDialog.hide()
     }
+
+    $scope.random = function (from, to) {
+        return Math.floor(Math.random() * to) + from;
+    }
+
+    $scope.groupByTimePeriod = function (obj) {
+        var objPeriod = {};
+        var oneDay = 24 * 60 * 60;
+        for (var i = 0; i < obj.length; i++) {
+            var d = new Date(obj[i]['time']);
+            d = Math.floor(d.getTime() / oneDay);
+            objPeriod[d] = objPeriod[d] || [];
+            objPeriod[d].push(obj[i]);
+        }
+        return objPeriod;
+    }
 }

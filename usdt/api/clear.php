@@ -11,4 +11,4 @@ foreach (USDT_TRC20_DEPOSIT_ADDRESSES as $DEPOSIT_ADDRESS) {
 $response[addresses] = USDT_TRC20_DEPOSIT_ADDRESSES;
 $response[success] = $setted == sizeof(USDT_TRC20_DEPOSIT_ADDRESSES);
 
-commit($response, usdt_clear);
+commit($response, usdt_deposit_clear);

@@ -1,7 +1,7 @@
 function openDeposit(success) {
     var depositCheckTimer
     window.$mdBottomSheet.show({
-        templateUrl: '/wallet/deposit/index.html',
+        templateUrl: '/wallet/usdt/deposit/index.html',
         controller: function ($scope) {
             addFormats($scope)
 

@@ -114,6 +114,12 @@
                 </div>
             </div>
             <div class="button" ng-click="openDeposit()">Deposit</div>
+            <div class="button p8 ml4" ng-click="openWithdrawal()">
+                <img class="img16 img-black" src="/wallet/img/upload.svg">
+            </div>
+            <div class="button p8 ml4" ng-click="openUsdtTransactions()">
+                <img class="img16 img-black" src="/wallet/img/transactions.svg">
+            </div>
         </div>
 
         <div class="mh16 mt16 row"
@@ -264,7 +270,9 @@
 <script async src="/wallet/trans/controller.js"></script>
 <script async src="/wallet/account/controller.js"></script>
 <script async src="/wallet/web/controller.js"></script>
-<script async src="/wallet/deposit/controller.js"></script>
+<script async src="/wallet/usdt/deposit/controller.js"></script>
+<script async src="/wallet/usdt/withdrawal/controller.js"></script>
+<script async src="/wallet/usdt/trans/controller.js"></script>
 <script async src="/wallet/trans/datepicker/controller.js"></script>
 </body>
 </html>

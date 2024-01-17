@@ -9,23 +9,11 @@ function openTransactions(domain) {
             $scope.fromDate = ""
             $scope.toDate = ""
 
-            var groupByTimePeriod = function (obj) {
-                var objPeriod = {};
-                var oneDay = 24 * 60 * 60;
-                for (var i = 0; i < obj.length; i++) {
-                    var d = new Date(obj[i]['time']);
-                    d = Math.floor(d.getTime() / oneDay);
-                    objPeriod[d] = objPeriod[d] || [];
-                    objPeriod[d].push(obj[i]);
-                }
-                return objPeriod;
-            }
-
             post("/wallet/api/trans.php", {
                 domain: domain,
                 address: wallet.address(),
             }, function (response) {
-                $scope.trans = groupByTimePeriod(response.trans)
+                $scope.trans = $scope.groupByTimePeriod(response.trans)
             })
 
             $scope.selectFrom = function () {
