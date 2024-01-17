@@ -5,4 +5,6 @@ $path = get_required(path);
 
 $path = explode("/", $path);
 
-echo json_encode(dataGet($path));
+$response[value] = dataGet($path);
+
+echo json_encode($response);

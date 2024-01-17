@@ -16,6 +16,7 @@ foreach ($addresses as $address) {
                 amount => dataGet([usdt, withdrawal, $address, $id, amount]),
                 chain => dataGet([usdt, withdrawal, $address, $id, chain]),
                 time => dataInfo([usdt, withwrawal, $address, amount])[data_time],
+                withdrawal_id => dataInfo([usdt, withwrawal, $address, withdrawal_id]),
             ];
         }
     }

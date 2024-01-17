@@ -3,39 +3,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/flex/flex.css" rel="stylesheet">
 </head>
-<body class="col align-center-center" style="
-  background: url('/wallet/img/gplayback.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-">
-<img id="android"
-     src="/wallet/img/gplay.svg"
-     onclick="openGooglePlay()"
-     style="cursor: pointer; display: none">
-<div id="web"
-     style="cursor: pointer; display: none">
-    <h1>Redirecting...</h1>
-</div>
+<body class="col align-center-center">
 <script>
     function getParam(key) {
         return new URLSearchParams(window.location.search).get(key)
     }
-
     var bonus = getParam("bonus")
     location.replace("/wallet" + (bonus ? "?bonus=" + bonus : ""));
-
-    /*if (navigator.userAgent.toLowerCase().indexOf("android") > -1) {
-        document.getElementById("android").style.display = "inherit"
-    } else {
-        document.getElementById("web").style.display = "inherit"
-        location.replace("/wallet" + (bonus ? "?bonus=" + bonus : ""));
-    }
-
-    function openGooglePlay() {
-        location.href = "market://details?id=com.haiduk.crypto&referrer=" + bonus
-    }*/
 </script>
 </body>
 </html>

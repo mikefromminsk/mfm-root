@@ -116,7 +116,7 @@ function dataGet(path, callback) {
         path: path,
     }, function (response) {
         if (callback)
-            callback(response)
+            callback(response.value)
     })
 }
 
@@ -172,9 +172,7 @@ var wallet = {
         function postWithGas(url) {
             openPin(isParamsFunction ? domain : wallet.gas_domain, function (pin) {
                 function postCalcKeyHash(domain, success) {
-                    post("/data/api/get.php", {
-                        path: domain + "/wallet/" + wallet.address() + "/prev_key",
-                    }, function (prev_key) {
+                    dataGet(domain + "/wallet/" + wallet.address() + "/prev_key", function (prev_key) {
                         calcKeyHash(domain, prev_key, success)
                     }, error)
                 }

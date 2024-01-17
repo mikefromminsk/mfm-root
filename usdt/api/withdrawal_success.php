@@ -20,4 +20,4 @@ dataSet([usdt, withdrawal, $address, $withdrawal_id], [
 
 $response[success] = true;
 
-commit($response, usdt_deposit_success);
+commit($response, usdt_withdrawal_success);

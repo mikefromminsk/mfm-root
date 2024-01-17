@@ -32,11 +32,11 @@ assertEquals("launch $gas_path", http_post($GLOBALS[host_name] . "/wallet/api/la
 
 assertEquals("analytics $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
         path => "analytics/$gas_domain/wallets/S60/value",
-    ]), 1);
+    ])[value], 1);
 
 assertEquals("dataWalletInit", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
         path => implode("/", [$gas_path, admin, amount]),
-    ]), 1000000000);
+    ])[value], 1000000000);
 
 
 function send($domain, $address, $key = null, $hash = null, $amount = 10000, $script = null)
@@ -71,7 +71,7 @@ send($gas_domain, user1, null, null, 10000, "wallet/api/testDelegate.php");
 
 assertEquals("analytics data", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
     path => "analytics/$gas_domain/wallets/S60/value",
-]), 2);
+])[value], 2);
 
 assertEquals("testDelegate", http_post("$host_name/wallet/api/testDelegate.php", [
 ])[success]);
@@ -118,7 +118,7 @@ assertEquals("ico $new_domain amount", dataGet([$new_path, ico, amount]), $sell_
 assertEquals("ico $new_domain price", dataGet([$new_domain, price]), $sell_price);
 assertEquals("analytics ico $gas_domain", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
     path => "analytics/$new_domain/price/S60/open",
-]), $sell_price);
+])[value], $sell_price);
 
 assertEquals("testReg test_ico_buy", http_post($GLOBALS[host_name] . "/$quote_domain/api/token/reg.php", [
         address => test_ico_buy,
@@ -147,11 +147,11 @@ assertEquals("ico buy", http_post($GLOBALS[host_name] . "/$new_domain/api/token/
 
 assertEquals("after buy ico gas balance", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
     path => implode("/", [$new_path, ico, amount]),
-]), $sell_amount - $buy_amount);
+])[value], $sell_amount - $buy_amount);
 
 assertEquals("after buy ico usdt balance", http_post($GLOBALS[host_name] . "/$gas_domain/api/get.php", [
     path => implode("/", [$quote_path, test_ico_buy, amount]),
-]), $sell_amount - ($buy_amount * $sell_price));
+])[value], $sell_amount - ($buy_amount * $sell_price));
 
 // data for ui tests
 
@@ -204,5 +204,28 @@ send($quote_domain, $quote_domain . "_withdrawals", pass5, md5(pass6), 1, "$quot
 send($gas_domain, "usdt_withdrawal_start", null, null, 1000000, "$quote_domain/api/withdrawal_start.php");
 send($gas_domain, "usdt_withdrawal_success", null, null, 1000000, "$quote_domain/api/withdrawal_success.php");
 
+send($quote_domain, $quote_domain . "_withdrawal_test", pass6, md5(pass7), 1);
+
+$withdrawal = [
+    address => $quote_domain . "_withdrawal_test",
+    key => pass,
+    nexthash => md5(pass1),
+    withdrawal_address => test_address,
+    amount => 1,
+    chain => TRON,
+    withdrawal_id => 123,
+];
+
+assertEquals("withdrawal_start", http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_start.php",
+    $withdrawal)[success]);
+
+$chain = http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_chain.php", []);
+
+assertEquals("withdrawal_chain", sizeof($chain), 1);
+
+$withdrawal[key] = pass;
+$withdrawal[nexthash] = md5(pass);
+assertEquals("withdrawal_success", http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_success.php",
+    $withdrawal)[success]);
 
 echo $gas_index;
