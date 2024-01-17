@@ -110,9 +110,9 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     function checkTransfers(from, to) {
-        function showTopMessage(token) {
+        function showTopMessage(balanceChange, domain) {
             $mdToast.show($mdToast.simple().position('top').textContent(
-                "You received " + $scope.formatAmount(token.balance, token.domain)
+                "You received " + $scope.formatAmount(balanceChange, domain)
             ))
             setTimeout(function () {
                 new Audio("/wallet/dialogs/success/payment_success.mp3").play()
@@ -123,12 +123,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             for (let fromToken of from) {
                 if (toToken.domain == fromToken.domain) {
                     found = true
-                    if (toToken.balance > fromToken.balance)
-                        showTopMessage(toToken)
+                    if (toToken.balance > fromToken.balance){
+                        showTopMessage(toToken.balance - fromToken.balance, toToken.domain)
+                    }
                 }
             }
             if (!found && toToken.balance > 0) {
-                showTopMessage(toToken)
+                showTopMessage(toToken.balance, toToken.domain)
             }
         }
     }

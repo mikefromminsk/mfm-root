@@ -156,14 +156,19 @@ assertEquals("after buy ico usdt balance", http_post($GLOBALS[host_name] . "/$ga
 // data for ui tests
 
 
-function dataWalletHash($path, $username, $password)
+function dataWalletKey($path, $username, $password, $prev_key = "")
 {
-    return md5(md5($path . $username . $password));
+    return md5($path . $username . $password . $prev_key);
+}
+
+function dataWalletHash($path, $username, $password, $prev_key = "")
+{
+    return md5(dataWalletKey($path, $username, $password, $prev_key));
 }
 
 assertEquals("testReg user", http_post($GLOBALS[host_name] . "/$gas_domain/api/token/reg.php", [
         address => user,
-        next_hash => dataWalletHash($gas_path, user, pass),
+        next_hash => dataWalletHash($gas_domain, user, pass),
     ] + gas())[success]);
 assertEquals("testSend gas to usdt", http_post($GLOBALS[host_name] . "/$gas_domain/api/token/send.php", [
         from_address => admin,
@@ -200,16 +205,20 @@ send($gas_domain, "usdt_deposit", null, null, 1000000, "$quote_domain/api/deposi
 send($gas_domain, "usdt_deposit_clear", null, null, 1000000, "$quote_domain/api/clear.php");
 send($gas_domain, "wallet_settings", null, null, 1000000, "wallet/api/settings/save.php");
 
-send($quote_domain, $quote_domain . "_withdrawals", pass5, md5(pass6), 1, "$quote_domain/api/withdrawal_success.php");
+assertEquals("testReg user", http_post($GLOBALS[host_name] . "/$quote_domain/api/token/reg.php", [
+        address => $quote_domain . "_withdrawals",
+        next_hash => dataWalletHash($quote_domain, $quote_domain . "_withdrawals", pass),
+    ] + gas())[success]);
+
 send($gas_domain, "usdt_withdrawal_start", null, null, 1000000, "$quote_domain/api/withdrawal_start.php");
 send($gas_domain, "usdt_withdrawal_success", null, null, 1000000, "$quote_domain/api/withdrawal_success.php");
 
-send($quote_domain, $quote_domain . "_withdrawal_test", pass6, md5(pass7), 1);
+send($quote_domain, $quote_domain . "_withdrawal_test", pass5, md5(pass6), 2);
 
 $withdrawal = [
     address => $quote_domain . "_withdrawal_test",
     key => pass,
-    nexthash => md5(pass1),
+    nexthash => md5(pass),
     withdrawal_address => test_address,
     amount => 1,
     chain => TRON,
@@ -220,12 +229,19 @@ assertEquals("withdrawal_start", http_post( "$GLOBALS[host_name]/$quote_domain/a
     $withdrawal)[success]);
 
 $chain = http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_chain.php", []);
-
 assertEquals("withdrawal_chain", sizeof($chain), 1);
+
+$withdrawal[key] = dataWalletKey($quote_domain, $quote_domain . "_withdrawals", pass);
+$withdrawal[nexthash] = dataWalletHash($quote_domain, $quote_domain . "_withdrawals", pass, $withdrawal[key]);
+assertEquals("withdrawal_success", http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_success.php",
+    $withdrawal)[success]);
 
 $withdrawal[key] = pass;
 $withdrawal[nexthash] = md5(pass);
-assertEquals("withdrawal_success", http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_success.php",
+$withdrawal[withdrawal_id] = 234;
+assertEquals("withdrawal_start2", http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_start.php",
     $withdrawal)[success]);
+$chain = http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_chain.php", []);
+assertEquals("withdrawal_chain", sizeof($chain), 1);
 
 echo $gas_index;
