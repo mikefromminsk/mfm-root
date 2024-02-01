@@ -12,6 +12,7 @@ function dataWalletReg($address, $next_hash, $domain = null)
     $path = $domain . "/wallet";
     if (dataExist([$path, $address])) error("$path/$address exist");
     dataSet([$path, $address, next_hash], $next_hash);
+    dataSet([wallet, settings, $address, domains], $domain);
     trackSum($domain, wallets, 1);
     return dataExist([$path, $address, next_hash]);
 }

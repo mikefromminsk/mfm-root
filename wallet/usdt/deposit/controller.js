@@ -4,11 +4,12 @@ function openDeposit(success) {
         templateUrl: '/wallet/usdt/deposit/index.html',
         controller: function ($scope) {
             addFormats($scope)
+            $scope.chain = "TRON"
 
             hasToken("usdt", function () {
                 post("/usdt/api/deposit_start.php", {
                     address: wallet.address(),
-                    chain: "BSC",
+                    chain: $scope.chain,
                 }, function (response) {
                     $scope.deadline = response.deadline
                     $scope.deposit_address = response.deposit_address
@@ -45,7 +46,7 @@ function openDeposit(success) {
                         $scope.countDownTimer = CHECK_INTERVAL
                         post("/usdt/api/deposit_check.php", {
                             deposit_address: $scope.deposit_address,
-                            chain: "BSC",
+                            chain: $scope.chain,
                         }, function (response) {
                             if (response.deposited > 0){
                                 $scope.back()

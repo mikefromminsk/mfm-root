@@ -1,7 +1,7 @@
 function openOptionsDialog($rootScope, coin, success) {
-    window.$mdBottomSheet.show({
+    window.$mdDialog.show({
         templateUrl: '/wallet/options/index.html',
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
             addFormats($scope)
             $scope.coin = coin
             var domain = coin.domain
@@ -73,6 +73,18 @@ function openOptionsDialog($rootScope, coin, success) {
 
             $scope.openDeposit = function () {
                 $rootScope.openDeposit()
+            }
+
+            $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
+
+            $scope.hideBalances = function () {
+                storage.setString(storageKeys.hideBalances, "true")
+                $scope.hideBalance = true
+            }
+
+            $scope.showBalances = function () {
+                storage.setString(storageKeys.hideBalances, "")
+                $scope.hideBalance = false
             }
         }
     }).then(function () {

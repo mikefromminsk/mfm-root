@@ -140,6 +140,10 @@
         <div class="row mt16 scrollable-horizontal size10 lowercase bold" style="width: 100%">
             <div class="ml16"></div>
             <div class="row ">
+                <div class="button radius16 mr4 pv4 ph8"
+                     ng-click="clearCategoryFilter()">
+                    All
+                </div>
                 <div ng-repeat="item in categories"
                      class="button radius16 mr4 pv4 ph8"
                      ng-class="{'active': selectedCategories.indexOf(item) != -1}"

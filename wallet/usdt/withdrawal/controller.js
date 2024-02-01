@@ -19,7 +19,7 @@ function openWithdrawal(success) {
                         withdrawal_id: $scope.random(10000, 99999),
                     }
                 }, function (response) {
-                    showSuccessDialog("Your withdrawal in progress")
+                    showSuccessDialog("Your withdrawal in progress", success)
                 })
             }
         }

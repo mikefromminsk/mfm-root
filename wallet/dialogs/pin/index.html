@@ -4,7 +4,7 @@
             <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
         <p class="flex size16 uppercase">Access for {{formatTicker(domain)}}</p>
-        <div class="button" ng-click="back()" ng-show="domain">SKIP</div>
+        <div class="button" ng-click="back()" ng-show="setMode">SKIP</div>
     </div>
 
     <div class="col size20" style="max-width: 600px">
@@ -13,8 +13,6 @@
             <div class="pin-unfilled" ng-hide="pin.length >= 2"></div><div class="pin-filled" ng-show="pin.length >= 2">*</div>
             <div class="pin-unfilled" ng-hide="pin.length >= 3"></div><div class="pin-filled" ng-show="pin.length >= 3">*</div>
             <div class="pin-unfilled" ng-hide="pin.length >= 4"></div><div class="pin-filled" ng-show="pin.length >= 4">*</div>
-            <div class="pin-unfilled" ng-hide="pin.length >= 5"></div><div class="pin-filled" ng-show="pin.length >= 5">*</div>
-            <div class="pin-unfilled" ng-hide="pin.length >= 6"></div><div class="pin-filled" ng-show="pin.length >= 6">*</div>
         </div>
         <div class="row">
             <div class="flex col align-center-center ripple pv16" ng-click="add('1')">1</div>

@@ -146,4 +146,9 @@ function addFormats($scope) {
         }
         return objPeriod;
     }
+
+    $scope.validateMaxLength = function (str, max){
+        if (str == null || str == '') return ""
+        if (str.length > max) return "Length is too big. Max " + max + " letters."
+    }
 }

@@ -182,11 +182,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         function addToStorage(domain) {
             if (!storage.isArrayItemExist(storageKeys.domains, domain)) {
                 storage.pushToArray(storageKeys.domains, domain)
-                post("/wallet/api/settings/save.php", {
-                    user: wallet.address(),
-                    key: "domains",
-                    value: domain,
-                })
             } else {
                 storage.removeFromArray(storageKeys.domains, domain)
             }
@@ -251,25 +246,27 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         init()
     }
 
+    $scope.clearCategoryFilter = function () {
+        storage.setString(storageKeys.categories, "")
+        $scope.selectedCategories = storage.getStringArray(storageKeys.categories)
+        init()
+    }
+
     if (storage.getString(storageKeys.onboardingShowed) == "") {
         storage.setString(storageKeys.onboardingShowed, "true")
         openOnboardingDialog(init)
     }
 
-    function updateHideBalance() {
-        $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
-    }
-
-    updateHideBalance()
+    $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
 
     $scope.hideBalances = function () {
         storage.setString(storageKeys.hideBalances, "true")
-        updateHideBalance()
+        $scope.hideBalance = true
     }
 
     $scope.showBalances = function () {
         storage.setString(storageKeys.hideBalances, "")
-        updateHideBalance()
+        $scope.hideBalance = false
     }
 
     init()

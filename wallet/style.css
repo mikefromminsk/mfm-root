@@ -128,3 +128,9 @@ md-tabs-wrapper {
 .pin-filled {
     border: 1px solid var(--green);
 }
+
+@media (max-width:959px) {
+    md-toast {
+        bottom: unset !important;
+    }
+}

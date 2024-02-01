@@ -18,6 +18,15 @@ function openLaunchDialog(domain, success) {
                 $scope.category = key
             }
 
+            $scope.$watch('domain', function (newValue, oldValue) {
+                if (newValue != newValue.toLowerCase())
+                    $scope.domain = newValue.toLowerCase()
+                if (newValue.match(new RegExp("\\W")))
+                    $scope.domain = oldValue
+                if (newValue.indexOf(' ') != -1)
+                    $scope.domain = oldValue
+            })
+
             $scope.next = function () {
                 if ($scope.selectedIndex == 0) {
                     $scope.in_progress = true
@@ -25,7 +34,7 @@ function openLaunchDialog(domain, success) {
                         path: "wallet/info",
                         search_text: $scope.domain,
                     }, function (response) {
-                        if (response.result.indexOf($scope.domain) == -1){
+                        if (response.result.indexOf($scope.domain) == -1) {
                             $scope.selectedIndex += 1;
                         } else {
                             showError($scope.domain.toUpperCase() + " domain exists")
@@ -37,9 +46,8 @@ function openLaunchDialog(domain, success) {
                     $scope.selectedIndex += 1;
                 } else if ($scope.selectedIndex == 2) {
                     $scope.selectedIndex += 1;
-                } else {
                     hasBalance(wallet.gas_domain, function () {
-                        wallet.calcStartHash($scope.domain ,function (next_hash) {
+                        wallet.calcStartHash($scope.domain, function (next_hash) {
                             postContractWithGas("wallet", "api/launch.php", {
                                 domain: $scope.domain,
                                 address: wallet.address(),
@@ -61,9 +69,11 @@ function openLaunchDialog(domain, success) {
                     let e = (new TextEncoder).encode(t);
                     return window.crypto.subtle.digest("SHA-1", e)
                 }
+
                 function hexString(t) {
                     return [...new Uint8Array(t)].map(t => t.toString(16).padStart(2, "0")).join("")
                 }
+
                 $scope.logo = hexString(await getHash(randomString(4)))
                 $scope.$apply()
             }
@@ -81,13 +91,13 @@ function openLaunchDialog(domain, success) {
                 $scope.stageIndex += 1
                 $scope.$apply()
                 setTimeout(function () {
-                    if ($scope.stageIndex < $scope.stages.length - 1){
+                    if ($scope.stageIndex < $scope.stages.length - 1) {
                         $scope.startLaunching()
                     } else {
                         $scope.close()
                         showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched", success)
                     }
-                },  DEBUG ? 100 : 3000)
+                }, DEBUG ? 100 : 3000)
             }
         }
     }).then(function () {

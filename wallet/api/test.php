@@ -204,6 +204,7 @@ send($gas_domain, "usdt_deposit_check", null, null, 1000000, "$quote_domain/api/
 send($gas_domain, "usdt_deposit", null, null, 1000000, "$quote_domain/api/deposit_start.php");
 send($gas_domain, "usdt_deposit_clear", null, null, 1000000, "$quote_domain/api/clear.php");
 send($gas_domain, "wallet_settings", null, null, 1000000, "wallet/api/settings/save.php");
+send($gas_domain, "usdt_reg", null, null, 100000, "$quote_domain/api/token/free_reg.php");
 
 assertEquals("testReg user", http_post($GLOBALS[host_name] . "/$quote_domain/api/token/reg.php", [
         address => $quote_domain . "_withdrawals",

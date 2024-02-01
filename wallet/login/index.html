@@ -21,9 +21,9 @@ background: linear-gradient(135deg, var(--gray200), var(--gray100));">
                        class="flex input"
                        type="text"
                        autocapitalize="none"
-                       onkeypress="return event.charCode != 32"
                        ng-model="username">
             </div>
+            <div>{{validateMaxLength(username, 10)}}</div>
             <div class="row input-wrapper">
                 <div class="input-label-top">Password</div>
                 <input type="password"
@@ -31,9 +31,12 @@ background: linear-gradient(135deg, var(--gray200), var(--gray100));">
                        ng-model="password">
             </div>
             <div class="row primary-button" ng-click="login()"
-                 ng-disabled="address == '' || password == '' || in_progress">
+                 ng-disabled="username == '' || password == '' || in_progress">
                 Login or Create account
             </div>
         </div>
     </div>
 </md-dialog>
+
+<!--
+ng-disabled="username == '' || password == '' || in_progress"-->

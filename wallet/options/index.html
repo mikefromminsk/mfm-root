@@ -1,6 +1,6 @@
-<md-bottom-sheet class="col bottom-back" style="height: 100%">
+<md-dialog class="col bottom-back" style="height: 100%">
     <div class="row pl8 pr16 pv16 align-start-center upper-back">
-        <div class="col mr4 ripple" ng-click="back()">
+        <div class="col mr4 ripple" ng-click="close()">
             <img class="img38 p8 img-black gray100-back radius16" src="/wallet/img/back.svg">
         </div>
         <img class="logo" src="{{genLogo(coin.logo)}}">
@@ -30,10 +30,11 @@
         <div class="row mt16 align-start-center">
             <div class="flex col">
                 <p class="size14 gray400-text">Account balance</p>
-                <p class="mt4 size24" ng-show="coin.price">{{formatPrice(coin.balance * coin.price)}}</p>
-                <p class="mt4 size24" ng-show="!coin.price">{{formatAmount(coin.balance, coin.domain)}}</p>
+                <p class="mt4 size24" ng-show="hideBalance">*****</p>
+                <p class="mt4 size24" ng-show="coin.price && !hideBalance">{{formatPrice(coin.balance * coin.price)}}</p>
+                <p class="mt4 size24" ng-show="!coin.price && !hideBalance">{{formatAmount(coin.balance, coin.domain)}}</p>
             </div>
-            <div class="button" ng-click="openDeposit()">Deposit</div>
+            <div class="button" ng-show="coin.domain == 'usdt'" ng-click="openDeposit()">Deposit</div>
         </div>
         <div class="col align-center-center" style="height: 200px;" ng-hide="profile">
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -156,4 +157,4 @@
             Sell {{formatDomain(coin.domain)}}
         </div>
     </div>
-</md-bottom-sheet>
+</md-dialog>

@@ -1,4 +1,4 @@
-function openPin(domain, success) {
+function openPin(domain, success, cancel) {
     if (domain != null && storage.getString(storageKeys.hasPin) == "") {
         if (success)
             success()
@@ -7,12 +7,13 @@ function openPin(domain, success) {
             templateUrl: "/wallet/dialogs/pin/index.html",
             controller: function ($scope) {
                 addFormats($scope)
-                $scope.domain = domain == null ? "Set pin code" : domain
+                $scope.setMode = domain == null
+                $scope.domain = $scope.setMode ? "Set pin code" : domain
                 $scope.pin = ""
 
                 $scope.add = function (symbol) {
                     $scope.pin += symbol
-                    if ($scope.pin.length == 6) {
+                    if ($scope.pin.length == 4) {
                         window.$mdBottomSheet.hide($scope.pin)
                     }
                 }
