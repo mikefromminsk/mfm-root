@@ -101,24 +101,21 @@
             <div class="flex col">
                 <p class="size14 gray400-text">Total balance</p>
                 <div class="mt4 row align-start-center">
-                    <p class="size24" ng-show="hideBalance">*****</p>
-                    <p class="size24" ng-show="!hideBalance">{{formatPrice(totalBalance())}}</p>
+                    <p class="size24" ng-show="isHideBalance()">*****</p>
+                    <p class="size24" ng-show="!isHideBalance()">{{formatPrice(totalBalance())}}</p>
                     <img class="ml8 img20 img-black"
                          src="/wallet/img/show.svg"
-                         ng-show="hideBalance"
+                         ng-show="isHideBalance()"
                          ng-click="showBalances()">
                     <img class="ml8 img20 img-black"
                          src="/wallet/img/hide.svg"
-                         ng-show="!hideBalance"
+                         ng-show="!isHideBalance()"
                          ng-click="hideBalances()">
                 </div>
             </div>
             <div class="button" ng-click="openDeposit()">Deposit</div>
             <div class="button p8 ml4" ng-click="openWithdrawal()">
                 <img class="img16 img-black" src="/wallet/img/upload.svg">
-            </div>
-            <div class="button p8 ml4" ng-click="openUsdtTransactions()">
-                <img class="img16 img-black" src="/wallet/img/transactions.svg">
             </div>
         </div>
 
@@ -172,10 +169,10 @@
                     </p>
                 </div>
                 <div class="col align-end-end" style="min-width: 80px">
-                    <p ng-show="hideBalance">*****</p>
-                    <p ng-show="!hideBalance">{{formatPrice(coin.price * coin.balance)}}</p>
-                    <p class="size10 mt4" ng-show="hideBalance">*****</p>
-                    <p class="size10 mt4" ng-show="!hideBalance">{{formatAmount(coin.balance)}}</p>
+                    <p ng-show="isHideBalance()">*****</p>
+                    <p ng-show="!isHideBalance()">{{formatPrice(coin.price * coin.balance)}}</p>
+                    <p class="size10 mt4" ng-show="isHideBalance()">*****</p>
+                    <p class="size10 mt4" ng-show="!isHideBalance()">{{formatAmount(coin.balance)}}</p>
                 </div>
             </div>
             <div class="divider"></div>
@@ -247,7 +244,7 @@
 <link href="/wallet/utils/base_style.css" rel="stylesheet">
 <link href="/wallet/utils/colors.css" rel="stylesheet">
 <link href="/wallet/utils/dark.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
+<link href="style.css?q1" rel="stylesheet">
 
 <script src="/wallet/utils/formats.js"></script>
 <script src="/wallet/utils/backend.js"></script>
@@ -276,7 +273,6 @@
 <script async src="/wallet/web/controller.js"></script>
 <script async src="/wallet/usdt/deposit/controller.js"></script>
 <script async src="/wallet/usdt/withdrawal/controller.js"></script>
-<script async src="/wallet/usdt/trans/controller.js"></script>
 <script async src="/wallet/trans/datepicker/controller.js"></script>
 </body>
 </html>

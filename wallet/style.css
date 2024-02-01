@@ -134,3 +134,10 @@ md-tabs-wrapper {
         bottom: unset !important;
     }
 }
+
+.sticky {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    bottom: 0;
+    border-radius: 30px;
+}

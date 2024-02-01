@@ -128,6 +128,7 @@ function addFormats($scope) {
     }
 
     $scope.close = function () {
+        window.$mdBottomSheet.hide()
         window.$mdDialog.hide()
     }
 
@@ -150,5 +151,20 @@ function addFormats($scope) {
     $scope.validateMaxLength = function (str, max){
         if (str == null || str == '') return ""
         if (str.length > max) return "Length is too big. Max " + max + " letters."
+    }
+
+
+    $scope.isHideBalance = function () {
+        return storage.getString(storageKeys.hideBalances) != ""
+    }
+
+    $scope.hideBalances = function () {
+        storage.setString(storageKeys.hideBalances, "true")
+        $scope.hideBalance = true
+    }
+
+    $scope.showBalances = function () {
+        storage.setString(storageKeys.hideBalances, "")
+        $scope.hideBalance = false
     }
 }

@@ -74,18 +74,6 @@ function openOptionsDialog($rootScope, coin, success) {
             $scope.openDeposit = function () {
                 $rootScope.openDeposit()
             }
-
-            $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
-
-            $scope.hideBalances = function () {
-                storage.setString(storageKeys.hideBalances, "true")
-                $scope.hideBalance = true
-            }
-
-            $scope.showBalances = function () {
-                storage.setString(storageKeys.hideBalances, "")
-                $scope.hideBalance = false
-            }
         }
     }).then(function () {
         if (success)

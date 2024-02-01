@@ -20,12 +20,6 @@ function openDeposit(success) {
                 })
             })
 
-            $scope.clear = function () {
-                post("/usdt/api/clear.php", {}, function () {
-                    showSuccess("success")
-                })
-            }
-
             $scope.copy = function () {
                 document.getElementById("deposit_address").focus();
                 document.getElementById("deposit_address").select();

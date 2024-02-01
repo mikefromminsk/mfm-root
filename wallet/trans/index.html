@@ -30,7 +30,7 @@
                 <p class="ml4 flex size14 gray300-text">{{formatSec(item.time)}}</p>
                 <p class="size14 nowrap"
                    ng-class="{'red-text': item.from == username,'green-text': item.from != username}">
-                    {{(item.from == username ? "-" : "+") + formatAmount(item.amount, domain)}}
+                    {{(item.from == username ? "-" : "+") + formatAmount(item.amount, item.domain)}}
                 </p>
             </div>
         </div>

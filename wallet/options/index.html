@@ -1,4 +1,4 @@
-<md-dialog class="col bottom-back" style="height: 100%">
+<md-dialog class="col bottom-back fill">
     <div class="row pl8 pr16 pv16 align-start-center upper-back">
         <div class="col mr4 ripple" ng-click="close()">
             <img class="img38 p8 img-black gray100-back radius16" src="/wallet/img/back.svg">
@@ -30,9 +30,9 @@
         <div class="row mt16 align-start-center">
             <div class="flex col">
                 <p class="size14 gray400-text">Account balance</p>
-                <p class="mt4 size24" ng-show="hideBalance">*****</p>
-                <p class="mt4 size24" ng-show="coin.price && !hideBalance">{{formatPrice(coin.balance * coin.price)}}</p>
-                <p class="mt4 size24" ng-show="!coin.price && !hideBalance">{{formatAmount(coin.balance, coin.domain)}}</p>
+                <p class="mt4 size24" ng-show="isHideBalance()">*****</p>
+                <p class="mt4 size24" ng-show="coin.price && !isHideBalance()">{{formatPrice(coin.balance * coin.price)}}</p>
+                <p class="mt4 size24" ng-show="!coin.price && !isHideBalance()">{{formatAmount(coin.balance, coin.domain)}}</p>
             </div>
             <div class="button" ng-show="coin.domain == 'usdt'" ng-click="openDeposit()">Deposit</div>
         </div>

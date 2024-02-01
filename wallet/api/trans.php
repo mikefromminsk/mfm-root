@@ -8,31 +8,40 @@ $size = get_int(size, 20);
 $fromDate = get_int(fromDate);
 $toDate = get_int(toDate);
 
-if ($fromDate != null && $toDate != null && $fromDate <= $toDate) {
-    $ids = dataHistory([$domain, wallet, $address, last_trans], 1, 100);
-    $filteredIds = [];
-    foreach ($ids as $id) {
-        $time = dataInfo([$domain, trans, $id, amount])[data_time];
-        if ($time >= $fromDate && $time <= $toDate) {
-            $filteredIds[] = $id;
+$userDomains = dataWalletSettingsRead($address, domains);
+
+$mergedIds = [];
+foreach ($userDomains as $userDomain) {
+    if ($fromDate != null && $toDate != null && $fromDate <= $toDate) {
+        $ids = dataHistory([$userDomain, wallet, $address, last_trans], 1, 40);
+        $filteredIds = [];
+        foreach ($ids as $id) {
+            $time = dataInfo([$userDomain, trans, $id, amount])[data_time];
+            if ($time >= $fromDate && $time <= $toDate) {
+                $filteredIds[] = $id;
+            }
         }
+        $ids = $filteredIds;
+    } else {
+        $ids = dataHistory([$userDomain, wallet, $address, last_trans], $page, $size);
     }
-    $ids = $filteredIds;
-} else {
-    $ids = dataHistory([$domain, wallet, $address, last_trans], $page, $size);
+    $mergedIds[$userDomain] = $ids;
 }
 
 $trans = [];
-foreach ($ids as $id) {
-    $tran = [];
-    $tran[from] = dataGet([$domain, trans, $id, from]);
-    $tran[to] = dataGet([$domain, trans, $id, to]);
-    $tran[amount] = dataGet([$domain, trans, $id, amount]);
-    $tran[time] = dataInfo([$domain, trans, $id, amount])[data_time];
-    // domain
-    // order id
-    // base amount
-    $trans[] = $tran;
+foreach ($mergedIds as $userDomain => $ids) {
+    foreach ($ids as $id) {
+        $tran = [];
+        $tran[domain] = $userDomain;
+        $tran[from] = dataGet([$userDomain, trans, $id, from]);
+        $tran[to] = dataGet([$userDomain, trans, $id, to]);
+        $tran[amount] = dataGet([$userDomain, trans, $id, amount]);
+        $tran[time] = dataInfo([$userDomain, trans, $id, amount])[data_time];
+        // domain
+        // order id
+        // base amount
+        $trans[] = $tran;
+    }
 }
 
 $response[trans] = $trans;

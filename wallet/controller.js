@@ -257,17 +257,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openOnboardingDialog(init)
     }
 
-    $scope.hideBalance = storage.getString(storageKeys.hideBalances) != ""
-
-    $scope.hideBalances = function () {
-        storage.setString(storageKeys.hideBalances, "true")
-        $scope.hideBalance = true
-    }
-
-    $scope.showBalances = function () {
-        storage.setString(storageKeys.hideBalances, "")
-        $scope.hideBalance = false
-    }
 
     init()
 }

@@ -5,6 +5,17 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/analytics.php";
 
 $gas_domain = "data";
 
+function dataWalletSettingsSave($user, $key, $value){
+    $values = dataHistory([wallet, settings, $user, $key]) ?: [];
+    if (array_search($value, $values) === false)
+        dataSet([wallet, settings, $user, $key], $value);
+    return dataGet([wallet, settings, $user, $key]) == $value;
+}
+
+function dataWalletSettingsRead($user, $key){
+    return dataHistory([wallet, settings, $user, $key]) ?: [];
+}
+
 function dataWalletReg($address, $next_hash, $domain = null)
 {
     if ($domain == null)
@@ -12,7 +23,7 @@ function dataWalletReg($address, $next_hash, $domain = null)
     $path = $domain . "/wallet";
     if (dataExist([$path, $address])) error("$path/$address exist");
     dataSet([$path, $address, next_hash], $next_hash);
-    dataSet([wallet, settings, $address, domains], $domain);
+    dataWalletSettingsSave($address, domains, $domain);
     trackSum($domain, wallets, 1);
     return dataExist([$path, $address, next_hash]);
 }

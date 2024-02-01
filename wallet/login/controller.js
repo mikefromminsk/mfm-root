@@ -34,7 +34,9 @@ function loginFunction(success) {
                 })
             }
 
-            $scope.$watch('username', function (newValue, oldValue) {
+            $scope.$watch(function() {
+                return $scope.username
+            }, function (newValue, oldValue) {
                 if (newValue != newValue.toLowerCase())
                     $scope.username = oldValue
                 if (newValue.match(new RegExp("\\W")))
