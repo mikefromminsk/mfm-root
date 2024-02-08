@@ -5,7 +5,7 @@
         </div>
         <p class="flex size16 uppercase">Deposit</p>
     </div>
-    <div class="row m16 input-wrapper" style="margin-top: 50px">
+    <div class="row mh16 input-wrapper" style="margin-top: 50px">
         <div class="input-label-top">Deposit address</div>
         <input class="flex input"
                type="text"
@@ -13,7 +13,23 @@
                id="deposit_address"
                ng-model="deposit_address">
     </div>
-    <div class="flex row align-center-center mh16">
+    <div class="row align-center-center">
+        <div class="col align-start-center ripple"
+             ng-click="copy()">
+            <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                <img class="img24 img-accent" src="/wallet/img/copy.svg">
+            </div>
+            <p class="size12 mt4 gray400-text">copy</p>
+        </div>
+        <div class="col align-start-center ripple"
+             ng-click="share()">
+            <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                <img class="img24 img-accent" src="/wallet/img/share.svg">
+            </div>
+            <p class="size12 mt4 gray400-text">Invite</p>
+        </div>
+    </div>
+    <div class="flex row align-center-center mh16 mt16">
         Deposit deadline {{formatTime(deadline)}}
     </div>
     <div class="row align-center-center mt16">

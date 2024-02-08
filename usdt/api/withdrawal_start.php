@@ -12,9 +12,12 @@ $withdrawal_id = get_int_required(withdrawal_id);
 if ($chain != "TRON") error("this chain is not available");
 $provider = PROVIDERS[$chain];
 
+if ($chain == "TRON" && $amount < $provider[commission]) error("min $provider[commission] usdt for withdrawal");
 if (dataWalletBalance(usdt, $address) < $amount) error("usdt not enough");
 
 dataWalletSend(usdt, $address, usdt_withdrawals, $amount, $key, $nexthash);
+
+$amount = $amount - $provider[commission];
 
 dataSet([usdt, withdrawal, $address, $withdrawal_id], [
     withdrawal_address => $withdrawal_address,

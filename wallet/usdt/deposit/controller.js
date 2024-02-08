@@ -27,6 +27,12 @@ function openDeposit(success) {
                 showSuccess("Deposit address copied")
             }
 
+            $scope.share = function () {
+                navigator.share({
+                    text: $scope.deposit_address,
+                })
+            }
+
             var CHECK_INTERVAL = 10
             $scope.countDownTimer = 0
             $scope.deposited = 0
