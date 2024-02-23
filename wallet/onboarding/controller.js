@@ -30,7 +30,7 @@ function openOnboardingDialog(success) {
 
             function openLogin() {
                 $scope.back()
-                loginFunction(success)
+                openLogin(success)
             }
         }
     }).then(function () {

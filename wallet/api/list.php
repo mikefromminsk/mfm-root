@@ -21,9 +21,10 @@ if ($domains != "") {
         ];
     }
 
-    usort($response[result], function ($a, $b) {
-        return -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
-    });
+    if ($address != null)
+        usort($response[result], function ($a, $b) {
+            return -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
+        });
 }
 
 commit($response);

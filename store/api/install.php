@@ -2,9 +2,9 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $domain = get_required(domain);
-$file = get_required(file);
+$app_domain = get_required(app_domain);
 
-upload($domain, $domain, $file[tmp_name]);
+upload($domain, $app_domain, "/store/apps/$app_domain.zip");
 
 $response[success] = true;
 commit($response);

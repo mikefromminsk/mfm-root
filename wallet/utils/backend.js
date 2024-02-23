@@ -1,17 +1,5 @@
 const DEBUG = location.hostname == "localhost"
 
-let contract = {
-    send: '6ca3ad3fb30b51001944d4d90c2080d4',
-    free_reg: '3d2a3f12adf303a58f8cb37c9ef51fa1',
-    reg: 'b6aea855e7418054e0af65f2816452d0',
-    drop: 'cd5ce018bfe962a3b8ae4117370edb04',
-    init: '772df88baecd34099df80f0e592a9bc7',
-    ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
-    ico_sell: '8d0a5b6afe2082197857d58faef59655',
-    bonus_create: 'f11bb3db4f36d360158b446c41b1bd6a',
-    bonus_receive: '96eb30f335960041368dc63ee5e6ebec',
-    wallet: '7242feda3f24473a3f86d9bd886e4510',
-}
 
 function randomString(length) {
     let result = '';
@@ -27,8 +15,7 @@ function randomString(length) {
 
 function post(url, params, success, error) {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", url);
-    xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    xhr.open("POST", url, true);
     xhr.onload = () => {
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
@@ -44,7 +31,10 @@ function post(url, params, success, error) {
             }
         }
     };
-    xhr.send(JSON.stringify(params))
+    const formData = new FormData()
+    for (var key of Object.keys(params))
+        formData.append(key, params[key])
+    xhr.send(formData)
 }
 
 var domainContracts = {}
@@ -91,26 +81,6 @@ function postContract(domain, contractHash, params, success, error) {
     }
 }
 
-function postForm(url, params, success, error) {
-    const xhr = new XMLHttpRequest()
-    const formData = new FormData()
-    xhr.open("POST", url, true);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState == 4) {
-            if (xhr.status == 200) {
-                if (success)
-                    success(JSON.parse(xhr.response))
-            } else {
-                if (error)
-                    error(JSON.parse(xhr.response))
-            }
-        }
-    }
-    for (var key of Object.keys(params))
-        formData.append(key, params[key])
-    xhr.send(formData)
-}
-
 function dataGet(path, callback) {
     post("/data/api/get.php", {
         path: path,
@@ -128,6 +98,7 @@ const storageKeys = {
     domains: "STORE_DOMAINS",
     bonuses: "STORE_BONUSES",
     categories: "STORE_CATEGORIES",
+    selectedCoin: "STORE_SELECTED_COIN",
     onboardingShowed: "STORE_ONBOARDING_SHOWED",
 }
 

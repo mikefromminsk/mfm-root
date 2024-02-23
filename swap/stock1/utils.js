@@ -11,7 +11,7 @@ function download(filename, url) {
     //document.body.removeChild(element);
 }
 
-function selectFile(contentType, callback) {
+/*function selectFile(contentType, callback) {
     let input = document.createElement('input')
     input.type = 'file'
     input.accept = contentType
@@ -21,7 +21,7 @@ function selectFile(contentType, callback) {
             callback(files[0])
     }
     input.click();
-}
+}*/
 
 function selectFileData(contentType, callback){
     selectFile(contentType, function (file) {

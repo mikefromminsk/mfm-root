@@ -43,7 +43,7 @@
         <div class="col" ng-show="profile">
             <div class="row scrollable-horizontal align-center-start">
                 <div class="col align-start-center ripple"
-                     ng-show="contracts[contract.drop]"
+                     ng-show="contracts[brc1.drop]"
                      ng-click="giveaway()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
                         <img class="img24 img-accent" src="/wallet/img/gift.svg">
@@ -51,7 +51,7 @@
                     <p class="size12 mt4 gray400-text">Drop</p>
                 </div>
                 <div class="col align-start-center ripple"
-                     ng-show="contracts[contract.drop]"
+                     ng-show="contracts[brc1.drop]"
                      ng-click="sendDialog()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
                         <img class="img24 img-accent" src="/wallet/img/qr.svg">
@@ -66,7 +66,7 @@
                     <p class="size12 mt4 gray400-text">Support</p>
                 </div>-->
                 <div class="col align-start-center ripple"
-                     ng-show="contracts[contract.bonus_create]"
+                     ng-show="contracts[brc1.bonus_create]"
                      ng-click="share()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
                         <img class="img24 img-accent" src="/wallet/img/mail.svg">
@@ -147,13 +147,13 @@
          ng-show="coin.price || coin.owner == username">
         <div class="flex primary-button green-back"
              ng-click="ico_buy()"
-             ng-show="contracts[contract.ico_buy] && coin.price">
+             ng-show="contracts[brc1.ico_buy] && coin.price">
             Buy {{formatDomain(coin.domain)}}
         </div>
         <div style="width: 16px" ng-show="coin.price && coin.owner == username"></div>
         <div class="flex primary-button red-back"
              ng-click="ico_sell()"
-             ng-show="contracts[contract.ico_sell] && coin.owner == username">
+             ng-show="contracts[brc1.ico_sell] && coin.owner == username">
             Sell {{formatDomain(coin.domain)}}
         </div>
     </div>

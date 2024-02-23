@@ -10,18 +10,6 @@ body {
     height: 1px;
 }
 
-md-bottom-sheet md-content {
-    max-height: 500px;
-}
-
-md-bottom-sheet {
-    z-index: 10000;
-}
-
-md-toast {
-    z-index: 10001;
-}
-
 .tab {
     border-bottom: 2px solid transparent;
 }
@@ -32,11 +20,6 @@ md-toast {
 
 .header {
     background-color: var(--bottom);
-}
-
-md-dialog {
-    max-width: none;
-    max-height: none;
 }
 
 #messages_send_input::placeholder {
@@ -114,20 +97,6 @@ md-tabs-wrapper {
     display: none;
 }
 
-
-.pin-unfilled, .pin-filled {
-    border: 1px solid var(--gray400);
-    border-radius: 4px;
-    width: 24px;
-    height: 32px;
-    margin-left: 8px;
-    text-align: center;
-    line-height: 32px;
-}
-
-.pin-filled {
-    border: 1px solid var(--green);
-}
 
 @media (max-width:959px) {
     md-toast {

@@ -12,7 +12,7 @@ function showInfoDialog(message, success) {
 }
 
 function hasToken(domain, success, error) {
-    postContract(domain, contract.wallet, {
+    postContract(domain, brc1.wallet, {
         address: wallet.address()
     }, function (response) {
         if (success)

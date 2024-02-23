@@ -82,7 +82,7 @@ send($gas_domain, $gas_domain . "_drop", null, null, 1000000, "$gas_domain/api/t
 send($gas_domain, $gas_domain . "_reg", null, null, 10000, "$gas_domain/api/token/free_reg.php");
 
 
-$new_domain = "gas";
+$new_domain = "drc1";
 $new_path = "$new_domain/wallet";
 assertEquals("launch $new_path", http_post($GLOBALS[host_name] . "/wallet/api/launch.php", [
         domain => $new_domain,

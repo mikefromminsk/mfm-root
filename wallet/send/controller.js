@@ -10,7 +10,7 @@ function openSendDialog(domain, success) {
             }
             $scope.send = function () {
                 hasToken()
-                postContractWithGas(domain, contract.send, function (key, next_hash) {
+                postContractWithGas(domain, brc1.send, function (key, next_hash) {
                     return {
                         from_address: wallet.address(),
                         to_address: $scope.to_address,

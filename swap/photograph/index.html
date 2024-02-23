@@ -3,12 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/flex/flex.css">
-    <link rel="stylesheet" href="/flex/shorts.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="/flex/colors.css">
-    <style>
-    </style>
 </head>
 <body class="col">
 <div class="row align-start-center"
@@ -82,27 +76,16 @@
     </div>
 </div>
 
-<!--<iframe width="400" height="750" src="https://www.youtube.com/embed/aY7uyaWutvE?autoplay=1&mute=1">
-</iframe>-->
 
-
+<link rel="stylesheet" href="/flex/flex.css">
+<link rel="stylesheet" href="/flex/shorts.css">
+<link rel="stylesheet" href="/flex/colors.css">
+<link rel="stylesheet" href="style.css">
 <script>
     function toggleMenu() {
         document.getElementById("right-menu").classList.toggle('mob-show')
     }
 
-    const elementsToFadeInUpOnScroll = document.querySelectorAll(".fade-up");
-    if (elementsToFadeInUpOnScroll) {
-        window.addEventListener("scroll", function (event) {
-            elementsToFadeInUpOnScroll.forEach(function (element) {
-                if (window.scrollY >= (element.offsetTop - window.innerHeight)) {
-                    element.classList.add("fade-in-up");
-                } else {
-                    element.classList.remove("fade-in-up");
-                }
-            });
-        });
-    }
 </script>
 </body>
 </html>

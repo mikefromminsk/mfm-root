@@ -13,7 +13,7 @@ function openAccount(success) {
             }
             $scope.login = function () {
                 $scope.back()
-                loginFunction(success)
+                openLogin(success)
             }
             $scope.restart = function () {
                 location.reload(true)

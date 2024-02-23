@@ -5,14 +5,16 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/analytics.php";
 
 $gas_domain = "data";
 
-function dataWalletSettingsSave($user, $key, $value){
+function dataWalletSettingsSave($user, $key, $value)
+{
     $values = dataHistory([wallet, settings, $user, $key]) ?: [];
     if (array_search($value, $values) === false)
         dataSet([wallet, settings, $user, $key], $value);
     return dataGet([wallet, settings, $user, $key]) == $value;
 }
 
-function dataWalletSettingsRead($user, $key){
+function dataWalletSettingsRead($user, $key)
+{
     return dataHistory([wallet, settings, $user, $key]) ?: [];
 }
 
@@ -103,18 +105,17 @@ function commit($response, $gas_address = null)
     echo json_encode($response);
 }
 
-function upload($domain, $filepath)
+function upload($domain, $app_domain, $filepath)
 {
-    $file_hash = hash_file(md5, $filepath);
-
-    //if (dataGet([$domain, vote, value]) != $file_hash) error("votes not equal to file");
-    if (dataGet([$domain, hash]) == $file_hash) error("archive was uploaded before");
+    $global_path = $_SERVER["DOCUMENT_ROOT"] . $filepath;
+    $file_hash = hash_file(md5, $global_path);
+    if (!$file_hash) error("file hash is false");
+    //if (dataGet([$domain, packages, $app_domain, hash]) == $file_hash) error("archive was uploaded before");
 
     $zip = new ZipArchive;
-    if ($zip->open($filepath) !== TRUE) error("zip->open is false");
+    if ($zip->open($global_path) !== true) error("zip->open is false");
 
     $zip->extractTo($_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $domain);
-    dataSet([$domain, vote, last_uploaded], $file_hash);
 
     $files = [];
     for ($i = 0; $i < $zip->numFiles; $i++) {
@@ -122,7 +123,9 @@ function upload($domain, $filepath)
         $filepath = implode("/", explode("\\", $filepath));
         $file_hash = hash_file(md5, $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . $filepath);
         $files[$file_hash] = $filepath;
+        $GLOBALS[gas_bytes] += 1;
     }
+    dataSet([$domain, packages, $app_domain, hash], $file_hash);
     dataSet([store, $domain], $files);
     $zip->close();
 

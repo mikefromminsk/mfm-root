@@ -41,7 +41,7 @@ function openIcoSell($rootScope, domain, success) {
 
             $scope.ico_sell = function () {
                 hasToken(wallet.quote_domain, function () {
-                    postContractWithGas(domain, contract.ico_sell, function (key, hash) {
+                    postContractWithGas(domain, brc1.ico_sell, function (key, hash) {
                         return {
                             key: key,
                             next_hash: hash,

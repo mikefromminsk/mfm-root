@@ -15,20 +15,9 @@ body{
     white-space: nowrap;
 }
 
-.block {
-    width: 980px;
-    min-height: 600px;
-    padding: 50px 20px;
-}
-
 .menu > *:hover {
     text-decoration: underline;
     cursor: pointer;
-}
-
-.wauto {
-    width: 100% !important;
-    height: auto !important;
 }
 
 @keyframes fadeInUp {

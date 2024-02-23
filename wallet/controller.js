@@ -3,11 +3,12 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdToast = $mdToast
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
+    $scope.wallet = wallet
 
     $scope.menuIndex = 0
 
     $scope.login = function () {
-        loginFunction(init)
+        openLogin(init)
     }
 
     $scope.options = function (coin) {
@@ -164,12 +165,12 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.addFavorite = function (domain, success) {
-        postContract(domain, contract.wallet, {
+        postContract(domain, brc1.wallet, {
             address: wallet.address()
         }, function () {
             addToStorage(domain)
         }, function () {
-            postContractWithGas(domain, contract.reg, function (key) {
+            postContractWithGas(domain, brc1.reg, function (key) {
                 return {
                     address: wallet.address(),
                     next_hash: md5(key)
@@ -203,7 +204,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.receiveBonus = function (bonus) {
         hasBalance(wallet.gas_domain, function () {
             hasToken(bonus.domain, function () {
-                postContractWithGas(bonus.domain, contract.bonus_receive, {
+                postContractWithGas(bonus.domain, brc1.bonus_receive, {
                     to_address: wallet.address(),
                     invite_key: bonus.key,
                 }, function (response) {
@@ -225,7 +226,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             showInfoDialog("Bonus " + bonus + " was checked before")
         }
     }
-    $scope.wallet = wallet
 
     window.tokenCategories = {
         UNKNOWN: "Это цифровой актив, который используется для представления определенной ценности или права в блокчейн-системе. Он может быть использован для обеспечения безопасности и защиты данных, а также для доступа к определенным ресурсам или функциям в децентрализованной среде. Крипто токены могут быть созданы и управляться на основе различных стандартов, таких как ERC-20, ERC-721 и другие.",

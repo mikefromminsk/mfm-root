@@ -6,7 +6,7 @@ function openOptionsDialog($rootScope, coin, success) {
             $scope.coin = coin
             var domain = coin.domain
             $scope.username = wallet.address()
-            $scope.contract = contract
+            $scope.contract = brc1
 
             function checkFavorite() {
                 $scope.isFavorite = storage.getStringArray(storageKeys.domains).indexOf(domain) != -1
@@ -48,7 +48,7 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.giveaway = function () {
-                postContract(domain, contract.drop, {
+                postContract(domain, brc1.drop, {
                     address: wallet.address()
                 }, function (response) {
                     showSuccessDialog("You have been received " + $scope.formatAmount(response.dropped, domain), success)
