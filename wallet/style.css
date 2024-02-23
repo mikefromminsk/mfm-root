@@ -1,9 +1,3 @@
-body {
-    color: var(--black);
-    font-size: 14px;
-    background-color: var(--bottom);
-}
-
 .divider {
     background-color: var(--upper);
     width: 100%;
@@ -18,19 +12,13 @@ body {
     border-bottom: 2px solid #4F50FB;
 }
 
-.header {
-    background-color: var(--bottom);
-}
-
 #messages_send_input::placeholder {
     color: var(--gray400);
 }
 
-
 .img-fav {
     filter: invert(100%) sepia(44%) saturate(7500%) hue-rotate(3deg) brightness(102%) contrast(102%);
 }
-
 
 .filter {
     color: var(--black);

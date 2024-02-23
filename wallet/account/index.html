@@ -1,34 +1,34 @@
-<md-bottom-sheet class="col bottom-back fill">
-    <div class="row ph8 pv16 align-start-center upper-back">
-        <div class="col mr4 ripple" ng-click="back()">
-            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
-        </div>
-        <p class="flex size16 uppercase">Settings</p>
+<md-bottom-sheet class="col fill">
+    <div class="row header align-start-center">
+        <img src="/wallet/img/back.svg" ng-click="back()">
+        <p>Settings</p>
     </div>
-    <div class="flex col input-content scrollable-vertical">
-        <div class="row mt16 align-start-end"
-             ng-show="wallet.address()">
-            <div class="flex col">
-                <div class="size10 gray400-text">Username</div>
-                <div class="size16 black-text">{{wallet.address()}}</div>
+    <div class="col content align-start-center">
+        <div class="flex col input-content">
+            <div class="row mt16 align-start-end"
+                 ng-show="wallet.address()">
+                <div class="flex col">
+                    <div class="size10 gray400-text">Username</div>
+                    <div class="size16 black-text">{{wallet.address()}}</div>
+                </div>
+                <div class="button" ng-click="logout()">Logout</div>
             </div>
-            <div class="button" ng-click="logout()">Logout</div>
-        </div>
-        <div class="row"
-             ng-hide="wallet.address()">
-            <div class="flex primary-button" ng-click="login()">
-                Login or Create account
+            <div class="row"
+                 ng-hide="wallet.address()">
+                <div class="flex primary-button" ng-click="login()">
+                    Login or Create account
+                </div>
             </div>
+            <div class="row align-start-center ripple" ng-click="restart()">
+                <img class="img36 p8 img-black" src="/wallet/img/reload.svg">
+                <p>Reload UI</p>
+            </div>
+            <div class="row align-start-center ripple" ng-click="openPage()">
+                <img class="img36 p8 img-black" src="/wallet/img/doc.svg">
+                <p>Privacy policy</p>
+            </div>
+            <p class="gray400-text">{{model}}</p>
+            <p class="gray400-text">v{{version}}</p>
         </div>
-        <div class="row align-start-center ripple" ng-click="restart()">
-            <img class="img36 p8 img-black" src="/wallet/img/reload.svg">
-            <p>Reload UI</p>
-        </div>
-        <div class="row align-start-center ripple" ng-click="openPage()">
-            <img class="img36 p8 img-black" src="/wallet/img/doc.svg">
-            <p>Privacy policy</p>
-        </div>
-        <p class="gray400-text">{{model}}</p>
-        <p class="gray400-text">v{{version}}</p>
     </div>
 </md-bottom-sheet>

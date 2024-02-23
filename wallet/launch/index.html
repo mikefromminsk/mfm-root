@@ -1,14 +1,12 @@
-<md-dialog class="fill col bottom-back">
-    <div class="row ph8 pv16 align-start-center upper-back">
-        <div class="col mr4 ripple" ng-click="close()">
-            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
-        </div>
-        <p class="flex size16 uppercase">New coin</p>
+<md-dialog class="fill col">
+    <div class="row header align-start-center">
+        <img class="img38 img-black ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p>New coin</p>
     </div>
-    <md-tabs class="flex" md-selected="selectedIndex">
+    <md-tabs class="flex content" md-selected="selectedIndex">
         <md-tab label="Name">
-            <div class="fill row align-center-center">
-                <div class="flex row">
+            <div class="fill col align-center-center">
+                <div class="col input-content">
                     <div class="flex col align-start-center input-content">
                         <h2>Type token name</h2>
                         <div class="flex row input-wrapper">
@@ -23,41 +21,52 @@
             </div>
         </md-tab>
         <md-tab label="Category">
-            <div class="col input-content align-center scrollable-vertical">
-                <h2>Select token category</h2>
-                <div class="row wrap">
-                    <div class="filter"
-                         ng-class="{'active': category == key}"
-                         ng-repeat="(key, val) in categories"
-                         ng-click="selectCategory(key)">
-                        {{key}}
+            <div class="fill col align-start-center">
+                <div class="col input-content">
+                    <h2>Select token category</h2>
+                    <div class="row wrap">
+                        <div class="filter"
+                             ng-class="{'active': category == key}"
+                             ng-repeat="(key, val) in categories"
+                             ng-click="selectCategory(key)">
+                            {{key}}
+                        </div>
                     </div>
+                    <p>{{categories[category]}}</p>
                 </div>
-                <p>{{categories[category]}}</p>
             </div>
         </md-tab>
         <md-tab label="Logo">
-            <div class="fill col align-center-center input-content">
-                <h2>Choose logo</h2>
-                <img class="logo" src="{{genLogo(logo)}}">
-                <div class="button"
-                     ng-click="generate()">
-                    Generate
+            <div class="fill col align-start-center">
+                <div class="col input-content">
+                    <h2>Choose logo</h2>
+                    <img class="logo" src="{{genLogo(logo)}}">
+                    <div class="button"
+                         ng-click="generate()">
+                        Generate
+                    </div>
                 </div>
             </div>
         </md-tab>
         <md-tab label="Launch">
-            <div class="fill col input-content">
-                <h2>Launch progress</h2>
-                <div class="row" ng-repeat="item in stages">
-                    <p class="flex">{{item}}</p>
-                    <div class="lds-ring"
-                         ng-show="$index == stageIndex"><div></div><div></div><div></div><div></div></div>
-                    <img class="img24"
-                         src="/wallet/img/success.svg"
-                         ng-show="$index < stageIndex"/>
-                    <div class="img24"
-                         ng-show="$index > stageIndex"></div>
+            <div class="fill col align-start-center">
+                <div class="col input-content">
+                    <h2>Launch progress</h2>
+                    <div class="row" ng-repeat="item in stages">
+                        <p class="flex">{{item}}</p>
+                        <div class="lds-ring"
+                             ng-show="$index == stageIndex">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                        <img class="img24"
+                             src="/wallet/img/success.svg"
+                             ng-show="$index < stageIndex"/>
+                        <div class="img24"
+                             ng-show="$index > stageIndex"></div>
+                    </div>
                 </div>
             </div>
         </md-tab>

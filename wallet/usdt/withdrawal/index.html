@@ -1,21 +1,21 @@
-<md-bottom-sheet class="col bottom-back">
-    <div class="row ph8 pv16 align-start-center upper-back">
-        <div class="col mr4 ripple" ng-click="back()">
-            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
-        </div>
-        <p class="flex size16 uppercase">Withdrawal</p>
+<md-bottom-sheet class="col">
+    <div class="row header align-start-center">
+        <img src="/wallet/img/back.svg" ng-click="close()">
+        <p>Withdrawal</p>
     </div>
-    <div class="flex col input-content scrollable-vertical">
-        <div class="flex row input-wrapper" style="margin-top: 16px">
-            <div class="input-label-top">Tron address</div>
-            <input type="text" class="flex input" ng-model="withdrawal_address">
-        </div>
-        <div class="flex row input-wrapper" style="margin-top: 16px">
-            <div class="input-label-top">Amount</div>
-            <input type="text" class="flex input" ng-model="amount">
-        </div>
-        <div class="primary-button" ng-click="withdrawal()" ng-disabled="!withdrawal_address || !amount">
-            Withdrawal
+    <div class="col content align-start-center">
+        <div class="col input-content">
+            <div class="flex row input-wrapper" style="margin-top: 16px">
+                <div class="input-label-top">Tron address</div>
+                <input type="text" class="flex input" ng-model="withdrawal_address">
+            </div>
+            <div class="flex row input-wrapper" style="margin-top: 16px">
+                <div class="input-label-top">Amount</div>
+                <input type="text" class="flex input" ng-model="amount">
+            </div>
+            <div class="primary-button" ng-click="withdrawal()" ng-disabled="!withdrawal_address || !amount">
+                Withdrawal
+            </div>
         </div>
     </div>
 </md-bottom-sheet>

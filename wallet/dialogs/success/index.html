@@ -1,17 +1,18 @@
-<md-bottom-sheet class="col bottom-back black-text">
+<md-bottom-sheet class="col">
     <div class="row shadow-black" style="height: 200px;">
         <div class="flex col align-center-center green-back">
             <img src="/wallet/img/success.svg" style="width: 120px; height: 120px;">
         </div>
     </div>
-    <div class="row" style="height: 150px;">
-        <div class="flex col align-center-center">
-            <p class="size16 bold" style="margin-top: 30px">Success</p>
-            <p class="size14" style="margin-top: 16px">{{message}}</p>
+    <div class="col align-start-center">
+        <div class="col input-content">
+            <div class="col align-center-center" style="height: 150px;">
+                <p class="size16 bold" style="margin-top: 30px">Success</p>
+                <p class="mt16 size14">{{message}}</p>
+            </div>
+            <div class="button m16"  ng-click="back()">
+                Close
+            </div>
         </div>
-    </div>
-    <div class="flex row button align-center-center m16"
-         ng-click="back()">
-        Close
     </div>
 </md-bottom-sheet>

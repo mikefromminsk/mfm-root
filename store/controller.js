@@ -4,7 +4,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
     $scope.wallet = wallet
-
+    $scope.apps = {}
     $scope.selectedCoin
 
 
@@ -34,7 +34,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         post("/store/api/apps.php", {
             search_text: (newValue || ""),
         }, function (response) {
-            $scope.apps = response.apps
+            $scope.apps = response.apps || {}
             $scope.categories = response.categories
             $scope.$apply()
         })

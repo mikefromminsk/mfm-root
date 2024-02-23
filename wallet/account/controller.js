@@ -1,7 +1,7 @@
 function openAccount(success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/account/index.html',
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
             addFormats($scope)
             $scope.version = storage.getString("version", "0.14")
             $scope.model = storage.getString("model", window.navigator.userAgent)
