@@ -1,54 +1,51 @@
-<md-dialog class="col fill bottom-back">
-    <div class="row align-start-center header">
-        <img class="img38 img-black ripple" src="/wallet/img/back.svg" ng-click="close()">
-        <p>Add new app</p>
+<md-dialog class="col fill">
+    <div class="row header align-start-center">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p>Settings</p>
     </div>
-    <div class="flex col align-start-center content">
-        <div class="col align-start-center block">
-            <div class="col input-content">
-                <div class="flex row input-wrapper">
-                    <div class="input-label-top">Domain</div>
-                    <input type="text" class="flex input" ng-model="domain">
-                </div>
-
-                <div class="flex row input-wrapper">
-                    <div class="input-label-top">Title</div>
-                    <input type="text" class="flex input" ng-model="title">
-                </div>
-
-                <div class="flex row input-wrapper">
-                    <div class="input-label-top">Description</div>
-                    <input type="text" class="flex input" ng-model="description">
-                </div>
-
-                <div class="row">
-                    <md-select class="flex" ng-model="category" ng-show="!newCategoryMode">
-                        <md-option><em>None</em></md-option>
-                        <md-option ng-repeat="item in categories"
-                                   ng-value="item"
-                                   ng-disabled="category === item">
-                            {{item}}
-                        </md-option>
-                    </md-select>
-                    <div class="flex row input-wrapper" ng-show="newCategoryMode">
-                        <div class="input-label-top">Category</div>
-                        <input type="text" class="flex input" ng-model="category">
-                    </div>
-                    <img class="img-black img12" ng-click="newCategoryMode = !newCategoryMode"
-                         src="/store/img/edit.svg">
-                </div>
-
-                <div class="flex primary-button" ng-click="save()">Save</div>
-
-                <div class="flex row align-center-center gray300-back cursor mt16 radius16"
-                     ng-click="upload()"
-                     style="min-height: 100px">
-                    <img class="img-black img64" src="/store/img/edit.svg">
-                </div>
-
-                <div class="flex primary-button" ng-click="archive()">Archive</div>
+    <div class="col content align-start-center">
+        <div class="col input-content">
+            <div class="flex row input-wrapper">
+                <div class="input-label-top">Domain</div>
+                <input type="text" class="flex input" ng-model="domain">
             </div>
 
+            <div class="flex row input-wrapper">
+                <div class="input-label-top">Title</div>
+                <input type="text" class="flex input" ng-model="title">
+            </div>
+
+            <div class="flex row input-wrapper">
+                <div class="input-label-top">Description</div>
+                <input type="text" class="flex input" ng-model="description">
+            </div>
+
+            <div class="row">
+                <md-select class="flex" ng-model="category" ng-show="!newCategoryMode">
+                    <md-option><em>None</em></md-option>
+                    <md-option ng-repeat="item in categories"
+                               ng-value="item"
+                               ng-disabled="category === item">
+                        {{item}}
+                    </md-option>
+                </md-select>
+                <div class="flex row input-wrapper" ng-show="newCategoryMode">
+                    <div class="input-label-top">Category</div>
+                    <input type="text" class="flex input" ng-model="category">
+                </div>
+                <img class="img-black img12" ng-click="newCategoryMode = !newCategoryMode"
+                     src="/store/img/edit.svg">
+            </div>
+
+            <div class="flex primary-button" ng-click="save()">Save</div>
+
+            <div class="flex row align-center-center gray300-back cursor mt16 radius16"
+                 ng-click="upload()"
+                 style="min-height: 100px">
+                <img class="img-black img64" src="/store/img/edit.svg">
+            </div>
+
+            <div class="flex primary-button" ng-click="archive()">Archive</div>
         </div>
     </div>
 </md-dialog>

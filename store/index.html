@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body class="col" ng-app="App" ng-controller="Controller">
-<div class="row align-start-center header">
+<div class="row header align-start-center">
     <div class="row flex input-wrapper">
         <img class="img20"
              style="position: absolute; left: 8px; top: 11px"
@@ -58,7 +57,7 @@
         </md-menu>
     </div>
 </div>
-<div class="col align-start-center content">
+<div class="col content align-start-center">
     <div class="col block" ng-repeat="(category, categoryDomains) in categories">
         <p class="size16 bold">{{category}}</p>
         <div class="row mt16 gap16">

@@ -108,15 +108,14 @@ function commit($response, $gas_address = null)
 function upload($domain, $app_domain, $filepath = null)
 {
     if ($app_domain != null && $filepath == null) {
-        $filepath = "/store/apps/$app_domain.zip";
+        $filepath = $_SERVER[DOCUMENT_ROOT] . "/store/apps/$app_domain.zip";
     }
-    $global_path = $_SERVER[DOCUMENT_ROOT] . $filepath;
-    $file_hash = hash_file(md5, $global_path);
-    if (!$file_hash) error("file hash is false in $global_path");
+    $file_hash = hash_file(md5, $filepath);
+    if (!$file_hash) error("file hash is false in $filepath");
     if (dataGet([$domain, packages, $app_domain, hash]) == $file_hash) error("archive was uploaded before");
 
     $zip = new ZipArchive;
-    if ($zip->open($global_path) !== true) error("zip->open is false");
+    if ($zip->open($filepath) !== true) error("zip->open is false");
 
     $zip->extractTo($_SERVER[DOCUMENT_ROOT] . DIRECTORY_SEPARATOR . $domain);
 
