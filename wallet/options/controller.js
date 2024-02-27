@@ -47,6 +47,10 @@ function openOptionsDialog($rootScope, coin, success) {
                 openSendDialog(domain, success)
             }
 
+            $scope.openMining = function () {
+                openMining(domain, success)
+            }
+
             $scope.giveaway = function () {
                 postContract(domain, brc1.drop, {
                     address: wallet.address()
