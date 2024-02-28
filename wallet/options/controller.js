@@ -5,7 +5,7 @@ function openOptionsDialog($rootScope, coin, success) {
             addFormats($scope)
             $scope.coin = coin
             var domain = coin.domain
-            $scope.username = wallet.address()
+            $scope.wallet = wallet
             $scope.contract = brc1
 
             function checkFavorite() {
@@ -49,6 +49,10 @@ function openOptionsDialog($rootScope, coin, success) {
 
             $scope.openMining = function () {
                 openMining(domain, success)
+            }
+
+            $scope.openStore = function () {
+                openWeb(location.origin + "/store/")
             }
 
             $scope.giveaway = function () {

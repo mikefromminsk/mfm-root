@@ -11,9 +11,10 @@
                         <h2>Type token name</h2>
                         <div class="flex row input-wrapper">
                             <input id="launch_token_name"
+                                   type="text"
                                    class="flex input lowercase"
                                    autocapitalize="none"
-                                   type="text"
+                                   autocomplete="off"
                                    ng-model="domain">
                         </div>
                     </div>
@@ -37,10 +38,10 @@
             </div>
         </md-tab>
         <md-tab label="Logo">
-            <div class="fill col align-start-center">
-                <div class="col input-content">
+            <div class="fill col align-center-center">
+                <div class="col input-content align-center-center">
                     <h2>Choose logo</h2>
-                    <img class="logo" src="{{genLogo(logo)}}">
+                    <img class="radius24" src="{{genLogo(logo)}}" style="width: 100px; height: 100px">
                     <div class="button"
                          ng-click="generate()">
                         Generate

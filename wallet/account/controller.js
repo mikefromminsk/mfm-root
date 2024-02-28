@@ -3,7 +3,6 @@ function openAccount(success) {
         templateUrl: '/wallet/account/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            $scope.version = storage.getString("version", "0.14")
             $scope.model = storage.getString("model", window.navigator.userAgent)
             $scope.wallet = wallet
 

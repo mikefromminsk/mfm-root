@@ -20,8 +20,8 @@
                  src="/wallet/img/favorite-selected.svg">
         </div>
     </div>
-    <div class="flex col content align-start-center scroll">
-        <div class="col block">
+    <div class="flex col content align-start-center scroll" ng-show="profile">
+        <div class="col block input-content">
             <div class="row mt16 align-start-center">
                 <div class="flex col">
                     <p class="size14 gray400-text">Account balance</p>
@@ -36,121 +36,117 @@
             <div class="col align-center-center" style="height: 200px;" ng-hide="profile">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
             </div>
-            <div class="col" ng-show="profile">
-                <div class="row scrollable-horizontal align-center-start">
-                    <div class="col align-start-center ripple"
-                         ng-show="contracts[brc1.drop]"
-                         ng-click="giveaway()">
-                        <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                            <img class="img24 img-accent" src="/wallet/img/gift.svg">
-                        </div>
-                        <p class="size12 mt4 gray400-text">Drop</p>
+            <div class="row scrollable-horizontal align-center-start">
+                <div class="col align-start-center ripple"
+                     ng-click="giveaway()">
+                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                        <img class="img24 img-accent" src="/wallet/img/gift.svg">
                     </div>
-                    <div class="col align-start-center ripple"
-                         ng-click="sendDialog()">
-                        <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                            <img class="img24 img-accent" src="/wallet/img/qr.svg">
-                        </div>
-                        <p class="size12 mt4 gray400-text">Send</p>
+                    <p class="size12 mt4 gray400-text">Drop</p>
+                </div>
+                <div class="col align-start-center ripple"
+                     ng-click="sendDialog()">
+                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                        <img class="img24 img-accent" src="/wallet/img/qr.svg">
                     </div>
-                    <!--<div class="col align-start-center ripple"
-                         ng-click="contact()">
-                        <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                            <img class="img24 img-accent" src="/wallet/img/support.svg">
-                        </div>
-                        <p class="size12 mt4 gray400-text">Support</p>
-                    </div>-->
-                    <div class="col align-start-center ripple"
+                    <p class="size12 mt4 gray400-text">Send</p>
+                </div>
+                <div class="col align-start-center ripple"
+                     ng-click="share()">
+                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                        <img class="img24 img-accent" src="/wallet/img/mail.svg">
+                    </div>
+                    <p class="size12 mt4 gray400-text">Invite</p>
+                </div>
+                <div class="col align-start-center ripple"
+                     ng-show="profile.owner == wallet.address()"
+                     ng-click="openStore()">
+                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                        <img class="img24 img-accent" src="/wallet/img/upgrade.svg">
+                    </div>
+                    <p class="size12 mt4 gray400-text">Store</p>
+                </div>
+            </div>
 
-                         ng-click="share()"><!--ng-show="contracts[brc1.bonus_create]"-->
-                        <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                            <img class="img24 img-accent" src="/wallet/img/mail.svg">
-                        </div>
-                        <p class="size12 mt4 gray400-text">Invite</p>
+            <div class="col mt16" ng-show="profile.category">
+                <p class="size16 gray400-text">Description</p>
+                <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
+            </div>
+
+
+            <div class="row mt16 scrollable-horizontal">
+                <div class="col mr16">
+                    <p class="gray300-text size10">MCAP</p>
+                    <div class="row mt8 align-start-center">
+                        <p class="black-text size14">{{formatPrice(profile.mcap)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(profile.price7dChange)">
+                            {{formatPercent(profile.price7dChange)}}
+                        </p>
                     </div>
                 </div>
-
-                <div class="col mt16" ng-show="profile.category">
-                    <p class="size16 gray400-text">About {{profile.domain.toUpperCase()}}</p>
-                    <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
-                </div>
-
-
-                <div class="row mt16 scrollable-horizontal">
-                    <div class="col mr16">
-                        <p class="gray300-text size10">MCAP</p>
-                        <div class="row mt8 align-start-center">
-                            <p class="black-text size14">{{formatPrice(profile.mcap)}}</p>
-                            <p class="ml4 black-text size12"
-                               ng-class="percentColor(profile.price7dChange)">
-                                {{formatPercent(profile.price7dChange)}}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col mr16">
-                        <p class="gray300-text size10">Wallets7d</p>
-                        <div class="row mt8 align-start-center">
-                            <p class="black-text size14">{{formatAmount(profile.wallets7d)}}</p>
-                            <p class="ml4 black-text size12"
-                               ng-class="percentColor(profile.wallets7dChange)">
-                                {{formatPercent(profile.wallets7dChange)}}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col mr16">
-                        <p class="gray300-text size10">Transfers7d</p>
-                        <div class="row mt8 align-start-center">
-                            <p class="black-text size14">{{formatAmount(profile.transfers7d)}}</p>
-                            <p class="ml4 black-text size12"
-                               ng-class="percentColor(profile.transfers7dChange)">
-                                {{formatPercent(profile.transfers7dChange)}}
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col mr16">
-                        <p class="gray300-text size10">Volume7d</p>
-                        <div class="row mt8 align-start-center">
-                            <p class="black-text size14">{{formatAmount(profile.volume7d)}}</p>
-                            <p class="ml4 black-text size12"
-                               ng-class="percentColor(profile.volume7dChange)">
-                                {{formatPercent(profile.volume7dChange)}}
-                            </p>
-                        </div>
+                <div class="col mr16">
+                    <p class="gray300-text size10">Wallets7d</p>
+                    <div class="row mt8 align-start-center">
+                        <p class="black-text size14">{{formatAmount(profile.wallets7d)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(profile.wallets7dChange)">
+                            {{formatPercent(profile.wallets7dChange)}}
+                        </p>
                     </div>
                 </div>
+                <div class="col mr16">
+                    <p class="gray300-text size10">Transfers7d</p>
+                    <div class="row mt8 align-start-center">
+                        <p class="black-text size14">{{formatAmount(profile.transfers7d)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(profile.transfers7dChange)">
+                            {{formatPercent(profile.transfers7dChange)}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col mr16">
+                    <p class="gray300-text size10">Volume7d</p>
+                    <div class="row mt8 align-start-center">
+                        <p class="black-text size14">{{formatAmount(profile.volume7d)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(profile.volume7dChange)">
+                            {{formatPercent(profile.volume7dChange)}}
+                        </p>
+                    </div>
+                </div>
+            </div>
 
-                <div class="col mt16" ng-show="profile.category">
-                    <p class="size16 gray400-text">Токеномика</p>
-                    <div class="mt8 size14">
-                        <div class="row mt4">
-                            <p class="flex">Total supply</p>
-                            <p class="nowrap">{{formatAmount(profile.total, profile.domain)}}</p>
-                        </div>
-                        <div class="row mt4">
-                            <p class="flex">Circulation supply</p>
-                            <p class="nowrap">{{formatAmount(profile.pie.circulation, profile.domain)}}</p>
-                        </div>
-                        <div class="row mt4">
-                            <p class="flex">For sale</p>
-                            <p class="nowrap">{{formatAmount(profile.pie.ico, profile.domain)}}</p>
-                        </div>
+            <div class="col mt16" ng-show="profile.category">
+                <p class="size16 gray400-text">Токеномика</p>
+                <div class="mt8 size14">
+                    <div class="row mt4">
+                        <p class="flex">Total supply</p>
+                        <p class="nowrap">{{formatAmount(profile.total, profile.domain)}}</p>
+                    </div>
+                    <div class="row mt4">
+                        <p class="flex">Circulation supply</p>
+                        <p class="nowrap">{{formatAmount(profile.pie.circulation, profile.domain)}}</p>
+                    </div>
+                    <div class="row mt4">
+                        <p class="flex">For sale</p>
+                        <p class="nowrap">{{formatAmount(profile.pie.ico, profile.domain)}}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col mb16 align-start-center"
-         ng-show="coin.price || coin.owner == username">
+         ng-show="coin.price || coin.owner == wallet.address()">
         <div class="row block gap16">
             <div class="flex primary-button green-back"
-                 ng-click="ico_buy()"><!--ng-show="contracts[brc1.ico_buy] && coin.price"-->
+                 ng-click="ico_buy()">
                 Buy {{formatDomain(coin.domain)}}
             </div>
-            <div style="width: 16px" ng-show="coin.price && coin.owner == username"></div>
+            <div style="width: 16px" ng-show="coin.price && coin.owner == wallet.address()"></div>
             <div class="flex primary-button red-back"
-                 ng-click="ico_sell()"
-                 >
-                <!--ng-show="contracts[brc1.ico_sell] && coin.owner == username"-->
+                 ng-click="ico_sell()">
+                <!--coin.owner == username"-->
                 Sell {{formatDomain(coin.domain)}}
             </div>
         </div>
