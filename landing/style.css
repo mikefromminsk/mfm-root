@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'Diatype';
+    url('ABC Diatype.ttf')  format('truetype'), /* Safari, Android, iOS */
+}
+
+html {
+    color: var(--black);
+}

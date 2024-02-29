@@ -1,0 +1,170 @@
+<head>
+    <title>Token</title>
+    <link rel="icon" href="/wallet/logo.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="col" ng-app="App" ng-controller="Controller">
+<div class="row header align-center-center shadow-black" style="background-color: rgba(0, 0, 0, 0.9)">
+    <div class="row block align-start-center">
+        <img src="{{genLogo(info.logo)}}">
+        <p class="size24 bold uppercase ml16">{{info.domain}}</p>
+        <div class="flex"></div>
+        <div class="row size16 nowrap cursor" style="gap: 20px">
+            <span class="selected">О {{info.domain}}</span>
+            <span>Shop</span>
+            <span>Explorer</span>
+            <span>Community</span>
+        </div>
+    </div>
+</div>
+<div class="col content align-start-center" style=" background-size: 100%; background-repeat: repeat-x;
+    background-position: calc(100% - 500px) 0; background-image: url('img/back.jpg');">
+    <div class="row block" style="padding: 150px 20px; gap: 50px;">
+        <div class="flex col align-center-center" style="text-align: center">
+            <p class="size70  bold">Powerful for developers.</p>
+            <p class="size70  bold">Fast for everyone.</p>
+            <p class="size24" style="margin: 32px 0">
+                Bring blockchain to the people. Solana supports experiences for power users, new consumers, and everyone
+                in between.
+            </p>
+            <div class="row" style="gap: 20px">
+                <div class="btn1">
+                    START BUILDING
+                </div>
+                <div class="btn3">
+                    DEMO
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col align-start-center" style="background-size: 100%; background-repeat: repeat-x;
+    background-position: calc(100% - 500px) 0; background-image: url('img/back2.jpg');">
+    <div class="row mob-col block">
+        <p class="flex-50 col size24">
+            Join a community of millions.
+        </p>
+        <div class="flex-50 col align-start-start" style="gap: 50px">
+            <div class="col">
+                <p class="size70 bold text1">{{formatAmount(info.wallets)}}</p>
+                <p class="mt16">ACTIVE ACCOUNTS</p>
+            </div>
+            <div class="col">
+                <p class="size70 bold text2">{{formatAmount(info.trans)}}</p>
+                <p class="mt16">TRANSACTIONS</p>
+            </div>
+            <div class="col">
+                <p class="size70 bold text3">$0.00025</p>
+                <p class="mt16">AVERAGE COST PER TRANSACTION</p>
+            </div>
+        </div>
+    </div>
+    <div class="col block size40 bold align-center-center"
+         style="padding: 150px 100px; gap: 50px">
+        <div style="text-align: center">
+            It's time to join the thousands of creators, artists, and developers using {{info.domain}}.
+        </div>
+        <div class="btn2">
+            Join the community
+        </div>
+    </div>
+</div>
+
+<div class="col align-start-center" style="background-image: radial-gradient(farthest-side at bottom left, #271d3b, transparent 900px), radial-gradient(farthest-corner at bottom right, #3a233f, transparent 1000px);">
+    <div class="row block align-start-start">
+        <div class="flex-33 col gray400-text" style="gap: 16px; padding: 20px;">
+            <p class="size16 bold black-text uppercase">GET CONNECTED</p>
+            <p>Ekosystem</p>
+            <p>Blog</p>
+            <p>Biuletyn</p>
+        </div>
+        <div class="flex-33 col block align-start-start gray400-text" style="gap: 16px; padding: 20px;">
+            <p class="size16 bold black-text uppercase">{{info.domain}}</p>
+            <p>Dotacje</p>
+            <p>Złam Solanę</p>
+            <p>Media Kit</p>
+            <p>Oferty pracy</p>
+            <p>Zastrzeżenie dotyczące wyłączenia odpowiedzialności</p>
+            <p>Privacy Policy</p>
+        </div>
+        <div class="flex-33 col block align-start-start gray400-text" style="gap: 16px; padding: 20px;">
+            <p class="size16 bold black-text uppercase">{{info.domain}}</p>
+            <p>Dotacje</p>
+            <p>Złam Solanę</p>
+            <p>Media Kit</p>
+            <p>Oferty pracy</p>
+            <p>Zastrzeżenie dotyczące wyłączenia odpowiedzialności</p>
+            <p>Privacy Policy</p>
+        </div>
+    </div>
+</div>
+<style>
+    .text1 {
+        background: linear-gradient(101.11deg, #f087ff 14.47%, #6e1fce 39.43%, rgba(110, 31, 206, .1) 76.77%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .text2 {
+        background: linear-gradient(100.93deg, #1fcff1 15.61%, #234cb6 41.38%, rgba(35, 76, 182, .1) 79.94%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .text3 {
+        background: linear-gradient(97.65deg, #19fb9b 11.36%, #199890 54.3%, #005f59 100.78%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .btn1 {
+        background: linear-gradient(101.81deg, rgb(240, 135, 255) -4.52%, rgb(110, 31, 206) 54.5%, rgba(110, 31, 206, 0.2) 101.41%);
+        color: rgb(255, 255, 255);
+        border-radius: 50px;
+        padding: 16px 32px;
+    }
+
+    .btn2 {
+        background: linear-gradient(90deg, #14f195, #80ecff 40.1%, #64a8f2 82.29%, #64a8f2);
+        color: rgb(255, 255, 255);
+        border-radius: 50px;
+        padding: 16px 32px;
+    }
+
+    .btn3 {
+        border: solid 1px #ffffff;
+        color: rgb(255, 255, 255);
+        border-radius: 50px;
+        padding: 16px 32px;
+    }
+</style>
+<script src="/node_modules/angular/angular.js"></script>
+<script src="/node_modules/angular-aria/angular-aria.js"></script>
+<script src="/node_modules/angular-animate/angular-animate.js"></script>
+<script src="/node_modules/angular-messages/angular-messages.js"></script>
+<script src="/node_modules/angular-material/angular-material.js"></script>
+<link href="/node_modules/angular-material/angular-material.min.css" rel="stylesheet">
+<script src="/node_modules/angular-material/angular-material.min.js"></script>
+
+<link href="/flex/flex.css" rel="stylesheet">
+<link href="/flex/shorts.css" rel="stylesheet">
+<link href="/flex/colors.css" rel="stylesheet">
+<link href="/flex/colors-dark.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+
+<script src="/wallet/utils/formats.js"></script>
+<script src="/wallet/utils/backend.js"></script>
+<script src="/wallet/utils/ui.js"></script>
+
+<script src="/wallet/utils/tokenCategories.js"></script>
+<script src="controller.js"></script>
+<script>
+    controller(main)
+</script>
+<script async src="account/controller.js"></script>
+</body>

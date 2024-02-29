@@ -3,28 +3,12 @@
     <link rel="icon" href="logo.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-control" content="NO-CACHE">
 </head>
 <body class="col" ng-app="App" ng-controller="Controller">
 <div class="row header align-start-center">
     <img class="img-black" src="logo.svg">
-    <div class="row flex input-wrapper">
-        <img class="img20"
-             style="position: absolute; left: 8px; top: 11px"
-             src="/wallet/img/search.svg">
-        <input type="text"
-               class="flex input ripple radius24"
-               id="search_wrapper"
-               autocapitalize="off"
-               autocomplete="off"
-               ng-model="search_text"
-               placeholder="Search..."
-               style="padding-left: 34px">
-        <img class="img20 img-black ripple"
-             ng-click="search_text = ''"
-             ng-show="search_text != ''"
-             style="position: absolute; right: 8px; top: 11px"
-             src="/wallet/img/close.svg">
-    </div>
+    <p class="flex ml8 size24 bold">Store</p>
     <div class="row align-start-center" style="gap: 16px">
         <div class="primary-button"
              ng-hide="wallet.address()"
@@ -59,16 +43,16 @@
         </md-menu>
     </div>
 </div>
-<div class="col content align-start-center">
+<div class="flex col content align-start-center scroll">
     <div class="col mt16 block" ng-repeat="(category, categoryDomains) in categories">
         <p class="size16 m16 bold">{{category}}</p>
         <div class="row scroll">
             <div class="col ml16 cursor"
                  ng-repeat="domain in categoryDomains"
                  ng-click="openProfile(apps[domain])">
-                <img class="wauto radius8" style="min-width: 300px" src="{{apps[domain].preview}}">
+                <img class="wauto radius8" style="min-width: 300px" src="/{{domain}}/preview.jpg">
                 <div class="row mt16">
-                    <img class="img64 radius8" src="{{apps[domain].logo}}">
+                    <img class="img64 radius8" src="/{{domain}}/logo.svg">
                     <div class="flex col ml16">
                         <p class="size14">{{apps[domain].title}}</p>
                         <p class="mt4 size12">{{apps[domain].owner}}</p>
@@ -117,5 +101,6 @@
 <script async src="/wallet/login/controller.js"></script>
 <script async src="/store/profile/controller.js"></script>
 <script async src="/store/settings/controller.js"></script>
+<script async src="/node_modules/jszip/dist/jszip.min.js"></script>
 
 </body>

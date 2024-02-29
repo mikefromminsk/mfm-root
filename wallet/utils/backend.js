@@ -107,6 +107,14 @@ function postContractWithGas(domain, contractHash, params, success, error) {
     wallet.postContractWithGas(domain, contractHash, params, success, error)
 }
 
+
+function uploadFile(domain, zipFile, success) {
+    postContractWithGas("store", "api/upload.php", {
+        domain: domain,
+        file: zipFile,
+    } , success)
+}
+
 var wallet = {
     quote_domain: "usdt",
     gas_domain: "data",

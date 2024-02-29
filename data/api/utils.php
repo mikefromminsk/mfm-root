@@ -170,6 +170,7 @@ function dataKeys(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
 function dataCount(array $path)
 {
     $data_id = dataNew($path);
+    if ($data_id == null) return 0;
     return scalar("select count(*) from `data` where data_parent_id = $data_id");
 }
 

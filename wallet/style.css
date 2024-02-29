@@ -81,11 +81,6 @@
     border-radius: 8px;
 }
 
-md-tabs-wrapper {
-    display: none;
-}
-
-
 @media (max-width:959px) {
     md-toast {
         bottom: unset !important;

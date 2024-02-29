@@ -9,7 +9,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
 
 
     $scope.openSettings = function () {
-        openSettings($scope.selectedCoin, $scope.apps[$scope.selectedCoin.domain], init)
+        openSettings($scope.selectedCoin.domain, init)
     }
 
     $scope.openProfile = function (app) {
@@ -39,12 +39,6 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             $scope.$apply()
         })
     }
-
-    $scope.search_text = ''
-    $scope.$watch('search_text', function (newValue) {
-        if (newValue == null) return
-        search(newValue)
-    })
 
     function updateCoins() {
         var domains = storage.getStringArray(storageKeys.domains)

@@ -14,9 +14,10 @@ function controller(callback) {
     app.controller("Controller", callback)
 }
 
-function selectFile(success) {
+function selectFile(success, accept) {
     var input = document.createElement('input')
     input.type = 'file'
+    input.accept = accept || "*/*"
     input.onchange = e => {
         if (success != null)
             success(e.target.files[0])

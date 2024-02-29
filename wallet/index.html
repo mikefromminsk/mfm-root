@@ -39,7 +39,7 @@
         }
     </style>
 </head>
-<body class="col" ng-app="App" ng-controller="Controller" style="overflow: hidden;">
+<body class="col" ng-app="App" ng-controller="Controller" style="overflow: hidden; background-color: #000">
 <div style="position: fixed; left:0; top: 0; width: 100%; height: 100%; background: white; z-index: 1"
      ng-style="{'visibility': showBody ? 'hidden' : 'visible'}">
     <img class="image"
@@ -240,7 +240,7 @@
 <link href="/flex/shorts.css" rel="stylesheet">
 <link href="/flex/colors.css" rel="stylesheet">
 <link href="/flex/colors-dark.css" rel="stylesheet">
-<link href="style.css?q1" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
 
 <script src="/wallet/utils/formats.js"></script>
 <script src="/wallet/utils/backend.js"></script>
@@ -250,6 +250,7 @@
 <script async src="/wallet/dialogs/info/controller.js"></script>
 <script src="/wallet/onboarding/controller.js"></script>
 
+<script src="/wallet/utils/tokenCategories.js"></script>
 <script src="/wallet/login/controller.js"></script>
 <script src="controller.js"></script>
 <script>

@@ -2,6 +2,9 @@ function openPin(domain, success, cancel) {
     if (domain != null && storage.getString(storageKeys.hasPin) == "") {
         if (success)
             success()
+    } else if (window.tempPin != null) {
+        if (success)
+            success(window.tempPin)
     } else {
         window.$mdBottomSheet.show({
             templateUrl: "/wallet/dialogs/pin/index.html",

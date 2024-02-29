@@ -31,7 +31,7 @@
                     <p class="mt4 size24" ng-show="!coin.price && !isHideBalance()">
                         {{formatAmount(coin.balance, coin.domain)}}</p>
                 </div>
-                <div class="button" ng-click="openMining()">Mining</div>
+                <!--<div class="button" ng-click="openMining()">Mining</div>-->
             </div>
             <div class="col align-center-center" style="height: 200px;" ng-hide="profile">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -66,6 +66,13 @@
                     </div>
                     <p class="size12 mt4 gray400-text">Store</p>
                 </div>
+                <div class="col align-start-center ripple"
+                     ng-click="openMining()">
+                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                        <img class="img24 img-accent" src="/wallet/img/mining.svg">
+                    </div>
+                    <p class="size12 mt4 gray400-text">Mining</p>
+                </div>
             </div>
 
             <div class="col mt16" ng-show="profile.category">
@@ -73,6 +80,11 @@
                 <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
             </div>
 
+            <div class="row">
+                <div class="button" ng-show="siteExist" ng-click="openSite()">
+                    Web site
+                </div>
+            </div>
 
             <div class="row mt16 scrollable-horizontal">
                 <div class="col mr16">
@@ -138,7 +150,7 @@
     </div>
     <div class="col mb16 align-start-center"
          ng-show="coin.price || coin.owner == wallet.address()">
-        <div class="row block gap16">
+        <div class="row ph16 block gap16">
             <div class="flex primary-button green-back"
                  ng-click="ico_buy()">
                 Buy {{formatDomain(coin.domain)}}

@@ -7,6 +7,7 @@ function openOptionsDialog($rootScope, coin, success) {
             var domain = coin.domain
             $scope.wallet = wallet
             $scope.contract = brc1
+            $scope.siteExist = false
 
             function checkFavorite() {
                 $scope.isFavorite = storage.getStringArray(storageKeys.domains).indexOf(domain) != -1
@@ -28,6 +29,19 @@ function openOptionsDialog($rootScope, coin, success) {
                 $scope.profile = response
                 $scope.$apply()
             })
+
+            function checkSiteExist(domain) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "/" + domain + "/index.html", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        $scope.siteExist = xhr.status === 200;
+                        $scope.$apply()
+                    }
+                }
+                xhr.send(null);
+            }
+            checkSiteExist(domain)
 
             $scope.categoriesDesc = tokenCategories
 
@@ -81,6 +95,10 @@ function openOptionsDialog($rootScope, coin, success) {
 
             $scope.openDeposit = function () {
                 $rootScope.openDeposit()
+            }
+
+            $scope.openSite = function () {
+                openWeb("/" + domain)
             }
         }
     }).then(function () {
