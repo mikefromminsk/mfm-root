@@ -3,4 +3,6 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdToast = $mdToast
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
+
+    $scope.selectedIndex = 4
 }

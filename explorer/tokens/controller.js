@@ -16,6 +16,10 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     })
 
+    $scope.selectDomain = function (coin) {
+        $scope.selectedCoin = coin
+        loadProfile(coin.domain)
+    }
 
     function loadProfile(domain){
         post("/wallet/api/profile.php", {
@@ -26,9 +30,5 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     }
 
-    $scope.selectDomain = function (coin) {
-        $scope.selectedCoin = coin
-        loadProfile(coin.domain)
-    }
     loadProfile('data')
 }

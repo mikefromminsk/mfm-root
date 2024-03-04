@@ -8,23 +8,36 @@
            class="input ripple radius24"
            autocapitalize="off"
            autocomplete="off"
-           ng-model="search_user"
+           ng-model="search_domain"
            placeholder="Find any domain"
            style="padding-left: 34px">
     <div class="col pv8 ripple"
-         ng-repeat="user in users"
-         ng-click="selectUser(user)">
+         ng-repeat="coin in searchCoins"
+         ng-click="selectDomain(coin)">
         <div class="row pv8 align-start-center">
-            <img class="img32 img-black" src="/explorer/img/user.svg">
+            <img class="img32" src="{{genLogo(coin.logo)}}">
             <div class="col flex ml8">
-                <p class="size16 bold uppercase medium">{{user}}</p>
+                <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                <p class="size12 gray400-text">{{coin.owner}}</p>
             </div>
         </div>
         <div class="divider"></div>
     </div>
 </div>
-<div class="flex col input-content">
-    <ng-include src="'/wallet/wallets.html'"></ng-include>
+<div class="flex col">
+    <div class="row align-start-center ripple p8" ng-click="backPath()">
+        <img class="img24 img-black" src="/explorer/img/{{toImg(info.dir.data_type)}}">
+        <div class="ml4">{{getPath()}}</div>
+    </div>
+    <div class="row ml16 align-start-center ripple p8"
+         ng-repeat="file in info.children"
+         ng-click="addPath(file.data_key)">
+        <img class="img24 img-black" src="/explorer/img/{{toImg(file.data_type)}}">
+        <div class="ml4">{{file.data_key}}</div>
+        <div class="flex row align-end">
+            <div class="">{{file.data_value}}</div>
+        </div>
+    </div>
 </div>
 
 <script src="/node_modules/angular/angular.js"></script>

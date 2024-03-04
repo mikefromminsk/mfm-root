@@ -4,44 +4,52 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
 
-    $scope.search_user = ''
-    $scope.$watch('search_user', function (newValue) {
-        $scope.files = []
+    $scope.path = []
+    $scope.search_domain = ''
+    $scope.$watch('search_domain', function (newValue) {
         if (newValue == null) return
-        post("/data/api/search.php", {
-            path: "data/wallet",
+        post("/wallet/api/search.php", {
             search_text: (newValue || ""),
         }, function (response) {
-            $scope.users = response.result
+            $scope.searchCoins = response.result
             $scope.$apply()
         })
     })
 
-    $scope.selectUser = function (user) {
-        updateCoins(user)
+    $scope.selectDomain = function (coin) {
+        $scope.selectedCoin = coin
+        $scope.path = [coin.domain]
+        loadDir()
     }
 
-    function updateCoins(user) {
-        post("/wallet/api/settings/read.php", {
-            key: "domains",
-            user: user,
+    function loadDir() {
+        post("/explorer/api/info_dir.php", {
+            path: $scope.path.join("/")
         }, function (response) {
-            var domains = response.settings
-            if (domains.length > 0) {
-                post("/wallet/api/list.php", {
-                    domains: domains.join(","),
-                    address: user,
-                }, function (response) {
-                    $scope.activeCoins = response.result
-                    $scope.filteredActiveCoins = response.result
-                    $scope.$apply()
-                })
-            } else {
-                $scope.activeCoins = []
-                $scope.filteredActiveCoins = []
-            }
+            $scope.info = response
+            $scope.$apply()
         })
+    }
 
+    $scope.addPath = function (key) {
+        $scope.path.push(key)
+        loadDir(key)
+    }
 
+    $scope.backPath = function () {
+        $scope.path.pop()
+        loadDir()
+    }
+
+    $scope.toImg = function (data_type) {
+        if (data_type == -1) {
+            return "folder.svg"
+        } else {
+            return "file.svg"
+        }
+    }
+
+    $scope.getPath = function () {
+        return $scope.path.join("/")
     }
 }
