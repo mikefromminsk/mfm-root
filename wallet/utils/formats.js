@@ -82,7 +82,7 @@ function addFormats($scope) {
         return new Date(number * 1000).toLocaleString()
     }
 
-    $scope.formatTimeAgoDiff = function (number) {
+    $scope.formatTimeDiff = function (number) {
         function round(num, precision) {
             return +(Math.round(num + "e+" + precision) + "e-" + precision);
         }

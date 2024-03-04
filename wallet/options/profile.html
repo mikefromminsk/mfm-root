@@ -3,11 +3,11 @@
     <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
 </div>
 
-<div class="row gap16">
+<div class="row gap16 mt16">
     <div class="button" ng-show="siteExist" ng-click="openSite()">
         Web site
     </div>
-    <a class="button" href="/explorer?domain={{profile.domain}}" target="_blank">
+    <a class="button" ng-show="wallet" href="/explorer?domain={{profile.domain}}" target="_blank">
         explorer
     </a>
 </div>
@@ -76,7 +76,7 @@
         </div>
         <div class="row mt4">
             <p class="flex">Lifetime</p>
-            <p class="nowrap">{{formatTime(profile.created)}}</p>
+            <p class="nowrap">{{formatTimeDiff(profile.created)}}</p>
         </div>
     </div>
 </div>
