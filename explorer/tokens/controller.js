@@ -21,7 +21,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         loadProfile(coin.domain)
     }
 
-    function loadProfile(domain){
+    function loadProfile(domain) {
         post("/wallet/api/profile.php", {
             domain: domain
         }, function (response) {
@@ -30,5 +30,9 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     }
 
-    loadProfile('data')
+    if ($scope.getUriParam("domain")) {
+        $scope.search_domain = $scope.getUriParam("domain")
+    } else {
+        loadProfile('data')
+    }
 }

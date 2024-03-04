@@ -4,5 +4,11 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
 
-    $scope.selectedIndex = 4
+    $scope.params = window.location.search
+
+    $scope.domain = $scope.getUriParam("domain") || 'data'
+
+    if ($scope.getUriParam("txid")) {
+        $scope.selectedIndex = 1
+    }
 }

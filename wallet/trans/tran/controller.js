@@ -18,7 +18,7 @@ function openTran(domain, txid, success) {
             }
 
             $scope.getTxLink = function (txid) {
-                return location.origin + "/explorer/trans?domain=" + domain + "&txid=" + txid
+                return location.origin + "/explorer?domain=" + domain + "&txid=" + txid
             }
         }
     }).then(function () {

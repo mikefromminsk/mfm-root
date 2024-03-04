@@ -13,21 +13,16 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         }, function (response) {
             $scope.searchCoins = response.result
             $scope.$apply()
-            if (getUriParam("domain")) {
+            if ($scope.getUriParam("domain")) {
                 $scope.selectDomain($scope.searchCoins[0])
-                openTran($scope.selectedCoin.domain, getUriParam("txid"))
+                if ($scope.getUriParam("txid"))
+                    openTran($scope.selectedCoin.domain, $scope.getUriParam("txid"))
             }
         })
     })
 
-    if (getUriParam("domain")) {
-        $scope.search_domain = getUriParam("domain")
-    }
-
-    function getUriParam(paramName){
-        var uri = window.location.search.substring(1)
-        var params = new URLSearchParams(uri)
-        return params.get(paramName)
+    if ($scope.getUriParam("domain")) {
+        $scope.search_domain = $scope.getUriParam("domain")
     }
 
     $scope.selectDomain = function (coin) {

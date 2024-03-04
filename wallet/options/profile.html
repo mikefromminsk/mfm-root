@@ -3,10 +3,13 @@
     <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
 </div>
 
-<div class="row">
+<div class="row gap16">
     <div class="button" ng-show="siteExist" ng-click="openSite()">
         Web site
     </div>
+    <a class="button" href="/explorer?domain={{profile.domain}}" target="_blank">
+        explorer
+    </a>
 </div>
 
 <div class="row mt16 scrollable-horizontal">

@@ -13,5 +13,6 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     }
 
-    loadProfile('data')
+    $scope.domain = $scope.getUriParam("domain") || 'data'
+    loadProfile($scope.domain)
 }

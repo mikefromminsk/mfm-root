@@ -18,9 +18,11 @@ function addFormats($scope) {
 
     $scope.formatSec = function (sec) {
         var d = new Date(sec * 1000);
+
         function format_two_digits(n) {
             return n < 10 ? '0' + n : n;
         }
+
         var hours = format_two_digits(d.getHours());
         var minutes = format_two_digits(d.getMinutes());
         return hours + ":" + minutes;
@@ -84,6 +86,7 @@ function addFormats($scope) {
         function round(num, precision) {
             return +(Math.round(num + "e+" + precision) + "e-" + precision);
         }
+
         var diff = new Date().getTime() / 1000 - number
         var string = ""
         if (diff < 60)
@@ -173,7 +176,7 @@ function addFormats($scope) {
         return objPeriod;
     }
 
-    $scope.validateMaxLength = function (str, max){
+    $scope.validateMaxLength = function (str, max) {
         if (str == null || str == '') return ""
         if (str.length > max) return "Length is too big. Max " + max + " letters."
     }
@@ -214,5 +217,11 @@ function addFormats($scope) {
         }
 
         document.body.removeChild(textArea);
+    }
+
+    $scope.getUriParam = function (paramName) {
+        var uri = window.location.search.substring(1)
+        var params = new URLSearchParams(uri)
+        return params.get(paramName)
     }
 }

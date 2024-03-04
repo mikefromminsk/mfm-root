@@ -16,9 +16,15 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             search_text: (newValue || ""),
         }, function (response) {
             $scope.searchCoins = response.result
+            if ($scope.getUriParam("domain"))
+                $scope.selectDomain($scope.searchCoins[0])
             $scope.$apply()
         })
     })
+    if ($scope.getUriParam("domain")) {
+        $scope.search_domain = $scope.getUriParam("domain")
+    }
+
 
     $scope.selectDomain = function (coin) {
         var request = new XMLHttpRequest();
