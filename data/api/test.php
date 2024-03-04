@@ -1,6 +1,5 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/schema.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 

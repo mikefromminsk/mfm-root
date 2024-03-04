@@ -42,6 +42,10 @@ function addFormats($scope) {
         }
         return result
     }
+    $scope.formatHash = function (hash) {
+        if (hash == null) return ""
+        return hash.substr(0, 5) + "..." + hash.substr(-5)
+    }
     $scope.formatDomain = function (domain) {
         if (domain == null) return ""
         if (domain.length > 5)
@@ -74,6 +78,27 @@ function addFormats($scope) {
 
     $scope.formatTime = function (number) {
         return new Date(number * 1000).toLocaleString()
+    }
+
+    $scope.formatTimeAgoDiff = function (number) {
+        function round(num, precision) {
+            return +(Math.round(num + "e+" + precision) + "e-" + precision);
+        }
+        var diff = new Date().getTime() / 1000 - number
+        var string = ""
+        if (diff < 60)
+            string = round(diff, 0) + "s"
+        else if (diff < 60 * 60)
+            string = round(diff / 60, 0) + "m"
+        else if (diff < 60 * 60 * 24)
+            string = round(diff / 60 / 60, 0) + "h"
+        else if (diff < 60 * 60 * 24 * 30)
+            string = round(diff / 60 / 60 / 24, 0) + "d"
+        else if (diff < 60 * 60 * 24 * 30 * 12)
+            string = round(diff / 60 / 60 / 24 / 30, 0) + "m"
+        else
+            string = round(diff / 60 / 60 / 24 / 30 / 12, 0) + "y"
+        return string + " ago"
     }
 
     function padTo2Digits(num) {
@@ -166,5 +191,28 @@ function addFormats($scope) {
     $scope.showBalances = function () {
         storage.setString(storageKeys.hideBalances, "")
         $scope.hideBalance = false
+    }
+
+    $scope.copyText = function (text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        // Avoid scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+
+        document.body.removeChild(textArea);
     }
 }

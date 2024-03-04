@@ -1,20 +1,30 @@
 <head>
-    <title>Title</title>
-    <link rel="icon" href="/wallet/logo.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
-<body class="col" ng-app="App" ng-controller="Controller">
-<div class="row header align-start-center">
-    <p ng-click="openAccount()">Page1</p>
-    <p>Page2</p>
-    <p>Page3</p>
-</div>
-<div class="col content align-start-center scroll">
-    <div class="col block">
-
+<body class="row" ng-app="App" ng-controller="Controller">
+<div class="col p16">
+    <input type="text"
+           class="input ripple radius24"
+           autocapitalize="off"
+           autocomplete="off"
+           ng-model="search_user"
+           placeholder="Find any domain"
+           style="padding-left: 34px">
+    <div class="col pv8 ripple"
+         ng-repeat="user in users"
+         ng-click="selectUser(user)">
+        <div class="row pv8 align-start-center">
+            <img class="img32 img-black" src="/explorer/img/user.svg">
+            <div class="col flex ml8">
+                <p class="size16 bold uppercase medium">{{user}}</p>
+            </div>
+        </div>
+        <div class="divider"></div>
     </div>
+</div>
+<div class="flex col input-content">
+    <ng-include src="'/wallet/wallets.html'"></ng-include>
 </div>
 
 <script src="/node_modules/angular/angular.js"></script>
@@ -29,7 +39,7 @@
 <link href="/flex/shorts.css" rel="stylesheet">
 <link href="/flex/colors.css" rel="stylesheet">
 <link href="/flex/colors-dark.css" rel="stylesheet">
-<link href="style.css" rel="stylesheet">
+<link href="../style.css" rel="stylesheet">
 
 <script src="/wallet/utils/formats.js"></script>
 <script src="/wallet/utils/backend.js"></script>
@@ -39,5 +49,5 @@
 <script>
     controller(main)
 </script>
-<script async src="account/controller.js"></script>
+<script async src="/wallet/dialogs/pin/controller.js"></script>
 </body>

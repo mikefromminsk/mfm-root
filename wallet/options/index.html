@@ -1,7 +1,7 @@
 <md-dialog class="fill col">
     <div class="row header align-start-center">
         <img src="/wallet/img/back.svg" ng-click="close()">
-        <img class="logo" src="{{genLogo(coin.logo)}}">
+        <img class="img32 radius8" src="{{genLogo(coin.logo)}}">
         <div class="col flex">
             <p class="size16 bold uppercase medium">{{coin.domain}}</p>
             <p class="size12 mt4 gray400-text">{{coin.owner}}</p>
@@ -74,78 +74,7 @@
                     <p class="size12 mt4 gray400-text">Mining</p>
                 </div>
             </div>
-
-            <div class="col mt16" ng-show="profile.category">
-                <p class="size16 gray400-text">Description</p>
-                <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
-            </div>
-
-            <div class="row">
-                <div class="button" ng-show="siteExist" ng-click="openSite()">
-                    Web site
-                </div>
-            </div>
-
-            <div class="row mt16 scrollable-horizontal">
-                <div class="col mr16">
-                    <p class="gray300-text size10">MCAP</p>
-                    <div class="row mt8 align-start-center">
-                        <p class="black-text size14">{{formatPrice(profile.mcap)}}</p>
-                        <p class="ml4 black-text size12"
-                           ng-class="percentColor(profile.price7dChange)">
-                            {{formatPercent(profile.price7dChange)}}
-                        </p>
-                    </div>
-                </div>
-                <div class="col mr16">
-                    <p class="gray300-text size10">Wallets7d</p>
-                    <div class="row mt8 align-start-center">
-                        <p class="black-text size14">{{formatAmount(profile.wallets7d)}}</p>
-                        <p class="ml4 black-text size12"
-                           ng-class="percentColor(profile.wallets7dChange)">
-                            {{formatPercent(profile.wallets7dChange)}}
-                        </p>
-                    </div>
-                </div>
-                <div class="col mr16">
-                    <p class="gray300-text size10">Transfers7d</p>
-                    <div class="row mt8 align-start-center">
-                        <p class="black-text size14">{{formatAmount(profile.transfers7d)}}</p>
-                        <p class="ml4 black-text size12"
-                           ng-class="percentColor(profile.transfers7dChange)">
-                            {{formatPercent(profile.transfers7dChange)}}
-                        </p>
-                    </div>
-                </div>
-                <div class="col mr16">
-                    <p class="gray300-text size10">Volume7d</p>
-                    <div class="row mt8 align-start-center">
-                        <p class="black-text size14">{{formatAmount(profile.volume7d)}}</p>
-                        <p class="ml4 black-text size12"
-                           ng-class="percentColor(profile.volume7dChange)">
-                            {{formatPercent(profile.volume7dChange)}}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col mt16" ng-show="profile.category">
-                <p class="size16 gray400-text">Токеномика</p>
-                <div class="mt8 size14">
-                    <div class="row mt4">
-                        <p class="flex">Total supply</p>
-                        <p class="nowrap">{{formatAmount(profile.total, profile.domain)}}</p>
-                    </div>
-                    <div class="row mt4">
-                        <p class="flex">Circulation supply</p>
-                        <p class="nowrap">{{formatAmount(profile.pie.circulation, profile.domain)}}</p>
-                    </div>
-                    <div class="row mt4">
-                        <p class="flex">For sale</p>
-                        <p class="nowrap">{{formatAmount(profile.pie.ico, profile.domain)}}</p>
-                    </div>
-                </div>
-            </div>
+            <ng-include src="'/wallet/options/profile.html'"></ng-include>
         </div>
     </div>
     <div class="col mb16 align-start-center"
@@ -163,4 +92,5 @@
             </div>
         </div>
     </div>
+
 </md-dialog>

@@ -81,6 +81,19 @@ function dataWalletSend($domain, $from_address, $to_address, $amount, $key = nul
     return true;
 }
 
+function getTran($domain, $txid)
+{
+    return [
+        domain => $domain,
+        txid => $txid,
+        from => dataGet([$domain, trans, $txid, from]),
+        to => dataGet([$domain, trans, $txid, to]),
+        amount => dataGet([$domain, trans, $txid, amount]),
+        time => dataInfo([$domain, trans, $txid])[data_time],
+    ];
+}
+
+
 function commit($response, $gas_address = null)
 {
     if ($GLOBALS[gas_bytes] != 0) {

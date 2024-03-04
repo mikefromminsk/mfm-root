@@ -8,6 +8,17 @@ $coin[total] = dataGet([wallet, info, $domain, total]);
 $coin[owner] = dataGet([wallet, info, $domain, owner]);
 $coin[logo] = "/wallet/img/coin.svg";
 $coin[category] = dataGet([wallet, info, $domain, category]) ?: UNKNOWN;
+$coin[trans] = dataCount([$domain, trans]);
+$coin[wallets] = dataCount([$domain, wallet]);
+$coin[nodes] = 1;
+$coin[created] = dataInfo([$domain])[data_time];
+$coin[dapps] = [];
+
+foreach (dataKeys([$domain, packages]) as $app_domain) {
+    $coin[dapps][$app_domain] = [
+        hash => dataGet([$domain, packages, $app_domain, hash]),
+    ];
+}
 
 function addValue(&$coin, $domain, $key)
 {
@@ -48,7 +59,6 @@ $coin[pie][bonus] = dataGet([$domain, wallet, bonus, amount]);
 
 $coin[pie][deligated] = dataGet([$domain, wallet, $coin[owner], script]);
 
-created
 rating
 coinlib.io
 investors

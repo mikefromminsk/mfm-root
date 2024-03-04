@@ -1,0 +1,11 @@
+<md-bottom-sheet class="col fill">
+    <div class="row header align-start-center">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
+        <p>{{domain}} transaction</p>
+    </div>
+    <div class="col content align-start-center">
+        <div class="col block p16">
+            <ng-include src="'/wallet/trans/tran/tran.html'"></ng-include>
+        </div>
+    </div>
+</md-bottom-sheet>

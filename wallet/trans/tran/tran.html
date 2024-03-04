@@ -1,0 +1,32 @@
+<div class="col mt16">
+    <p class="size16 gray400-text">Transaction details</p>
+    <div class="mt8 size14">
+        <div class="row mt4">
+            <p class="flex">From</p>
+            <p class="nowrap">{{tran.from}}</p>
+        </div>
+        <div class="row mt4">
+            <p class="flex">To</p>
+            <p class="nowrap">{{tran.to}}</p>
+        </div>
+        <div class="row mt4">
+            <p class="flex">Amount</p>
+            <p class="nowrap">{{formatAmount(tran.amount, tran.domain)}}</p>
+        </div>
+        <div class="row mt4">
+            <p class="flex">Time</p>
+            <p class="nowrap">{{formatTime(tran.time)}}</p>
+        </div>
+        <div class="row mt4">
+            <p class="flex">Lifetime</p>
+            <p class="nowrap">{{formatTimeAgoDiff(tran.time)}}</p>
+        </div>
+        <div class="row mt4">
+            <p class="flex">TxId</p>
+            <div class="row">
+                <a class="nowrap" href="{{getTxLink(tran.txid)}}" target="_blank">{{formatHash(tran.txid)}}</a>
+                <img class="img16 ml4 ripple img-black" src="/wallet/img/copy.svg" ng-click="copy(tran.txid)">
+            </div>
+        </div>
+    </div>
+</div>

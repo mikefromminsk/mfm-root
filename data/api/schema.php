@@ -25,9 +25,3 @@ query("CREATE TABLE IF NOT EXISTS `history` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-if (DEBUG)
-    query("DROP TABLE IF EXISTS `hashes`;");
-query("CREATE TABLE IF NOT EXISTS `hashes` (
-  `hash` varchar(64) COLLATE utf8_bin NOT NULL,
-  `path` varchar(256) COLLATE utf8_bin NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");

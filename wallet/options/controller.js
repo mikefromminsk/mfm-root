@@ -15,14 +15,6 @@ function openOptionsDialog($rootScope, coin, success) {
 
             checkFavorite()
 
-            $scope.tabs = ["Info", "Transactions"]
-            $scope.activeTabIndex = 0
-            $scope.selectTab = function ($index) {
-                $scope.activeTabIndex = $index
-                if ($scope.activeTabIndex == 1)
-                    $scope.trans()
-            }
-
             post("/wallet/api/profile.php", {
                 domain: domain
             }, function (response) {

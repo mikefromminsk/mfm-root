@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db/test.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 include_once "scheme.php";
 
 $usdtOwner = "123";

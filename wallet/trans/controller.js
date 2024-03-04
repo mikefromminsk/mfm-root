@@ -9,11 +9,12 @@ function openTransactions(domain) {
             $scope.fromDate = ""
             $scope.toDate = ""
 
-            post("/wallet/api/trans.php", {
+            post("/wallet/api/trans_user.php", {
                 domain: domain,
                 address: wallet.address(),
             }, function (response) {
                 $scope.trans = $scope.groupByTimePeriod(response.trans)
+                $scope.$apply()
             })
 
             $scope.selectFrom = function () {
@@ -29,7 +30,7 @@ function openTransactions(domain) {
             }
 
             $scope.search = function () {
-                post("/wallet/api/trans.php", {
+                post("/wallet/api/trans_user.php", {
                     domain: domain,
                     address: wallet.address(),
                     fromDate: Math.ceil($scope.fromDate.getTime() / 1000),
@@ -38,6 +39,10 @@ function openTransactions(domain) {
                     $scope.trans = groupByTimePeriod(response.trans)
                     $scope.$apply()
                 })
+            }
+
+            $scope.openTran = function (tran) {
+                openTran(tran.domain, tran.txid)
             }
         }
     })

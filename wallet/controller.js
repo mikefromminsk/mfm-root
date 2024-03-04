@@ -251,6 +251,9 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openOnboardingDialog(init)
     }
 
-
     init()
+}
+
+function coinListController($scope){
+
 }

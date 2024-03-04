@@ -8,9 +8,9 @@ $size = get_int(size, 20);
 $fromDate = get_int(fromDate);
 $toDate = get_int(toDate);
 
-$userDomains = dataWalletSettingsRead($address, domains);
-
 $mergedIds = [];
+
+$userDomains = dataWalletSettingsRead($address, domains);
 foreach ($userDomains as $userDomain) {
     if ($fromDate != null && $toDate != null && $fromDate <= $toDate) {
         $ids = dataHistory([$userDomain, wallet, $address, last_trans], 1, 40);
@@ -28,21 +28,14 @@ foreach ($userDomains as $userDomain) {
     $mergedIds[$userDomain] = $ids;
 }
 
+
 $trans = [];
 foreach ($mergedIds as $userDomain => $ids) {
     foreach ($ids as $id) {
-        $tran = [];
-        $tran[domain] = $userDomain;
-        $tran[from] = dataGet([$userDomain, trans, $id, from]);
-        $tran[to] = dataGet([$userDomain, trans, $id, to]);
-        $tran[amount] = dataGet([$userDomain, trans, $id, amount]);
-        $tran[time] = dataInfo([$userDomain, trans, $id, amount])[data_time];
-        // domain
-        // order id
-        // base amount
-        $trans[] = $tran;
+        $trans[] = getTran($userDomain, $id);
     }
 }
+
 
 $response[trans] = $trans;
 

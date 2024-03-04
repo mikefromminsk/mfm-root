@@ -7,7 +7,6 @@ define("DATA_NULL", 0);
 define("DATA_BOOL", 1);
 define("DATA_NUMBER", 2);
 define("DATA_STRING", 3);
-define("DATA_FILE", 4);
 
 define("MAX_VALUE_SIZE", 256);
 define("FILE_ROW_SIZE", 256 + 64);
@@ -80,11 +79,7 @@ function dataSet(array $path_array, $value, $addHistory = true)
         if (strlen($value) <= MAX_VALUE_SIZE) {
             $data[data_type] = DATA_STRING;
         } else {
-            $data[data_type] = DATA_FILE;
-            $data[data_value] = md5($value);
-            //$GLOBALS[gas_bytes] += strlen($value) + HASH_ROW_SIZE;
-            file_put_contents($_SERVER[DOCUMENT_ROOT] . $path, $value);
-            insertRow(hashes, [hash => $data[data_value], path => $path]);
+            error("value size is too big");
         }
     } else if (is_array($value)) {
         foreach ($value as $key => $subvalue)
@@ -125,9 +120,10 @@ function dataGet(array $path)
         $result = doubleval($node[data_value]);
     } else if ($node[data_type] == DATA_STRING) {
         $result = $node[data_value];
-    } else if ($node[data_type] == DATA_FILE) {
-        $path = scalarWhere(hashes, path, [hash => $node[data_value]]);
-        $result = file_get_contents($_SERVER[DOCUMENT_ROOT] . $path);
+    } else if ($node[data_type] == DATA_NULL) {
+        $result = null;
+    } else {
+        $result = null;
     }
     return $result;
 }

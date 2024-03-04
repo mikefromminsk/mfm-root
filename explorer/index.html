@@ -1,0 +1,73 @@
+<head>
+    <title>Explorer</title>
+    <link rel="icon" href="logo.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="col" ng-app="App" ng-controller="Controller">
+<div class="col header align-start-center">
+    <div class="flex row block align-start-center gap16">
+        <p ng-click="selectedIndex = 0">Analytics</p>
+        <p ng-click="selectedIndex = 1">Trans</p>
+        <p ng-click="selectedIndex = 2">Tokens</p>
+        <p ng-click="selectedIndex = 3">Wallets</p>
+        <p ng-click="selectedIndex = 4">Files</p>
+        <p ng-click="selectedIndex = 5">Api</p>
+    </div>
+</div>
+
+<div class="flex col content align-start-center">
+    <div class="flex row block">
+        <md-tabs class="flex" md-selected="selectedIndex" md-swipe-content>
+            <md-tab label="0">
+                <iframe class="fill" frameborder="0" loading="lazy"
+                        src="/explorer/analytics/index.html"></iframe>
+            </md-tab>
+            <md-tab label="0">
+                <iframe class="fill" frameborder="0" loading="lazy"
+                        src="/explorer/trans/index.html"></iframe>
+            </md-tab>
+            <md-tab label="0">
+                <iframe class="fill" frameborder="0" loading="lazy"
+                        src="/explorer/tokens/index.html"></iframe>
+            </md-tab>
+            <md-tab label="0">
+                <iframe class="fill" frameborder="0" loading="lazy"
+                        src="/explorer/wallets/index.html"></iframe>
+            </md-tab>
+            <md-tab label="0">
+                <iframe class="fill" frameborder="0" loading="lazy"
+                        src="/explorer/files/index.html"></iframe>
+            </md-tab>
+            <md-tab label="0">
+                <iframe class="fill" frameborder="0" loading="lazy"
+                        src="/explorer/apis/index.html"></iframe>
+            </md-tab>
+        </md-tabs>
+    </div>
+</div>
+
+<script src="/node_modules/angular/angular.js"></script>
+<script src="/node_modules/angular-aria/angular-aria.js"></script>
+<script src="/node_modules/angular-animate/angular-animate.js"></script>
+<script src="/node_modules/angular-messages/angular-messages.js"></script>
+<script src="/node_modules/angular-material/angular-material.js"></script>
+<link href="/node_modules/angular-material/angular-material.min.css" rel="stylesheet">
+<script src="/node_modules/angular-material/angular-material.min.js"></script>
+
+<link href="/flex/flex.css" rel="stylesheet">
+<link href="/flex/shorts.css" rel="stylesheet">
+<link href="/flex/colors.css" rel="stylesheet">
+<link href="/flex/colors-dark.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+
+<script src="/wallet/utils/formats.js"></script>
+<script src="/wallet/utils/backend.js"></script>
+<script src="/wallet/utils/ui.js"></script>
+
+<script src="controller.js"></script>
+<script>
+    controller(main)
+</script>
+</body>

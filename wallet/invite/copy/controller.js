@@ -1,16 +1,11 @@
 function openInviteCopy(domain, invite_key, success) {
     window.$mdBottomSheet.show({
         templateUrl: "/wallet/invite/copy/index.html",
-        controller: function ($scope, $mdBottomSheet) {
+        controller: function ($scope) {
+            addFormats($scope)
             $scope.domain = domain
             $scope.link = location.origin + "?bonus=" + domain + ":" + invite_key
-            $scope.copy = function () {
-                document.getElementById("link_input").focus();
-                document.getElementById("link_input").select();
-                document.execCommand("copy");
-                showSuccess("Link copied")
-                $mdBottomSheet.hide()
-            }
+
             $scope.share = function () {
                 navigator.share({
                     url: $scope.link,
@@ -18,6 +13,13 @@ function openInviteCopy(domain, invite_key, success) {
                     text: "Login and get your coins",
                 })
             }
+
+            $scope.copy = function () {
+                $scope.copyText($scope.link)
+                showSuccess("Link copied")
+                $mdBottomSheet.hide()
+            }
+
             var qrcode
             setTimeout(function () {
                 if (qrcode){

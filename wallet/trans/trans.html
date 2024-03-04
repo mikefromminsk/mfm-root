@@ -1,0 +1,15 @@
+<div ng-repeat="(key, val) in trans"
+     class="col mh16">
+    <div class="row align-center-center gray400-text">{{formatDate(key * 24 * 60 * 60)}}</div>
+    <div class="row radius8 gray200-back ph8 pv8 mt8"
+         ng-repeat="item in val"
+         ng-click="openTran(item)">
+        <p class="size14 nowrap gray400-text">{{item.from == username ? "to " : "from "}}</p>
+        <p class="ml4 size14 nowrap">{{item.from == username ? item.to : item.from}}</p>
+        <p class="ml4 flex size14 gray300-text">{{formatSec(item.time)}}</p>
+        <p class="size14 nowrap"
+           ng-class="{'red-text': item.from == username,'green-text': item.from != username}">
+            {{(item.from == username ? "-" : "+") + formatAmount(item.amount, item.domain)}}
+        </p>
+    </div>
+</div>
