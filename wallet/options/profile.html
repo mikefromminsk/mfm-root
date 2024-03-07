@@ -2,13 +2,16 @@
     <p class="size16 gray400-text">Description</p>
     <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
 </div>
-
+<!--
+Потребление 24h
+Выпуск 24h
+-->
 <div class="row gap16 mt16">
-    <div class="button" ng-show="siteExist" ng-click="openSite()">
+    <div class="button" ng-show="profile.ui == 1" ng-click="openSite()">
         Web site
     </div>
     <a class="button" ng-show="wallet" href="/explorer?domain={{profile.domain}}" target="_blank">
-        explorer
+        Explorer
     </a>
 </div>
 

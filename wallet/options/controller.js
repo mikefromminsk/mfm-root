@@ -50,7 +50,7 @@ function openOptionsDialog($rootScope, coin, success) {
             })
 
             $scope.sendDialog = function () {
-                openSendDialog(domain, success)
+                openSendDialog(domain, "", "", success)
             }
 
             $scope.openMining = function () {
@@ -58,11 +58,11 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.openStore = function () {
-                openWeb(location.origin + "/store/")
+                openWeb(location.origin + "/store/?domain=" + domain)
             }
 
             $scope.giveaway = function () {
-                postContract(domain, brc1.drop, {
+                postContract(domain, "api/token/drop.php", {
                     address: wallet.address()
                 }, function (response) {
                     showSuccessDialog("You have been received " + $scope.formatAmount(response.dropped, domain), success)

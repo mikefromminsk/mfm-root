@@ -13,11 +13,11 @@
                     {{item}}%
                 </div>
             </div>
-            <div class="flex row input-wrapper">
-                <div class="input-label-top">Price for a token</div>
+            <div class="input-wrapper">
+                <div class="input-label">Price for a token</div>
                 <input type="number"
                        id="first_input"
-                       class="flex input"
+
                        ng-model="price">
             </div>
             <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>

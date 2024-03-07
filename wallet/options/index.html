@@ -31,7 +31,6 @@
                     <p class="mt4 size24" ng-show="!coin.price && !isHideBalance()">
                         {{formatAmount(coin.balance, coin.domain)}}</p>
                 </div>
-                <!--<div class="button" ng-click="openMining()">Mining</div>-->
             </div>
             <div class="col align-center-center" style="height: 200px;" ng-hide="profile">
                 <md-progress-circular md-mode="indeterminate"></md-progress-circular>
@@ -59,19 +58,11 @@
                     <p class="size12 mt4 gray400-text">Invite</p>
                 </div>
                 <div class="col align-start-center ripple"
-                     ng-show="profile.owner == wallet.address()"
                      ng-click="openStore()">
                     <div class="p8 mt16 mh16 row align-center button-gray radius12">
                         <img class="img24 img-accent" src="/wallet/img/upgrade.svg">
                     </div>
                     <p class="size12 mt4 gray400-text">Store</p>
-                </div>
-                <div class="col align-start-center ripple"
-                     ng-click="openMining()">
-                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                        <img class="img24 img-accent" src="/wallet/img/mining.svg">
-                    </div>
-                    <p class="size12 mt4 gray400-text">Mining</p>
                 </div>
             </div>
             <ng-include src="'/wallet/options/profile.html'"></ng-include>

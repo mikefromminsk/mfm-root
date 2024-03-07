@@ -173,7 +173,14 @@ function addFormats($scope) {
             objPeriod[d] = objPeriod[d] || [];
             objPeriod[d].push(obj[i]);
         }
-        return objPeriod;
+        var result = []
+        for (day of Object.keys(objPeriod).sort().reverse()){
+            result.push({
+                day: $scope.formatDate(day * 24 * 60 * 60),
+                items: objPeriod[day].sort((a,b) => b['time'] - a['time']),
+            })
+        }
+        return result;
     }
 
     $scope.validateMaxLength = function (str, max) {

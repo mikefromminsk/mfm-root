@@ -13,6 +13,8 @@ $coin[wallets] = dataCount([$domain, wallet]);
 $coin[nodes] = 1;
 $coin[created] = dataInfo([$domain])[data_time];
 $coin[dapps] = [];
+$coin[ui] = dataGet([store, info, $domain, ui]);
+
 
 foreach (dataKeys([$domain, packages]) as $app_domain) {
     $coin[dapps][$app_domain] = [
@@ -73,7 +75,7 @@ toptrades
 
 */
 
-foreach (dataKeys([store, $domain]) as $hash)
-    $coin[contracts][$hash] = dataGet([store, $domain, $hash]);
+foreach (dataKeys([store, info, $domain, contracts]) as $hash)
+    $coin[contracts][$hash] = dataGet([store, info, $domain, contracts, $hash]);
 
 commit($coin);

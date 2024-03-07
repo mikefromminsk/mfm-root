@@ -1,17 +1,23 @@
 <div class="col mt16">
     <p class="size16 gray400-text">Transaction details</p>
     <div class="mt8 size14">
-        <div class="row mt4">
+        <div class="row mt4" ng-hide="tran.from == wallet.address()">
             <p class="flex">From</p>
             <p class="nowrap">{{tran.from}}</p>
         </div>
-        <div class="row mt4">
+        <div class="row mt4" ng-hide="tran.to == wallet.address()">
             <p class="flex">To</p>
             <p class="nowrap">{{tran.to}}</p>
         </div>
         <div class="row mt4">
             <p class="flex">Amount</p>
-            <p class="nowrap">{{formatAmount(tran.amount, tran.domain)}}</p>
+            <p class="nowrap" ng-class="{'green-text': tran.to == wallet.address(), 'red-text': tran.from == wallet.address()}">
+                {{(tran.to == wallet.address() ? "+" : "-") + formatAmount(tran.amount, tran.domain)}}
+            </p>
+        </div>
+        <div class="row mt4">
+            <p class="flex">Status</p>
+            <p class="nowrap green-text">Completed</p>
         </div>
         <div class="row mt4">
             <p class="flex">Time</p>
@@ -21,6 +27,14 @@
             <p class="flex">Lifetime</p>
             <p class="nowrap">{{formatTimeDiff(tran.time)}}</p>
         </div>
+        <div class="row mt4">
+            <p class="flex">Gas</p>
+            <p class="nowrap">{{formatAmount(tran.gas, wallet.gas_domain)}}</p>
+        </div>
+        <!--@SerializedName("valueUSD")
+        @SerializedName("direction")
+        fee
+        -->
         <div class="row mt4">
             <p class="flex">TxId</p>
             <div class="row">

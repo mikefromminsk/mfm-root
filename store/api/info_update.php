@@ -11,8 +11,6 @@ $gas_address = get_required(gas_address);
 
 dataSet([store, info, $domain], [
     title => $title,
-    logo => "/store/img/screenshot2.png",
-    preview => "/store/img/screenshot1.png",
     owner => $gas_address,
     description => $description,
     category => $category,

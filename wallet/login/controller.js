@@ -27,7 +27,7 @@ function openLogin(success) {
             // TODO validation
             $scope.login = function () {
                 $scope.in_progress = true
-                postContract(wallet.gas_domain, brc1.wallet, {
+                postContract(wallet.gas_domain, "api/token/wallet.php", {
                     address: $scope.username,
                 }, function (response) {
                     $scope.in_progress = false
@@ -38,7 +38,7 @@ function openLogin(success) {
                     }
                 }, function () {
                     $scope.in_progress = false
-                    postContract(wallet.gas_domain, brc1.free_reg, {
+                    postContract(wallet.gas_domain, "api/token/free_reg.php", {
                         address: $scope.username,
                         next_hash: md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
                     }, function () {

@@ -7,13 +7,20 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.apps = {}
     $scope.selectedCoin
 
+    if ($scope.getUriParam("domain")) {
+        storage.setString(storageKeys.selectedCoin, $scope.getUriParam("domain"))
+    }
 
     $scope.openSettings = function () {
         openSettings($scope.selectedCoin.domain, init)
     }
 
     $scope.openProfile = function (app) {
-        openProfile(app)
+        if (app.console){
+            openWeb(location.origin + "/" + app.domain + "/console?domain=" + $scope.selectedCoin.domain, init)
+        } else {
+            openProfile(app)
+        }
     }
 
     $scope.openLogin = function () {
@@ -33,6 +40,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     function search(newValue) {
         post("/store/api/apps.php", {
             search_text: (newValue || ""),
+            domain: (storage.getString(storageKeys.selectedCoin) || ""),
         }, function (response) {
             $scope.apps = response.apps || {}
             $scope.categories = response.categories
@@ -72,6 +80,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             domain: $scope.selectedCoin.domain,
             app_domain: app.domain,
         }, function () {
+            init()
             showSuccess("Install success")
         })
     }

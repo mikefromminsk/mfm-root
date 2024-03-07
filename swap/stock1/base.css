@@ -193,7 +193,7 @@ input:disabled{
     border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.input-label-top {
+.input-label {
     top: -6px;
     left: 10px;
     position: absolute;

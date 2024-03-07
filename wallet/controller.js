@@ -104,7 +104,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         if ($scope.selectedCategories.length > 0) {
             result = []
             for (let token of tokens)
-                if ($scope.selectedCategories.indexOf(token.category) != -1)
+                if ($scope.selectedCategories.indexOf(token.category) != -1
+                    || $scope.selectedCategories.indexOf('mining') != -1 && token.mining)
                     result.push(token)
         }
         return result
@@ -165,12 +166,12 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.addFavorite = function (domain, success) {
-        postContract(domain, brc1.wallet, {
+        postContract(domain, "api/token/wallet.php", {
             address: wallet.address()
         }, function () {
             addToStorage(domain)
         }, function () {
-            postContractWithGas(domain, brc1.reg, function (key) {
+            postContractWithGas(domain, "api/token/reg.php", function (key) {
                 return {
                     address: wallet.address(),
                     next_hash: md5(key)
@@ -204,7 +205,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.receiveBonus = function (bonus) {
         hasBalance(wallet.gas_domain, function () {
             hasToken(bonus.domain, function () {
-                postContractWithGas(bonus.domain, brc1.bonus_receive, {
+                postContractWithGas(bonus.domain, "api/token/bonus_receive.php", {
                     to_address: wallet.address(),
                     invite_key: bonus.key,
                 }, function (response) {

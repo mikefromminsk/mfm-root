@@ -3,7 +3,9 @@ function openWeb(link, success) {
         templateUrl: '/wallet/web/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            $scope.link = link
+            setTimeout(function () {
+                document.getElementById('web-frame').src = link
+            }, 1000)
         }
     }).then(function () {
         if (success)

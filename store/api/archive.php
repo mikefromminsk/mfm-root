@@ -15,7 +15,7 @@ $files = new RecursiveIteratorIterator(
     new RecursiveDirectoryIterator($rootPath),
     RecursiveIteratorIterator::LEAVES_ONLY
 );
-
+// add gitignore
 foreach ($files as $name => $file) {
     if (!$file->isDir()) {
         $filePath = $file->getRealPath();

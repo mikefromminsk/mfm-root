@@ -1,5 +1,5 @@
 <head>
-    <title>Title</title>
+    <title>Wallet</title>
     <link rel="icon" href="/wallet/logo.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +9,18 @@
 
 <md-tabs class="flex" md-selected="selectedIndex" md-swipe-content>
     <md-tab label="0">
-        <iframe class="fill" frameborder="0" src="/wallet/index.html" loading="lazy" ></iframe>
+        <iframe class="fill" frameborder="0" src="/wallet/index.html?update" loading="lazy" ></iframe>
     </md-tab>
     <md-tab label="1">
-        <iframe class="fill" frameborder="0" src="/store/index.html" loading="lazy" ></iframe>
+        <iframe class="fill" frameborder="0" src="/store/index.html?update" loading="lazy" ></iframe>
     </md-tab>
 </md-tabs>
 <div class="row">
-    <div class="flex pv16 row align-center-center ripple" ng-click="selectedIndex = 0">
+    <div class="flex pv16 row align-center-center ripple" ng-click="selectTab(0)">
         <img class="img24" src="/wallet/logo.svg">
         <p class="ml16">Wallet</p>
     </div>
-    <div class="flex pv16 row align-center-center ripple" ng-click="selectedIndex = 1">
+    <div class="flex pv16 row align-center-center ripple" ng-click="selectTab(1)">
         <img class="img24" src="/store/logo.svg">
         <p class="ml16">Store</p>
     </div>

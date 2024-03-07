@@ -75,7 +75,7 @@
             <div class="row line" style="position: relative; margin: 8px 0;">
 
                 <div class="row flex input-wrapper">
-                    <input type="text" class="flex input" ng-model="search_text" placeholder="{{str.search}}"
+                    <input type="text" ng-model="search_text" placeholder="{{str.search}}"
                            style=" border-radius: 20px; padding-top: 1px">
                     <div class="input-label-right">
                         <img src="img/loupe.svg" style="width: 16px; height: 16px;">
@@ -150,13 +150,13 @@
                 </div>
 
                 <div class="row input-wrapper" style="margin-top: 16px">
-                    <div class="input-label-top">Price</div>
-                    <input type="number" class="flex input" ng-model="price" ng-change="changePrice()">
+                    <div class="input-label">Price</div>
+                    <input type="number" ng-model="price" ng-change="changePrice()">
                 </div>
 
                 <div class="row input-wrapper" style="margin-top: 16px">
-                    <div class="input-label-top">{{coin.ticker}} amount</div>
-                    <input type="number" class="flex input" ng-model="amount" ng-change="changeAmount()">
+                    <div class="input-label">{{coin.ticker}} amount</div>
+                    <input type="number" ng-model="amount" ng-change="changeAmount()">
                 </div>
                 <div class="row" style="height: 22px">
                     <md-content class="flex row align-center-center  white-back size12"
@@ -165,8 +165,8 @@
                     </md-content>
                 </div>
                 <div class="row input-wrapper" style="margin-top: 16px">
-                    <div class="input-label-top">Total</div>
-                    <input type="number" class="flex input" ng-model="total" ng-change="changeTotal()">
+                    <div class="input-label">Total</div>
+                    <input type="number" ng-model="total" ng-change="changeTotal()">
                 </div>
 
                 <div class="row size10" style="margin-top: 8px">
@@ -286,13 +286,13 @@
                 <img id="starter-logo" class="coin-logo" ng-click="generateStarterLogo()">
                 <md-input-container class="flex">
                     <label>{{str.name}}</label>
-                    <input type="text" class="flex input" ng-model="launchCoin.name" ng-change="changeCoinName()">
+                    <input type="text" ng-model="launchCoin.name" ng-change="changeCoinName()">
                     <div class="input-label-right red-text">{{coin_name_message}}</div>
                 </md-input-container>
             </div>
             <md-input-container class="row">
                 <label>{{str.ticker}}</label>
-                <input type="text" class="flex input" ng-model="launchCoin.ticker" ng-change="changeCoinTicker()"
+                <input type="text" ng-model="launchCoin.ticker" ng-change="changeCoinTicker()"
                        style="text-transform: uppercase;">
                 <div class="input-label-right red-text">{{coin_ticker_message}}</div>
             </md-input-container>
@@ -318,25 +318,25 @@
             <div class="col col-content" ng-show="tariffIndex == 2">
                 <md-input-container>
                     <label>{{str.supply}}</label>
-                    <input type="number" class="flex input" ng-model="launchCoin.supply"
+                    <input type="number" ng-model="launchCoin.supply"
                            min="0" max="10000" step="1">
                     <div class="input-label-right">max 10 000 {{launchCoin.ticker}}</div>
                 </md-input-container>
                 <md-input-container>
                     <label>{{str.starter_supply}}</label>
-                    <input type="number" class="flex input" min="0" max="10000" step="1"
+                    <input type="number" min="0" max="10000" step="1"
                            ng-model="launchCoin.starter_supply">
                     <div class="input-label-right">max 1 000 {{launchCoin.ticker}}</div>
                 </md-input-container>
                 <md-input-container>
                     <label>{{str.starter_price}}</label>
-                    <input type="number" class="flex input" min="0" max="100" step="0.01" ng-model="launchCoin.price">
+                    <input type="number" min="0" max="100" step="0.01" ng-model="launchCoin.price">
                     <div class="input-label-right">max $100</div>
                 </md-input-container>
             </div>
             <md-input-container>
                 <label>{{str.need_for_listing}}</label>
-                <input type="number" class="flex input" min="0" max="100" step="0.01" ng-model="launchCoin.usd_round">
+                <input type="number" min="0" max="100" step="0.01" ng-model="launchCoin.usd_round">
                 <div class="input-label-right">max $100</div>
             </md-input-container>
 
@@ -493,9 +493,9 @@
             </div>
 
             <div class="row input-wrapper" style="margin-top: 16px">
-                <div class="input-label-top">Stake {{selectedStaking.ticker}}</div>
+                <div class="input-label">Stake {{selectedStaking.ticker}}</div>
                 <div class="input-label-right">Balance {{balances[selectedStaking.ticker].spot}}</div>
-                <input type="number" class="flex input" ng-model="stakingAmount">
+                <input type="number" ng-model="stakingAmount">
             </div>
 
             <div class="row align-center-center ripple blue-back white-text size18"

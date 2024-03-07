@@ -1,7 +1,7 @@
 function openMining(domain, success) {
     var stopVar = false
     window.$mdDialog.show({
-        templateUrl: 'mining/index.html',
+        templateUrl: '/mining/mining/index.html',
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
@@ -72,18 +72,6 @@ function openMining(domain, success) {
             $scope.stopMining = function () {
                 stopVar = true
                 $scope.inProgress = false
-            }
-
-            $scope.init = function () {
-                postContractWithGas($scope.domain, "api/mining/init.php", {}, function (response) {
-                    showSuccessDialog("Success " + response.success, success)
-                })
-            }
-
-            $scope.reset = function () {
-                postContractWithGas($scope.domain, "api/mining/reset.php", {}, function (response) {
-                    showSuccessDialog("Success " + response.success, success)
-                })
             }
         }
     }).then(function () {

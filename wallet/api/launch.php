@@ -14,9 +14,9 @@ $category = get_string(category);
 $wallet_path = $domain . "/wallet";
 
 if (strlen($domain) < 3 || strlen($domain) > 16) error("domain length has to be between 3 and 16");
-if (dataExist($wallet_path)) error("path $wallet_path exist");
+//if (dataExist($wallet_path)) error("path $wallet_path exist");
 
-$response[files] = upload($domain, "drc1");
+$response[files] = installApp($domain, "drc1");
 
 dataWalletReg($address, $next_hash, $domain);
 dataSet([$wallet_path, $address, amount], $amount);

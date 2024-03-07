@@ -1,9 +1,9 @@
 <md-dialog class="col fill">
-    <div class="row header align-start-center">
+    <div class="row header align-start-center gray100-back">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
-        <div class="flex row input-wrapper">
-            <div class="input-label-top">Domain</div>
-            <input type="text" class="flex input" ng-model="domain">
+        <div class="input-wrapper">
+            <div class="input-label">Domain</div>
+            <input type="text" ng-model="domain">
         </div>
     </div>
     <div class="col content align-start-center scroll">
@@ -11,7 +11,13 @@
             <div class="row">
                 <img class="flex cursor"
                      style="min-height: 200px"
+                     ng-hide="imgshow"
                      src="/{{domain}}/preview.jpg"
+                     ng-click="uploadPreview()">
+                <img class="flex cursor"
+                     style="min-height: 200px"
+                     ng-show="imgshow"
+                     src="{{imgshow}}"
                      ng-click="uploadPreview()">
             </div>
             <div class="row">
@@ -19,32 +25,30 @@
                      src="/{{domain}}/logo.svg"
                      ng-click="uploadLogo()">
                 <div class="flex col">
-                    <div class="flex row input-wrapper">
-                        <div class="input-label-top">Title</div>
-                        <input type="text" class="flex input" ng-model="title">
+                    <div class="input-wrapper">
+                        <div class="input-label">Title</div>
+                        <input type="text" ng-model="title">
                     </div>
-                    <div class="flex row pl16">
-                        <md-select class="flex" ng-model="category" ng-show="!newCategoryMode">
-                            <md-option><em>None</em></md-option>
-                            <md-option ng-repeat="item in categories"
-                                       ng-value="item"
-                                       ng-disabled="category === item">
-                                {{item}}
-                            </md-option>
-                        </md-select>
-                        <div class="flex row input-wrapper" ng-show="newCategoryMode">
-                            <div class="input-label-top">Category</div>
-                            <input type="text" class="flex input" ng-model="category">
+                    <div class="row">
+                        <div class="flex input-wrapper">
+                            <div class="input-label">Category</div>
+                            <input type="text" ng-model="category">
                         </div>
-                        <img class="img-black img12" ng-click="newCategoryMode = !newCategoryMode"
-                             src="/store/img/edit.svg">
+                        <md-menu md-position-mode="target-right target">
+                            <img class="img36 img-black" src="/store/img/menu.svg" ng-click="$mdMenu.open($event)"/>
+                            <md-menu-content width="4" class="col-content">
+                                <md-menu-item ng-repeat="item in categories" ng-click="selectCategory(item)">
+                                    <p class="ml16 uppercase">{{item}}</p>
+                                </md-menu-item>
+                            </md-menu-content>
+                        </md-menu>
                     </div>
                 </div>
             </div>
 
-            <div class="flex row input-wrapper">
-                <div class="input-label-top">Description</div>
-                <input type="text" class="flex input" ng-model="description">
+            <div class="input-wrapper">
+                <div class="input-label">Description</div>
+                <input type="text" ng-model="description">
             </div>
 
             <div class="primary-button" ng-click="save()">Save</div>

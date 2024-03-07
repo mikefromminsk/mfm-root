@@ -8,6 +8,27 @@
            class="input ripple radius24"
            autocapitalize="off"
            autocomplete="off"
+           ng-model="search_domain"
+           placeholder="Find any domain"
+           style="padding-left: 34px">
+    <div class="col pv8 ripple"
+         ng-repeat="coin in searchCoins"
+         ng-click="selectDomain(coin)">
+        <div class="row pv8 align-start-center">
+            <img class="img32" src="{{genLogo(coin.logo)}}">
+            <div class="col flex ml8">
+                <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                <p class="size12 gray400-text">{{coin.owner}}</p>
+            </div>
+        </div>
+        <div class="divider"></div>
+    </div>
+</div>
+<div class="col p16">
+    <input type="text"
+           class="input ripple radius24"
+           autocapitalize="off"
+           autocomplete="off"
            ng-model="search_user"
            placeholder="Find any domain"
            style="padding-left: 34px">

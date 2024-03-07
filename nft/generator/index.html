@@ -1,0 +1,57 @@
+<md-dialog class="col fill">
+    <div class="row header align-start-center gray100-back">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <div class="input-wrapper">
+            <div class="input-label">Domain</div>
+            <input type="text" ng-model="domain">
+        </div>
+    </div>
+    <div class="col content align-start-center scroll">
+        <div class="col input-content">
+            <div class="row">
+                <img class="flex cursor"
+                     style="min-height: 200px"
+                     ng-hide="imgshow"
+                     src="/{{domain}}/preview.jpg"
+                     ng-click="uploadPreview()">
+                <img class="flex cursor"
+                     style="min-height: 200px"
+                     ng-show="imgshow"
+                     src="{{imgshow}}"
+                     ng-click="uploadPreview()">
+            </div>
+
+            <div class="input-wrapper">
+                <div class="input-label">Title</div>
+                <input type="text" ng-model="title">
+            </div>
+
+            <div class="row">
+                <div class="flex input-wrapper">
+                    <div class="input-label">Collection</div>
+                    <input type="text" ng-model="category">
+                </div>
+                <md-menu md-position-mode="target-right target">
+                    <img class="img36 img-black" src="/store/img/menu.svg" ng-click="$mdMenu.open($event)"/>
+                    <md-menu-content width="4" class="col-content">
+                        <md-menu-item ng-repeat="item in categories" ng-click="selectCategory(item)">
+                            <p class="ml16 uppercase">{{item}}</p>
+                        </md-menu-item>
+                    </md-menu-content>
+                </md-menu>
+            </div>
+
+            <div class="input-wrapper">
+                <div class="input-label">Description</div>
+                <input type="text" ng-model="description">
+            </div>
+
+            <div class="input-wrapper">
+                <div class="input-label">Count</div>
+                <input type="number" ng-model="count">
+            </div>
+
+            <div class="primary-button" ng-click="save()">Save</div>
+        </div>
+    </div>
+</md-dialog>

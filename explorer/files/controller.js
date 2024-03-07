@@ -6,6 +6,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
 
     $scope.path = []
     $scope.search_domain = ''
+    $scope.subdir = ''
     $scope.$watch('search_domain', function (newValue) {
         if (newValue == null) return
         post("/wallet/api/search.php", {

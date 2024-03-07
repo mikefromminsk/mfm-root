@@ -1,13 +1,18 @@
-function openSendDialog(domain, success) {
+function openSendDialog(domain, to_address, amount, success) {
     window.$mdBottomSheet.show({
         templateUrl: '/wallet/send/index.html',
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
-            if (DEBUG) {
-                $scope.to_address = 'user'
-                $scope.amount = 2
+            if ((to_address || "") != "") {
+                $scope.to_address = to_address
+                $scope.block_to_address = true
             }
+
+            if ((amount || "") != "") {
+                $scope.amount = amount
+            }
+
             $scope.send = function () {
                 hasToken()
                 postContractWithGas(domain, "api/token/send.php", function (key, next_hash) {

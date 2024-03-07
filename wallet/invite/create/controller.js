@@ -7,7 +7,7 @@ function openInvite(domain, success) {
             $scope.amount = 1
             $scope.create = function () {
                 let invite_code = randomString(8)
-                postContractWithGas(domain, brc1.bonus_create, function (key, next_hash) {
+                postContractWithGas(domain, "api/token/bonus_create.php", function (key, next_hash) {
                     return {
                         key: key,
                         next_hash: next_hash,

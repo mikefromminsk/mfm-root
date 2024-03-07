@@ -12,7 +12,7 @@ function showInfoDialog(message, success) {
 }
 
 function hasToken(domain, success, error) {
-    postContract(domain, brc1.wallet, {
+    postContract(domain, "api/token/wallet.php", {
         address: wallet.address()
     }, function (response) {
         if (success)

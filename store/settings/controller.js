@@ -4,11 +4,9 @@ function openSettings(domain, success) {
         controller: function ($scope) {
             addFormats($scope)
 
-            $scope.domain = domain
             $scope.title = ""
             $scope.description = ""
             $scope.category = "sandbox"
-
 
             $scope.save = function () {
                 postContractWithGas("store", "api/info_update.php", function (key, next_hash) {
@@ -38,7 +36,7 @@ function openSettings(domain, success) {
                         domain: $scope.domain,
                         file: file,
                     }, function () {
-                        showSuccess("Archive uploaded successfully", init)
+                        showSuccess("Archive uploaded successfully")
                     })
                 }, ".zip")
             }
@@ -49,7 +47,7 @@ function openSettings(domain, success) {
                     zip.file("logo.svg", file);
                     zip.generateAsync({type: "blob"}).then(function (content) {
                         uploadFile($scope.domain, content, function () {
-                            showSuccess("Logo uploaded successfully", init)
+                            showSuccess("Logo uploaded successfully")
                         })
                     });
                 }, ".svg")
@@ -57,11 +55,17 @@ function openSettings(domain, success) {
 
             $scope.uploadPreview = function () {
                 selectFile(function (file) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $scope.imgshow = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+
                     var zip = new JSZip();
                     zip.file("preview.jpg", file);
                     zip.generateAsync({type: "blob"}).then(function (content) {
                         uploadFile($scope.domain, content, function () {
-                            showSuccess("Preview uploaded successfully", init)
+                            showSuccess("Preview uploaded successfully")
                         })
                     });
                 }, ".jpg")
@@ -71,11 +75,12 @@ function openSettings(domain, success) {
                 postContractWithGas("store", "api/archive.php", {
                     domain: $scope.domain,
                 }, function () {
-                    showSuccess("Archived successfully", init)
+                    showSuccess("Archived successfully")
                 })
             }
 
-            function search(newValue) {
+            $scope.$watch('domain', function (newValue) {
+                if (newValue == null) return
                 post("/store/api/apps.php", {
                     search_text: (newValue || ""),
                 }, function (response) {
@@ -87,18 +92,14 @@ function openSettings(domain, success) {
                     }
                     $scope.$apply()
                 })
-            }
-
-            $scope.$watch('domain', function (newValue) {
-                if (newValue == null) return
-                search(newValue)
             })
 
-            function init() {
-                search($scope.domain)
-            }
+            $scope.domain = domain
 
-            init()
+
+            $scope.selectCategory = function (category) {
+                $scope.category = category
+            }
         }
     }).then(function () {
         if (success)

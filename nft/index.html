@@ -1,0 +1,98 @@
+<head>
+    <title>NFT</title>
+    <link rel="icon" href="logo.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="col" ng-app="App" ng-controller="Controller">
+<div class="row header align-center">
+    <div class="row block align-start-center">
+        <img class="img32 img-black" src="logo.svg">
+        <p class="flex ml8 size24 bold">NFT Marketplace</p>
+        <div class="row align-start-center gap16">
+            <div class="primary-button"
+                 ng-hide="wallet.address()"
+                 ng-click="openLogin()">
+                Login
+            </div>
+            <div class="row"
+                 ng-show="wallet.address() && selectedCoin != null">
+                <!--<img class="img24" src="{{genLogo(selectedCoin.logo)}}">-->
+                <p class="ml8 uppercase">{{selectedCoin.domain}}</p>
+            </div>
+            <md-menu md-position-mode="target-right target">
+                <img class="img36 img-black" src="/store/img/menu.svg" ng-click="$mdMenu.open($event)"/>
+                <md-menu-content width="4" class="col-content">
+                    <md-menu-item ng-repeat="coin in coins" ng-click="selectCoin(coin)">
+                        <img class="img24" src="{{genLogo(coin.logo)}}">
+                        <p class="uppercase">{{coin.domain}}</p>
+                    </md-menu-item>
+                    <md-menu-item ng-click="openGenerator()" ng-show="selectedCoin != null">
+                        <img class="img24 img-black" src="/store/img/edit.svg">
+                        Update app info
+                    </md-menu-item>
+                    <md-menu-item ng-click="openLogin()" ng-hide="wallet.address()">
+                        <img class="img24 img-black" src="/wallet/img/login.svg">
+                        Login
+                    </md-menu-item>
+                    <md-menu-item ng-click="logout()" ng-show="wallet.address()">
+                        <img class="img24 img-black" src="/wallet/img/logout.svg">
+                        Logout
+                    </md-menu-item>
+                </md-menu-content>
+            </md-menu>
+        </div>
+    </div>
+</div>
+<div class="flex col content align-start-center scroll">
+    <div class="col mt16 block" ng-repeat="collection in collections">
+        <p class="size16 m16 bold">{{collection.title}}</p>
+        <div class="row scroll">
+            <div class="col ml16 cursor"
+                 ng-repeat="item in collection.items"
+                 ng-click="openProfile(apps[domain])">
+                <img class="wauto radius8" style="min-width: 100px" src="/{{selectedCoin.domain}}/nft/img/{{item.filename}}">
+                <div class="col mt16">
+                    <p class="size14">{{item.title}}</p>
+                    <p class="mt4 size12">{{item.description}}</p>
+                    <p class="mt4 size12">{{item.count}}</p>
+                </div>
+            </div>
+            <div class="ml16"></div>
+        </div>
+    </div>
+
+    <div style="height: 100px;"></div>
+</div>
+
+<script src="/node_modules/angular/angular.js"></script>
+<script src="/node_modules/angular-aria/angular-aria.js"></script>
+<script src="/node_modules/angular-animate/angular-animate.js"></script>
+<script src="/node_modules/angular-messages/angular-messages.js"></script>
+<script src="/node_modules/angular-material/angular-material.js"></script>
+<link href="/node_modules/angular-material/angular-material.min.css" rel="stylesheet">
+<script src="/node_modules/angular-material/angular-material.min.js"></script>
+
+<link href="/flex/flex.css" rel="stylesheet">
+<link href="/flex/shorts.css" rel="stylesheet">
+<link href="/flex/colors.css" rel="stylesheet">
+<link href="/flex/colors-dark.css" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+
+<script src="/wallet/utils/formats.js"></script>
+<script src="/wallet/utils/backend.js"></script>
+<script src="/wallet/utils/ui.js"></script>
+
+<script src="controller.js"></script>
+<script>
+    controller(main)
+</script>
+<script async src="/wallet/dialogs/success/controller.js"></script>
+<script async src="/wallet/dialogs/info/controller.js"></script>
+<script async src="/wallet/dialogs/pin/controller.js"></script>
+<script async src="/wallet/login/controller.js"></script>
+<script async src="/node_modules/jszip/dist/jszip.min.js"></script>
+
+<script async src="/nft/generator/controller.js"></script>
+
+</body>

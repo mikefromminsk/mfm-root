@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Cache-control" content="NO-CACHE">
     <meta name="theme-color" content="#000000">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <style>
         .image {
             position: absolute;
@@ -137,6 +138,11 @@
                          ng-click="clearCategoryFilter()">
                         All
                     </div>
+                    <div class="button radius16 mr4 pv4 ph8"
+                         ng-class="{'active': selectedCategories.indexOf('mining') != -1}"
+                         ng-click="selectCategory('mining')">
+                        mining
+                    </div>
                     <div ng-repeat="item in categories"
                          class="button radius16 mr4 pv4 ph8"
                          ng-class="{'active': selectedCategories.indexOf(item) != -1}"
@@ -244,7 +250,7 @@
 <script async src="/wallet/usdt/deposit/controller.js"></script>
 <script async src="/wallet/usdt/withdrawal/controller.js"></script>
 <script async src="/wallet/trans/datepicker/controller.js"></script>
-<script async src="/wallet/mining/controller.js"></script>
+<script async src="/mining/mining/controller.js"></script>
 <script async src="/wallet/trans/tran/controller.js"></script>
 </body>
 </html>

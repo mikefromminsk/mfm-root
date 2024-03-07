@@ -3,13 +3,13 @@
     <link rel="icon" href="logo.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-control" content="NO-CACHE">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body class="col" ng-app="App" ng-controller="Controller">
 <div class="row header align-start-center">
     <img class="img-black" src="logo.svg">
     <p class="flex ml8 size24 bold">Store</p>
-    <div class="row align-start-center" style="gap: 16px">
+    <div class="row align-start-center gap16">
         <div class="primary-button"
              ng-hide="wallet.address()"
              ng-click="openLogin()">
@@ -61,8 +61,11 @@
                             <img class="ml4 img12 img-gray" src="img/favorite-selected.svg">
                         </div>
                     </div>
-                    <div class="row align-start-center" ng-show="selectedCoin">
-                        <div class="button" ng-click="installApp(apps[domain]); $event.stopPropagation(); ">Install</div>
+                    <div class="row align-start-center" ng-show="apps[domain].installed == false">
+                        <div class="primary-button" ng-click="installApp(apps[domain]); $event.stopPropagation(); ">Install</div>
+                    </div>
+                    <div class="row align-start-center" ng-show="apps[domain].installed == true">
+                        <div class="button">Installed</div>
                     </div>
                 </div>
             </div>
@@ -99,6 +102,7 @@
 <script async src="/wallet/dialogs/info/controller.js"></script>
 <script async src="/wallet/dialogs/pin/controller.js"></script>
 <script async src="/wallet/login/controller.js"></script>
+<script async src="/wallet/web/controller.js"></script>
 <script async src="/store/profile/controller.js"></script>
 <script async src="/store/settings/controller.js"></script>
 <script async src="/node_modules/jszip/dist/jszip.min.js"></script>

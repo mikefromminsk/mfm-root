@@ -63,7 +63,6 @@ function dataSet(array $path_array, $value, $addHistory = true)
 {
     $data_id = dataNew($path_array, true);
     if ($data_id == null) return false;
-    dataDeleteChildren($data_id);
     $path = implode("/", $path_array);
     $data = [
         data_value => $value,
@@ -126,26 +125,6 @@ function dataGet(array $path)
         $result = null;
     }
     return $result;
-}
-
-function dataDelete(array $path)
-{
-    $data_id = dataNew($path, false);
-    if ($data_id == null) return false;
-    dataDeleteChildren($data_id);
-    return query("delete from data where data_id = $data_id");
-}
-
-function dataDeleteChildren($data_id)
-{
-    $children = selectListWhere(data, data_id, [
-        data_parent_id => $data_id
-    ]);
-
-    foreach ($children as $child_data_id) {
-        dataDeleteChildren($child_data_id);
-        query("delete from data where data_id = $child_data_id");
-    }
 }
 
 function dataExist($path)

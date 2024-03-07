@@ -52,8 +52,8 @@
     <div class="col input-content gray200-back radius8">
         <p class="">Request</p>
         <div class="row input-wrapper" ng-repeat="(name, param) in info.params">
-            <div class="input-label-top">{{param.name}} ({{(param.type)}}{{param.required ? " required" : ""}})</div>
-            <input type="text" class="flex input" ng-model="param.value">
+            <div class="input-label">{{param.name}} ({{(param.type)}}{{param.required ? " required" : ""}})</div>
+            <input type="text" ng-model="param.value">
         </div>
 
         <div class="primary-button" ng-click="makeRequest()">
