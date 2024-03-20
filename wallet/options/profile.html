@@ -1,6 +1,7 @@
 <div class="col mt16" ng-show="profile.category">
     <p class="size16 gray400-text">Description</p>
-    <p class="mt8 size14">{{categoriesDesc[profile.category]}}</p>
+    <p class="mt8 size14" ng-hide="profile.description">{{categoriesDesc[profile.category]}}</p>
+    <p class="mt8 size14" ng-show="profile.description">{{profile.description}}</p>
 </div>
 <!--
 Потребление 24h

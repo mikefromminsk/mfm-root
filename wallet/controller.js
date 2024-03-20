@@ -105,13 +105,15 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             result = []
             for (let token of tokens)
                 if ($scope.selectedCategories.indexOf(token.category) != -1
-                    || $scope.selectedCategories.indexOf('mining') != -1 && token.mining)
+                    || $scope.selectedCategories.indexOf('mining') != -1 && token.mining
+                    || $scope.selectedCategories.indexOf('my_coins') != -1 && token.owner == wallet.address())
                     result.push(token)
         }
         return result
     }
 
     function checkTransfers(from, to) {
+        if (from.length == 0) return
         function showTopMessage(balanceChange, domain) {
             $mdToast.show($mdToast.simple().position('top').textContent(
                 "You received " + $scope.formatAmount(balanceChange, domain)

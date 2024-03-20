@@ -1,7 +1,7 @@
 <md-dialog class="fill col">
     <div class="row header align-start-center">
         <img src="/wallet/img/back.svg" ng-click="close()">
-        <img class="img32 radius8" src="{{genLogo(coin.logo)}}">
+        <img class="img32 radius8" src="/{{coin.domain}}/logo.svg">
         <div class="col flex">
             <p class="size16 bold uppercase medium">{{coin.domain}}</p>
             <p class="size12 mt4 gray400-text">{{coin.owner}}</p>
@@ -19,6 +19,10 @@
                  ng-show="isFavorite"
                  src="/wallet/img/favorite-selected.svg">
         </div>
+            <img class="img32 radius8 img-black"
+                 src="/wallet/img/settings.svg"
+                 ng-show="coin.owner == wallet.address()"
+                 ng-click="openTokenSettings()">
     </div>
     <div class="flex col content align-start-center scroll" ng-show="profile">
         <div class="col block input-content">
@@ -63,6 +67,14 @@
                         <img class="img24 img-accent" src="/wallet/img/upgrade.svg">
                     </div>
                     <p class="size12 mt4 gray400-text">Store</p>
+                </div>
+                <div class="col align-start-center ripple"
+                     ng-show="profile.mining"
+                     ng-click="openMining()">
+                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                        <img class="img24 img-accent" src="/wallet/img/mining.svg">
+                    </div>
+                    <p class="size12 mt4 gray400-text">Mining</p>
                 </div>
             </div>
             <ng-include src="'/wallet/options/profile.html'"></ng-include>

@@ -15,13 +15,6 @@ function openOptionsDialog($rootScope, coin, success) {
 
             checkFavorite()
 
-            post("/wallet/api/profile.php", {
-                domain: domain
-            }, function (response) {
-                $scope.profile = response
-                $scope.$apply()
-            })
-
             function checkSiteExist(domain) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", "/" + domain + "/index.html", true);
@@ -92,6 +85,21 @@ function openOptionsDialog($rootScope, coin, success) {
             $scope.openSite = function () {
                 openWeb("/" + domain)
             }
+
+            $scope.openTokenSettings = function () {
+                openTokenSettings(domain, init)
+            }
+
+            function init(){
+                post("/wallet/api/profile.php", {
+                    domain: domain
+                }, function (response) {
+                    $scope.profile = response
+                    $scope.$apply()
+                })
+            }
+
+            init()
         }
     }).then(function () {
         if (success)

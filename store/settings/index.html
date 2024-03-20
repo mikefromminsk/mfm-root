@@ -50,7 +50,9 @@
                 <div class="input-label">Description</div>
                 <input type="text" ng-model="description">
             </div>
-
+            <md-checkbox ng-model="hide_in_store">
+                Hide in store
+            </md-checkbox>
             <div class="primary-button" ng-click="save()">Save</div>
 
             <div class="primary-button" ng-click="uploadArchive()">Upload archive</div>

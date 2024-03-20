@@ -36,6 +36,7 @@ function openLaunchDialog(domain, success) {
                     }, function (response) {
                         if (response.result.indexOf($scope.domain) == -1) {
                             $scope.selectedIndex += 1;
+                            $scope.checkLaunch()
                         } else {
                             showError($scope.domain.toUpperCase() + " domain exists")
                         }
@@ -43,41 +44,26 @@ function openLaunchDialog(domain, success) {
                         $scope.$apply()
                     })
                 } else if ($scope.selectedIndex == 1) {
-                    $scope.selectedIndex += 1;
-                } else if ($scope.selectedIndex == 2) {
-                    $scope.selectedIndex += 1;
-                    hasBalance(wallet.gas_domain, function () {
-                        wallet.calcStartHash($scope.domain, function (next_hash) {
-                            postContractWithGas("wallet", "api/launch.php", {
-                                domain: $scope.domain,
-                                address: wallet.address(),
-                                logo: $scope.logo,
-                                category: $scope.category,
-                                next_hash: next_hash,
-                                amount: 1000000,
-                            }, function () {
-                                storage.pushToArray(storageKeys.domains, $scope.domain)
-                                $scope.startLaunching()
-                            })
+                    $scope.checkLaunch()
+                }
+            }
+
+            $scope.checkLaunch = function () {
+                hasBalance(wallet.gas_domain, function () {
+                    wallet.calcStartHash($scope.domain, function (next_hash) {
+                        postContractWithGas("wallet", "api/launch.php", {
+                            domain: $scope.domain,
+                            address: wallet.address(),
+                            next_hash: next_hash,
+                            amount: 1000000,
+                        }, function () {
+                            storage.pushToArray(storageKeys.domains, $scope.domain)
+                            $scope.startLaunching()
                         })
                     })
-                }
+                })
             }
 
-            $scope.generate = async function () {
-                function getHash(t) {
-                    let e = (new TextEncoder).encode(t);
-                    return window.crypto.subtle.digest("SHA-1", e)
-                }
-
-                function hexString(t) {
-                    return [...new Uint8Array(t)].map(t => t.toString(16).padStart(2, "0")).join("")
-                }
-
-                $scope.logo = hexString(await getHash(randomString(4)))
-                $scope.$apply()
-            }
-            $scope.generate()
 
             $scope.stages = [
                 "Upload contracts",
@@ -94,11 +80,15 @@ function openLaunchDialog(domain, success) {
                     if ($scope.stageIndex < $scope.stages.length - 1) {
                         $scope.startLaunching()
                     } else {
-                        $scope.close()
-                        showSuccessDialog("Token " + $scope.formatTicker($scope.domain) + " launched", success)
+                        openTokenSettings($scope.domain, function () {
+                            $scope.close()
+                            success()
+                        })
                     }
                 }, DEBUG ? 100 : 3000)
             }
+
+
         }
     }).then(function () {
         if (success)

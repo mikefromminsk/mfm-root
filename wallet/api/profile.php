@@ -6,7 +6,6 @@ $domain = get_required(domain);
 $coin[domain] = $domain;
 $coin[total] = dataGet([wallet, info, $domain, total]);
 $coin[owner] = dataGet([wallet, info, $domain, owner]);
-$coin[logo] = "/wallet/img/coin.svg";
 $coin[category] = dataGet([wallet, info, $domain, category]) ?: UNKNOWN;
 $coin[trans] = dataCount([$domain, trans]);
 $coin[wallets] = dataCount([$domain, wallet]);
@@ -14,6 +13,8 @@ $coin[nodes] = 1;
 $coin[created] = dataInfo([$domain])[data_time];
 $coin[dapps] = [];
 $coin[ui] = dataGet([store, info, $domain, ui]);
+$coin[mining] = dataExist([$domain, mining]);
+$coin[description] = dataGet([wallet, info, $domain, description]);
 
 
 foreach (dataKeys([$domain, packages]) as $app_domain) {

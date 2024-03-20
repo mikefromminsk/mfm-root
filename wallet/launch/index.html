@@ -21,34 +21,6 @@
                 </div>
             </div>
         </md-tab>
-        <md-tab label="Category">
-            <div class="fill col align-start-center">
-                <div class="col input-content">
-                    <h2>Select token category</h2>
-                    <div class="row wrap">
-                        <div class="filter"
-                             ng-class="{'active': category == key}"
-                             ng-repeat="(key, val) in categories"
-                             ng-click="selectCategory(key)">
-                            {{key}}
-                        </div>
-                    </div>
-                    <p>{{categories[category]}}</p>
-                </div>
-            </div>
-        </md-tab>
-        <md-tab label="Logo">
-            <div class="fill col align-center-center">
-                <div class="col input-content align-center-center">
-                    <h2>Choose logo</h2>
-                    <img class="radius24" src="{{genLogo(logo)}}" style="width: 100px; height: 100px">
-                    <div class="button"
-                         ng-click="generate()">
-                        Generate
-                    </div>
-                </div>
-            </div>
-        </md-tab>
         <md-tab label="Launch">
             <div class="fill col align-start-center">
                 <div class="col input-content">

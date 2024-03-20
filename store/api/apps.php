@@ -12,6 +12,7 @@ $apps = [];
 if ($domains != "") {
     $domains = explode(",", $domains);
     foreach ($domains as $appDomain) {
+        if (dataGet([store, info, $appDomain, title]) == null) continue;
         $apps[] = [
             domain => $appDomain,
             title => dataGet([store, info, $appDomain, title]),
@@ -22,6 +23,7 @@ if ($domains != "") {
             category => dataGet([store, info, $appDomain, ui]) == 1 ? Website : Plugin,
             installed => dataExist([$domain, packages, $appDomain]),
             console => dataGet([store, info, $appDomain, console]) == 1,
+            hide_in_store => dataGet([store, info, $appDomain, hide_in_store]) == 1,
         ];
     }
 }

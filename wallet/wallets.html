@@ -7,7 +7,7 @@
 <div class="col" ng-repeat="coin in filteredActiveCoins">
     <div class="row ph16 pv8 align-start-center ripple"
          ng-click="options(coin)">
-        <img class="img32 radius8" src="{{genLogo(coin.logo)}}">
+        <img class="img32 radius8" src="/{{coin.domain}}/logo.svg">
         <div class="col flex ml8">
             <p class="size16 bold uppercase medium">{{coin.domain}}</p>
             <p class="size12 gray400-text">{{coin.owner}}</p>

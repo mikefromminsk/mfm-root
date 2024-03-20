@@ -6,6 +6,7 @@ function openSettings(domain, success) {
 
             $scope.title = ""
             $scope.description = ""
+            $scope.hide_in_store = false
             $scope.category = "sandbox"
 
             $scope.save = function () {
@@ -16,6 +17,7 @@ function openSettings(domain, success) {
                         next_hash: next_hash,
                         title: $scope.title,
                         description: $scope.description,
+                        hide_in_store: $scope.hide_in_store ? 1 : 0,
                         category: $scope.category,
                     }
                 }, function () {

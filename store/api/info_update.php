@@ -8,12 +8,14 @@ $title = get_required(title);
 $description = get_required(description);
 $category = get_required(category);
 $gas_address = get_required(gas_address);
+$hide_in_store = get_required(hide_in_store);
 
 dataSet([store, info, $domain], [
     title => $title,
     owner => $gas_address,
     description => $description,
     category => $category,
+    hide_in_store => $hide_in_store,
 ]);
 
 /*$dir = $_SERVER["DOCUMENT_ROOT"];

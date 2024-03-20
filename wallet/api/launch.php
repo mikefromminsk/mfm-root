@@ -8,8 +8,6 @@ $address = get_required(address);
 $next_hash = get_required(next_hash);
 $amount = get_int_required(amount);
 $contract = get_required(contract, "gas");
-$logo = get_string(logo);
-$category = get_string(category);
 
 $wallet_path = $domain . "/wallet";
 
@@ -25,8 +23,6 @@ dataSet([wallet, info, $domain], [
     domain => $domain,
     owner => $address,
     total => $amount,
-    category => $category,
-    logo => $logo,
 ]);
 
 $response[success] = true;

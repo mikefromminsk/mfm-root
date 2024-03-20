@@ -16,8 +16,12 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.openProfile = function (app) {
-        if (app.console){
-            openWeb(location.origin + "/" + app.domain + "/console?domain=" + $scope.selectedCoin.domain, init)
+        if (app.console) {
+            var link = location.origin + "/" + app.domain + "/console?domain=" + $scope.selectedCoin.domain
+            if (DEBUG)
+                window.open(link)
+            else
+                openWeb(link, init)
         } else {
             openProfile(app)
         }

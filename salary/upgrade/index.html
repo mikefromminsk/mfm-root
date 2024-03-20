@@ -1,0 +1,47 @@
+<md-bottom-sheet class="col">
+    <div class="row header align-start-center">
+        <img src="/wallet/img/back.svg" ng-click="close()">
+        <p>Upgrade {{domain}}</p>
+    </div>
+    <div class="col align-start-center content">
+        <div class="input-content">
+            <div class="input-wrapper">
+                <div class="input-label">Employee address</div>
+                <input type="text"
+                       ng-disabled="block_employee_address"
+                       autocapitalize="none"
+                       minlength="3"
+                       maxlength="16"
+                       onkeypress="return event.charCode != 32"
+                       ng-model="employee_address">
+            </div>
+            <div class="input-wrapper">
+                <div class="input-label">Manager address</div>
+                <input type="text"
+                       ng-disabled="block_manager_address"
+                       autocapitalize="none"
+                       minlength="3"
+                       maxlength="16"
+                       onkeypress="return event.charCode != 32"
+                       ng-model="manager_address">
+            </div>
+            <div class="input-wrapper">
+                <div class="input-label">Distance</div>
+                <input type="text"
+                       ng-disabled="true"
+                       autocapitalize="off"
+                       ng-model="'7days'">
+            </div>
+            <div class="input-wrapper">
+                <div class="input-label">Amount</div>
+                <input type="number"
+                       autocapitalize="off"
+                       ng-model="amount">
+            </div>
+            <div class="flex mt16 primary-button" ng-click="upgrade()"
+                 ng-disabled="!employee_address || !manager_address || !amount">
+                Upgrade {{employee_address}}
+            </div>
+        </div>
+    </div>
+</md-bottom-sheet>

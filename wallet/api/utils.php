@@ -43,6 +43,11 @@ function dataWalletBalance($domain, $address)
     return dataGet([$domain, wallet, $address, amount]) ?: 0.0;
 }
 
+function dataWalletBlocks()
+{
+    return ceil(time() / 60);
+}
+
 function dataWalletSend(
     $domain,
     $from_address,
@@ -183,7 +188,7 @@ function uploadContent($domain, $filepath, $local_path)
     if ($zip->open($filepath) !== true) error("zip->open is false");
 
     for ($i = 0; $i < $zip->numFiles; $i++) {
-        if (!in_array(pathinfo($zip->getNameIndex($i))[extension], [jpg])) {
+        if (!in_array(pathinfo($zip->getNameIndex($i))[extension], [jpg, svg])) {
             error("file extension is not correct");
         }
     }

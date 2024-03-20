@@ -46,27 +46,29 @@
     <img class="image"
          src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0ibm9uZSIgY2xhc3M9Imhkcy1mbGlnaHQtaWNvbi0tYW5pbWF0aW9uLWxvYWRpbmciPgoNPGcgZmlsbD0iIzAwMDAwMCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPgoNPHBhdGggZD0iTTggMS41YTYuNSA2LjUgMCAxMDAgMTMgNi41IDYuNSAwIDAwMC0xM3pNMCA4YTggOCAwIDExMTYgMEE4IDggMCAwMTAgOHoiIG9wYWNpdHk9Ii4yIi8+Cg08cGF0aCBkPSJNNy4yNS43NUEuNzUuNzUgMCAwMTggMGE4IDggMCAwMTggOCAuNzUuNzUgMCAwMS0xLjUgMEE2LjUgNi41IDAgMDA4IDEuNWEuNzUuNzUgMCAwMS0uNzUtLjc1eiIvPgoNPC9nPgoNPC9zdmc+"/>
 </div>
-<div class="row header align-start-center">
-    <img class="img38 img-black ripple" src="/wallet/img/settings.svg" ng-click="openAccount()">
-    <div class="row flex input-wrapper">
-        <img class="img20"
-             style="position: absolute; left: 8px; top: 11px"
-             src="/wallet/img/search.svg">
-        <input type="text"
-               class="flex input ripple radius24"
-               id="search_wrapper"
-               autocapitalize="off"
-               autocomplete="off"
-               ng-model="search_text"
-               placeholder="Find any token"
-               style="padding-left: 34px">
-        <img class="img20 img-black ripple"
-             ng-click="search_text = ''"
-             ng-show="search_text != ''"
-             style="position: absolute; right: 8px; top: 11px"
-             src="/wallet/img/close.svg">
+<div class="row header align-center-center">
+    <div class="row block align-start-center gap16">
+        <img class="img40 p8 img-black ripple" src="/wallet/img/settings.svg" ng-click="openAccount()">
+        <div class="row flex input-wrapper">
+            <img class="img20"
+                 style="position: absolute; left: 8px; top: 11px"
+                 src="/wallet/img/search.svg">
+            <input type="text"
+                   class="flex input ripple"
+                   id="search_wrapper"
+                   autocapitalize="off"
+                   autocomplete="off"
+                   ng-model="search_text"
+                   placeholder="Find any token"
+                   style="padding-left: 34px; border-radius: 24px">
+            <img class="img20 img-black ripple"
+                 ng-click="search_text = ''"
+                 ng-show="search_text != ''"
+                 style="position: absolute; right: 8px; top: 11px"
+                 src="/wallet/img/close.svg">
+        </div>
+        <img class="img40 p8 img-black ripple" src="/wallet/img/transactions.svg" ng-click="openTransactions()">
     </div>
-    <img class="img38 img-black ripple" src="/wallet/img/transactions.svg"  ng-click="openTransactions()">
 </div>
 <div class="col content align-start-center scroll">
     <div class="col block">
@@ -76,7 +78,7 @@
             </div>
             <div class="col" ng-repeat="item in bonuses">
                 <div class="row ph16 pv8 align-start-center ripple" ng-click="receiveBonus(item)">
-                    <img class="img32 radius8" src="{{genLogo(bonusesCoins[item.domain].logo)}}">
+                    <img class="img32 radius8" src="/{{item.domain}}/logo.svg">
                     <div class="col flex ml8">
                         <p class="size16 bold uppercase medium">{{item.domain}}</p>
                         <p class="size12 gray400-text">{{bonusesCoins[item.domain].owner}}</p>
@@ -131,9 +133,9 @@
                     Test
                 </div>
             </div>-->
-            <div class="row mt16 scrollable-horizontal size10 lowercase bold" style="width: 100%">
+            <div class="row mt16 size10 lowercase bold" style="width: 100%">
                 <div class="ml16"></div>
-                <div class="row ">
+                <div class="row scroll nowrap">
                     <div class="button radius16 mr4 pv4 ph8"
                          ng-click="clearCategoryFilter()">
                         All
@@ -142,6 +144,11 @@
                          ng-class="{'active': selectedCategories.indexOf('mining') != -1}"
                          ng-click="selectCategory('mining')">
                         mining
+                    </div>
+                    <div class="button radius16 mr4 pv4 ph8"
+                         ng-class="{'active': selectedCategories.indexOf('my_coins') != -1}"
+                         ng-click="selectCategory('my_coins')">
+                        my coins
                     </div>
                     <div ng-repeat="item in categories"
                          class="button radius16 mr4 pv4 ph8"
@@ -160,7 +167,7 @@
                  ng-repeat="coin in recommendedCoins"
                  ng-click="options(coin)">
                 <div class="row pv8 ph16 align-start-center">
-                    <img class="img32 radius8" src="{{genLogo(coin.logo)}}">
+                    <img class="img32 radius8" src="/{{coin.domain}}/logo.svg">
                     <div class="col flex ml8">
                         <p class="size16 bold uppercase medium">{{coin.domain}}</p>
                         <p class="size12 gray400-text">{{coin.owner}}</p>
@@ -179,7 +186,7 @@
                  ng-repeat="coin in searchCoins"
                  ng-click="options(coin)">
                 <div class="row pv8 align-start-center">
-                    <img class="img32 radius8" src="{{genLogo(coin.logo)}}">
+                    <img class="img32 radius8" src="/{{coin.domain}}/logo.svg">
                     <div class="col flex ml8">
                         <p class="size16 bold uppercase medium">{{coin.domain}}</p>
                         <p class="size12 gray400-text">{{coin.owner}}</p>
@@ -235,6 +242,8 @@
 <script>
     controller(main)
 </script>
+<script async src="/node_modules/jszip/dist/jszip.min.js"></script>
+<script async src="/node_modules/canvas2svg-master/canvas2svg.js"></script>
 <script async src="/node_modules/qrcodejs/qrcode.min.js"></script>
 <script async src="/wallet/dialogs/pin/controller.js"></script>
 <script async src="/wallet/options/controller.js"></script>
@@ -252,5 +261,6 @@
 <script async src="/wallet/trans/datepicker/controller.js"></script>
 <script async src="/mining/mining/controller.js"></script>
 <script async src="/wallet/trans/tran/controller.js"></script>
+<script async src="/wallet/token/controller.js"></script>
 </body>
 </html>

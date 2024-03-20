@@ -18,12 +18,14 @@ if ($domains != "") {
             category => dataGet([wallet, info, $domain, category]) ?: UNKNOWN,
             price24hChange => 0,
             balance => $address != null ? dataWalletBalance($domain, $address) : null,
+            mining => dataExist([$domain, mining]),
         ];
     }
 
     if ($address != null)
         usort($response[result], function ($a, $b) {
-            return -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
+            $balance = -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
+            return $balance != 0 ? $balance : strcmp($a[domain], $b[domain]);
         });
 }
 
