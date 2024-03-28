@@ -255,6 +255,8 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     init()
+
+    openLogin(init)
 }
 
 function coinListController($scope){

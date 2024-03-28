@@ -1,39 +1,33 @@
-<md-dialog class="fill col upper-back scroll"
-           style="
-background: var(--gray100);
-background: linear-gradient(135deg, var(--gray200), var(--gray100));">
-    <div class="row ph8 pv16 align-start-center">
-        <div class="col mr4 ripple" ng-click="close()">
-            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
+<md-dialog class="fill col upper-back" style="flex-direction: column-reverse;">
+    <div class="col">
+        <div class="col align-center-center">
+            <img src="/wallet/img/crypto-wallet.png" style="width: auto;">
         </div>
-    </div>
-
-    <div class="col align-start-center">
         <div class="col input-content">
-            <div class="col align-center-center">
-                <img src="/wallet/logo.svg" style="width: 60px; height: 60px;">
-                <p class="black-text size32 bold mt16"
-                   style="text-shadow: 4px 4px 16px var(--white);">HeyChain</p>
-            </div>
             <div class="row mt16 input-wrapper">
                 <div class="input-label">Username</div>
                 <input id="first_input"
                        type="text"
                        autocapitalize="none"
+                       autocomplete="off"
                        maxlength="10"
                        ng-model="username">
             </div>
-            <div>{{validateMaxLength(username, 10)}}</div>
             <div class="row input-wrapper">
                 <div class="input-label">Password</div>
                 <input type="password"
                        autocomplete="new-password"
                        ng-model="password">
             </div>
-            <div class=" primary-button sticky" ng-click="login()"
-                 ng-disabled="username == '' || password == '' || in_progress">
-                Login or Create account
-            </div>
+        </div>
+        <div class="primary-button" ng-click="login()"
+             ng-disabled="username == '' || password == '' || in_progress">
+            Login or Create account
+        </div>
+    </div>
+    <div class="row ph8 pv16 align-start-center" style="position: absolute; left: 16px; top: 16px;">
+        <div class="col mr4 ripple" ng-click="close()">
+            <img class="img38 p8 img-black" src="/wallet/img/back.svg">
         </div>
     </div>
 </md-dialog>

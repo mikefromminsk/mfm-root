@@ -196,11 +196,6 @@ function addFormats($scope) {
         return result;
     }
 
-    $scope.validateMaxLength = function (str, max) {
-        if (str == null || str == '') return ""
-        if (str.length > max) return "Length is too big. Max " + max + " letters."
-    }
-
 
     $scope.isHideBalance = function () {
         return storage.getString(storageKeys.hideBalances) != ""

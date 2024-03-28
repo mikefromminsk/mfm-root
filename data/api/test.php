@@ -3,6 +3,7 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/schema.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 
+if (!DEBUG) error("cannot use not in debug session");
 
 dataSet([login, test1], "123");
 assertEquals("data put", dataGet([login, test1]), "123");

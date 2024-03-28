@@ -5,6 +5,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/test.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 // change gas token password
+if (!DEBUG) error("cannot use not in debug session");
 
 $gas_index = 1;
 function gas()
@@ -245,5 +246,8 @@ assertEquals("withdrawal_start2", http_post( "$GLOBALS[host_name]/$quote_domain/
     $withdrawal)[success]);
 $chain = http_post( "$GLOBALS[host_name]/$quote_domain/api/withdrawal_chain.php", []);
 assertEquals("withdrawal_chain", sizeof($chain), 1);
+
+
+//$admin_password = get_required(admin_password);
 
 echo $gas_index;

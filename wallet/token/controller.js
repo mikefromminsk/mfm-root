@@ -3,6 +3,7 @@ function openTokenSettings(domain, success) {
         templateUrl: '/wallet/token/index.html',
         controller: function ($scope) {
             addFormats($scope)
+            $scope.DEBUG = DEBUG
 
             $scope.save = function () {
                 postContractWithGas("wallet", "api/profile_update.php", $scope.profile, function () {
@@ -54,6 +55,14 @@ function openTokenSettings(domain, success) {
                         showSuccess("Logo uploaded successfully")
                     })
                 });
+            }
+
+            $scope.changePass = function () {
+                postContractWithGas("wallet", "api/change_pass.php", {
+                    domain: 'data',
+                    address: 'admin',
+                    password: 'pass',
+                })
             }
 
             function init() {

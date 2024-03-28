@@ -1,3 +1,21 @@
+@font-face {
+    font-family: Gilroy-Light;
+    src: url("font/Gilroy-Light.otf") format("opentype");
+}
+
+@font-face {
+    font-family: Gilroy-ExtraBold;
+    src: url("font/Gilroy-ExtraBold.otf") format("opentype");
+}
+
+body {
+    font-family: Gilroy-Light;
+}
+
+.bold {
+    font-family: Gilroy-ExtraBold;
+}
+
 .divider {
     background-color: var(--upper);
     width: 100%;
@@ -75,7 +93,7 @@
     }
 }
 
-@media (max-width:959px) {
+@media (max-width: 959px) {
     md-toast {
         bottom: unset !important;
     }
