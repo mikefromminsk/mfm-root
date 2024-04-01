@@ -1,29 +1,32 @@
 <md-bottom-sheet class="col">
+    <div style="position: absolute; right: 26px; top: -30px; z-index: 2">
+        <img src="/wallet/img/buy.png">
+    </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
         <p>Sell {{domain}}</p>
     </div>
-    <div class="col content align-start-center">
+    <div class="col content">
         <div class="col input-content">
-            <div class="row">
-                <div class="filter ripple"
-                     ng-class="{'active': item == selectedPortion}"
-                     ng-click="setPortion(item)"
-                     ng-repeat="item in portions">
-                    {{item}}%
-                </div>
-            </div>
-            <div class="input-wrapper">
+            <div class="row input-wrapper-black">
                 <div class="input-label">Price for a token</div>
                 <input type="number"
                        id="first_input"
 
                        ng-model="price">
             </div>
-            <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
-            <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price">
-                Set price
+            <div class="row">
+                <div class="filter-black ripple black-text"
+                     ng-class="{'active': item == selectedPortion}"
+                     ng-click="setPortion(item)"
+                     ng-repeat="item in portions">
+                    {{item}}%
+                </div>
             </div>
+            <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
+        </div>
+        <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price">
+            Set price
         </div>
     </div>
 </md-bottom-sheet>

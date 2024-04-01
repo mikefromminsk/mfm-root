@@ -11,7 +11,7 @@ function openPin(domain, success, cancel) {
             controller: function ($scope) {
                 addFormats($scope)
                 $scope.setMode = domain == null
-                $scope.domain = $scope.setMode ? "Set pin code" : domain
+                $scope.domain = $scope.setMode ? "Set pin" : domain
                 $scope.pin = ""
 
                 $scope.add = function (symbol) {

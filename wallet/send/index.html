@@ -1,31 +1,34 @@
 <md-bottom-sheet class="col">
+    <div style="position: absolute; right: 29px; top: -50px; z-index: 2">
+        <img src="/wallet/img/send.png">
+    </div>
     <div class="row header align-start-center">
-        <img src="/wallet/img/back.svg" ng-click="close()">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
         <p>Send {{domain}}</p>
     </div>
-    <div class="col align-start-center content">
-        <div class="input-content">
-            <div class="input-wrapper">
+    <div class="col content">
+        <div class="col input-content">
+            <div class="row input-wrapper-black">
                 <div class="input-label">To address</div>
                 <input type="text"
                        ng-disabled="block_to_address"
                        autocapitalize="none"
+                       autocomplete="off"
                        minlength="3"
                        maxlength="16"
                        onkeypress="return event.charCode != 32"
                        ng-model="to_address">
             </div>
-            <div class="input-wrapper" style="margin-top: 16px">
+            <div class="row input-wrapper-black">
                 <div class="input-label">Amount</div>
                 <input type="number"
                        autocapitalize="off"
-
                        ng-model="amount">
             </div>
-            <div class="flex mt16 primary-button" ng-click="send()"
-                 ng-disabled="!to_address || !amount">
-                Send {{domain}}
-            </div>
+        </div>
+        <div class="flex mt16 primary-button" ng-click="send()"
+             ng-disabled="!to_address || !amount">
+            Send {{domain}}
         </div>
     </div>
 </md-bottom-sheet>

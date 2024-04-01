@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Cache-control" content="NO-CACHE">
     <meta name="theme-color" content="#000000">
-    <!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <style>
         .image {
             position: absolute;
@@ -48,26 +48,32 @@
 </div>
 <div class="row header align-center-center">
     <div class="row block align-start-center gap16">
-        <img class="img40 p8 img-black ripple" src="/wallet/img/settings.svg" ng-click="openAccount()">
-        <div class="row flex input-wrapper">
+        <div class="col align-start-end normal">
+            <div class="row align-start-end">
+                <p class="size14 normal mb4">my</p>
+                <p class="size20 bold ml4">Token</p>
+            </div>
+            <p class="size14 normal">space</p>
+        </div>
+        <div class="row flex input-wrapper ml16">
             <img class="img20"
                  style="position: absolute; left: 8px; top: 11px"
                  src="/wallet/img/search.svg">
             <input type="text"
                    class="flex input ripple"
-                   id="search_wrapper"
                    autocapitalize="off"
                    autocomplete="off"
                    ng-model="search_text"
                    placeholder="Find any token"
-                   style="padding-left: 34px; border-radius: 24px">
+                   style="padding-left: 34px; border-radius: 10px; height: 40px;">
             <img class="img20 img-black ripple"
                  ng-click="search_text = ''"
                  ng-show="search_text != ''"
                  style="position: absolute; right: 8px; top: 11px"
                  src="/wallet/img/close.svg">
         </div>
-        <img class="img40 p8 img-black ripple" src="/wallet/img/transactions.svg" ng-click="openTransactions()">
+        <img class="img40 p8 img-black ripple" src="/wallet/img/settings.svg" ng-click="openAccount()">
+        <!--<img class="img40 p8 img-black ripple" src="/wallet/img/transactions.svg" ng-click="openTransactions()">-->
     </div>
 </div>
 <div class="col content align-start-center scroll">
@@ -90,19 +96,14 @@
                 <div class="divider"></div>
             </div>
 
-            <div class="row ph16 pt16" ng-hide="wallet.address()">
-                <div class="flex primary-button"
-                     ng-click="login()">
-                    Login or Create account
-                </div>
-            </div>
+            <div class="mt16 primary-button" ng-click="login()"  ng-hide="wallet.address()">Login or Create account</div>
 
-            <div class="row mt16 mh16 align-start-center" ng-show="wallet.address()">
+            <div class="row mt16 mh16 align-start-end" ng-show="wallet.address()">
                 <div class="flex col">
-                    <p class="size14 gray400-text">Total balance</p>
-                    <div class="mt4 row align-start-center">
-                        <p class="size24" ng-show="isHideBalance()">*****</p>
-                        <p class="size24" ng-show="!isHideBalance()">{{formatPrice(totalBalance())}}</p>
+                    <p class="size10">Total balance</p>
+                    <div class="mt4 row align-start-center size32 bold">
+                        <p ng-show="isHideBalance()">*****</p>
+                        <p ng-show="!isHideBalance()">{{formatPrice(totalBalance())}}</p>
                         <img class="ml8 img20 img-black"
                              src="/wallet/img/show.svg"
                              ng-show="isHideBalance()"
@@ -113,46 +114,66 @@
                              ng-click="hideBalances()">
                     </div>
                 </div>
-                <div class="button" ng-click="openDeposit()">Deposit</div>
-                <div class="button p8 ml4" ng-click="openWithdrawal()">
-                    <img class="img16 img-black" src="/wallet/img/upload.svg">
+                <div class="ripple radius10 black-back white-text size14 pv8 ph16 mb4"
+                     style="border: var(--black) solid 2px;"
+                     ng-click="openDeposit()">
+                    Deposit
+                </div>
+                <div class="button-gray p8 ml4 mb4" ng-click="openWithdrawal()">
+                    <img class="img14 img-black" src="/wallet/img/upload.svg">
                 </div>
             </div>
 
-            <div class="mh16 mt16 row"
-                 ng-show="wallet.address()">
-                <div class="flex primary-button"
-                     ng-click="newCoin()">
-                    New coin
+            <div class="mt16 primary-button" ng-click="newCoin()" ng-show="false">New coin</div>
+
+            <div class="col p8 mh16 mt16 radius10"
+                 ng-show="wallet.address()"
+                 style="background: url(/wallet/img/card_back.png); border-width: 0 0 1px 0; border-color: var(--black); border-style: solid;">
+                <div class="row">
+                    <div class="col">
+                        <div class="row align-start-end">
+                            <p class="secondary-text size20 bold">$0</p>
+                            <p class="secondary-text ml4">balance</p>
+                        </div>
+                    </div>
+                    <div class="flex"></div>
+                    <div class="col align-start-end">
+                        <div class="row align-start-end">
+                            <p class="size10">+2%</p>
+                            <p class="ml8 size20 bold">$0.1</p>
+                        </div>
+                        <p>Price</p>
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 50px">
+                    <img class="img40 radius8" src="/{{wallet.gas_domain}}/logo.svg">
+                    <div class="col ml4">
+                        <p class="size20 bold uppercase bold">{{wallet.gas_domain}}</p>
+                        <p class="size10 gray400-text">Admin</p>
+                    </div>
                 </div>
             </div>
-
-            <!--<div class="mh16 mt16 row">
-                <div class="flex primary-button"
-                     ng-click="openPin()">
-                    Test
-                </div>
-            </div>-->
-            <div class="row mt16 size10 lowercase bold" style="width: 100%">
+            <div class="row mt16 size10 lowercase gray200-back">
                 <div class="ml16"></div>
                 <div class="row scroll nowrap">
-                    <div class="button radius16 mr4 pv4 ph8"
+                    <div class="mr4 pv8 ph8"
+                         ng-class="{'bold uppercase underline': selectedCategories.length == 0}"
                          ng-click="clearCategoryFilter()">
                         All
                     </div>
-                    <div class="button radius16 mr4 pv4 ph8"
-                         ng-class="{'active': selectedCategories.indexOf('mining') != -1}"
+                    <div class="mr4 pv8 ph8"
+                         ng-class="{'bold uppercase underline': selectedCategories.indexOf('mining') != -1}"
                          ng-click="selectCategory('mining')">
                         mining
                     </div>
-                    <div class="button radius16 mr4 pv4 ph8"
-                         ng-class="{'active': selectedCategories.indexOf('my_coins') != -1}"
+                    <div class="mr4 pv8 ph8"
+                         ng-class="{'bold uppercase underline': selectedCategories.indexOf('my_coins') != -1}"
                          ng-click="selectCategory('my_coins')">
                         my coins
                     </div>
                     <div ng-repeat="item in categories"
-                         class="button radius16 mr4 pv4 ph8"
-                         ng-class="{'active': selectedCategories.indexOf(item) != -1}"
+                         class="mr4 pv8 ph8"
+                         ng-class="{'bold uppercase underline': selectedCategories.indexOf(item) != -1}"
                          ng-click="selectCategory(item)">
                         {{item}}
                     </div>
@@ -161,7 +182,7 @@
             <ng-include src="'/wallet/wallets.html'"></ng-include>
 
             <div class="mh16 mt16" ng-show="recommendedCoins.length">
-                <p class="size14 gray400-text">Recommended coins</p>
+                <p class="size10 gray400-text">Recommended coins</p>
             </div>
             <div class="col ripple"
                  ng-repeat="coin in recommendedCoins"
@@ -169,12 +190,20 @@
                 <div class="row pv8 ph16 align-start-center">
                     <img class="img32 radius8" src="/{{coin.domain}}/logo.svg">
                     <div class="col flex ml8">
-                        <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                        <p class="size16 uppercase medium">{{coin.domain}}</p>
                         <p class="size12 gray400-text">{{coin.owner}}</p>
                     </div>
-                    <div class="col ml8 align-center-center button-gray p8"
-                         ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
-                        <img class="img16 img-gray400" src="/wallet/img/favorite.svg">
+                    <div class="col align-end-end">
+                        <p>{{formatPrice(coin.price)}}</p>
+                        <p class="size10 mt4" ng-class="percentColor(coin.price24hChange)">
+                            {{formatPercent(coin.price24hChange)}}
+                        </p>
+                    </div>
+                    <div class="row align-end" style="min-width: 80px">
+                        <div class="col ml8 align-center-center button-gray p8"
+                             ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
+                            Add
+                        </div>
                     </div>
                 </div>
                 <div class="divider"></div>
@@ -188,17 +217,26 @@
                 <div class="row pv8 align-start-center">
                     <img class="img32 radius8" src="/{{coin.domain}}/logo.svg">
                     <div class="col flex ml8">
-                        <p class="size16 bold uppercase medium">{{coin.domain}}</p>
+                        <p class="size16 uppercase medium">{{coin.domain}}</p>
                         <p class="size12 gray400-text">{{coin.owner}}</p>
                     </div>
-                    <div class="col ml8 align-center-center button-gray p8"
-                         ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
-                        <img class="img16 img-gray400"
-                             src="/wallet/img/favorite.svg"
-                             ng-show="!coin.isFavorite">
-                        <img class="img16 img-warning"
-                             src="/wallet/img/favorite-selected.svg"
-                             ng-show="coin.isFavorite">
+                    <div class="col align-end-end">
+                        <p>{{formatPrice(coin.price)}}</p>
+                        <p class="size10 mt4" ng-class="percentColor(coin.price24hChange)">
+                            {{formatPercent(coin.price24hChange)}}
+                        </p>
+                    </div>
+                    <div class="row align-end" style="min-width: 80px" ng-show="!coin.isFavorite">
+                        <div class="col ml8 align-center-center button p8"
+                             ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
+                            Add
+                        </div>
+                    </div>
+                    <div class="col align-end-end" style="min-width: 80px" ng-show="coin.isFavorite">
+                        <p ng-show="isHideBalance()">*****</p>
+                        <p ng-show="!isHideBalance()">{{formatPrice(coin.price * coin.balance)}}</p>
+                        <p class="size10 mt4" ng-show="isHideBalance()">*****</p>
+                        <p class="size10 mt4" ng-show="!isHideBalance()">{{formatAmount(coin.balance)}}</p>
                     </div>
                 </div>
                 <div class="divider"></div>

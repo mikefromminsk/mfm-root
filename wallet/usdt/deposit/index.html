@@ -1,45 +1,35 @@
 <md-bottom-sheet class="col">
+    <div style="position: absolute; right: 0; top: -70px; z-index: 2">
+        <img src="/wallet/img/deposit.png">
+    </div>
     <div class="row header align-start-center">
-        <img src="/wallet/img/back.svg" ng-click="close()">
-        <p>Settings</p>
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p>Deposit</p>
     </div>
     <div class="col content align-start-center">
         <div class="col input-content">
-            <div class="row mh16 input-wrapper">
+            <div class="row input-wrapper-black">
                 <div class="input-label">Deposit address</div>
-                <input
-                       type="text"
+                <input type="text"
                        autocapitalize="off"
                        id="deposit_address"
                        ng-model="deposit_address">
-            </div>
-            <div class="row align-center-center">
-                <div class="col align-start-center ripple"
-                     ng-click="copy()">
-                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                        <img class="img24 img-accent" src="/wallet/img/copy.svg">
-                    </div>
-                    <p class="size12 mt4 gray400-text">copy</p>
-                </div>
-                <div class="col align-start-center ripple"
-                     ng-click="share()">
-                    <div class="p8 mt16 mh16 row align-center button-gray radius12">
-                        <img class="img24 img-accent" src="/wallet/img/share.svg">
-                    </div>
-                    <p class="size12 mt4 gray400-text">Invite</p>
+                <div class="input-label-right">
+                    <img class="img28 p4 ripple gray500-back"
+                         src="/wallet/img/copy.svg"
+                         ng-click="copy()">
                 </div>
             </div>
-            <div class="flex row align-center-center mh16 mt16">
-                Deposit deadline {{formatTime(deadline)}}
+            <div class="flex row mh16 ">
+                <div class="flex">Deposit deadline</div>
+                <div class="nowrap">{{formatTime(deadline)}}</div>
             </div>
-            <div class="row align-center-center mt16">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-                <div class="ml8">Waiting for deposit ({{countDownTimer}})</div>
-            </div>
-            <div class="flex row button align-center-center m16"
-                 style="margin-top: 20px"
-                 ng-click="copy()">
-                Copy
+            <div class="row align-center-start">
+                <div class="col align-center-center" style="width: 100px; height: 100px;">
+                    <img style="position: absolute" src="/wallet/img/deposit_circle.png">
+                    <p class="size20 accent-text bold">{{countDownTimer}}</p>
+                    <div class="mt4" style="text-align: center">Waiting for <br>deposit</div>
+                </div>
             </div>
         </div>
     </div>

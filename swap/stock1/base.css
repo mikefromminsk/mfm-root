@@ -179,10 +179,14 @@ button {
 
 input:disabled{
     pointer-events:none;
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: var(--white);
 }
 
-.input {
+.input-wrapper-black > input:disabled{
+    background-color: var(--black);
+}
+
+input {
     height: 38px;
     outline: none;
     border-radius: 3px;
@@ -197,10 +201,15 @@ input:disabled{
     top: -6px;
     left: 10px;
     position: absolute;
-    background-color: white;
+    background-color: var(--white);
     font-size: 12px;
     padding: 0 4px;
-    color: rgb(132, 142, 156);
+    color: var(--gray400);
+}
+
+.input-wrapper-black > .input-label:disabled{
+    background-color: var(--black);
+    color: var(--gray400);
 }
 
 .input-label-right {
@@ -217,7 +226,6 @@ input:disabled{
 .input-label-right {
     right: 0;
 }
-
 
 .header {
     min-height: 64px;

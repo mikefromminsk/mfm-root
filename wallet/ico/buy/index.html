@@ -1,41 +1,44 @@
 <md-bottom-sheet class="col">
+    <div style="position: absolute; right: 26px; top: -30px; z-index: 2">
+        <img src="/wallet/img/buy.png">
+    </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
         <p>Buy {{domain}}</p>
     </div>
-    <div class="col content align-start-center">
+    <div class="col content">
         <div class="col input-content">
-            <div class="row align-center-center">
-                <p class="size16">Price: {{formatPrice(price)}}</p>
-            </div>
             <div class="row size12">
-                <p class="flex">You give</p>
-                <p>You get</p>
+                <p class="flex nowrap">You give</p>
+                <p class="nowrap">You get</p>
             </div>
             <div class="row">
-                <div class="input-wrapper">
+                <div class="row input-wrapper-black">
                     <div class="input-label uppercase">USDT</div>
                     <input type="number"
-
                            ng-model="total"
                            ng-change="calcAmount()">
                 </div>
-                <div class="input-wrapper">
+                <div class="row input-wrapper-black">
                     <div class="input-label uppercase">{{domain}}</div>
                     <input type="number"
-
                            ng-model="amount"
                            ng-change="calcTotal()">
                 </div>
             </div>
             <div class="row size12">
-                <p class="flex">Available: {{formatAmount(balance)}}</p>
-                <p>Max: {{formatAmount(icoBalance, domain)}}</p>
+                <p class="flex nowrap">Available: {{formatAmount(balance)}}</p>
+                <p class="nowrap">Max: {{formatAmount(icoBalance, domain)}}</p>
             </div>
-            <div class="primary-button green-back" ng-click="ico_buy()"
-                 ng-disabled="!total || in_progress">
-                Buy
+            <div class="col align-center-center ">
+                <div class="row p16 align-center-center secondary-back radius24">
+                    <p class="size16 black-text bold">1 USDT = {{formatAmount(1 / price, domain)}}</p>
+                </div>
             </div>
+        </div>
+        <div class="primary-button green-back" ng-click="ico_buy()"
+             ng-disabled="!total || in_progress">
+            Buy
         </div>
     </div>
 </md-bottom-sheet>

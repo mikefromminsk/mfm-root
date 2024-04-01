@@ -1,12 +1,14 @@
-<md-bottom-sheet class="col">
+<md-bottom-sheet class="col size24">
+    <div style="position: absolute; right: 26px; top: -45px; z-index: 2">
+        <img src="/wallet/img/crypto-locker.png">
+    </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
-        <p class="flex">Access for {{formatTicker(domain)}}</p>
-        <div class="button" ng-click="back()" ng-show="setMode">SKIP</div>
+        <p class="bold">{{formatTicker(domain)}}</p>
     </div>
     <div class="col align-start-center content">
-        <div class="col size20 block " style="width: 400px">
-            <div class="row align-center-center" style="margin: 40px 0">
+        <div class="col block" style="width: 400px">
+            <div class="row align-center-center" style="margin: 40px 0 20px 0">
                 <div class="pin-unfilled" ng-hide="pin.length >= 1"></div>
                 <div class="pin-filled" ng-show="pin.length >= 1">*</div>
                 <div class="pin-unfilled" ng-hide="pin.length >= 2"></div>
@@ -32,10 +34,12 @@
                 <div class="flex col align-center-center ripple pv16" ng-click="add('9')">9</div>
             </div>
             <div class="row">
-                <div class="flex col align-center-center ripple pv16"></div>
+                <div class="flex col align-center-center ripple pv16">
+                    <p ng-click="back()" ng-show="setMode">SKIP</p>
+                </div>
                 <div class="flex col align-center-center ripple pv16" ng-click="add('1')">0</div>
                 <div class="flex col align-center-center ripple pv16" ng-click="remove()">
-                    <img class="img36 img-black" src="/wallet/img/delete.svg">
+                    <img class="img36 img-white" src="/wallet/img/delete.svg">
                 </div>
             </div>
         </div>
