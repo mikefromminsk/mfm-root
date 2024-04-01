@@ -111,6 +111,8 @@ function addFormats($scope) {
     $scope.formatDate = function (number) {
         if (number == "") return ""
         let date = new Date(number * 1000)
+        if (new Date().toDateString() === date.toDateString())
+            return "today"
         return [
             padTo2Digits(date.getDate()),
             padTo2Digits(date.getMonth() + 1),

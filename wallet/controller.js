@@ -4,8 +4,14 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
     $scope.wallet = wallet
+    $scope.apps = {}
+    $scope.selectedCoin
 
     $scope.menuIndex = 0
+
+    if ($scope.getUriParam("domain")) {
+        storage.setString(storageKeys.selectedCoin, $scope.getUriParam("domain"))
+    }
 
     $scope.login = function () {
         openLogin(init)
@@ -43,6 +49,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         updateBonuses()
         updateCoins()
         recommendations()
+        searchApp()
     }
 
     $scope.drops = []
@@ -150,6 +157,15 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 $scope.activeCoins = response.result
                 $scope.filteredActiveCoins = filterByCategory(response.result)
                 $scope.showBody = true
+                let selectedCoin = storage.getString(storageKeys.selectedCoin)
+                for (let coin of response.result) {
+                    if (coin.owner == wallet.address()) {
+                        if (coin.domain == selectedCoin)
+                            $scope.selectedCoin = coin
+                        if (selectedCoin == '' && $scope.selectedCoin == null)
+                            $scope.selectedCoin = coin
+                    }
+                }
                 $scope.$apply()
             })
         } else {
@@ -252,6 +268,56 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     if (storage.getString(storageKeys.onboardingShowed) == "") {
         storage.setString(storageKeys.onboardingShowed, "true")
         openOnboardingDialog(init)
+    }
+
+
+
+    // Store
+
+    $scope.openSettings = function () {
+        openSettings($scope.selectedCoin.domain, init)
+    }
+
+    $scope.openProfile = function (app) {
+        if (app.console) {
+            var link = location.origin + "/" + app.domain + "/console?domain=" + $scope.selectedCoin.domain
+            /*if (DEBUG)*/
+            window.open(link)
+            /*else
+                openWeb(link, init)*/
+        } else {
+            openProfile(app)
+        }
+    }
+
+    $scope.selectCoin = function (coin) {
+        $scope.selectedCoin = coin
+        storage.setString(storageKeys.selectedCoin, coin.domain)
+        init()
+    }
+
+    $scope.installApp = function (app) {
+        postContractWithGas("store", "api/install.php", {
+            domain: $scope.selectedCoin.domain,
+            app_domain: app.domain,
+        }, function () {
+            init()
+            showSuccess("Install success")
+        })
+    }
+
+    $scope.selectTab = function (tab) {
+        $scope.selectedIndex = tab
+    }
+
+    function searchApp(newValue) {
+        post("/wallet/api/apps.php", {
+            search_text: (newValue || ""),
+            domain: (storage.getString(storageKeys.selectedCoin) || ""),
+        }, function (response) {
+            $scope.apps = response.apps || {}
+            $scope.$apply()
+        })
     }
 
     init()

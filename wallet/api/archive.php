@@ -7,7 +7,7 @@ $domain = get_required(domain);
 $rootPath = $_SERVER["DOCUMENT_ROOT"] . "/" . $domain;
 
 $zip = new ZipArchive();
-$zip->open("$_SERVER[DOCUMENT_ROOT]/store/apps/$domain.zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
+$zip->open("$_SERVER[DOCUMENT_ROOT]/wallet/apps/$domain.zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
 $filesToDelete = array();
 

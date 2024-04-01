@@ -21,14 +21,14 @@
                 <p class="ml8 uppercase">{{selectedCoin.domain}}</p>
             </div>
             <md-menu md-position-mode="target-right target">
-                <img class="img36 img-black" src="/store/img/menu.svg" ng-click="$mdMenu.open($event)"/>
+                <img class="img36 img-black" src="/wallet/store/img/menu.svg" ng-click="$mdMenu.open($event)"/>
                 <md-menu-content width="4" class="col-content">
                     <md-menu-item ng-repeat="coin in coins" ng-click="selectCoin(coin)">
                         <img class="img24" src="{{genLogo(coin.logo)}}">
                         <p class="uppercase">{{coin.domain}}</p>
                     </md-menu-item>
                     <md-menu-item ng-click="openGenerator()" ng-show="selectedCoin != null">
-                        <img class="img24 img-black" src="/store/img/edit.svg">
+                        <img class="img24 img-black" src="/wallet/img/edit.svg">
                         Update app info
                     </md-menu-item>
                     <md-menu-item ng-click="openLogin()" ng-hide="wallet.address()">

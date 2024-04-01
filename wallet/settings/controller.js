@@ -1,6 +1,6 @@
 function openSettings(domain, success) {
     window.$mdDialog.show({
-        templateUrl: '/store/settings/index.html',
+        templateUrl: '/wallet/settings/index.html',
         controller: function ($scope) {
             addFormats($scope)
 

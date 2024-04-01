@@ -316,11 +316,11 @@ input {
     height: 100%;
 }
 
-.blue-text {
+.accent-text {
     color: #4F50FB;
 }
 
-.blue-back {
+.accent-back {
     background-color: #4F50FB;
     border-radius: 2px;
 }

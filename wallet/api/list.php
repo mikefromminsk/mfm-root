@@ -15,7 +15,6 @@ if ($domains != "") {
             logo => dataGet([wallet, info, $domain, logo]),
             owner => dataGet([wallet, info, $domain, owner]),
             price => dataGet([$domain, price]) ?: 0,
-            category => dataGet([wallet, info, $domain, category]) ?: UNKNOWN,
             price24hChange => 0,
             balance => $address != null ? dataWalletBalance($domain, $address) : null,
             mining => dataExist([$domain, mining]),

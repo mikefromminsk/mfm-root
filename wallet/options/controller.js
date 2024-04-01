@@ -6,7 +6,6 @@ function openOptionsDialog($rootScope, coin, success) {
             $scope.coin = coin
             var domain = coin.domain
             $scope.wallet = wallet
-            $scope.contract = brc1
             $scope.siteExist = false
 
             function checkFavorite() {
@@ -36,11 +35,6 @@ function openOptionsDialog($rootScope, coin, success) {
                     $scope.$apply()
                 })
             }
-
-            getContracts(domain, function (contracts) {
-                $scope.contracts = contracts
-                $scope.$apply()
-            })
 
             $scope.sendDialog = function () {
                 openSendDialog(domain, "", "", success)

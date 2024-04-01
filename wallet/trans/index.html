@@ -3,23 +3,12 @@
         <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
         <p>Transactions</p>
     </div>
-    <div class="col content align-start-center scroll">
+    <div class="col content align-start-center scroll" ng-hide="in_progress">
         <div class="col block">
-            <div class="row ph16 mt16">
-                <div class="flex row pv8 radius4 align-center-center gray200-back"
-                     ng-click="selectFrom()">
-                    <p>From {{formatDate(fromDate / 1000)}}</p>
-                </div>
-                <div class="flex row pv8 ml4 radius4 align-center-center gray200-back"
-                     ng-click="selectTo()">
-                    <p>To {{formatDate(toDate / 1000)}}</p>
-                </div>
-                <div class="ml4 button" ng-click="search()">
-                    Search
-                </div>
-            </div>
-            <div class="mt16"></div>
             <ng-include src="'/wallet/trans/trans.html'"></ng-include>
         </div>
+    </div>
+    <div class="fill col align-center-center" ng-show="in_progress">
+        <md-progress-circular md-mode="indeterminate"></md-progress-circular>
     </div>
 </md-dialog>

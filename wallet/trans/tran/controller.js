@@ -5,6 +5,7 @@ function openTran(domain, txid, success) {
             addFormats($scope)
             $scope.domain = domain
             $scope.wallet = wallet
+            $scope.username = wallet.address()
 
             post("/wallet/api/tran.php", {
                 domain: domain,

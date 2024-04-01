@@ -6,13 +6,12 @@ $domain = get_required(domain);
 $coin[domain] = $domain;
 $coin[total] = dataGet([wallet, info, $domain, total]);
 $coin[owner] = dataGet([wallet, info, $domain, owner]);
-$coin[category] = dataGet([wallet, info, $domain, category]) ?: UNKNOWN;
 $coin[trans] = dataCount([$domain, trans]);
 $coin[wallets] = dataCount([$domain, wallet]);
 $coin[nodes] = 1;
 $coin[created] = dataInfo([$domain])[data_time];
 $coin[dapps] = [];
-$coin[ui] = dataGet([store, info, $domain, ui]);
+$coin[ui] = dataGet([wallet, info, $domain, ui]);
 $coin[mining] = dataExist([$domain, mining]);
 $coin[description] = dataGet([wallet, info, $domain, description]);
 
@@ -73,10 +72,6 @@ trending
 topvolume
 toptrades
 
-
 */
-
-foreach (dataKeys([store, info, $domain, contracts]) as $hash)
-    $coin[contracts][$hash] = dataGet([store, info, $domain, contracts, $hash]);
 
 commit($coin);

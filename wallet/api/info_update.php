@@ -10,7 +10,7 @@ $category = get_required(category);
 $gas_address = get_required(gas_address);
 $hide_in_store = get_required(hide_in_store);
 
-dataSet([store, info, $domain], [
+dataSet([wallet, info, $domain], [
     title => $title,
     owner => $gas_address,
     description => $description,

@@ -1,5 +1,5 @@
 function openAccount(success) {
-    window.$mdBottomSheet.show({
+    window.$mdDialog.show({
         templateUrl: '/wallet/account/index.html',
         controller: function ($scope) {
             addFormats($scope)

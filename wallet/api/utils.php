@@ -149,7 +149,7 @@ function commit($response, $gas_address = null)
 function installApp($domain, $app_domain, $filepath = null)
 {
     if ($app_domain != null && $filepath == null) {
-        $filepath = $_SERVER[DOCUMENT_ROOT] . "/store/apps/$app_domain.zip";
+        $filepath = $_SERVER[DOCUMENT_ROOT] . "/wallet/apps/$app_domain.zip";
     }
     $file_hash = hash_file(md5, $filepath);
     if (!$file_hash) error("file hash is false in $filepath");
@@ -174,9 +174,9 @@ function installApp($domain, $app_domain, $filepath = null)
         $GLOBALS[gas_bytes] += 1;
     }
     dataSet([$domain, packages, $app_domain, hash], $file_hash);
-    dataSet([store, info, $domain, ui], $hasRootIndex ? 1 : 0);
-    dataSet([store, info, $domain, console], $hasConsole ? 1 : 0);
-    dataSet([store, info, $domain, contracts], $files);
+    dataSet([wallet, info, $domain, ui], $hasRootIndex ? 1 : 0);
+    dataSet([wallet, info, $domain, console], $hasConsole ? 1 : 0);
+    dataSet([wallet, info, $domain, contracts], $files);
     $zip->close();
 
     return $files;
@@ -224,7 +224,7 @@ function dataIcoSell($key, $next_hash, $amount, $price)
     if (!dataExist(["usdt/wallet", $owner_address])) error("usdt address is not init");
     if (!dataExist([$domain, wallet, ico])) {
         dataWalletReg(ico, md5(pass), $domain);
-        $contract_path = dataGet([store, info, $domain, contracts, "d670072f06bf06183fb422b9c28f1d8b"]);
+        $contract_path = dataGet([wallet, info, $domain, contracts, "d670072f06bf06183fb422b9c28f1d8b"]);
         dataWalletDelegate($domain, ico, pass, $contract_path);
     }
     dataWalletSend($domain, $owner_address, ico, $amount, $key, $next_hash);
@@ -254,7 +254,7 @@ function dataWalletBonusCreate($domain,
     if (dataExist([$domain, invite, $invite_next_hash])) error("drop exists");
     if (!dataExist([$domain, wallet, bonus])) {
         dataWalletReg(bonus, md5(pass), $domain);
-        $bonus_receive_contract_hash = dataGet([store, info, $domain, contracts, "96eb30f335960041368dc63ee5e6ebec"]);
+        $bonus_receive_contract_hash = dataGet([wallet, info, $domain, contracts, "96eb30f335960041368dc63ee5e6ebec"]);
         dataWalletDelegate($domain, bonus, pass, $bonus_receive_contract_hash);
     }
     dataWalletSend($domain, $address, bonus, $amount, $key, $next_hash);
