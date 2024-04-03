@@ -117,7 +117,7 @@ function uploadFile(domain, zipFile, success) {
 
 var wallet = {
     quote_domain: "usdt",
-    gas_domain: "data",
+    gas_domain: "space",
     logout: function () {
         storage.clear()
     },

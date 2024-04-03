@@ -17,7 +17,6 @@ function gas()
     ];
 }
 
-$gas_domain = "data";
 $gas_path = "$gas_domain/wallet";
 
 assertEquals("data test", http_post($GLOBALS[host_name] . "/$gas_domain/api/test.php", [
@@ -156,17 +155,6 @@ assertEquals("after buy ico usdt balance", http_post($GLOBALS[host_name] . "/$ga
 ])[value], $sell_amount - ($buy_amount * $sell_price));
 
 // data for ui tests
-
-
-function dataWalletKey($path, $username, $password, $prev_key = "")
-{
-    return md5($path . $username . $password . $prev_key);
-}
-
-function dataWalletHash($path, $username, $password, $prev_key = "")
-{
-    return md5(dataWalletKey($path, $username, $password, $prev_key));
-}
 
 assertEquals("testReg user", http_post($GLOBALS[host_name] . "/$gas_domain/api/token/reg.php", [
         address => user,

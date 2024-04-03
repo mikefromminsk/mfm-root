@@ -3,7 +3,7 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/analytics.php";
 
-$gas_domain = "data";
+$gas_domain = "space";
 
 function dataWalletSettingsSave($user, $key, $value)
 {
@@ -272,4 +272,14 @@ function dataWalletBonusReceive($domain,
     dataWalletSend($domain, bonus, $to_address, $amount);
     dataSet([$domain, bonus, $invite_hash, amount], 0);
     return $amount;
+}
+
+function dataWalletKey($path, $username, $password, $prev_key = "")
+{
+    return md5($path . $username . $password . $prev_key);
+}
+
+function dataWalletHash($path, $username, $password, $prev_key = "")
+{
+    return md5(dataWalletKey($path, $username, $password, $prev_key));
 }
