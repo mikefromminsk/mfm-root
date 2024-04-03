@@ -2,10 +2,11 @@
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
-$domain = get_required(domain);
 $address = get_required(address);
 $key = get_required(key);
 $next_hash = get_required(next_hash);
+
+$domain = getDomain();
 
 if (!DEBUG) error("cannot use not in debug session");
 

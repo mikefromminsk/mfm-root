@@ -53,7 +53,6 @@ send($gas_domain, "free_reg", null, null, 10000, "$gas_domain/api/token/free_reg
 send($gas_domain, "change_pass", null, null, 10000, "$gas_domain/api/token/change_pass.php");
 
 assertEquals("change pass", http_post($GLOBALS[host_name] . "/$gas_domain/api/token/change_pass.php", [
-        domain => $gas_domain,
         address => admin,
         key => pass . $GLOBALS[gas_index],
         next_hash => dataWalletHash($gas_domain, admin, pass),
