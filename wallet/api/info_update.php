@@ -6,7 +6,6 @@ $password = get_required(password);
 $next_hash = get_required(next_hash);
 $title = get_required(title);
 $description = get_required(description);
-$category = get_required(category);
 $gas_address = get_required(gas_address);
 $hide_in_store = get_required(hide_in_store);
 
@@ -14,7 +13,6 @@ dataSet([wallet, info, $domain], [
     title => $title,
     owner => $gas_address,
     description => $description,
-    category => $category,
     hide_in_store => $hide_in_store,
 ]);
 

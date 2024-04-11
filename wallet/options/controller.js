@@ -1,9 +1,8 @@
-function openOptionsDialog($rootScope, coin, success) {
+function openOptions($rootScope, coin, success) {
     window.$mdDialog.show({
         templateUrl: '/wallet/options/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            $scope.coin = coin
             var domain = coin.domain
             $scope.wallet = wallet
             $scope.siteExist = false
@@ -25,9 +24,8 @@ function openOptionsDialog($rootScope, coin, success) {
                 }
                 xhr.send(null);
             }
-            checkSiteExist(domain)
 
-            $scope.categoriesDesc = tokenCategories
+            checkSiteExist(domain)
 
             $scope.toggleFavorite = function () {
                 $rootScope.addFavorite(domain, function () {
@@ -45,7 +43,10 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.openStore = function () {
-                openWeb(location.origin + "/store/?domain=" + domain)
+                $scope.close({
+                    action: "store",
+                    domain: domain
+                })
             }
 
             $scope.giveaway = function () {
@@ -57,11 +58,11 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.ico_sell = function () {
-                openIcoSell($rootScope, domain, success)
+                openIcoSell($rootScope, domain, init)
             }
 
             $scope.ico_buy = function () {
-                openIcoBuy($rootScope, domain, success)
+                openIcoBuy($rootScope, domain, init)
             }
 
             $scope.share = function () {
@@ -77,26 +78,34 @@ function openOptionsDialog($rootScope, coin, success) {
             }
 
             $scope.openSite = function () {
-                openWeb("/" + domain)
+                window.open("/" + domain)
             }
 
             $scope.openTokenSettings = function () {
-                openTokenSettings(domain, init)
+                openTokenSettings(domain, function (result) {
+                    if (result == "success")
+                        location.reload()
+                })
             }
 
-            function init(){
+            $scope.openWithdrawal = function () {
+                openWithdrawal(init)
+            }
+
+            function init() {
                 post("/wallet/api/profile.php", {
-                    domain: domain
+                    domain: domain,
+                    address: wallet.address(),
                 }, function (response) {
-                    $scope.profile = response
+                    $scope.coin = response
                     $scope.$apply()
                 })
             }
 
             init()
         }
-    }).then(function () {
+    }).then(function (result) {
         if (success)
-            success()
+            success(result)
     })
 }

@@ -4,6 +4,7 @@ function openIcoBuy($rootScope, domain, success) {
         controller: function ($scope, $mdBottomSheet) {
             addFormats($scope)
             $scope.domain = domain
+            $scope.wallet = wallet
 
             postContract(domain, "api/token/wallet.php", {
                 address: "ico"
@@ -47,8 +48,7 @@ function openIcoBuy($rootScope, domain, success) {
                         hasBalance(wallet.quote_domain, function () {
                             $scope.in_progress = true
                             postContractWithGas(wallet.quote_domain, "", function (usdt_key, usdt_next_hash) {
-                                postContractWithGas(domain, "api/token/ico_buy.php", {
-                                    address: wallet.address(),
+                                postContractWithGas(domain, "api/ico/buy.php", {
                                     key: usdt_key,
                                     next_hash: usdt_next_hash,
                                     amount: $scope.amount,

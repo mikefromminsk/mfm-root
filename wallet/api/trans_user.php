@@ -1,7 +1,6 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
-$domain = get_required(domain);
 $address = get_required(address);
 $page = get_int(page, 1);
 $size = get_int(size, 10);

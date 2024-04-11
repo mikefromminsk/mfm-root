@@ -6,25 +6,18 @@ $address = get_string(address);
 
 $response[result] = [];
 
+$response[gas] = dataWalletProfile($gas_domain, $address);
+
 if ($domains != "") {
     $domains = explode(",", $domains);
 
-    foreach ($domains as $domain) {
-        $response[result][] = [
-            domain => $domain,
-            logo => dataGet([wallet, info, $domain, logo]),
-            owner => dataGet([wallet, info, $domain, owner]),
-            price => dataGet([$domain, price]) ?: 0,
-            price24hChange => 0,
-            balance => $address != null ? dataWalletBalance($domain, $address) : null,
-            mining => dataExist([$domain, mining]),
-        ];
-    }
+    foreach ($domains as $domain)
+        $response[result][] = dataWalletProfile($domain, $address);
 
     if ($address != null)
         usort($response[result], function ($a, $b) {
             $balance = -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
-            return $balance != 0 ? $balance : strcmp($a[domain], $b[domain]);
+            return $balance != 0 ? $balance : ($b[created] - $a[created]);
         });
 }
 

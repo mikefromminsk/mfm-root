@@ -4,7 +4,7 @@ function openInviteCopy(domain, invite_key, success) {
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
-            $scope.link = location.origin + "?bonus=" + domain + ":" + invite_key
+            $scope.link = location.origin + "/wallet?bonus=" + domain + ":" + invite_key
 
             $scope.share = function () {
                 navigator.share({
@@ -17,7 +17,6 @@ function openInviteCopy(domain, invite_key, success) {
             $scope.copy = function () {
                 $scope.copyText($scope.link)
                 showSuccess("Link copied")
-                $mdBottomSheet.hide()
             }
 
             var qrcode

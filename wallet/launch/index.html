@@ -9,7 +9,7 @@
                 <div class="col">
                     <div class="flex col align-start-center input-content">
                         <h2>Type token name</h2>
-                        <div class="input-wrapper">
+                        <div class="row input-wrapper">
                             <input id="launch_token_name"
                                    type="text"
                                    class="flex input lowercase"
@@ -27,12 +27,15 @@
                     <h2>Launch progress</h2>
                     <div class="row" ng-repeat="item in stages">
                         <p class="flex">{{item}}</p>
-                        <div class="lds-ring"
+
+                        <div class="loader"
                              ng-show="$index == stageIndex">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
+                            <div class="face">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="face">
+                                <div class="circle"></div>
+                            </div>
                         </div>
                         <img class="img24"
                              src="/wallet/img/success.svg"

@@ -9,11 +9,15 @@
     <div class="col content">
         <div class="col input-content">
             <div class="row input-wrapper-black">
-                <div class="input-label">Price for a token</div>
+                <div class="input-label">Price</div>
                 <input type="number"
-                       id="first_input"
-
+                       ng-disabled="hasPrice"
                        ng-model="price">
+            </div>
+            <div class="row input-wrapper-black">
+                <div class="input-label">Amount</div>
+                <input type="number"
+                       ng-model="amount">
             </div>
             <div class="row">
                 <div class="filter-black ripple black-text"
@@ -24,9 +28,10 @@
                 </div>
             </div>
             <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
+            <p>1 {{formatTicker(wallet.gas_domain)}} fee for transaction</p>
         </div>
-        <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price">
-            Set price
+        <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price && !amount">
+            Sell
         </div>
     </div>
 </md-bottom-sheet>

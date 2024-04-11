@@ -28,9 +28,6 @@ if ($domains != "") {
     }
 }
 
-$response[apps] = array_to_map($apps, domain);
-foreach ($apps as $app)
-    $response[categories][$app[category]][] = $app[domain];
-
+$response[apps] = $apps;
 
 commit($response);

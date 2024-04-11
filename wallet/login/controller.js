@@ -1,17 +1,9 @@
-const brc1 = {
-    send: '6ca3ad3fb30b51001944d4d90c2080d4',
-    free_reg: '3d2a3f12adf303a58f8cb37c9ef51fa1',
-    reg: 'b6aea855e7418054e0af65f2816452d0',
-    drop: 'cd5ce018bfe962a3b8ae4117370edb04',
-    init: '772df88baecd34099df80f0e592a9bc7',
-    ico_buy: 'd670072f06bf06183fb422b9c28f1d8b',
-    ico_sell: '8d0a5b6afe2082197857d58faef59655',
-    bonus_create: 'f11bb3db4f36d360158b446c41b1bd6a',
-    bonus_receive: '96eb30f335960041368dc63ee5e6ebec',
-    wallet: '7242feda3f24473a3f86d9bd886e4510',
-}
-
 function openLogin(success) {
+    if (wallet.address() != ""){
+        if (success)
+            success()
+        return
+    }
     window.$mdDialog.show({
         templateUrl: '/wallet/login/index.html',
         controller: function ($scope) {
@@ -19,7 +11,7 @@ function openLogin(success) {
             $scope.username = ""
             if (DEBUG) {
                 if ($scope.username == "")
-                    $scope.username = "user"
+                    $scope.username = "admin"
                 $scope.password = "pass"
             }
             setFocus("first_input")
@@ -77,6 +69,13 @@ function openLogin(success) {
                 })
             }
 
+            $scope.changePass = function () {
+                postContractWithGas("wallet", "api/change_pass.php", {
+                    domain: 'data',
+                    address: 'admin',
+                    password: 'pass',
+                })
+            }
         }
     })
 }

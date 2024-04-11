@@ -132,6 +132,7 @@ function addFormats($scope) {
         function getColor(t) {
             return "#" + t.slice(-6)
         }
+
         let wh = 32
         let wh5 = wh / 5
         context.clearRect(0, 0, wh, wh);
@@ -158,7 +159,7 @@ function addFormats($scope) {
 
     $scope.genSvg = function (logo) {
         if (logo == null) return ""
-        var ctx = new C2S(32,32);
+        var ctx = new C2S(32, 32);
         $scope.drawLogo(ctx, logo)
         var mySerializedSVG = ctx.getSerializedSvg(); //true here, if you need to convert named to numbered entities.
         var svg = ctx.getSvg();
@@ -166,13 +167,13 @@ function addFormats($scope) {
     }
 
 
-    $scope.back = function () {
-        window.$mdBottomSheet.hide()
+    $scope.back = function (result) {
+        window.$mdBottomSheet.hide(result)
     }
 
-    $scope.close = function () {
-        window.$mdBottomSheet.hide()
-        window.$mdDialog.hide()
+    $scope.close = function (result) {
+        window.$mdBottomSheet.hide(result)
+        window.$mdDialog.hide(result)
     }
 
     $scope.random = function (from, to) {
@@ -189,10 +190,10 @@ function addFormats($scope) {
             objPeriod[d].push(obj[i]);
         }
         var result = []
-        for (day of Object.keys(objPeriod).sort().reverse()){
+        for (day of Object.keys(objPeriod).sort().reverse()) {
             result.push({
                 day: $scope.formatDate(day * 24 * 60 * 60),
-                items: objPeriod[day].sort((a,b) => b['time'] - a['time']),
+                items: objPeriod[day].sort((a, b) => b['time'] - a['time']),
             })
         }
         return result;
@@ -240,5 +241,44 @@ function addFormats($scope) {
         var uri = window.location.search.substring(1)
         var params = new URLSearchParams(uri)
         return params.get(paramName)
+    }
+
+    $scope.cardBack = function (coin) {
+        function hexEncode(str) {
+            var result = '';
+            for (var i = 0; i < str.length; i++) {
+                result += str.charCodeAt(i).toString(16);
+            }
+            return result;
+        }
+
+        function getColor(t) {
+            return "#" + hexEncode(md5(t)).substr(0, 6)
+        }
+
+        return {
+            'background': 'linear-gradient(75deg, var(--bottom) 0%, ' + getColor(coin.domain) + ' 100%)',
+        }
+    }
+
+    $scope.cardFront = function (coin) {
+        return {
+        }
+    }
+
+    $scope.getLogo = function (domain, width) {
+        if (width == null)
+            width = 32
+        var img = {
+            'width': width + 'px',
+            'height': width + 'px',
+            'min-width': width + 'px',
+            'min-height': width + 'px',
+        }
+        if (domain != null){
+            img['background-image'] =  "url('/" + domain + "/logo.svg')"
+            img['background-size'] = '100% 100%'
+        }
+        return img
     }
 }

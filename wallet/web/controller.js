@@ -5,7 +5,7 @@ function openWeb(link, success) {
             addFormats($scope)
             setTimeout(function () {
                 document.getElementById('web-frame').src = link
-            }, 1000)
+            }, 1)
         }
     }).then(function () {
         if (success)

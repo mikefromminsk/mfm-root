@@ -1,4 +1,4 @@
-function openSettings(domain, success) {
+function openAppSettings(domain, success) {
     window.$mdDialog.show({
         templateUrl: '/wallet/settings/index.html',
         controller: function ($scope) {
@@ -7,10 +7,9 @@ function openSettings(domain, success) {
             $scope.title = ""
             $scope.description = ""
             $scope.hide_in_store = false
-            $scope.category = "sandbox"
 
             $scope.save = function () {
-                postContractWithGas("store", "api/info_update.php", function (key, next_hash) {
+                postContractWithGas("wallet", "api/info_update.php", function (key, next_hash) {
                     return {
                         domain: $scope.domain,
                         password: key,
@@ -18,7 +17,6 @@ function openSettings(domain, success) {
                         title: $scope.title,
                         description: $scope.description,
                         hide_in_store: $scope.hide_in_store ? 1 : 0,
-                        category: $scope.category,
                     }
                 }, function () {
                     showSuccess("Updated success", success)
@@ -27,14 +25,9 @@ function openSettings(domain, success) {
                 })
             }
 
-            post("/store/api/categories.php", {}, function (response) {
-                $scope.categories = response.result
-                $scope.$apply()
-            })
-
             $scope.uploadArchive = function () {
                 selectFile(function (file) {
-                    postContractWithGas("store", "api/upload.php", {
+                    postContractWithGas("wallet", "api/upload.php", {
                         domain: $scope.domain,
                         file: file,
                     }, function () {
@@ -74,7 +67,7 @@ function openSettings(domain, success) {
             }
 
             $scope.archive = function () {
-                postContractWithGas("store", "api/archive.php", {
+                postContractWithGas("wallet", "api/archive.php", {
                     domain: $scope.domain,
                 }, function () {
                     showSuccess("Archived successfully")
@@ -83,7 +76,7 @@ function openSettings(domain, success) {
 
             $scope.$watch('domain', function (newValue) {
                 if (newValue == null) return
-                post("/store/api/apps.php", {
+                post("/wallet/api/apps.php", {
                     search_text: (newValue || ""),
                 }, function (response) {
                     var apps = response.apps || {}
@@ -97,11 +90,6 @@ function openSettings(domain, success) {
             })
 
             $scope.domain = domain
-
-
-            $scope.selectCategory = function (category) {
-                $scope.category = category
-            }
         }
     }).then(function () {
         if (success)

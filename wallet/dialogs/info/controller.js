@@ -18,7 +18,7 @@ function hasToken(domain, success, error) {
         if (success)
             success(response)
     }, function () {
-        showInfoDialog("You need to find " + domain.toUpperCase() + " token", error)
+        showInfoDialog("You need to add " + domain.toUpperCase() + " token", error)
     })
 }
 

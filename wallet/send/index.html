@@ -3,7 +3,7 @@
         <img src="/wallet/img/send.png">
     </div>
     <div class="row header align-start-center">
-        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
         <p>Send {{domain}}</p>
     </div>
     <div class="col content">
@@ -15,7 +15,7 @@
                        autocapitalize="none"
                        autocomplete="off"
                        minlength="3"
-                       maxlength="16"
+                       maxlength="50"
                        onkeypress="return event.charCode != 32"
                        ng-model="to_address">
             </div>

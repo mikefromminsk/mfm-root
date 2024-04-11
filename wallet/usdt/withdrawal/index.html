@@ -3,19 +3,26 @@
         <img src="/wallet/img/deposit.png">
     </div>
     <div class="row header align-start-center">
-        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
         <p>Withdrawal</p>
     </div>
     <div class="col content">
         <div class="col input-content">
-            <div class="row input-wrapper-black">
-                <div class="input-label">Tron address</div>
-                <input type="text" ng-model="withdrawal_address">
+            <div class="col">
+                <div class="row input-wrapper-black">
+                    <div class="input-label">Tron address</div>
+                    <input type="text"
+                           placeholder="TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
+                           ng-model="withdrawal_address">
+                </div>
+                <p class="red-text" ng-show="errorWithdrawalAddress">Tron address is incorrect</p>
             </div>
             <div class="row input-wrapper-black">
                 <div class="input-label">Amount</div>
-                <input type="text" ng-model="amount">
+                <input type="number" ng-model="amount">
+                <div class="input-label-right">MAX <br>{{coin.balance - 1}}</div>
             </div>
+            <p>{{selectedProvider.fee}} USDT fee for withdrawal</p>
         </div>
         <div class="primary-button" ng-click="withdrawal()" ng-disabled="!withdrawal_address || !amount">
             Withdrawal

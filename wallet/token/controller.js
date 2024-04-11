@@ -25,8 +25,6 @@ function openTokenSettings(domain, success) {
                 }, ".svg")
             }
 
-
-
             $scope.getLogo = function () {
                 if ($scope.logo == null)
                     return "/" + domain + "/logo.svg"
@@ -52,17 +50,11 @@ function openTokenSettings(domain, success) {
                 zip.file("logo.svg", $scope.genSvg($scope.logo));
                 zip.generateAsync({type: "blob"}).then(function (content) {
                     uploadFile(domain, content, function () {
-                        showSuccess("Logo uploaded successfully")
+                        showSuccess("Logo uploaded successfully", function () {
+                            $scope.close("success")
+                        })
                     })
                 });
-            }
-
-            $scope.changePass = function () {
-                postContractWithGas("wallet", "api/change_pass.php", {
-                    domain: 'data',
-                    address: 'admin',
-                    password: 'pass',
-                })
             }
 
             function init() {
@@ -77,8 +69,8 @@ function openTokenSettings(domain, success) {
             init()
 
         }
-    }).then(function () {
+    }).then(function (result) {
         if (success)
-            success()
+            success(result)
     })
 }

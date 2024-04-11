@@ -11,13 +11,6 @@ function openLaunchDialog(domain, success) {
 
             $scope.selectedIndex = 0
 
-            $scope.category = Object.keys(tokenCategories)[0]
-
-            $scope.categories = tokenCategories
-            $scope.selectCategory = function (key) {
-                $scope.category = key
-            }
-
             $scope.$watch('domain', function (newValue, oldValue) {
                 if (newValue != newValue.toLowerCase())
                     $scope.domain = newValue.toLowerCase()
@@ -80,10 +73,7 @@ function openLaunchDialog(domain, success) {
                     if ($scope.stageIndex < $scope.stages.length - 1) {
                         $scope.startLaunching()
                     } else {
-                        openTokenSettings($scope.domain, function () {
-                            $scope.close()
-                            success()
-                        })
+                        openTokenSettings($scope.domain, success)
                     }
                 }, DEBUG ? 100 : 3000)
             }

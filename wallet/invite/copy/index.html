@@ -1,28 +1,27 @@
 <md-bottom-sheet class="col">
-    <div class="row shadow-black" style="height: 200px;">
-        <div class="flex col align-center-center green-back">
-            <div id="qrcode"></div>
-        </div>
+    <div class="row header align-start-center">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
+        <p>Invite</p>
     </div>
-    <div class="col content align-start-center">
-        <div class="col input-content">
-            <div class="row m16 input-wrapper" style="margin-top: 50px">
+    <div class="col">
+        <div class="col content input-content">
+            <div class="row input-wrapper-black">
                 <div class="input-label">Invite link</div>
-                <input
-                       type="text"
+                <input type="text"
+                       class="flex"
                        autocapitalize="off"
                        id="link_input"
                        ng-model="link">
+                <div class="input-label-right">
+                    <img class="img28 p4 ripple gray500-back"
+                         src="/wallet/img/copy.svg"
+                         ng-click="copy()">
+                </div>
             </div>
-            <div class="flex row primary-button align-center-center mh16"
-                 style="margin-top: 50px"
-                 ng-click="share()">
-                Share
-            </div>
-            <div class="flex row button align-center-center m16"
-                 ng-click="copyText()">
-                Copy
-            </div>
+        </div>
+        <div class="flex row primary-button align-center-center"
+             ng-click="share()">
+            Share
         </div>
     </div>
 </md-bottom-sheet>

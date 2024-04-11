@@ -109,7 +109,7 @@ function postContractWithGas(domain, contractHash, params, success, error) {
 
 
 function uploadFile(domain, zipFile, success) {
-    postContractWithGas("store", "api/upload.php", {
+    postContractWithGas("wallet", "api/upload.php", {
         domain: domain,
         file: zipFile,
     } , success)

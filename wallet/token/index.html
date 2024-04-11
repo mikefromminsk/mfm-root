@@ -1,12 +1,11 @@
 <md-dialog class="col fill">
     <div class="row header align-start-center gray100-back">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
-        <p class="flex">{{profile.domain}} settings</p>
-        <!--<div class="primary-button" ng-click="changePass()">pass</div>-->
+        <p class="flex">Logo</p>
     </div>
-    <div class="col content align-start-center scroll">
-        <div class="col input-content">
-            <div class="row gap16">
+    <div class="flex col content">
+        <div class="flex col input-content align-center-center">
+            <div class="col align-center-center gap16">
                 <div class="row">
                     <img class="radius24" src="{{getLogo()}}"
                          style="width: 100px; height: 100px"
@@ -16,18 +15,11 @@
                     <div class="button" ng-click="generate()">
                         Generate
                     </div>
-                    <div class="button" ng-click="saveLogo()">
-                        Save
-                    </div>
                 </div>
             </div>
-
-            <div class="input-wrapper">
-                <div class="input-label">Description</div>
-                <input type="text" ng-model="profile.description">
-            </div>
-
-            <div class="primary-button" ng-click="save()">Save</div>
+        </div>
+        <div class="primary-button" ng-click="saveLogo()">
+            Save
         </div>
     </div>
 </md-dialog>

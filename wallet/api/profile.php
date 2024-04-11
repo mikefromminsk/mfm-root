@@ -2,7 +2,9 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $domain = get_required(domain);
+$address = get_string(address);
 
+$coin = dataWalletProfile($domain, $address);
 $coin[domain] = $domain;
 $coin[total] = dataGet([wallet, info, $domain, total]);
 $coin[owner] = dataGet([wallet, info, $domain, owner]);
@@ -14,6 +16,7 @@ $coin[dapps] = [];
 $coin[ui] = dataGet([wallet, info, $domain, ui]);
 $coin[mining] = dataExist([$domain, mining]);
 $coin[description] = dataGet([wallet, info, $domain, description]);
+$coin[ico_balance] = dataWalletBalance($domain, ico);
 
 
 foreach (dataKeys([$domain, packages]) as $app_domain) {

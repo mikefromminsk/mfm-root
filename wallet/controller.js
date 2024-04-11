@@ -18,7 +18,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.options = function (coin) {
-        openOptionsDialog($scope, coin, init)
+        openOptions($scope, coin, function (result) {
+            if (result && result.action == "store") {
+                $scope.selectCoin(coin)
+            } else {
+                init()
+            }
+        })
     }
 
     $scope.openAccount = function () {
@@ -41,43 +47,17 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         openWithdrawal(init)
     }
 
-    $scope.openUsdtTransactions = function () {
-        openUsdtTransactions(init)
-    }
-
     function init() {
         updateBonuses()
         updateCoins()
         recommendations()
         searchApp()
+        loadTrans()
     }
 
     $scope.drops = []
     $scope.coins = {}
     $scope.bonuses = []
-    $scope.bonusesCoins = {}
-
-    function updateBonuses() {
-        $scope.bonuses = []
-        var domains = []
-        for (const bonus of storage.getStringArray(storageKeys.bonuses)) {
-            var domain = bonus.split(":")[0]
-            var key = bonus.split(":")[1]
-            $scope.bonuses.push({domain: domain, key: key})
-            if (domains.indexOf(domain) == -1 && $scope.bonusesCoins[domain] == null)
-                domains.push(domain)
-        }
-        if (domains.length > 0) {
-            post("/wallet/api/list.php", {
-                domains: domains.join(","),
-            }, function (response) {
-                $scope.bonusesCoins = {}
-                for (let coin of response.result)
-                    $scope.bonusesCoins[coin.domain] = coin
-                $scope.$apply()
-            })
-        }
-    }
 
     function recommendations() {
         post("/wallet/api/search.php", {
@@ -121,6 +101,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     function checkTransfers(from, to) {
         if (from.length == 0) return
+
         function showTopMessage(balanceChange, domain) {
             $mdToast.show($mdToast.simple().position('top').textContent(
                 "You received " + $scope.formatAmount(balanceChange, domain)
@@ -129,12 +110,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 new Audio("/wallet/dialogs/success/payment_success.mp3").play()
             })
         }
+
         for (let toToken of to) {
             var found = false
             for (let fromToken of from) {
                 if (toToken.domain == fromToken.domain) {
                     found = true
-                    if (toToken.balance > fromToken.balance){
+                    if (toToken.balance > fromToken.balance) {
                         showTopMessage(toToken.balance - fromToken.balance, toToken.domain)
                     }
                 }
@@ -152,6 +134,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 domains: domains.join(","),
                 address: wallet.address(),
             }, function (response) {
+                $scope.coin = response.gas
                 if ($scope.activeCoins != null)
                     checkTransfers($scope.activeCoins, response.result)
                 $scope.activeCoins = response.result
@@ -220,33 +203,46 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }, DEBUG ? 20000 : 10000)
 
 
+    function updateBonuses() {
+        if (storage.getString(storageKeys.bonuses) != "") {
+            post("/wallet/api/bonuses.php", {
+                bonuses: storage.getString(storageKeys.bonuses),
+            }, function (response) {
+                $scope.bonuses = response.bonuses
+                if (response.bonuses == null) {
+                    $scope.bonus_coins = {}
+                } else {
+                    $scope.bonus_coins = Object.fromEntries(
+                        response.result.map(o => [o.domain, o])
+                    )
+                }
+                $scope.$apply()
+            })
+        }
+    }
+
     $scope.receiveBonus = function (bonus) {
-        hasBalance(wallet.gas_domain, function () {
-            hasToken(bonus.domain, function () {
-                postContractWithGas(bonus.domain, "api/token/bonus_receive.php", {
-                    to_address: wallet.address(),
-                    invite_key: bonus.key,
-                }, function (response) {
-                    storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
-                    showSuccessDialog("You have been received " + $scope.formatAmount(response.received, bonus.domain), init)
-                }, function () {
-                    storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
-                    showInfoDialog("Bonus is invalid", init)
-                })
-            }, init)
-        }, init)
+        openLogin(function () {
+            postContractWithGas(bonus.domain, "api/bonus/receive.php", {
+                to_address: wallet.address(),
+                invite_key: bonus.bonus_key,
+            }, function (response) {
+                //storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
+                showSuccessDialog("You have been received " + $scope.formatAmount(response.received, bonus.domain), init)
+            }, function () {
+                //storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
+                showInfoDialog("Bonus is invalid", init)
+            })
+        })
     }
 
     var bonus = storage.getString("bonus")
     if (bonus != "") {
         if (!storage.isArrayItemExist(storageKeys.bonuses, bonus)) {
             storage.pushToArray(storageKeys.bonuses, bonus)
-        } else {
-            showInfoDialog("Bonus " + bonus + " was checked before")
         }
     }
 
-    $scope.categories = Object.keys(window.tokenCategories)
     $scope.selectedCategories = storage.getStringArray(storageKeys.categories)
 
     $scope.selectCategory = function (key) {
@@ -265,26 +261,29 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
         init()
     }
 
-    if (storage.getString(storageKeys.onboardingShowed) == "") {
+    /*if (storage.getString(storageKeys.onboardingShowed) == "") {
         storage.setString(storageKeys.onboardingShowed, "true")
         openOnboardingDialog(init)
-    }
+    }*/
 
+    $scope.openSupport = function () {
+        window.open("https://t.me/+UWS_ZfqIi1tkNmVi", init)
+    }
 
 
     // Store
 
-    $scope.openSettings = function () {
-        openSettings($scope.selectedCoin.domain, init)
+    $scope.openAppSettings = function () {
+        openAppSettings($scope.selectedCoin.domain, init)
     }
 
     $scope.openProfile = function (app) {
-        if (app.console) {
-            var link = location.origin + "/" + app.domain + "/console?domain=" + $scope.selectedCoin.domain
-            /*if (DEBUG)*/
-            window.open(link)
-            /*else
-                openWeb(link, init)*/
+        if (app.installed) {
+            if (app.console) {
+                openWeb(location.origin + "/" + app.domain + "/console?domain=" + $scope.selectedCoin.domain, init)
+            } else {
+                window.open(location.origin + "/" + app.domain)
+            }
         } else {
             openProfile(app)
         }
@@ -293,11 +292,12 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.selectCoin = function (coin) {
         $scope.selectedCoin = coin
         storage.setString(storageKeys.selectedCoin, coin.domain)
-        init()
+        $scope.selectTab(1)
+        searchApp()
     }
 
     $scope.installApp = function (app) {
-        postContractWithGas("store", "api/install.php", {
+        postContractWithGas("wallet", "api/install.php", {
             domain: $scope.selectedCoin.domain,
             app_domain: app.domain,
         }, function () {
@@ -318,6 +318,20 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             $scope.apps = response.apps || {}
             $scope.$apply()
         })
+    }
+
+    //transactions
+    function loadTrans() {
+        post("/wallet/api/trans_user.php", {
+            address: wallet.address(),
+        }, function (response) {
+            $scope.trans = $scope.groupByTimePeriod(response.trans)
+            $scope.$apply()
+        })
+    }
+
+    $scope.openTran = function (tran) {
+        openTran(tran.domain, tran.txid)
     }
 
     init()

@@ -1,0 +1,25 @@
+<div class="col p8 radius10"
+     ng-click="options(coin)"
+     ng-style="cardBack(coin)"
+     style="border-width: 0 0 1px 0; border-color: var(--black); border-style: solid;">
+    <div class="col" ng-style="cardFront(coin)">
+        <div class="row">
+            <div class="col">
+            </div>
+            <div class="flex"></div>
+            <div class="col align-start-end">
+                <div class="row align-start-end">
+                    <p class="ml8 size20 bold">{{formatPrice(coin.price)}}</p>
+                </div>
+                <p>Price</p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 50px">
+            <div ng-style="getLogo(coin.domain)"></div>
+            <div class="col ml8">
+                <p class="size20 bold uppercase bold">{{formatAmount(coin.balance, coin.domain)}}</p>
+                <p class="size10 gray400-text">balance</p>
+            </div>
+        </div>
+    </div>
+</div>
