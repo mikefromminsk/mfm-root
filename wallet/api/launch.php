@@ -14,7 +14,9 @@ $wallet_path = $domain . "/wallet";
 if (strlen($domain) < 3 || strlen($domain) > 16) error("domain length has to be between 3 and 16");
 //if (dataExist($wallet_path)) error("path $wallet_path exist");
 
-$response[files] = installApp($domain, "drc1");
+$response[file_hash] = installApp($domain, "drc1");
+
+dataWalletRegScript($gas_domain, $domain . _reg, "$domain/api/token/free_reg.php");
 
 dataWalletReg($address, $next_hash, $domain);
 dataSet([$wallet_path, $address, amount], $amount);

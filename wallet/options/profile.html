@@ -1,11 +1,35 @@
 <div class="col mt16">
     <p class="bold">Description</p>
-    <p class="mt8 text-fill">
+    <p class="mt8 ">
         {{formatTicker(coin.domain)}} = это цифровой актив (сертификат), который представляет определенную стоимость, функционирует на основе блокчейна или другой децентрализованной сети и гарантирует обязательства компании перед его владельцем.</p>
 </div>
 <!--
 Потребление 24h
 Выпуск 24h
+
+/*         "contractAddress":"0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+         "tokenName":"PancakeSwap Token",
+         "symbol":"Cake",
+         "divisor":"18",
+         "tokenType":"ERC20",
+         "totalSupply":"431889535.843059000000000000",
+         "blueCheckmark":"true",
+         "description":"PancakeSwap is a yield farming project whereby users can get FLIP (LP token) for staking and get CAKE token as reward. CAKE holders can swap CAKE for SYRUP for additional incentivized staking.",
+         "website":"https://pancakeswap.finance/",
+         "email":"PancakeSwap@gmail.com",
+         "blog":"https://medium.com/@pancakeswap",
+         "reddit":"",
+         "slack":"",
+         "facebook":"",
+         "twitter":"https://twitter.com/pancakeswap",
+         "bitcointalk":"",
+         "github":"https://github.com/pancakeswap",
+         "telegram":"https://t.me/PancakeSwap",
+         "wechat":"",
+         "linkedin":"",
+         "discord":"",
+         "whitepaper":"",
+         "tokenPriceUSD":"23.9300000000"*/
 -->
 <div class="row gap16 mt16">
     <div class="button" ng-show="coin.ui == 1" ng-click="openSite()">
@@ -17,7 +41,7 @@
 </div>
 
 <div class="row mt16 scrollable-horizontal">
-    <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
+    <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200); min-width: 80px">
         <p class="gray400-text size10">MCAP</p>
         <div class="row mt8 align-start-end">
             <p class="black-text size14">{{formatPrice(coin.mcap)}}</p>
@@ -110,7 +134,7 @@
 </div>
 
 
-<div class="row" ng-show="coin.category" style="margin-top: 32px;">
+<div class="row" style="margin-top: 32px;">
     <p class="vertical-text size16 bold mt4">DApps</p>
     <div class="flex col ml8 size14 gray400-text">
         <div class="col" ng-repeat="(domain, app) in coin.dapps">

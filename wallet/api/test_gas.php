@@ -49,7 +49,6 @@ function send($domain, $address, $key = null, $hash = null, $amount = 10000, $sc
             ] + gas())[success]);
 }
 
-send($gas_domain, "free_reg", null, null, 10000, "$gas_domain/api/token/free_reg.php");
 send($gas_domain, "change_pass", null, null, 10000, "$gas_domain/api/token/change_pass.php");
 
 assertEquals("change pass", http_post($GLOBALS[host_name] . "/$gas_domain/api/token/change_pass.php", [

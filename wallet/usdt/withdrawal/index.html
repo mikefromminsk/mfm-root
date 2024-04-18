@@ -20,7 +20,7 @@
             <div class="row input-wrapper-black">
                 <div class="input-label">Amount</div>
                 <input type="number" ng-model="amount">
-                <div class="input-label-right">MAX <br>{{coin.balance - 1}}</div>
+                <div class="input-label-right">MAX <br>{{formatPrice(coin.balance - selectedProvider.fee)}}</div>
             </div>
             <p>{{selectedProvider.fee}} USDT fee for withdrawal</p>
         </div>

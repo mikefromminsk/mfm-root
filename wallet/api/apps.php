@@ -21,9 +21,10 @@ if ($domains != "") {
             preview => dataGet([wallet, info, $appDomain, preview]),
             owner => dataGet([wallet, info, $appDomain, owner]),
             category => dataGet([wallet, info, $appDomain, ui]) == 1 ? Website : Plugin,
-            installed => dataExist([$domain, packages, $appDomain]),
+            installed => dataExist([$domain, packages, $appDomain, hash]),
             console => dataGet([wallet, info, $appDomain, console]) == 1,
             hide_in_store => dataGet([wallet, info, $appDomain, hide_in_store]) == 1,
+            uptodate => dataGet([$domain, packages, $appDomain, hash]) == dataGet([$appDomain, packages, $appDomain, hash]),
         ];
     }
 }

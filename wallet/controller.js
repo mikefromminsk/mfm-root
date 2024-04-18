@@ -6,8 +6,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.wallet = wallet
     $scope.apps = {}
     $scope.selectedCoin
+    $scope.searchMode = false
 
     $scope.menuIndex = 0
+
+    $scope.toggleSearchMode = function () {
+        $scope.searchMode = !$scope.searchMode
+    }
 
     if ($scope.getUriParam("domain")) {
         storage.setString(storageKeys.selectedCoin, $scope.getUriParam("domain"))
@@ -222,18 +227,23 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.receiveBonus = function (bonus) {
-        openLogin(function () {
-            postContractWithGas(bonus.domain, "api/bonus/receive.php", {
+        if (wallet.address() == "") {
+            openLogin(init)
+        } else {
+            postContractWithGas(bonus.domain, "api/token/invite/receive.php", {
                 to_address: wallet.address(),
                 invite_key: bonus.bonus_key,
             }, function (response) {
-                //storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
+                storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
+                setTimeout(function () {
+                    updateBonuses()
+                }, 3000)
                 showSuccessDialog("You have been received " + $scope.formatAmount(response.received, bonus.domain), init)
             }, function () {
                 //storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
                 showInfoDialog("Bonus is invalid", init)
             })
-        })
+        }
     }
 
     var bonus = storage.getString("bonus")

@@ -1,7 +1,6 @@
 function openLogin(success) {
-    if (wallet.address() != ""){
-        if (success)
-            success()
+    if (wallet.address() != "") {
+        if (success) success()
         return
     }
     window.$mdDialog.show({
@@ -10,11 +9,9 @@ function openLogin(success) {
             addFormats($scope)
             $scope.username = ""
             if (DEBUG) {
-                if ($scope.username == "")
-                    $scope.username = "admin"
+                $scope.username = "admin"
                 $scope.password = "pass"
             }
-            setFocus("first_input")
 
             // TODO validation
             $scope.login = function () {
@@ -34,7 +31,12 @@ function openLogin(success) {
                         address: $scope.username,
                         next_hash: md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
                     }, function () {
-                        setPin()
+                        postContract(wallet.quote_domain, "api/token/free_reg.php", {
+                            address: $scope.username,
+                            next_hash: md5(wallet.calcHash(wallet.quote_domain, $scope.username, $scope.password))
+                        }, function () {
+                            setPin()
+                        })
                     })
                 })
             }
@@ -62,8 +64,7 @@ function openLogin(success) {
                     }, function (response) {
                         for (let setting of response.settings)
                             storage.pushToArray(storageKeys.domains, setting)
-                        if (success)
-                            success()
+                        if (success) success()
                         $scope.close()
                     })
                 })

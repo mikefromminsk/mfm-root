@@ -255,7 +255,8 @@ function addFormats($scope) {
         function getColor(t) {
             return "#" + hexEncode(md5(t)).substr(0, 6)
         }
-
+        if (coin == null)
+            return {}
         return {
             'background': 'linear-gradient(75deg, var(--bottom) 0%, ' + getColor(coin.domain) + ' 100%)',
         }

@@ -48,7 +48,7 @@ function openIcoBuy($rootScope, domain, success) {
                         hasBalance(wallet.quote_domain, function () {
                             $scope.in_progress = true
                             postContractWithGas(wallet.quote_domain, "", function (usdt_key, usdt_next_hash) {
-                                postContractWithGas(domain, "api/ico/buy.php", {
+                                postContractWithGas(domain, "api/token/ico/buy.php", {
                                     key: usdt_key,
                                     next_hash: usdt_next_hash,
                                     amount: $scope.amount,

@@ -8,4 +8,4 @@ $domain = getDomain();
 
 $response[success] = dataWalletReg($address, $next_hash);
 
-commit($response, "free_reg");
+commit($response, $domain .  _reg);

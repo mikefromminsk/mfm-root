@@ -5,8 +5,8 @@ function openAppSettings(domain, success) {
             addFormats($scope)
 
             $scope.title = ""
-            $scope.description = ""
             $scope.hide_in_store = false
+            $scope.domain = domain
 
             $scope.save = function () {
                 postContractWithGas("wallet", "api/info_update.php", function (key, next_hash) {
@@ -15,7 +15,6 @@ function openAppSettings(domain, success) {
                         password: key,
                         next_hash: next_hash,
                         title: $scope.title,
-                        description: $scope.description,
                         hide_in_store: $scope.hide_in_store ? 1 : 0,
                     }
                 }, function () {
@@ -74,22 +73,18 @@ function openAppSettings(domain, success) {
                 })
             }
 
-            $scope.$watch('domain', function (newValue) {
-                if (newValue == null) return
-                post("/wallet/api/apps.php", {
-                    search_text: (newValue || ""),
+            function init() {
+                post("/wallet/api/profile.php", {
+                    domain: domain,
+                    address: wallet.address(),
                 }, function (response) {
-                    var apps = response.apps || {}
-                    if (apps[newValue] != null){
-                        $scope.title = apps[newValue].title
-                        $scope.description = apps[newValue].description
-                        $scope.category = apps[newValue].category
-                    }
+                    $scope.title = response.title
+                    $scope.hide_in_store = response.hide_in_store
                     $scope.$apply()
                 })
-            })
+            }
 
-            $scope.domain = domain
+            init()
         }
     }).then(function () {
         if (success)

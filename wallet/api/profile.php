@@ -6,6 +6,8 @@ $address = get_string(address);
 
 $coin = dataWalletProfile($domain, $address);
 $coin[domain] = $domain;
+$coin[title] = dataGet([wallet, info, $domain, title]);
+$coin[hide_in_store] = dataGet([wallet, info, $domain, hide_in_store]) == 1;
 $coin[total] = dataGet([wallet, info, $domain, total]);
 $coin[owner] = dataGet([wallet, info, $domain, owner]);
 $coin[trans] = dataCount([$domain, trans]);

@@ -49,14 +49,6 @@ function openOptions($rootScope, coin, success) {
                 })
             }
 
-            $scope.giveaway = function () {
-                postContract(domain, "api/token/drop.php", {
-                    address: wallet.address()
-                }, function (response) {
-                    showSuccessDialog("You have been received " + $scope.formatAmount(response.dropped, domain), success)
-                })
-            }
-
             $scope.ico_sell = function () {
                 openIcoSell($rootScope, domain, init)
             }
@@ -67,10 +59,6 @@ function openOptions($rootScope, coin, success) {
 
             $scope.share = function () {
                 openInvite(domain, success)
-            }
-
-            $scope.trans = function () {
-                openTransactions(domain)
             }
 
             $scope.openDeposit = function () {

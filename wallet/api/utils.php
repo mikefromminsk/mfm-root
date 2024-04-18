@@ -75,7 +75,7 @@ function dataWalletSend(
     if (!dataExist([$domain, wallet, $to_address])) error("$to_address receiver doesn't exist");
     if ($key == null || $next_hash == null) {
         if (dataGet([$domain, wallet, $from_address, script]) != scriptPath())
-            error("script " . scriptPath() . " cannot use $from_address address");
+            error("script " . scriptPath() . " cannot use $from_address address " . dataGet([$domain, wallet, $from_address, script]));
     } else {
         if (dataGet([$domain, wallet, $from_address, next_hash]) != md5($key))
             error("key is not right");
@@ -159,9 +159,9 @@ function installApp($domain, $app_domain, $filepath = null)
     if ($app_domain != null && $filepath == null) {
         $filepath = $_SERVER[DOCUMENT_ROOT] . "/wallet/apps/$app_domain.zip";
     }
-    $file_hash = hash_file(md5, $filepath);
-    if (!$file_hash) error("file hash is false in $filepath");
-    if (dataGet([$domain, packages, $app_domain, hash]) == $file_hash) error("archive was uploaded before");
+    $archive_hash = hash_file(md5, $filepath);
+    if (!$archive_hash) error("file hash is false in $filepath");
+    //if (dataGet([$domain, packages, $app_domain, hash]) == $archive_hash) error("archive was uploaded before");
 
     $zip = new ZipArchive;
     if ($zip->open($filepath) !== true) error("zip->open is false");
@@ -171,6 +171,7 @@ function installApp($domain, $app_domain, $filepath = null)
     $files = [];
     $hasRootIndex = false;
     $hasConsole = false;
+    // calc $GLOBALS[gas_bytes] += 1; before unzip
     for ($i = 0; $i < $zip->numFiles; $i++) {
         $filename = $zip->getNameIndex($i);
         if ($filename == "index.html") $hasRootIndex = true;
@@ -181,13 +182,13 @@ function installApp($domain, $app_domain, $filepath = null)
         $files[$file_hash] = $filepath;
         $GLOBALS[gas_bytes] += 1;
     }
-    dataSet([$domain, packages, $app_domain, hash], $file_hash);
+    dataSet([$domain, packages, $app_domain, hash], $archive_hash);
     dataSet([wallet, info, $domain, ui], $hasRootIndex ? 1 : 0);
     dataSet([wallet, info, $domain, console], $hasConsole ? 1 : 0);
     dataSet([wallet, info, $domain, contracts], $files);
     $zip->close();
 
-    return $files;
+    return $archive_hash;
 }
 
 function uploadContent($domain, $filepath, $local_path)
@@ -233,9 +234,9 @@ function dataIcoSell($key, $next_hash, $amount, $price)
     if ($gas_address == $owner_address) {
         if (!dataExist([$domain, wallet, ico])) {
             dataWalletReg(ico, md5(pass), $domain);
-            dataWalletDelegate($domain, ico, pass, "$domain/api/ico/buy.php");
+            dataWalletDelegate($domain, ico, pass, "$domain/api/token/ico/buy.php");
             dataWalletReg($domain . _ico, md5(pass), usdt);
-            dataWalletDelegate(usdt, $domain . _ico, pass, "$domain/api/ico/sell.php");
+            dataWalletDelegate(usdt, $domain . _ico, pass, "$domain/api/token/ico/sell.php");
         }
         dataWalletSend($domain, $gas_address, ico, $amount, $key, $next_hash);
         dataSet([$domain, price], $price);

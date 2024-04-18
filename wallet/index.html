@@ -59,33 +59,32 @@
                         </div>
                         <p class="size14 regular">space</p>
                     </div>
-                    <div class="row flex input-wrapper ml16">
-                        <img class="img20 img-gray200"
-                             style="position: absolute; left: 8px; top: 11px"
-                             src="/wallet/img/search.svg">
-                        <input type="text"
-                               class="flex input ripple"
-                               autocapitalize="off"
-                               autocomplete="off"
-                               ng-model="search_text"
-                               placeholder="Find any token"
-                               style="padding-left: 34px; border-radius: 10px; height: 40px;">
-                        <img class="img20 img-black ripple"
-                             ng-click="search_text = ''"
-                             ng-show="search_text != ''"
-                             style="position: absolute; right: 8px; top: 11px"
-                             src="/wallet/img/close.svg">
+                    <div class="row" ng-show="searchMode">
+                        <div class="row flex input-wrapper ml16">
+                            <img class="img20 img-gray200"
+                                 style="position: absolute; left: 8px; top: 11px"
+                                 src="/wallet/img/search.svg">
+                            <input type="text"
+                                   class="flex input ripple"
+                                   autocapitalize="off"
+                                   autocomplete="off"
+                                   ng-model="search_text"
+                                   placeholder="Find any token"
+                                   style="padding-left: 34px; border-radius: 10px; height: 40px;">
+                        </div>
+                        <img class="img40 p8 img-black ripple" src="/wallet/img/close.svg" ng-click="toggleSearchMode()">
                     </div>
-                    <div class="row">
+                    <div class="row flex align-end-center" ng-hide="searchMode">
                         <img class="img40 p8 img-black ripple" src="/wallet/img/settings.svg" ng-click="openAccount()">
                         <img class="img40 p8 img-black ripple" src="/wallet/img/support.svg" ng-click="openSupport()">
+                        <img class="img40 p8 img-black ripple" src="/wallet/img/search.svg" ng-click="toggleSearchMode()">
                     </div>
                     <!--<img class="img40 p8 img-black ripple" src="/wallet/img/transactions.svg" ng-click="openTransactions()">-->
                 </div>
             </div>
             <div class="col content align-start-center scroll">
                 <div class="col block">
-                    <div class="col" ng-show="search_text == ''">
+                    <div class="col" ng-hide="searchMode">
 
                         <div class="row mt16 mh16 align-start-end" ng-show="wallet.address()">
                             <div class="flex col">
@@ -161,7 +160,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mh16 mt16 gray300-text" ng-show="activeCoins.length">
+                        <div class="row mh16 mt16 gray300-text" ng-show="filteredActiveCoins.length > 1">
                             <p class="flex size10 gray400-text">Your coins</p>
                             <p class="size10">Price</p>
                             <p class="size10 row align-end" style="min-width: 80px">Balance</p>
@@ -200,7 +199,7 @@
                             <div class="divider"></div>
                         </div>
                     </div>
-                    <div class="mh16 mt16" ng-show="search_text != ''">
+                    <div class="mh16 mt16" ng-show="searchMode">
                         <p class="size14 gray400-text">Search results</p>
                         <div class="col pv8 ripple"
                              ng-repeat="coin in searchCoins"
@@ -268,12 +267,16 @@
                                     <img class="ml4 img12 img-gray" src="img/favorite-selected.svg">
                                 </div>
                             </div>
-                            <div class="row align-start-center" ng-show="app.installed == false">
-                                <div class="button" ng-click="installApp(app)">Install
+                            <div class="col align-center-center">
+                                <div class="row align-start-center" ng-show="app.installed == false">
+                                    <div class="button" ng-click="installApp(app)">Install</div>
                                 </div>
-                            </div>
-                            <div class="row align-start-center" ng-show="app.installed == true">
-                                <div class="button" ng-click="openProfile(app)">Open</div>
+                                <div class="row align-start-center" ng-show="app.installed == true">
+                                    <div class="button" ng-click="openProfile(app)">Open</div>
+                                </div>
+                                <div class="row align-start-center mt4" ng-show="app.installed == true && app.uptodate == false">
+                                    <div class="button" ng-click="installApp(app)">Upgrade</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -394,7 +397,6 @@ background-repeat: repeat-x;; height: 1px"></div>
 <script async src="/wallet/ico/buy/controller.js"></script>
 <script async src="/wallet/invite/create/controller.js"></script>
 <script async src="/wallet/invite/copy/controller.js"></script>
-<script async src="/wallet/trans/controller.js"></script>
 <script async src="/wallet/account/controller.js"></script>
 <script async src="/wallet/web/controller.js"></script>
 <script async src="/wallet/usdt/deposit/controller.js"></script>

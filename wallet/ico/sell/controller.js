@@ -8,7 +8,7 @@ function openIcoSell($rootScope, domain, success) {
             $scope.price = 1
             $scope.total = 0
             $scope.amount = 0
-            $scope.portions = [1, 5, 10, 50, 100]
+            $scope.portions = [1, 5, 10, 50, 95]
             $scope.selectedPortion = $scope.portions[2]
             $scope.setPortion = function (item) {
                 $scope.selectedPortion = item
@@ -29,6 +29,7 @@ function openIcoSell($rootScope, domain, success) {
                 }
                 if ($scope.base.price != 0)
                     $scope.hasPrice = true
+                $scope.price = $scope.base.price
                 $scope.balance = $scope.quote.balance
                 dataGet("wallet/info/" + domain + "/total", function (total) {
                     $scope.total = total
@@ -44,7 +45,7 @@ function openIcoSell($rootScope, domain, success) {
 
             $scope.ico_sell = function () {
                 hasToken(wallet.quote_domain, function () {
-                    postContractWithGas(domain, "api/ico/sell.php", function (key, hash) {
+                    postContractWithGas(domain, "api/token/ico/sell.php", function (key, hash) {
                         return {
                             key: key,
                             next_hash: hash,
