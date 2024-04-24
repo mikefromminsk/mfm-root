@@ -37,48 +37,8 @@ function post(url, params, success, error) {
     xhr.send(formData)
 }
 
-var domainContracts = {}
-
-function getContracts(domain, success) {
-    if (domainContracts[domain] != null) {
-        setTimeout(function () {
-            success(domainContracts[domain])
-        })
-    } else {
-        post("/wallet/api/contracts.php", {
-            domain: domain
-        }, function (response) {
-            domainContracts[domain] = response.contracts
-            success(response.contracts)
-        })
-    }
-}
-
-function contractExist(domain, contractHash, success, error) {
-    getContracts(domain, function (contracts) {
-        var script_path = contracts[contractHash]
-        if (script_path != null) {
-            if (success)
-                success(script_path)
-        } else {
-            if (error)
-                error()
-        }
-    })
-}
-
-function postContract(domain, contractHash, params, success, error) {
-    if (contractHash.length == 32) {
-        contractExist(domain, contractHash, function (script_path) {
-            postWith(script_path)
-        }, error)
-    } else {
-        postWith(domain + "/" + contractHash)
-    }
-
-    function postWith(url) {
-        post("/" + url, params, success, error)
-    }
+function postContract(domain, path, params, success, error) {
+    post("/" + domain + "/" + path, params, success, error)
 }
 
 function dataGet(path, callback) {
@@ -107,12 +67,11 @@ function postContractWithGas(domain, contractHash, params, success, error) {
     wallet.postContractWithGas(domain, contractHash, params, success, error)
 }
 
-
 function uploadFile(domain, zipFile, success) {
     postContractWithGas("wallet", "api/upload.php", {
         domain: domain,
         file: zipFile,
-    } , success)
+    }, success)
 }
 
 var wallet = {
@@ -138,62 +97,52 @@ var wallet = {
             success(md5(key))
         })
     },
-    postContractWithGas: function (domain, contractHash, params, success, error) {
+    postContractWithGas: function (domain, path, params, success, error) {
         var isParamsFunction = typeof params === 'function'
-        if (contractHash.length == 32) {
-            contractExist(domain, contractHash, function (script_path) {
-                postWithGas(script_path)
-            }, error)
-        } else {
-            postWithGas(domain + "/" + contractHash)
-        }
+        openPin(isParamsFunction ? domain : wallet.gas_domain, function (pin) {
+            function postCalcKeyHash(domain, success) {
+                dataGet(domain + "/wallet/" + wallet.address() + "/prev_key", function (prev_key) {
+                    calcKeyHash(domain, prev_key, success)
+                }, error)
+            }
 
-        function postWithGas(url) {
-            openPin(isParamsFunction ? domain : wallet.gas_domain, function (pin) {
-                function postCalcKeyHash(domain, success) {
-                    dataGet(domain + "/wallet/" + wallet.address() + "/prev_key", function (prev_key) {
-                        calcKeyHash(domain, prev_key, success)
-                    }, error)
-                }
+            function calcKeyHash(domain, prev_key, success) {
+                var passhash = storage.getString(storageKeys.passhash)
+                var password = decode(passhash, pin)
+                var key = wallet.calcHash(domain, wallet.address(), password, prev_key)
+                var next_hash = md5(wallet.calcHash(domain, wallet.address(), password, key))
+                success(key, next_hash)
+            }
 
-                function calcKeyHash(domain, prev_key, success) {
-                    var passhash = storage.getString(storageKeys.passhash)
-                    var password = decode(passhash, pin)
-                    var key = wallet.calcHash(domain, wallet.address(), password, prev_key)
-                    var next_hash = md5(wallet.calcHash(domain, wallet.address(), password, key))
-                    success(key, next_hash)
-                }
+            if (isParamsFunction) {
+                postCalcKeyHash(domain, function (key, next_hash) {
+                    params = params(key, next_hash)
+                    if (domain == wallet.gas_domain) {
+                        calcKeyHash(wallet.gas_domain, key, function (gas_key, gas_next_hash) {
+                            send(params, gas_key, gas_next_hash)
+                        })
+                    } else {
+                        calcGas(params)
+                    }
+                })
+            } else {
+                calcGas(params)
+            }
 
-                if (isParamsFunction) {
-                    postCalcKeyHash(domain, function (key, next_hash) {
-                        params = params(key, next_hash)
-                        if (domain == wallet.gas_domain) {
-                            calcKeyHash(wallet.gas_domain, key, function (gas_key, gas_next_hash) {
-                                send(params, gas_key, gas_next_hash)
-                            })
-                        } else {
-                            calcGas(params)
-                        }
-                    })
-                } else {
-                    calcGas(params)
-                }
+            function calcGas(params) {
+                postCalcKeyHash(wallet.gas_domain, function (gas_key, gas_next_hash) {
+                    send(params, gas_key, gas_next_hash)
+                })
+            }
 
-                function calcGas(params) {
-                    postCalcKeyHash(wallet.gas_domain, function (gas_key, gas_next_hash){
-                        send(params, gas_key, gas_next_hash)
-                    })
-                }
-
-                function send(params, gas_key, gas_next_hash) {
-                    if (params == null) return
-                    params.gas_address = wallet.address()
-                    params.gas_key = gas_key
-                    params.gas_next_hash = gas_next_hash
-                    post("/" + url, params, success, error)
-                }
-            })
-        }
+            function send(params, gas_key, gas_next_hash) {
+                if (params == null) return
+                params.gas_address = wallet.address()
+                params.gas_key = gas_key
+                params.gas_next_hash = gas_next_hash
+                postContract(domain, path, params, success, error)
+            }
+        })
     },
 }
 

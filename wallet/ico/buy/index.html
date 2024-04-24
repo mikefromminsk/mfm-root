@@ -35,7 +35,10 @@
                     <p class="size16 black-text bold">1 USDT = {{formatAmount(1 / price, domain)}}</p>
                 </div>
             </div>
-            <p>1 {{formatTicker(wallet.gas_domain)}} fee for transaction</p>
+            <div class="col size12">
+                <p>Fee: {{formatAmount(1, wallet.gas_domain)}}</p>
+                <p>Total: {{formatAmount(amount + 1, wallet.gas_domain)}}</p>
+            </div>
         </div>
         <div class="primary-button green-back" ng-click="ico_buy()"
              ng-disabled="!total || in_progress">

@@ -7,10 +7,14 @@
         <div class="flex col input-content">
             <div class="row mt16 align-start-end"
                  ng-show="wallet.address()">
-                <div class="flex col">
+                <div class="col">
                     <div class="size10 gray400-text">Username</div>
                     <div class="size16 black-text">{{wallet.address()}}</div>
                 </div>
+                <img class="img28 p4 ripple ml8 img-black"
+                     src="/wallet/img/copy.svg"
+                     ng-click="copy()">
+                <div class="flex"></div>
                 <div class="button" ng-click="logout()">Logout</div>
             </div>
             <div class="row"

@@ -40,7 +40,7 @@ function openIcoBuy($rootScope, domain, success) {
 
             $scope.calcTotal = function () {
                 $scope.total = $scope.round($scope.amount * $scope.base.price, 2)
-                return $scope.amount
+                return $scope.amount - 1
             }
 
             $scope.ico_buy = function () {

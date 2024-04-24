@@ -8,11 +8,11 @@ function openIcoSell($rootScope, domain, success) {
             $scope.price = 1
             $scope.total = 0
             $scope.amount = 0
-            $scope.portions = [1, 5, 10, 50, 95]
+            $scope.portions = [1, 5, 10, 50, 100]
             $scope.selectedPortion = $scope.portions[2]
             $scope.setPortion = function (item) {
                 $scope.selectedPortion = item
-                $scope.amount = ($scope.base.balance / 100) * $scope.selectedPortion
+                $scope.amount = ($scope.base.balance / 100) * $scope.selectedPortion - 1
             }
             $scope.base = {};
             $scope.quote = {};
@@ -56,6 +56,10 @@ function openIcoSell($rootScope, domain, success) {
                         showSuccessDialog("You open for sale " + $scope.formatTicker(domain), success)
                     })
                 })
+            }
+
+            $scope.setMax = function () {
+                $scope.amount = Math.max(0, $scope.base.balance - 1)
             }
         }
     })

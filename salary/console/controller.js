@@ -4,19 +4,31 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
 
-    $scope.domain = $scope.getUriParam("domain")
+    var domain = $scope.getUriParam("domain")
+    $scope.domain = domain
+
     $scope.employees = []
 
     function init() {
-        postContract($scope.domain, "api/salary/employees.php", {},function (result) {
-            $scope.employees = result.employees
-            $scope.balance = result.balance
+        loadProfile()
+        loadEmployees()
+    }
+
+    function loadProfile() {
+        postContract("wallet", "api/profile.php", {
+            domain: domain,
+            address: "salary",
+        }, function (response) {
+            $scope.coin = response
             $scope.$apply()
         })
     }
 
-    $scope.openMining = function () {
-        openMining($scope.domain)
+    function loadEmployees() {
+        postContract($scope.domain, "api/salary/employees.php", {},function (result) {
+            $scope.employees = result.employees
+            $scope.$apply()
+        })
     }
 
     $scope.openUpgradeEmployee = function (employee, manager, amount) {
@@ -32,9 +44,8 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     }
 
-    $scope.send = function () {
-        openSendDialog($scope.domain, "salary", 100000, init)
+    $scope.openSettings = function () {
+        openSettings($scope.domain, init)
     }
-
     init()
 }

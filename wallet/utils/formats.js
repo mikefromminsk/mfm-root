@@ -82,12 +82,12 @@ function addFormats($scope) {
         return new Date(number * 1000).toLocaleString()
     }
 
-    $scope.formatTimeDiff = function (number) {
+    $scope.formatTimeDiff = function (seconds) {
         function round(num, precision) {
             return +(Math.round(num + "e+" + precision) + "e-" + precision);
         }
 
-        var diff = new Date().getTime() / 1000 - number
+        var diff = new Date().getTime() / 1000 - seconds
         var string = ""
         if (diff < 60)
             string = round(diff, 0) + "s"
@@ -101,7 +101,7 @@ function addFormats($scope) {
             string = round(diff / 60 / 60 / 24 / 30, 0) + "m"
         else
             string = round(diff / 60 / 60 / 24 / 30 / 12, 0) + "y"
-        return string + " ago"
+        return string
     }
 
     function padTo2Digits(num) {
@@ -281,5 +281,9 @@ function addFormats($scope) {
             img['background-size'] = '100% 100%'
         }
         return img
+    }
+
+    $scope.max = function (a, b) {
+        return Math.max(a, b)
     }
 }

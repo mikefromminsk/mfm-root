@@ -74,7 +74,7 @@ function openAppSettings(domain, success) {
             }
 
             function init() {
-                post("/wallet/api/profile.php", {
+                postContract("wallet", "api/profile.php", {
                     domain: domain,
                     address: wallet.address(),
                 }, function (response) {

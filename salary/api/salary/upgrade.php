@@ -8,10 +8,7 @@ $amount = get_int_required(amount);
 
 $domain = getDomain();
 
-if (!dataExist([$domain, wallet, salary])) {
-    dataWalletReg(salary, md5(password));
-    dataWalletDelegate($domain, salary, password, "$domain/api/salary/approve.php");
-}
+
 if (!dataExist([$domain, wallet, $employee_address])) error("Employee not found");
 if (!dataExist([$domain, wallet, $manager_address])) error("Manager not found");
 

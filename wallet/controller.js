@@ -318,6 +318,9 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     $scope.selectTab = function (tab) {
         $scope.selectedIndex = tab
+        if (tab == 2) {
+            loadTrans()
+        }
     }
 
     function searchApp(newValue) {

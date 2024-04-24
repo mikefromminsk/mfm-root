@@ -5,7 +5,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdDialog = $mdDialog
 
     function loadProfile(domain){
-        post("/wallet/api/profile.php", {
+        postContract("wallet", "api/profile.php", {
             domain: domain
         }, function (response) {
             $scope.profile = response

@@ -22,6 +22,11 @@ function openAccount(success) {
                 openWeb(location.origin + "/wallet/docs/clear/index.html")
             }
 
+            $scope.copy = function () {
+                $scope.copyText(wallet.address())
+                showSuccess("Username copied")
+            }
+
         }
     }).then(function () {
         if (success)

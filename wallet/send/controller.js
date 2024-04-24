@@ -3,6 +3,7 @@ function openSendDialog(domain, to_address, amount, success) {
         templateUrl: '/wallet/send/index.html',
         controller: function ($scope) {
             addFormats($scope)
+            $scope.wallet = wallet
             $scope.domain = domain
             if ((to_address || "") != "") {
                 $scope.to_address = to_address
@@ -33,6 +34,22 @@ function openSendDialog(domain, to_address, amount, success) {
                     }
                 })
             }
+
+            $scope.setMax = function () {
+                $scope.amount = Math.max(0, $scope.coin.balance - 1)
+            }
+
+            function init() {
+                postContract("wallet", "api/profile.php", {
+                    domain: domain,
+                    address: wallet.address(),
+                }, function (response) {
+                    $scope.coin = response
+                    $scope.$apply()
+                })
+            }
+
+            init()
         }
     })
 }

@@ -58,7 +58,7 @@ function openTokenSettings(domain, success) {
             }
 
             function init() {
-                post("/wallet/api/profile.php", {
+                postContract("wallet", "api/profile.php", {
                     domain: domain
                 }, function (response) {
                     $scope.profile = response

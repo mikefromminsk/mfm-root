@@ -10,9 +10,8 @@
         <div class="col input-content">
             <div class="col">
                 <div class="row input-wrapper-black">
-                    <div class="input-label">Tron address</div>
+                    <div class="input-label">Tron withdrawal address (TRC-20)</div>
                     <input type="text"
-                           placeholder="TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"
                            ng-model="withdrawal_address">
                 </div>
                 <p class="red-text" ng-show="errorWithdrawalAddress">Tron address is incorrect</p>
@@ -20,9 +19,15 @@
             <div class="row input-wrapper-black">
                 <div class="input-label">Amount</div>
                 <input type="number" ng-model="amount">
-                <div class="input-label-right">MAX <br>{{formatPrice(coin.balance - selectedProvider.fee)}}</div>
+                <div class="input-label-right row align-center-center ripple" ng-click="setMax()">
+                    <p>MAX</p>
+                </div>
             </div>
-            <p>{{selectedProvider.fee}} USDT fee for withdrawal</p>
+            <div class="col size12">
+                <p>Available: {{formatAmount(coin.balance, wallet.quote_domain)}}</p>
+                <p>Fee: {{formatAmount(provider.fee, wallet.quote_domain)}}</p>
+                <p>Total: {{formatAmount(amount + provider.fee, wallet.quote_domain)}}</p>
+            </div>
         </div>
         <div class="primary-button" ng-click="withdrawal()" ng-disabled="!withdrawal_address || !amount">
             Withdrawal

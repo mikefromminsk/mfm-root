@@ -24,6 +24,7 @@ if (substr($new_hash, 0, $difficulty) == str_repeat("0", $difficulty)) {
     if ($new_difficulty != null)
         dataSet([$domain, mining, difficulty], $new_difficulty);
     dataSet([$domain, mining, last_hash], $new_hash);
+    dataSet([$domain, mining, last_reward], $reward);
 } else {
     error("Invalid nonce");
 }

@@ -4,7 +4,7 @@
     </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
-        <p>Send {{domain}}</p>
+        <p>Send {{formatTicker(domain)}}</p>
     </div>
     <div class="col content">
         <div class="col input-content">
@@ -24,9 +24,18 @@
                 <input type="number"
                        autocapitalize="off"
                        ng-model="amount">
+                <div class="input-label-right row align-center-center ripple"
+                     ng-click="setMax()">
+                    <p>MAX</p>
+                </div>
+            </div>
+            <div class="col size12">
+                <p>Available: {{formatAmount(coin.balance, domain)}}</p>
+                <p>Fee: {{formatAmount(1, wallet.gas_domain)}}</p>
+                <p>Total: {{formatAmount(amount + 1, wallet.gas_domain)}}</p>
             </div>
         </div>
-        <div class="flex mt16 primary-button" ng-click="send()"
+        <div class="flex primary-button" ng-click="send()"
              ng-disabled="!to_address || !amount">
             Send {{domain}}
         </div>

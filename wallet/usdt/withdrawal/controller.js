@@ -3,6 +3,7 @@ function openWithdrawal(success) {
         templateUrl: '/wallet/usdt/withdrawal/index.html',
         controller: function ($scope) {
             addFormats($scope)
+            $scope.wallet = wallet
 
             $scope.withdrawal_address = ""
             $scope.amount = ""
@@ -37,18 +38,22 @@ function openWithdrawal(success) {
                 })
             }
 
+            $scope.setMax = function () {
+                $scope.amount = Math.max(0, $scope.coin.balance - $scope.provider.fee)
+            }
+
             function init() {
-                post("/wallet/api/profile.php", {
+                postContract("wallet", "api/profile.php", {
                     domain: "usdt",
                     address: wallet.address(),
                 }, function (response) {
                     $scope.coin = response
                     $scope.$apply()
                 })
-                post("/usdt/api/providers.php", {
+                postContract(wallet.quote_domain, "api/providers.php", {
                 }, function (response) {
                     $scope.providers = response
-                    $scope.selectedProvider = response["TRON"]
+                    $scope.provider = response["TRON"]
                     $scope.$apply()
                 })
             }

@@ -107,9 +107,9 @@
                                  ng-click="openDeposit()">
                                 Deposit
                             </div>
-                            <div class="button-gray p8 ml4 mb4" ng-click="openWithdrawal()">
+                            <!--<div class="button-gray p8 ml4 mb4" ng-click="openWithdrawal()">
                                 <img class="img14 img-black" src="/wallet/img/upload.svg">
-                            </div>
+                            </div>-->
                         </div>
 
                         <div class="col mh16 mt16"
@@ -120,6 +120,7 @@
                         <div class="gray100-back mh16 mt16 radius16 p8 size10 text-fill gray400-text">
                             Сеть находится в тестовом режиме. Балансы могут быть недоступны при обновлении сети.
                             Воспользуйтесь выводом USDT что бы сохранить свои средства.
+                            {{formatTimeDiff(coin.created)}} без проишествий.
                         </div>
 
                         <div class="mt16 row align-center-start scroll" ng-show="bonuses.length">
@@ -248,7 +249,7 @@
             <div class="col block">
                 <div class="row header align-start-center">
                     <div ng-style="getLogo(selectedCoin.domain, 40)"></div>
-                    <p class="flex ml8 size24 bold">{{selectedCoin.domain}} Apps</p>
+                    <p class="flex ml8 size24 bold uppercase">{{selectedCoin.domain}} Apps</p>
                     <div class="row align-start-center gap16">
                         <img class="img24 img-black" src="/wallet/img/settings.svg" ng-click="openAppSettings()">
                     </div>
@@ -294,30 +295,8 @@
                 </div>
             </div>
             <div class="col content align-start-center scroll" ng-hide="in_progress">
-                <div class="col block">
-                    <div ng-repeat="tran in trans"
-                         class="col mh16 nowrap">
-                        <div class="row size10 gray400-text mt16">{{tran.day}}</div>
-                        <div class="row align-start-center radius10 gray100-back p8 mt8"
-                             ng-repeat="item in tran.items"
-                             ng-click="openTran(item)">
-                            <div class="col">
-                                <div class="row align-start-end">
-                                    <p class="size10 gray400-text">{{item.from == wallet.address() ? "to " : "from "}}</p>
-                                    <p class="ml4 size14 bold">{{item.from == wallet.address() ? item.to : item.from}}</p>
-                                </div>
-                                <p class="mt4 size10 gray400-text">{{formatSec(item.time)}}</p>
-                            </div>
-                            <div class="flex mh8" style="background-image: linear-gradient(to right, var(--gray400) 33%, rgba(255,255,255,0) 0%);
-background-position: bottom;
-background-size: 10px 1px;
-background-repeat: repeat-x;; height: 1px"></div>
-                            <p class="size16 size16 bold"
-                               ng-class="{'red-text': item.from == wallet.address(),'green-text': item.from != username}">
-                                {{(item.from == wallet.address() ? "-" : "+") + formatAmount(item.amount, item.domain)}}
-                            </p>
-                        </div>
-                    </div>
+                <div class="col block ph16">
+                    <ng-include src="'/wallet/tran/trans.html'"></ng-include>
                 </div>
             </div>
             <div class="fill col align-center-center" ng-show="in_progress">
@@ -401,7 +380,7 @@ background-repeat: repeat-x;; height: 1px"></div>
 <script async src="/wallet/web/controller.js"></script>
 <script async src="/wallet/usdt/deposit/controller.js"></script>
 <script async src="/wallet/usdt/withdrawal/controller.js"></script>
-<script async src="/mining/mining/controller.js"></script>
+<script async src="/mining/console/settings/controller.js"></script>
 <script async src="/wallet/tran/controller.js"></script>
 <script async src="/wallet/token/controller.js"></script>
 <script async src="/wallet/settings/controller.js"></script>

@@ -18,6 +18,11 @@
 <div class="flex col content scroll input-content">
 
     <div class="col" ng-show="coin">
+        <div style="
+         background-image: url('/wallet/logo.svg');
+         background-size: 150% 100%;
+         width: 100px; height: 200px; position: absolute; right: 0; top: 0;">
+        </div>
         <ng-include src="'/wallet/card.html'"></ng-include>
     </div>
     <div class="col align-start-center"
@@ -44,7 +49,24 @@
             </div>
         </div>
     </div>
+
     <ng-include src="'/wallet/tran/trans.html'"></ng-include>
+
+    <!--<div class="flex col block  input-content">
+        <p>Mining {{domain}}</p>
+        <button class="primary-button" ng-click="init()" ng-disabled="!not_initialized">
+            Initialize mining
+        </button>
+        <button class="primary-button" ng-click="send()" ng-disabled="not_initialized">
+            Send {{domain}} to mining pool
+        </button>
+        <button class="primary-button" ng-click="reset()" ng-disabled="not_initialized">
+            Remove difficulty
+        </button>
+        <button class="primary-button" ng-click="openMining()" ng-disabled="not_initialized">
+            Miner
+        </button>
+    </div>-->
 </div>
 
 <script src="/node_modules/angular/angular.js"></script>

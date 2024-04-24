@@ -1,6 +1,6 @@
 function openUpgradeEmployee(domain, employee_address, manager_address, amount, success) {
     window.$mdBottomSheet.show({
-        templateUrl: '/salary/upgrade/index.html',
+        templateUrl: '/salary/console/upgrade/index.html',
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain

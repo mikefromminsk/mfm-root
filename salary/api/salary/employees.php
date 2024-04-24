@@ -18,6 +18,5 @@ foreach ($employee_addresses as $address) {
     ];
 }
 $response[employees] = $employees;
-$response[balance] = dataWalletBalance($domain, salary);
 
 commit($response);

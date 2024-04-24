@@ -4,21 +4,23 @@
     </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
-        <p>Deposit</p>
+        <p>Deposit {{formatTicker(wallet.quote_domain)}}</p>
     </div>
     <div class="col content align-start-center">
         <div class="col input-content">
             <div class="row input-wrapper-black">
-                <div class="input-label">Deposit address</div>
+                <div class="input-label">Tron deposit address (TRC-20)</div>
                 <input type="text"
                        autocapitalize="off"
                        id="deposit_address"
                        ng-model="deposit_address">
-                <div class="input-label-right">
-                    <img class="img28 p4 ripple gray500-back"
-                         src="/wallet/img/copy.svg"
-                         ng-click="copy()">
+                <div class="input-label-right row align-center-center ripple" ng-click="copy()">
+                    <p>Copy</p>
                 </div>
+            </div>
+            <div class="flex row mh16 ">
+                <div class="flex">Min deposit</div>
+                <div class="nowrap">{{formatAmount(min_deposit, wallet.quote_domain)}}</div>
             </div>
             <div class="flex row mh16 ">
                 <div class="flex">Deposit deadline</div>
@@ -28,7 +30,7 @@
                 <div class="col align-center-center" style="width: 100px; height: 100px;">
                     <img style="position: absolute" src="/wallet/img/deposit_circle.png">
                     <p class="size20 accent-text bold">{{countDownTimer}}</p>
-                    <div class="mt4" style="text-align: center">Waiting for <br>deposit</div>
+                    <div class="mt4" style="text-align: center">Check for <br>deposit</div>
                 </div>
             </div>
         </div>

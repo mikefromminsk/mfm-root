@@ -3,7 +3,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $domain = getDomain();
 
-dataWalletRegScript($domain,  "mining", "$domain/api/mining/mint.php");
+dataWalletRegScript($domain,  "salary", "$domain/api/salary/approve.php");
 
 $response[success] = true;
 

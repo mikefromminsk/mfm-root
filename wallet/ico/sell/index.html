@@ -18,6 +18,10 @@
                 <div class="input-label">Amount</div>
                 <input type="number"
                        ng-model="amount">
+                <div class="input-label-right ph8 row align-center-center accent-text ripple"
+                     ng-click="setMax()">
+                    <p>MAX</p>
+                </div>
             </div>
             <div class="row">
                 <div class="filter-black ripple black-text"
@@ -28,7 +32,10 @@
                 </div>
             </div>
             <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
-            <p>1 {{formatTicker(wallet.gas_domain)}} fee for transaction</p>
+            <div class="col size12">
+                <p>Fee: {{formatAmount(1, wallet.gas_domain)}}</p>
+                <p>Total: {{formatAmount(amount + 1, wallet.gas_domain)}}</p>
+            </div>
         </div>
         <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price && !amount">
             Sell

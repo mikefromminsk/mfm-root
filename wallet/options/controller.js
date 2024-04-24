@@ -39,7 +39,7 @@ function openOptions($rootScope, coin, success) {
             }
 
             $scope.openMining = function () {
-                openMining(domain, success)
+                openWeb(location.origin + "/mining/console?domain=" + domain, init)
             }
 
             $scope.openStore = function () {
@@ -80,8 +80,12 @@ function openOptions($rootScope, coin, success) {
                 openWithdrawal(init)
             }
 
+            $scope.donate = function () {
+                openSendDialog(domain, $scope.coin.owner, "", init)
+            }
+
             function init() {
-                post("/wallet/api/profile.php", {
+                postContract("wallet", "api/profile.php", {
                     domain: domain,
                     address: wallet.address(),
                 }, function (response) {
