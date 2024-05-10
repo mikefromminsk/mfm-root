@@ -3,7 +3,6 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdToast = $mdToast
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
-    $scope.wallet = wallet
 
     $scope.search_domain = ''
     $scope.$watch('search_domain', function (newValue) {

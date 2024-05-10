@@ -1,20 +1,43 @@
 <md-bottom-sheet class="col">
+    <div style="position: absolute; right: 29px; top: -50px; z-index: 2">
+        <img src="/wallet/img/share.png">
+    </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
-        <p>Create invite link</p>
+        <p>Share</p>
     </div>
-    <div class="col content ">
+    <div class="col content">
         <div class="col input-content">
-            <p>Share {{formatTicker(domain)}} with your friend</p>
-            <div class="row input-wrapper-black">
-                <div class="input-label">{{formatTicker(domain)}} count</div>
-                <input type="number"
-                       id="invite_coins"
-                       ng-model="amount">
+            <div class="col">
+                <div class="row input-wrapper-black">
+                    <div class="input-label">Amount {{formatTicker(domain)}}</div>
+                    <input type="number"
+                           id="invite_coins"
+                           ng-model="amount">
+                    <div class="input-label-right row align-center-center ripple"
+                         ng-click="setMax()">
+                        <p>MAX</p>
+                    </div>
+                </div>
+                <div class="mt8 row nowrap">
+                    <p class="flex">Available</p>
+                    <p>{{formatAmount(coin.balance, domain)}}</p>
+                </div>
             </div>
         </div>
-        <div class="primary-button" ng-click="create()">
-            Create invite link
+        <div class="divider-white"></div>
+        <div class="row mh16 mv8">
+            <div class="flex-50 col size12 align-center-start">
+                <p>Total for receiver</p>
+                <p class="mt2 size16">{{getTotal(amount)}} {{formatTicker(domain)}}</p>
+                <p>Net commission: {{formatAmount(2, wallet.gas_domain)}}</p>
+            </div>
+            <div class="flex-50 row align-end-center">
+                <button class="flex primary-button radius4" ng-click="create()"
+                        ng-disabled="!amount">
+                    Share
+                </button>
+            </div>
         </div>
     </div>
 </md-bottom-sheet>

@@ -27,6 +27,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     function loadTrans() {
         post("/wallet/api/trans_user.php", {
             address: wallet.address(),
+            domain: domain,
         }, function (response) {
             $scope.trans = $scope.groupByTimePeriod(response.trans)
             $scope.$apply()
@@ -55,7 +56,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
                     address: wallet.address(),
                     nonce: i,
                 }, function (data) {
-                    loadTrans()
+                    init()
                 }, function () {
 
                 })
@@ -68,7 +69,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         openPin($scope.domain, function (pin) {
             window.tempPin = pin
             $scope.inProgress = true
-            loadTrans($scope.domain)
+            init()
         })
     }
 

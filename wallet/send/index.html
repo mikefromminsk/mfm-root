@@ -4,7 +4,8 @@
     </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
-        <p>Send {{formatTicker(domain)}}</p>
+        <p ng-hide="block_to_address">Send</p>
+        <p ng-show="block_to_address">Donate</p>
     </div>
     <div class="col content">
         <div class="col input-content">
@@ -19,25 +20,36 @@
                        onkeypress="return event.charCode != 32"
                        ng-model="to_address">
             </div>
-            <div class="row input-wrapper-black">
-                <div class="input-label">Amount</div>
-                <input type="number"
-                       autocapitalize="off"
-                       ng-model="amount">
-                <div class="input-label-right row align-center-center ripple"
-                     ng-click="setMax()">
-                    <p>MAX</p>
+            <div class="col">
+                <div class="row input-wrapper-black">
+                    <div class="input-label">Amount {{formatTicker(domain)}}</div>
+                    <input type="number"
+                           autocapitalize="off"
+                           ng-model="amount">
+                    <div class="input-label-right row align-center-center ripple"
+                         ng-click="setMax()">
+                        <p>MAX</p>
+                    </div>
+                </div>
+                <div class="mt8 row nowrap">
+                    <p class="flex">Available</p>
+                    <p>{{formatAmount(coin.balance, domain)}}</p>
                 </div>
             </div>
-            <div class="col size12">
-                <p>Available: {{formatAmount(coin.balance, domain)}}</p>
-                <p>Fee: {{formatAmount(1, wallet.gas_domain)}}</p>
-                <p>Total: {{formatAmount(amount + 1, wallet.gas_domain)}}</p>
-            </div>
         </div>
-        <div class="flex primary-button" ng-click="send()"
-             ng-disabled="!to_address || !amount">
-            Send {{domain}}
+        <div class="divider-white"></div>
+        <div class="row mh16 mv8">
+            <div class="flex-50 col size12 align-center-start">
+                <p>Total for receiver</p>
+                <p class="mt2 size16">{{getTotal(amount)}} {{formatTicker(domain)}}</p>
+                <p>Net commission: {{formatAmount(1, wallet.gas_domain)}}</p>
+            </div>
+            <div class="flex-50 row align-end-center">
+                <button class="flex primary-button radius4" ng-click="send()"
+                     ng-disabled="!to_address || !amount">
+                    Send
+                </button>
+            </div>
         </div>
     </div>
 </md-bottom-sheet>

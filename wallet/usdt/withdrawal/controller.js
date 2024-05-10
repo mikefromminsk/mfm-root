@@ -3,7 +3,6 @@ function openWithdrawal(success) {
         templateUrl: '/wallet/usdt/withdrawal/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            $scope.wallet = wallet
 
             $scope.withdrawal_address = ""
             $scope.amount = ""
@@ -24,6 +23,9 @@ function openWithdrawal(success) {
                     $scope.errorWithdrawalAddress = true
                     return
                 }
+                if (!$scope.amount) {
+                    return
+                }
                 postContractWithGas("usdt", "api/withdrawal/start.php", function (key, nexthash) {
                     return {
                         address: wallet.address(),
@@ -40,6 +42,10 @@ function openWithdrawal(success) {
 
             $scope.setMax = function () {
                 $scope.amount = Math.max(0, $scope.coin.balance - $scope.provider.fee)
+            }
+
+            $scope.getTotal = function () {
+                return Math.max(0, $scope.amount - $scope.provider.fee)
             }
 
             function init() {

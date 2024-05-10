@@ -8,37 +8,48 @@
     </div>
     <div class="col content">
         <div class="col input-content">
-            <div class="row input-wrapper-black">
+            <div class="col align-start-center" ng-show="coin.price">
+                <p class="size40 bold">{{formatPrice(coin.price)}}</p>
+                <p class="">price</p>
+            </div>
+            <div class="row input-wrapper-black"  ng-hide="coin.price">
                 <div class="input-label">Price</div>
                 <input type="number"
-                       ng-disabled="hasPrice"
                        ng-model="price">
             </div>
-            <div class="row input-wrapper-black">
-                <div class="input-label">Amount</div>
-                <input type="number"
-                       ng-model="amount">
-                <div class="input-label-right ph8 row align-center-center accent-text ripple"
-                     ng-click="setMax()">
-                    <p>MAX</p>
+            <div class="col">
+                <div class="row input-wrapper-black">
+                    <div class="input-label">Amount {{formatTicker(domain)}}</div>
+                    <input type="number"
+                           ng-model="amount"
+                           ng-change="calcTotal()">
+                    <div class="input-label-right ph8 row align-center-center accent-text ripple"
+                         ng-click="setMax()">
+                        <p>MAX</p>
+                    </div>
+                </div>
+                <div class="mt8 row nowrap">
+                    <p class="flex">Available</p>
+                    <p>{{formatAmount(coin.balance, domain)}}</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="filter-black ripple black-text"
-                     ng-class="{'active': item == selectedPortion}"
-                     ng-click="setPortion(item)"
-                     ng-repeat="item in portions">
-                    {{item}}%
-                </div>
-            </div>
-            <p>For ({{formatAmount(amount, domain)}}) you will get {{formatPrice(amount * price)}}</p>
-            <div class="col size12">
-                <p>Fee: {{formatAmount(1, wallet.gas_domain)}}</p>
-                <p>Total: {{formatAmount(amount + 1, wallet.gas_domain)}}</p>
+            <div class="col align-center-center">
+                <p class="size32 bold">{{formatPrice(total)}}</p>
+                <p class="">you get</p>
             </div>
         </div>
-        <div class="primary-button red-back" ng-click="ico_sell()" ng-disabled="!price && !amount">
-            Sell
+
+        <div class="divider-white"></div>
+        <div class="row mh16 mv8">
+            <div class="flex-50 col size12 align-center-start">
+                <p>Net commission: {{formatAmount(1, wallet.gas_domain)}}</p>
+            </div>
+            <div class="flex-50 row align-end-center">
+                <button class="flex primary-button radius4 red-back" ng-click="ico_sell()"
+                        ng-disabled="!price && !amount">
+                    Sell
+                </button>
+            </div>
         </div>
     </div>
 </md-bottom-sheet>

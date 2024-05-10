@@ -15,9 +15,12 @@
 background-position: bottom;
 background-size: 10px 1px;
 background-repeat: repeat-x;; height: 1px"></div>
-        <p class="size16 size16 bold"
-           ng-class="{'red-text': item.from == wallet.address(),'green-text': item.from != username}">
-            {{(item.from == wallet.address() ? "-" : "+") + formatAmount(item.amount, item.domain)}}
-        </p>
+        <div class="row align-start-center">
+            <p class="bold size16"
+               ng-class="{'red-text': item.from == wallet.address(),'green-text': item.from != username}">
+                {{(item.from == wallet.address() ? "-" : "+") + item.amount}}
+            </p>
+            <p class="ml4">{{formatTicker(item.domain)}}</p>
+        </div>
     </div>
 </div>

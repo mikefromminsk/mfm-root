@@ -15,6 +15,9 @@ function openLogin(success) {
 
             // TODO validation
             $scope.login = function () {
+                if (!$scope.username || !$scope.password) {
+                    return
+                }
                 $scope.in_progress = true
                 postContract(wallet.gas_domain, "api/token/wallet.php", {
                     address: $scope.username,

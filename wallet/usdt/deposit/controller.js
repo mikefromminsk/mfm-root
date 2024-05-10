@@ -4,7 +4,6 @@ function openDeposit(success) {
         templateUrl: '/wallet/usdt/deposit/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            $scope.wallet = wallet
             $scope.chain = "TRON"
 
             hasToken(wallet.quote_domain, function () {

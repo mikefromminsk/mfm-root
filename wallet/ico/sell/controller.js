@@ -3,54 +3,23 @@ function openIcoSell($rootScope, domain, success) {
         templateUrl: "/wallet/ico/sell/index.html",
         controller: function ($scope) {
             addFormats($scope)
-            $scope.wallet = wallet
             $scope.domain = domain
-            $scope.price = 1
-            $scope.total = 0
-            $scope.amount = 0
-            $scope.portions = [1, 5, 10, 50, 100]
-            $scope.selectedPortion = $scope.portions[2]
-            $scope.setPortion = function (item) {
-                $scope.selectedPortion = item
-                $scope.amount = ($scope.base.balance / 100) * $scope.selectedPortion - 1
-            }
-            $scope.base = {};
-            $scope.quote = {};
-            post("/wallet/api/list.php", {
-                domains: domain + "," + wallet.quote_domain,
-                address: wallet.address(),
-            }, function (response) {
-                if (response.result[0].domain == domain) {
-                    $scope.base = response.result[0]
-                    $scope.quote = response.result[1]
-                } else {
-                    $scope.base = response.result[1]
-                    $scope.quote = response.result[0]
-                }
-                if ($scope.base.price != 0)
-                    $scope.hasPrice = true
-                $scope.price = $scope.base.price
-                $scope.balance = $scope.quote.balance
-                dataGet("wallet/info/" + domain + "/total", function (total) {
-                    $scope.total = total
-                    $scope.setPortion($scope.selectedPortion)
-                    $scope.$apply()
-                })
-                $scope.$apply()
-            })
 
             hasBalance(domain, function () {
                 setFocus("first_input")
             })
 
             $scope.ico_sell = function () {
+                if (!$scope.amount) {
+                    return
+                }
                 hasToken(wallet.quote_domain, function () {
                     postContractWithGas(domain, "api/token/ico/sell.php", function (key, hash) {
                         return {
                             key: key,
                             next_hash: hash,
                             amount: $scope.amount,
-                            price: $scope.price,
+                            price: $scope.coin.price || $scope.price,
                         }
                     }, function () {
                         showSuccessDialog("You open for sale " + $scope.formatTicker(domain), success)
@@ -58,9 +27,31 @@ function openIcoSell($rootScope, domain, success) {
                 })
             }
 
-            $scope.setMax = function () {
-                $scope.amount = Math.max(0, $scope.base.balance - 1)
+            $scope.calcTotal = function () {
+                if (domain == wallet.gas_domain) {
+                    $scope.total = Math.max(0, $scope.round($scope.amount * $scope.coin.price, 2) - 1)
+                } else {
+                    $scope.total = $scope.round($scope.amount * $scope.coin.price, 2)
+                }
+                return $scope.total
             }
+
+            $scope.setMax = function () {
+                $scope.amount = Math.max(0, $scope.coin.balance - 1)
+                $scope.calcTotal()
+            }
+
+            function init() {
+                postContract("wallet", "api/profile.php", {
+                    domain: domain,
+                    address: wallet.address(),
+                }, function (response) {
+                    $scope.coin = response
+                    $scope.$apply()
+                })
+            }
+
+            init()
         }
     })
 }

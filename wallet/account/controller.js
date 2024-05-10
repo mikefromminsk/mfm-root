@@ -4,7 +4,6 @@ function openAccount(success) {
         controller: function ($scope) {
             addFormats($scope)
             $scope.model = storage.getString("model", window.navigator.userAgent)
-            $scope.wallet = wallet
 
             $scope.logout = function () {
                 wallet.logout()

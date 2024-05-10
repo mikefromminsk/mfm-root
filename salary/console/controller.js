@@ -47,5 +47,6 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.openSettings = function () {
         openSettings($scope.domain, init)
     }
+    setInterval(init, 10000)
     init()
 }

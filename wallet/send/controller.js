@@ -3,7 +3,6 @@ function openSendDialog(domain, to_address, amount, success) {
         templateUrl: '/wallet/send/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            $scope.wallet = wallet
             $scope.domain = domain
             if ((to_address || "") != "") {
                 $scope.to_address = to_address
@@ -15,6 +14,9 @@ function openSendDialog(domain, to_address, amount, success) {
             }
 
             $scope.send = function () {
+                if (!$scope.to_address || !$scope.amount) {
+                    return
+                }
                 hasToken()
                 postContractWithGas(domain, "api/token/send.php", function (key, next_hash) {
                     return {
@@ -36,7 +38,23 @@ function openSendDialog(domain, to_address, amount, success) {
             }
 
             $scope.setMax = function () {
-                $scope.amount = Math.max(0, $scope.coin.balance - 1)
+                if (domain == wallet.gas_domain){
+                    $scope.amount = Math.max(0, $scope.coin.balance - 1)
+                } else {
+                    $scope.amount = $scope.coin.balance
+                }
+            }
+
+            $scope.getTotal = function (amount) {
+                if (domain == wallet.gas_domain){
+                    if (amount > 1){
+                        return amount - 1
+                    } else {
+                        return 0
+                    }
+                } else {
+                    return amount
+                }
             }
 
             function init() {

@@ -4,7 +4,6 @@ function openOptions($rootScope, coin, success) {
         controller: function ($scope) {
             addFormats($scope)
             var domain = coin.domain
-            $scope.wallet = wallet
             $scope.siteExist = false
 
             function checkFavorite() {
@@ -35,7 +34,7 @@ function openOptions($rootScope, coin, success) {
             }
 
             $scope.sendDialog = function () {
-                openSendDialog(domain, "", "", success)
+                openSendDialog(domain, "", "", init)
             }
 
             $scope.openMining = function () {

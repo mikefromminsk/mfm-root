@@ -54,10 +54,9 @@
                 <div class="row block align-start-center gap16">
                     <div class="col align-start-end regular">
                         <div class="row align-start-end">
-                            <p class="size14 regular mb4">my</p>
-                            <p class="size20 bold ml4">Token</p>
+                            <p class="size14 regular mb4 nowrap">my Token</p>
                         </div>
-                        <p class="size14 regular">space</p>
+                        <p class="size20 bold regular">SPACE</p>
                     </div>
                     <div class="row" ng-show="searchMode">
                         <div class="row flex input-wrapper ml16">
@@ -107,9 +106,9 @@
                                  ng-click="openDeposit()">
                                 Deposit
                             </div>
-                            <!--<div class="button-gray p8 ml4 mb4" ng-click="openWithdrawal()">
+                            <div class="button-gray p8 ml4 mb4" ng-click="openWithdrawal()">
                                 <img class="img14 img-black" src="/wallet/img/upload.svg">
-                            </div>-->
+                            </div>
                         </div>
 
                         <div class="col mh16 mt16"
@@ -117,13 +116,18 @@
                             <ng-include src="'/wallet/card.html'"></ng-include>
                         </div>
 
-                        <div class="gray100-back mh16 mt16 radius16 p8 size10 text-fill gray400-text">
-                            Сеть находится в тестовом режиме. Балансы могут быть недоступны при обновлении сети.
-                            Воспользуйтесь выводом USDT что бы сохранить свои средства.
-                            {{formatTimeDiff(coin.created)}} без проишествий.
+                        <div class="col align-start-center mt16" ng-click="login()" ng-hide="wallet.address()">
+                            <p class="size20 bold">Welcome to mytoken.space!</p>
+                            <p class="size16 mt16">Here you can create your own token.</p>
                         </div>
 
-                        <div class="mt16 row align-center-start scroll" ng-show="bonuses.length">
+                        <div class="row mh16 mt16" ng-click="login()" ng-hide="wallet.address() || bonuses.length != 0">
+                            <div class="flex primary-button" >
+                                Login or Create account
+                            </div>
+                        </div>
+
+                        <div class="mt16 row align-center-start scroll" ng-show="bonuses.length != 0">
                             <div class="col align-start-center" ng-repeat="item in bonuses">
                                 <img src="/wallet/img/gift-colored.svg" style="width: 100px">
                                 <div class="row ph16 pv8 align-start-center ripple" ng-click="receiveBonus(item)">

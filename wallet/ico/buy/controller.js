@@ -4,7 +4,6 @@ function openIcoBuy($rootScope, domain, success) {
         controller: function ($scope, $mdBottomSheet) {
             addFormats($scope)
             $scope.domain = domain
-            $scope.wallet = wallet
 
             postContract(domain, "api/token/wallet.php", {
                 address: "ico"
@@ -13,37 +12,24 @@ function openIcoBuy($rootScope, domain, success) {
                 $scope.$apply()
             })
 
-            $scope.base = {};
-            $scope.quote = {};
-            post("/wallet/api/list.php", {
-                domains: domain + "," + wallet.quote_domain,
-                address: wallet.address(),
-            }, function (response) {
-                if (response.result[0].domain == domain) {
-                    $scope.base = response.result[0]
-                    $scope.quote = response.result[1]
-                } else {
-                    $scope.base = response.result[1]
-                    $scope.quote = response.result[0]
-                }
-                $scope.balance = $scope.quote.balance
-
-                $scope.balance = $scope.quote.balance
-                $scope.price = $scope.base.price
-                $scope.$apply()
-            })
-
             $scope.calcAmount = function () {
-                $scope.amount = $scope.round($scope.total / $scope.base.price, 2)
+                if (domain == wallet.gas_domain) {
+                    $scope.amount = Math.max(0, $scope.round($scope.total / $scope.coin.price, 2) - 1)
+                } else {
+                    $scope.amount = $scope.round($scope.total / $scope.coin.price, 2)
+                }
                 return $scope.amount
             }
 
             $scope.calcTotal = function () {
-                $scope.total = $scope.round($scope.amount * $scope.base.price, 2)
+                $scope.total = $scope.round($scope.amount * $scope.coin.price, 2)
                 return $scope.amount - 1
             }
 
             $scope.ico_buy = function () {
+                if (!$scope.total) {
+                    return
+                }
                 hasToken(domain, function () {
                         hasBalance(wallet.quote_domain, function () {
                             $scope.in_progress = true
@@ -64,6 +50,22 @@ function openIcoBuy($rootScope, domain, success) {
                     }
                 )
             }
+
+            $scope.setMax = function () {
+                $scope.total = $scope.coin.balance
+            }
+
+            function init() {
+                postContract("wallet", "api/profile.php", {
+                    domain: domain,
+                    address: wallet.address(),
+                }, function (response) {
+                    $scope.coin = response
+                    $scope.$apply()
+                })
+            }
+
+            init()
         }
     })
 }

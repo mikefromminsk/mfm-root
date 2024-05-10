@@ -286,4 +286,6 @@ function addFormats($scope) {
     $scope.max = function (a, b) {
         return Math.max(a, b)
     }
+
+    $scope.wallet = wallet
 }

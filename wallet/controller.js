@@ -3,7 +3,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdToast = $mdToast
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
-    $scope.wallet = wallet
     $scope.apps = {}
     $scope.selectedCoin
     $scope.searchMode = false
@@ -34,10 +33,6 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     $scope.openAccount = function () {
         openAccount(init)
-    }
-
-    $scope.openTransactions = function () {
-        openTransactions(wallet.gas_domain)
     }
 
     $scope.newCoin = function () {

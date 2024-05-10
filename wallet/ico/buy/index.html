@@ -4,45 +4,50 @@
     </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
-        <p>Buy {{domain}}</p>
+        <p>Buy {{formatTicker(domain)}}</p>
     </div>
     <div class="col content">
         <div class="col input-content">
-            <div class="row size12">
-                <p class="flex nowrap">You give</p>
-                <p class="nowrap">You get</p>
+            <div class="col align-start-center">
+                <p class="size40 bold">{{formatPrice(coin.price)}}</p>
+                <p class="">price</p>
             </div>
-            <div class="row">
-                <div class="row input-wrapper-black">
-                    <div class="input-label uppercase">USDT</div>
-                    <input type="number"
-                           ng-model="total"
-                           ng-change="calcAmount()">
+            <div class="col">
+                <div class="row">
+                    <div class="flex row input-wrapper-black">
+                        <div class="input-label uppercase">USDT</div>
+                        <input type="number"
+                               ng-model="total"
+                               ng-change="calcAmount()">
+                        <div class="input-label-right row align-center-center ripple"
+                             ng-click="setMax()">
+                            <p>MAX</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="row input-wrapper-black">
-                    <div class="input-label uppercase">{{domain}}</div>
-                    <input type="number"
-                           ng-model="amount"
-                           ng-change="calcTotal()">
-                </div>
-            </div>
-            <div class="row size12">
-                <p class="flex nowrap">Available: {{formatAmount(balance)}}</p>
-                <p class="nowrap">Max: {{formatAmount(icoBalance, domain)}}</p>
-            </div>
-            <div class="col align-center-center ">
-                <div class="row p16 align-center-center secondary-back radius24">
-                    <p class="size16 black-text bold">1 USDT = {{formatAmount(1 / price, domain)}}</p>
+                <div class="mt8 row nowrap">
+                    <p class="flex">Available</p>
+                    <p>{{formatAmount(coin.balance, wallet.quote_domain)}}</p>
                 </div>
             </div>
-            <div class="col size12">
-                <p>Fee: {{formatAmount(1, wallet.gas_domain)}}</p>
-                <p>Total: {{formatAmount(amount + 1, wallet.gas_domain)}}</p>
+            <div class="col align-center-center">
+                <p class="size32 bold">{{formatAmount(amount, domain)}}</p>
+                <p class="">you get</p>
             </div>
         </div>
-        <div class="primary-button green-back" ng-click="ico_buy()"
-             ng-disabled="!total || in_progress">
-            Buy
+
+        <div class="divider-white"></div>
+        <div class="row mh16 mv8">
+            <div class="flex-50 col size12 align-center-start">
+                <p>Net commission: {{formatAmount(1, wallet.gas_domain)}}</p>
+            </div>
+            <div class="flex-50 row align-end-center">
+                <button class="flex primary-button radius4 green-back" ng-click="ico_buy()"
+                        ng-disabled="!total || in_progress">
+                    Buy
+                </button>
+            </div>
         </div>
+
     </div>
 </md-bottom-sheet>
