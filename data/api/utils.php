@@ -18,7 +18,6 @@ function dataCreateRow($data_parent_id, $data_key, $data_type)
 {
     if ($GLOBALS[last_data_id] == null)
         $GLOBALS[last_data_id] = scalar("select max(data_id) from `data`") ?: 1;
-    $GLOBALS[gas_bytes] += FILE_ROW_SIZE;
     $data_id = ++$GLOBALS[last_data_id];
     $GLOBALS[new_data][$data_id] = [
         data_parent_id => $data_parent_id,
@@ -85,7 +84,6 @@ function dataSet(array $path_array, $value, $addHistory = true)
             dataSet(array_merge($path_array, [$key]), $subvalue);
     }
     $GLOBALS[update_data][$data_id] = $data;
-    $GLOBALS[gas_bytes] += 1;
     if ($addHistory) {
         $data[data_path] = $path;
         $GLOBALS[new_history][] = $data;

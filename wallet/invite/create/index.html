@@ -16,28 +16,19 @@
                            ng-model="amount">
                     <div class="input-label-right row align-center-center ripple"
                          ng-click="setMax()">
-                        <p>MAX</p>
+                        <p>MAX {{formatAmount(getMax())}}</p>
                     </div>
                 </div>
                 <div class="mt8 row nowrap">
-                    <p class="flex">Available</p>
-                    <p>{{formatAmount(coin.balance, domain)}}</p>
+                    <p>Net commission: {{formatAmount(gas_recommended, wallet.gas_domain)}}</p>
                 </div>
             </div>
         </div>
-        <div class="divider-white"></div>
         <div class="row mh16 mv8">
-            <div class="flex-50 col size12 align-center-start">
-                <p>Total for receiver</p>
-                <p class="mt2 size16">{{getTotal(amount)}} {{formatTicker(domain)}}</p>
-                <p>Net commission: {{formatAmount(2, wallet.gas_domain)}}</p>
-            </div>
-            <div class="flex-50 row align-end-center">
-                <button class="flex primary-button radius4" ng-click="create()"
-                        ng-disabled="!amount">
-                    Share
-                </button>
-            </div>
+            <button class="flex primary-button radius4" ng-click="create()"
+                    ng-disabled="!amount">
+                Share
+            </button>
         </div>
     </div>
 </md-bottom-sheet>

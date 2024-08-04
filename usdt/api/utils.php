@@ -20,7 +20,7 @@ const PROVIDERS = [
         min => 0.02,
         contract => 'TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t',
         min_deposit => 5,
-        fee => 2,
+        fee => 1,
         deposit_addresses => [
             "TPWZ6TNgYBCh18Bf4EVfKesoHHRJ4w8SgT",
             "TSXvWWCsysLQoPujPCEbYQySXP66ZvN57b",

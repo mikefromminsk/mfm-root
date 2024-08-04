@@ -5,27 +5,6 @@ function openIcoBuy($rootScope, domain, success) {
             addFormats($scope)
             $scope.domain = domain
 
-            postContract(domain, "api/token/wallet.php", {
-                address: "ico"
-            }, function (response) {
-                $scope.icoBalance = response.amount
-                $scope.$apply()
-            })
-
-            $scope.calcAmount = function () {
-                if (domain == wallet.gas_domain) {
-                    $scope.amount = Math.max(0, $scope.round($scope.total / $scope.coin.price, 2) - 1)
-                } else {
-                    $scope.amount = $scope.round($scope.total / $scope.coin.price, 2)
-                }
-                return $scope.amount
-            }
-
-            $scope.calcTotal = function () {
-                $scope.total = $scope.round($scope.amount * $scope.coin.price, 2)
-                return $scope.amount - 1
-            }
-
             $scope.ico_buy = function () {
                 if (!$scope.total) {
                     return
@@ -33,26 +12,25 @@ function openIcoBuy($rootScope, domain, success) {
                 hasToken(domain, function () {
                         hasBalance(wallet.quote_domain, function () {
                             $scope.in_progress = true
-                            postContractWithGas(wallet.quote_domain, "", function (usdt_key, usdt_next_hash) {
-                                postContractWithGas(domain, "api/token/ico/buy.php", {
-                                    key: usdt_key,
-                                    next_hash: usdt_next_hash,
-                                    amount: $scope.amount,
-                                }, function () {
-                                    showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain), success)
-                                }, function () {
-                                    $scope.in_progress = false
-                                })
-                                return null
+                            postContractWithGas(domain, "api/token/ico/buy.php", {
+                                amount: $scope.amount,
+                            }, function () {
+                                showSuccessDialog("You bought " + $scope.formatAmount($scope.amount, domain), success)
+                            }, function () {
+                                $scope.in_progress = false
                             })
-
                         })
                     }
                 )
             }
 
             $scope.setMax = function () {
-                $scope.total = $scope.coin.balance
+                $scope.total = $scope.coin.gas_balance
+                $scope.calcAmount()
+            }
+
+            $scope.calcAmount = function () {
+                $scope.amount = Math.max(0, $scope.round(($scope.total - $scope.gas_recommended) / $scope.coin.price, 2))
             }
 
             function init() {
@@ -61,6 +39,12 @@ function openIcoBuy($rootScope, domain, success) {
                     address: wallet.address(),
                 }, function (response) {
                     $scope.coin = response
+                    $scope.$apply()
+                })
+                postContract(domain, "api/token/ico/sell.php", {
+                    gas_spent: 1,
+                }, function (response) {
+                    $scope.gas_recommended = response.gas_recommended
                     $scope.$apply()
                 })
             }

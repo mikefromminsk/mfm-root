@@ -12,19 +12,18 @@ function openWithdrawal(success) {
                 $scope.amount = 0.1
             }
 
-            $scope.$watch('search_text', function (newValue) {
-                if (newValue == null) return
-                $scope.errorWithdrawalAddress = false
-            })
-
             $scope.withdrawal = function () {
                 // test withdrawal address
                 if (!$scope.withdrawal_address.startsWith("T") || !$scope.withdrawal_address.length == 34) {
-                    $scope.errorWithdrawalAddress = true
+                    $scope.errorAddress = "Invalid address"
                     return
                 }
                 if (!$scope.amount) {
                     return
+                }
+                if ($scope.total <= 0){
+                    $scope.errorAmount = "Amount too low"
+                    return;
                 }
                 postContractWithGas("usdt", "api/withdrawal/start.php", function (key, nexthash) {
                     return {
@@ -41,11 +40,12 @@ function openWithdrawal(success) {
             }
 
             $scope.setMax = function () {
-                $scope.amount = Math.max(0, $scope.coin.balance - $scope.provider.fee)
+                $scope.amount = $scope.coin.balance
+                $scope.calcTotal()
             }
 
-            $scope.getTotal = function () {
-                return Math.max(0, $scope.amount - $scope.provider.fee)
+            $scope.calcTotal = function () {
+                $scope.total = Math.max(0, $scope.amount - $scope.provider.fee)
             }
 
             function init() {

@@ -19,6 +19,7 @@ $coin[ui] = dataGet([wallet, info, $domain, ui]);
 $coin[mining] = dataExist([$domain, mining]);
 $coin[description] = dataGet([wallet, info, $domain, description]);
 $coin[ico_balance] = dataWalletBalance($domain, ico);
+$coin[gas_balance] = dataWalletBalance($gas_domain, $address);
 
 
 foreach (dataKeys([$domain, packages]) as $app_domain) {

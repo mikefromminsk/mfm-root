@@ -37,6 +37,8 @@ function addFormats($scope) {
         if (number == null)
             number = 0;
         var result = shortNumber(number)
+        if (domain == "usdt")
+            return "$" + result
         if (domain != null) {
             if (domain.length > 5)
                 domain = domain.substr(0, 3)

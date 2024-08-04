@@ -3,7 +3,7 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/analytics.php";
 
-$gas_domain = "space";
+$gas_domain = "usdt";
 
 function dataWalletSettingsSave($user, $key, $value)
 {
@@ -122,33 +122,36 @@ function getTran($domain, $txid)
 
 function commit($response, $gas_address = null)
 {
-    if ($GLOBALS[gas_bytes] != 0) {
-        $trans = $GLOBALS[trans];
-        foreach ($trans as $domain => $txids)
-            $GLOBALS[gas_bytes] += count($txids);
+    $gas_rows = 0;
+    $gas_rows += count($GLOBALS[new_data]);
+    $gas_rows += count($GLOBALS[new_history]);
+    $gas_spent = 0.001 * $gas_rows;
+
+    if ($gas_rows != 0) {
         if ($gas_address != null) {
             $dataTxid = dataWalletSend(
                 $GLOBALS[gas_domain],
                 $gas_address,
                 admin,
-                DEBUG ? 1 : $GLOBALS[gas_bytes]);
+                $gas_spent);
         } else {
             $dataTxid = dataWalletSend(
                 $GLOBALS[gas_domain],
                 get_required(gas_address),
                 admin,
-                DEBUG ? 1 : $GLOBALS[gas_bytes],
+                $gas_spent,
                 get_required(gas_key),
                 get_required(gas_next_hash)
             );
         }
-        foreach ($trans as $domain => $txids) {
+        dataSet([analytics, gas_spent, scriptPath()], $gas_spent, false);
+        /*foreach ($GLOBALS[trans] as $domain => $txids) {
             foreach ($txids as $txid) {
                 dataSet([$domain, trans, $txid, gas], $dataTxid);
             }
-        }
+        }*/
         dataCommit();
-        $response[gas_spend] = $GLOBALS[gas_bytes];
+        $response[gas_spend] = $gas_spent;
         $response[gas_txid] = $dataTxid;
     }
     echo json_encode($response);
@@ -248,17 +251,21 @@ function dataIcoSell($key, $next_hash, $amount, $price)
     }
 }
 
-function dataIcoBuy($key, $next_hash, $amount)
+function dataIcoBuy($amount)
 {
     $domain = getDomain();
     $gas_address = get_required(gas_address);
+    $gas_key = get_required(gas_key);
+
+    $temp_next_hash = md5($gas_key);
+
     $owner_address = dataGet([wallet, info, $domain, owner]);
     if ($gas_address == $owner_address) {
-        dataWalletSend(usdt, $gas_address, $domain . _ico, $amount, $key, $next_hash);
+        dataWalletSend(usdt, $gas_address, $domain . _ico, $amount, $gas_key, $temp_next_hash);
     } else {
         $token_price = dataGet([$domain, price]);
         $total_usdt = $amount * $token_price;
-        dataWalletSend(usdt, $gas_address, $domain . _ico, $total_usdt, $key, $next_hash);
+        dataWalletSend(usdt, $gas_address, $domain . _ico, $total_usdt, $gas_key, $temp_next_hash);
         dataWalletSend($domain, ico, $gas_address, $amount);
     }
 }
@@ -301,4 +308,11 @@ function dataWalletProfile($domain, $address = null)
         mining => dataExist([$domain, mining]),
         created => dataInfo([$domain])[data_time],
     ];
+}
+
+if (get_string(gas_spent) != null) {
+    $response[gas_spent] = dataGet([analytics, gas_spent, scriptPath()]) ?: 0;
+    $response[gas_gap] = 0.01;
+    $response[gas_recommended] = $response[gas_spent] + $response[gas_gap];
+    die(json_encode($response));
 }

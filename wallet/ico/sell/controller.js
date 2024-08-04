@@ -27,18 +27,13 @@ function openIcoSell($rootScope, domain, success) {
                 })
             }
 
-            $scope.calcTotal = function () {
-                if (domain == wallet.gas_domain) {
-                    $scope.total = Math.max(0, $scope.round($scope.amount * $scope.coin.price, 2) - 1)
-                } else {
-                    $scope.total = $scope.round($scope.amount * $scope.coin.price, 2)
-                }
-                return $scope.total
+            $scope.setMax = function () {
+                $scope.amount = $scope.coin.balance
+                $scope.calcTotal()
             }
 
-            $scope.setMax = function () {
-                $scope.amount = Math.max(0, $scope.coin.balance - 1)
-                $scope.calcTotal()
+            $scope.calcTotal = function () {
+                $scope.total = Math.max(0, $scope.round($scope.amount * $scope.coin.price - $scope.gas_recommended, 2))
             }
 
             function init() {
@@ -47,6 +42,12 @@ function openIcoSell($rootScope, domain, success) {
                     address: wallet.address(),
                 }, function (response) {
                     $scope.coin = response
+                    $scope.$apply()
+                })
+                postContract(domain, "api/token/ico/sell.php", {
+                    gas_spent: 1,
+                }, function (response) {
+                    $scope.gas_recommended = response.gas_recommended
                     $scope.$apply()
                 })
             }

@@ -34,12 +34,7 @@ function openLogin(success) {
                         address: $scope.username,
                         next_hash: md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
                     }, function () {
-                        postContract(wallet.quote_domain, "api/token/free_reg.php", {
-                            address: $scope.username,
-                            next_hash: md5(wallet.calcHash(wallet.quote_domain, $scope.username, $scope.password))
-                        }, function () {
-                            setPin()
-                        })
+                        setPin()
                     })
                 })
             }

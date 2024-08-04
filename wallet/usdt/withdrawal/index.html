@@ -14,36 +14,32 @@
                     <input type="text"
                            ng-model="withdrawal_address">
                 </div>
-                <p class="red-text" ng-show="errorWithdrawalAddress">Tron address is incorrect</p>
+                <p class="red-text" >{{errorAddress}}</p>
             </div>
             <div class="col">
                 <div class="row input-wrapper-black">
                     <div class="input-label">Amount USDT</div>
-                    <input type="number" ng-model="amount">
+                    <input type="number" ng-model="amount"
+                           ng-change="calcTotal()">
                     <div class="input-label-right row align-center-center ripple" ng-click="setMax()">
-                        <p>MAX</p>
+                        <p>MAX {{formatAmount(coin.balance)}}</p>
                     </div>
                 </div>
+                <p class="red-text" >{{errorAmount}}</p>
                 <div class="mt8 row nowrap">
-                    <p class="flex">Available</p>
-                    <p>{{formatAmount(coin.balance, wallet.quote_domain)}}</p>
+                    <p>Net commission: {{formatAmount(provider.fee, wallet.quote_domain)}}</p>
                 </div>
             </div>
+            <div class="col align-center-center">
+                <p class="">you get</p>
+                <p class="size32 bold">{{formatAmount(total, wallet.quote_domain)}}</p>
+            </div>
         </div>
-
-        <div class="divider-white"></div>
         <div class="row mh16 mv8">
-            <div class="flex-50 col size12 align-center-start">
-                <p>Total for receiver</p>
-                <p class="mt2 size16">{{getTotal()}} {{formatTicker(wallet.quote_domain)}}</p>
-                <p>Net commission: {{formatAmount(provider.fee, wallet.quote_domain)}}</p>
-            </div>
-            <div class="flex-50 row align-end-center">
-                <button class="flex primary-button radius4" ng-click="withdrawal()"
-                        ng-disabled="!withdrawal_address || !amount">
-                    Withdrawal
-                </button>
-            </div>
+            <button class="flex primary-button radius4" ng-click="withdrawal()"
+                    ng-disabled="!withdrawal_address || !amount || total == 0">
+                Withdrawal
+            </button>
         </div>
     </div>
 </md-bottom-sheet>

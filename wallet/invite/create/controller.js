@@ -25,12 +25,16 @@ function openInvite(domain, success) {
                 })
             }
 
-            $scope.setMax = function () {
+            $scope.getMax = function () {
                 if (domain == wallet.gas_domain){
-                    $scope.amount = Math.max(0, $scope.coin.balance - 1)
+                    return Math.round(Math.max(0, $scope.coin.balance - $scope.gas_recommended), 2)
                 } else {
-                    $scope.amount = $scope.coin.balance
+                    return $scope.coin.balance
                 }
+            }
+
+            $scope.setMax = function () {
+                $scope.amount = $scope.getMax()
             }
 
             $scope.getTotal = function (amount) {
@@ -52,6 +56,12 @@ function openInvite(domain, success) {
                     address: wallet.address(),
                 }, function (response) {
                     $scope.coin = response
+                    $scope.$apply()
+                })
+                postContract(domain, "api/token/invite/create.php", {
+                    gas_spent: 1,
+                }, function (response) {
+                    $scope.gas_recommended = response.gas_recommended
                     $scope.$apply()
                 })
             }

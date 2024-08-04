@@ -21,32 +21,24 @@
                                ng-change="calcAmount()">
                         <div class="input-label-right row align-center-center ripple"
                              ng-click="setMax()">
-                            <p>MAX</p>
+                            <p>MAX {{formatAmount(coin.gas_balance)}}</p>
                         </div>
                     </div>
                 </div>
                 <div class="mt8 row nowrap">
-                    <p class="flex">Available</p>
-                    <p>{{formatAmount(coin.balance, wallet.quote_domain)}}</p>
+                    <p>Net commission: {{formatAmount(gas_recommended, wallet.gas_domain)}}</p>
                 </div>
             </div>
             <div class="col align-center-center">
-                <p class="size32 bold">{{formatAmount(amount, domain)}}</p>
                 <p class="">you get</p>
+                <p class="size32 bold">{{formatAmount(amount, domain)}}</p>
             </div>
         </div>
-
-        <div class="divider-white"></div>
         <div class="row mh16 mv8">
-            <div class="flex-50 col size12 align-center-start">
-                <p>Net commission: {{formatAmount(1, wallet.gas_domain)}}</p>
-            </div>
-            <div class="flex-50 row align-end-center">
-                <button class="flex primary-button radius4 green-back" ng-click="ico_buy()"
-                        ng-disabled="!total || in_progress">
-                    Buy
-                </button>
-            </div>
+            <button class="flex primary-button radius4 green-back" ng-click="ico_buy()"
+                    ng-disabled="!total || in_progress">
+                Buy
+            </button>
         </div>
 
     </div>

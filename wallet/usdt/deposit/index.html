@@ -3,7 +3,7 @@
         <img src="/wallet/img/deposit.png">
     </div>
     <div class="row header align-start-center">
-        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
         <p>Deposit {{formatTicker(wallet.quote_domain)}}</p>
     </div>
     <div class="col content align-start-center">
@@ -17,10 +17,6 @@
                 <div class="input-label-right row align-center-center ripple" ng-click="copy()">
                     <p>Copy</p>
                 </div>
-            </div>
-            <div class="flex row mh16 ">
-                <div class="flex">Min deposit</div>
-                <div class="nowrap">{{formatAmount(min_deposit, wallet.quote_domain)}}</div>
             </div>
             <div class="flex row mh16 ">
                 <div class="flex">Deposit deadline</div>

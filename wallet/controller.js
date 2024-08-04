@@ -210,7 +210,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
             }, function (response) {
                 $scope.bonuses = response.bonuses
                 if (response.bonuses == null) {
-                    $scope.bonus_coins = {}
+                    $scope.bonus_coins = []
                 } else {
                     $scope.bonus_coins = Object.fromEntries(
                         response.result.map(o => [o.domain, o])
@@ -230,9 +230,7 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
                 invite_key: bonus.bonus_key,
             }, function (response) {
                 storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
-                setTimeout(function () {
-                    updateBonuses()
-                }, 3000)
+                updateBonuses()
                 showSuccessDialog("You have been received " + $scope.formatAmount(response.received, bonus.domain), init)
             }, function () {
                 //storage.removeFromArray(storageKeys.bonuses, bonus.bonus)
@@ -340,6 +338,13 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
 
     $scope.openTran = function (tran) {
         openTran(tran.domain, tran.txid)
+    }
+
+    $scope.adminClick = function () {
+        postContractWithGas("wallet", "api/init.php", {
+        }, function () {
+            showSuccessDialog("success")
+        })
     }
 
     init()

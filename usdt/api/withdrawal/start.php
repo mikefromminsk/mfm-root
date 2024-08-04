@@ -11,15 +11,14 @@ $provider = get_required(provider);
 if ($provider != "TRON") error("this chain is not available");
 $provider = PROVIDERS[$provider];
 
-if ($amount < $provider[min]) error("minimum amount is $provider[min]");
-if (dataWalletBalance(usdt, $address) < $amount + $provider[fee]) error("usdt not enough");
+if ($amount <= $provider[fee]) error("Amount is too small");
+if (dataWalletBalance(usdt, $address) - $amount < 0) error("usdt not enough");
 
-
-$withdrawal_id = dataWalletSend(usdt, $address, usdt_withdrawals, $amount + $provider[fee], $key, $next_hash);
+$withdrawal_id = dataWalletSend(usdt, $address, usdt_withdrawals, $amount, $key, $next_hash);
 
 dataSet([usdt, withdrawal, $withdrawal_id], [
     withdrawal_address => $withdrawal_address,
-    amount => $amount,
+    amount => $amount - $provider[fee],
     username => $address,
     provider => $provider[name],
 ]);
