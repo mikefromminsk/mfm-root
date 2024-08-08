@@ -53,7 +53,7 @@ function addFormats($scope) {
     $scope.formatDomain = function (domain) {
         if (domain == null) return ""
         if (domain.length > 5)
-            domain = domain.substr(0, 3)
+            domain = domain.substr(0, 3).toUpperCase()
         return domain
     }
     $scope.formatTicker = function (domain) {
