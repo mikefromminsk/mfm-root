@@ -13,6 +13,7 @@ define("FILE_ROW_SIZE", 256 + 64);
 define("HASH_ROW_SIZE", 32);
 
 define("PAGE_SIZE_DEFAULT", 20);
+define("BLOCK_SIZE", 10000);
 
 function dataCreateRow($data_parent_id, $data_key, $data_type)
 {
@@ -66,7 +67,7 @@ function dataSet(array $path_array, $value, $addHistory = true)
     $data = [
         data_value => $value,
         data_time => time(),
-        ];
+    ];
     if (is_numeric($value) && !is_string($value)) {
         $data[data_type] = DATA_NUMBER;
     } else if (is_bool($value)) {
@@ -203,7 +204,21 @@ function dataCommit()
         insertRow(data, $data);
     }
     foreach ($GLOBALS[new_history] as $data) {
-        insertRow(history, $data);
+        $id = insertRowAndGetId(history, $data);
+        if ($id % BLOCK_SIZE == 0) {
+            while ($id > 0) {
+                $id -= BLOCK_SIZE;
+                $block = select("select * from history where `id` >= $id limit 0," . BLOCK_SIZE);
+                $dirpath = $_SERVER["DOCUMENT_ROOT"] . "/../blocks";
+                $filepath = "$dirpath/$id.json";
+                if (!file_exists($filepath)) {
+                    mkdir($dirpath);
+                    file_put_contents($filepath, json_encode($block));
+                } else {
+                    break;
+                }
+            }
+        }
     }
     foreach ($GLOBALS[update_data] as $data_id => $data) {
         updateWhere(data, $data, [data_id => $data_id]);

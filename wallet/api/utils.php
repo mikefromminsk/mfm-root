@@ -1,7 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/analytics.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/data/api/track.php";
 
 $gas_domain = "usdt";
 
@@ -26,7 +26,7 @@ function dataWalletReg($address, $next_hash, $domain = null)
     if (dataExist([$path, $address])) error("$path/$address exist");
     dataSet([$path, $address, next_hash], $next_hash);
     dataWalletSettingsSave($address, domains, $domain);
-    trackSum($domain, wallets, 1);
+    trackVolume($domain, wallets, 1);
     return dataExist([$path, $address, next_hash]);
 }
 
@@ -51,11 +51,6 @@ function dataWalletBalance($domain, $address)
     return dataGet([$domain, wallet, $address, amount]) ?: 0.0;
 }
 
-function dataWalletBlocks()
-{
-    return ceil(time() / 60);
-}
-
 function dataWalletSend(
     $domain,
     $from_address,
@@ -75,7 +70,7 @@ function dataWalletSend(
     if (!dataExist([$domain, wallet, $to_address])) error("$to_address receiver doesn't exist");
     if ($key == null || $next_hash == null) {
         if (dataGet([$domain, wallet, $from_address, script]) != scriptPath())
-            error("script " . scriptPath() . " cannot use $from_address address " . dataGet([$domain, wallet, $from_address, script]));
+            error("script " . scriptPath() . " cannot use $from_address address. Only " . dataGet([$domain, wallet, $from_address, script]));
     } else {
         if (dataGet([$domain, wallet, $from_address, next_hash]) != md5($key))
             error("key is not right");
@@ -98,7 +93,7 @@ function dataWalletSend(
     dataSet([$domain, last_trans], $next_trans);
     dataSet([$domain, wallet, $from_address, last_trans], $next_trans);
     dataSet([$domain, wallet, $to_address, last_trans], $next_trans);
-    trackSum($domain, transfer, $amount);
+    trackVolume($domain, transfer, $amount);
     return $next_trans;
 }
 
@@ -224,29 +219,22 @@ function uploadContent($domain, $filepath, $local_path)
     return $files;
 }
 
-function hasNft($domain, $address, $item_hash)
-{
-    return dataGet([$domain, nft, wallet, $address, $item_hash, count]) > 0;
-}
-
-function dataIcoSell($key, $next_hash, $amount, $price)
+function dataIcoSell($key, $next_hash, $amount, $price) // shop
 {
     $domain = getDomain();
     $gas_address = get_required(gas_address);
     $owner_address = dataGet([wallet, info, $domain, owner]);
     if ($gas_address == $owner_address) {
         if (!dataExist([$domain, wallet, ico])) {
-            dataWalletReg(ico, md5(pass), $domain);
-            dataWalletDelegate($domain, ico, pass, "$domain/api/token/ico/buy.php");
-            dataWalletReg($domain . _ico, md5(pass), usdt);
-            dataWalletDelegate(usdt, $domain . _ico, pass, "$domain/api/token/ico/sell.php");
+            dataWalletRegScript($domain, $domain . _ico, "$domain/api/token/ico/buy.php");
+            dataWalletRegScript(usdt, $domain . _ico, "$domain/api/token/ico/sell.php");
         }
         dataWalletSend($domain, $gas_address, ico, $amount, $key, $next_hash);
         dataSet([$domain, price], $price);
     } else {
         $token_price = dataGet([$domain, price]);
         $total_usdt = $amount * $token_price;
-        dataWalletSend($domain, $gas_address, ico, $amount, $key, $next_hash);
+        dataWalletSend($domain, $gas_address, $domain . _ico, $amount, $key, $next_hash);
         dataWalletSend(usdt, $domain . _ico, $gas_address, $total_usdt);
     }
 }
@@ -287,14 +275,14 @@ function dataWalletBonusReceive($domain,
 
 }
 
-function dataWalletKey($path, $username, $password, $prev_key = "")
+function dataWalletKey($path, $address, $password, $prev_key = "")
 {
-    return md5($path . $username . $password . $prev_key);
+    return md5($path . $address . $password . $prev_key);
 }
 
-function dataWalletHash($path, $username, $password, $prev_key = "")
+function dataWalletHash($path, $address, $password, $prev_key = "")
 {
-    return md5(dataWalletKey($path, $username, $password, $prev_key));
+    return md5(dataWalletKey($path, $address, $password, $prev_key));
 }
 
 function dataWalletProfile($domain, $address = null)

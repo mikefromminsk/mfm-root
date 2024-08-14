@@ -7,8 +7,9 @@
              ng-show="coin.owner == wallet.address()"
              ng-click="openTokenSettings()">
     </div>
-    <div class="flex col content input-content scroll" ng-show="coin">
-        <ng-include src="'/wallet/card.html'"></ng-include>
+    <div class="flex col content scroll" ng-show="coin">
+        <div id="priceChart" style="width: 100%; min-height: 300px"></div>
+        <!--<ng-include src="'/wallet/card.html'"></ng-include>-->
         <div class="row scrollable-horizontal align-center-start">
             <div class="col align-start-center ripple"
                  ng-click="sendDialog()">

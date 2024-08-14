@@ -13,6 +13,6 @@ $order_id = place($address, $is_sell, $price, $amount, $key, $next_hash);
 
 if ($order_id == null) error("place error");
 
-$response[result] = true;
+$response[success] = true;
 
 commit($response, exchange_ . getDomain() . _gas);

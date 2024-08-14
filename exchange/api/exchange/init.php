@@ -3,16 +3,19 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $domain = getDomain();
 
-dataWalletRegScript($domain,exchange, $domain . "/api/exchange/place.php");
+dataWalletRegScript($domain,exchange_ . $domain, $domain . "/api/exchange/place.php");
 dataWalletRegScript(usdt,exchange_ . $domain, $domain . "/api/exchange/place.php");
 dataWalletRegScript(usdt,exchange_ . $domain . _gas, $domain . "/api/exchange/place.php");
+
+dataWalletRegScript(usdt,exchange_ . $domain . _bot_spred, $domain . "/api/exchange/bot_spred.php");
+dataWalletRegScript($domain,exchange_ . $domain . _bot_spred, $domain . "/api/exchange/bot_spred.php");
 
 if (DEBUG)
     query("DROP TABLE IF EXISTS `orders`;");
 query("CREATE TABLE IF NOT EXISTS `orders` (
   `order_id` int(11) NOT NULL AUTO_INCREMENT,
-  `domain` varchar(10) COLLATE utf8_bin NOT NULL,
-  `address` varchar(10) COLLATE utf8_bin NOT NULL,
+  `domain` varchar(256) COLLATE utf8_bin NOT NULL,
+  `address` varchar(256) COLLATE utf8_bin NOT NULL,
   `is_sell` int(1) NOT NULL,
   `status` int(1) DEFAULT 0,
   `price` double NOT NULL,

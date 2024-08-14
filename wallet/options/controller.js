@@ -83,6 +83,51 @@ function openOptions($rootScope, coin, success) {
                 openSendDialog(domain, $scope.coin.owner, "", init)
             }
 
+            var chart
+            var lineSeries
+
+            function initChart() {
+                setTimeout(function () {
+                    if (chart == null) {
+                        var tradeChart = document.getElementById("priceChart")
+                        chart = LightweightCharts.createChart(tradeChart, {
+                            layout: {
+                                background: { color: '#222' },
+                                textColor: '#DDD',
+                            },
+                            grid: {
+                                vertLines: { color: '#444' },
+                                horzLines: { color: '#444' },
+                            },
+                            crosshair: {
+                                mode: LightweightCharts.CrosshairMode.Normal,
+                            },
+                        });
+                        lineSeries = chart.addLineSeries();
+                        new ResizeObserver(entries => {
+                            if (entries.length === 0 || entries[0].target !== tradeChart) return;
+                            const newRect = entries[0].contentRect;
+                            chart.applyOptions({height: newRect.height, width: newRect.width});
+                        }).observe(tradeChart)
+                    }
+                    $scope.loadChart()
+                })
+            }
+
+            function loadChart() {
+                postContract("exchange", "api/exchange/chart.php", {
+                    domain: domain,
+                    key: "price",
+                    period_name: "1M",
+                }, function (response) {
+                    for (var i = 0; i < response.chart.length; i++) {
+                        response.chart[i].time =
+                            new Date(response.chart[i].time * 1000 + (i * 60 * 60 * 24 * 1000)).toJSON().slice(0, 10)
+                    }
+                    console.log(response.chart)
+                    lineSeries.setData(response.chart)
+                })
+            }
             function init() {
                 postContract("wallet", "api/profile.php", {
                     domain: domain,
@@ -91,7 +136,13 @@ function openOptions($rootScope, coin, success) {
                     $scope.coin = response
                     $scope.$apply()
                 })
+                initChart()
+                loadChart()
             }
+
+            setInterval(function () {
+                loadChart()
+            }, 3000)
 
             init()
         }

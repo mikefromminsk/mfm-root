@@ -19,8 +19,9 @@ function openLogin(success) {
                     return
                 }
                 $scope.in_progress = true
-                postContract(wallet.gas_domain, "api/token/wallet.php", {
+                postContract("wallet", "api/wallet.php", {
                     address: $scope.username,
+                    domain: wallet.gas_domain,
                 }, function (response) {
                     $scope.in_progress = false
                     if (md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password, response.prev_key)) == response.next_hash) {
@@ -30,7 +31,7 @@ function openLogin(success) {
                     }
                 }, function () {
                     $scope.in_progress = false
-                    postContract(wallet.gas_domain, "api/token/free_reg.php", {
+                    postContract(wallet.gas_domain, "api/token/reg.php", {
                         address: $scope.username,
                         next_hash: md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
                     }, function () {

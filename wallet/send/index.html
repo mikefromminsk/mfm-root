@@ -4,8 +4,7 @@
     </div>
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="back()">
-        <p ng-hide="block_to_address">Send</p>
-        <p ng-show="block_to_address">Donate</p>
+        Send {{formatTicker(domain)}}
     </div>
     <div class="col content">
         <div class="col input-content">
@@ -22,7 +21,7 @@
             </div>
             <div class="col">
                 <div class="row input-wrapper-black">
-                    <div class="input-label">Amount {{formatTicker(domain)}}</div>
+                    <div class="input-label">Amount</div>
                     <input type="number"
                            autocapitalize="off"
                            ng-model="amount">

@@ -1,16 +1,16 @@
 function controller(callback) {
     let app = angular.module("App", ['ngMaterial', 'ngAnimate'])
-    app.config(function($mdThemingProvider) {
-            $mdThemingProvider.theme('default')
-                .primaryPalette('indigo')
-                .accentPalette('grey');
-            // add light theme
+    app.config(function ($mdThemingProvider) {
+        $mdThemingProvider.theme('default')
+            .primaryPalette('indigo')
+            .accentPalette('grey');
+        // add light theme
         $mdThemingProvider.theme('default')
             .dark();
-        })
+    })
 
-   /* You supplied an invalid color palette for theme default's primary palette. Available palettes: red, pink, purple, deep-purple, ' +
-    'indigo, blue, light-blue, cyan, teal, green, light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey*/
+    /* You supplied an invalid color palette for theme default's primary palette. Available palettes: red, pink, purple, deep-purple, ' +
+     'indigo, blue, light-blue, cyan, teal, green, light-green, lime, yellow, amber, orange, deep-orange, brown, grey, blue-grey*/
     app.controller("Controller", callback)
 }
 
@@ -83,4 +83,36 @@ function showSuccess(message, success) {
     }
     if (success)
         success(message)
+}
+
+
+function getChartOptions() {
+    return {
+        layout: {
+            background: {color: '#222'},
+            textColor: '#DDD',
+        },
+        grid: {
+            vertLines: {color: '#444'},
+            horzLines: {color: '#444'},
+        },
+        crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal,
+        },
+    }
+}
+
+function chartResize(tradeChart, chart) {
+    new ResizeObserver(entries => {
+        if (entries.length === 0 || entries[0].target !== tradeChart) return;
+        const newRect = entries[0].contentRect;
+        chart.applyOptions({height: newRect.height, width: newRect.width});
+    }).observe(tradeChart)
+}
+
+function createChart(id) {
+    var tradeChart = document.getElementById(id)
+    var chart = LightweightCharts.createChart(tradeChart, getChartOptions())
+    chartResize(tradeChart, chart)
+    return chart;
 }

@@ -3,17 +3,24 @@
     <link rel="icon" href="/wallet/logo.svg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
 </head>
 
 <body class="col" ng-app="App" ng-controller="Controller">
-<div class="row header align-center">
-    <div class="row block align-start-center">
-        <p>Exchange {{domain}}</p>
+<div class="row header align-start-center">
+    <img class="img38 img-black ripple" src="/wallet/img/back.svg" ng-click="close()">
+    <div class="flex row">
+        <p>{{formatDomain(domain)}}</p>
     </div>
+    <div class="row">
+        <p>{{formatPrice(price)}}</p>
+    </div>
+    <img class="img32 img-black ripple button black-back"
+         src="/wallet/img/settings.svg" ng-click="openSettings()">
 </div>
 <div class="col content align-start-center scroll">
     <div class="col block">
-        <div id="tradeChart" style="width: 100%; height: 300px" ng-show="showChart = !showChart"></div>
+        <div id="tradeChart" style="width: 100%; min-height: 300px"></div>
         <div class="row mt16 mh8">
             <div class="col" style="min-width: 200px;">
                 <div class="row r3" style="height: 32px">
@@ -66,10 +73,10 @@
 
 
             <div class="flex col" style="margin-left: 10px">
-                <div class="row ripple r3 align-center-center" style="height: 32px"
+                <!--<div class="row ripple r3 align-center-center" style="height: 32px"
                      ng-class="{'gray400-back': showChart}" ng-click="showChartToggle()">
                     Chart
-                </div>
+                </div>-->
                 <div class="row size10 gray300-text mt16 nowrap">
                     <div class="flex">Price (USDT)</div>
                     <div>Amt ({{formatDomain(domain)}})</div>
@@ -78,32 +85,47 @@
 
                 <!--orderbook-->
                 <div class="col align-end" style="height: calc(20px * 6)">
-                    <div class="row align-start-center ripple"
+                    <div class="row align-start-center ripple ph8"
                          ng-repeat="item in sell"
                          style="height: 20px; position: relative"
                          ng-click="sellLineClick($index)">
                         <div class="red-back" style="position: absolute; height: 100%; opacity: 0.09;"
                              ng-style="{'min-width': item.percent + '%'}"></div>
-                        <div class="flex ml4 red-text">{{formatPrice(item.price)}}</div>
+                        <div class="flex red-text">{{formatPrice(item.price)}}</div>
                         <div class="red-text">{{formatAmount(item.amount)}}</div>
                     </div>
                 </div>
                 <md-divider></md-divider>
                 <div class="col align-start" style="height: calc(20px * 6)">
-                    <div class="row align-start-center ripple"
+                    <div class="row align-start-center ripple ph8"
                          ng-repeat="item in buy" style="height: 20px; position: relative"
                          ng-click="buyLineClick($index)">
                         <div class="green-back" style="position: absolute; height: 100%; opacity: 0.09;"
                              ng-style="{'min-width': item.percent + '%'}"></div>
-                        <div class="flex ml4 green-text">{{formatPrice(item.price)}}</div>
+                        <div class="flex green-text">{{formatPrice(item.price)}}</div>
                         <div>{{formatAmount(item.amount)}}</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="flex primary-button" ng-click="init()">
-        Init
+        <div class="col ph8">
+            <p class="mt16">Orders</p>
+            <div class="row mt16 nowrap size12 align-start-center" ng-repeat="item in orders">
+                <div ng-style="getLogo(domain)"></div>
+                <div class="flex col ml8">
+                    <p>{{formatDomain(domain)}}/USDT</p>
+                    <p class="mt4 size8 gray300-text">{{formatTime(item.timestamp)}}</p>
+                </div>
+                <div class="flex col align-start-end">
+                    <p>{{formatAmount(item.amount, domain)}}</p>
+                    <p class="mt4 size8 gray300-text">Filled {{round(item.filled / item.amount, 2) * 100}}%</p>
+                </div>
+                <div class="flex-30 col align-start-end">
+                    <p>{{formatPrice(item.price)}}</p>
+                    <p class="mt4 size8 gray300-text">{{item.status == 0 ? "Active" : (item.filled == item.amount ? "Finished" : "Canceled")}}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -132,4 +154,7 @@
 <script async src="/wallet/dialogs/pin/controller.js"></script>
 <script async src="/wallet/dialogs/success/controller.js"></script>
 <script async src="/wallet/dialogs/info/controller.js"></script>
+
+<script async src="/exchange/console/settings/controller.js"></script>
+<script async src="/wallet/send/controller.js"></script>
 </body>

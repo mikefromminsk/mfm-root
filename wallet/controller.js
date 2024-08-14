@@ -167,8 +167,9 @@ function main($scope, $http, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.addFavorite = function (domain, success) {
-        postContract(domain, "api/token/wallet.php", {
-            address: wallet.address()
+        postContract("wallet", "api/token/wallet.php", {
+            address: wallet.address(),
+            domain: domain,
         }, function () {
             addToStorage(domain)
         }, function () {

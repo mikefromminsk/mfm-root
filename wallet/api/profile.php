@@ -28,7 +28,14 @@ foreach (dataKeys([$domain, packages]) as $app_domain) {
     ];
 }
 
-function addValue(&$coin, $domain, $key)
+function addVolume(&$coin, $domain, $key)
+{
+    $coin[$key] = dataGet([analytics, $domain, $key, "S" . (60 * 60 * 24), value]);
+    $coin[$key . "7d"] = 15500;
+    $coin[$key . "7dChange"] = 21;
+}
+
+function addCandles(&$coin, $domain, $key)
 {
     $val = dataGet([analytics, $domain, $key, "S" . (60 * 60 * 24), open]);
     if ($val == null) return;
@@ -40,17 +47,10 @@ function addValue(&$coin, $domain, $key)
     $coin[$key . "7dChange"] = 12;
 }
 
-function addSum(&$coin, $domain, $key)
-{
-    $coin[$key] = dataGet([analytics, $domain, $key, "S" . (60 * 60 * 24), value]);
-    $coin[$key . "7d"] = 15500;
-    $coin[$key . "7dChange"] = 21;
-}
-
-addValue($coin, $domain, price);
-addSum($coin, $domain, wallets);
-addSum($coin, $domain, transfers);
-addSum($coin, $domain, volume);
+addVolume($coin, $domain, wallets);
+addVolume($coin, $domain, transfers);
+addVolume($coin, $domain, volume);
+addCandles($coin, $domain, price);
 $coin[mcap] = $coin[total] * $coin[price];
 
 $coin[pie][blocked] = 0;

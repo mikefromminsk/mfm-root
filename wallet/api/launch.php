@@ -16,7 +16,7 @@ if (strlen($domain) < 3 || strlen($domain) > 16) error("domain length has to be 
 
 $response[file_hash] = installApp($domain, "drc1");
 
-dataWalletRegScript($gas_domain, $domain . _reg, "$domain/api/token/free_reg.php");
+dataWalletRegScript($gas_domain, $domain . _reg, "$domain/api/token/reg.php");
 
 dataWalletReg($address, $next_hash, $domain);
 dataSet([$wallet_path, $address, amount], $amount);
