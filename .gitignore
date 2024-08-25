@@ -1,5 +1,13 @@
 .git
 .idea
+.gradle
+build
+out
+gradlew
+gradlew.bat
+gradle
+gradle.properties
+settings.gradle
 app.zip
 _gsdata_
 properties.php
