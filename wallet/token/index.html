@@ -72,7 +72,7 @@
         <div class="col" ng-repeat="token in activeTokens">
             <div class="col">
                 <div class="row ph16 pv8 align-start-center ripple"
-                     ng-click="openTokenProfile(token)">
+                     ng-click="openTokenProfile(token.domain)">
                     <div ng-style="getLogo(token.domain)"></div>
                     <div class="col flex ml8">
                         <p class="size16 uppercase medium">{{token.domain}}</p>
@@ -98,7 +98,7 @@
         </div>
         <div class="col ripple"
              ng-repeat="token in recTokens"
-             ng-click="openTokenProfile(token)">
+             ng-click="openTokenProfile(token.domain)">
             <div class="row pv8 ph16 align-start-center">
                 <div ng-style="getLogo(token.domain)"></div>
                 <div class="col flex ml8">

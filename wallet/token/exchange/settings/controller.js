@@ -1,6 +1,6 @@
 function openSettings(domain, success) {
     window.$mdDialog.show({
-        templateUrl: '/exchange/console/settings/index.html',
+        templateUrl: '/wallet/token/exchange/settings/index.html',
         controller: function ($scope) {
             addFormats($scope)
             window.$mdToast = $mdToast
@@ -98,8 +98,8 @@ function openSettings(domain, success) {
             function init() {
                 getBalance("usdt", "exchange_" + domain + "_bot_spred")
                 getBalance(domain, "exchange_" + domain + "_bot_spred")
-                getBalance("usdt", "exchange_" + domain + "_bot_pump")
-                getBalance(domain, "exchange_" + domain + "_bot_pump")
+                /*getBalance("usdt", "exchange_" + domain + "_bot_pump")
+                getBalance(domain, "exchange_" + domain + "_bot_pump")*/
                 loadPumpVals()
                 initChart()
             }

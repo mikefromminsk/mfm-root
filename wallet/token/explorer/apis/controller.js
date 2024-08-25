@@ -89,7 +89,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.makeRequest = function () {
-        var domain = $scope.selectedCoin.domain
+        var domain = $scope.selectedToken
         var path = $scope.path.substring((domain + "/").length);
         var params = {}
         Object.values($scope.info.params).forEach(param => {

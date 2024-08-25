@@ -36,29 +36,14 @@ function openAppSettings(domain, success) {
                     var zip = new JSZip();
                     zip.file("logo.svg", file);
                     zip.generateAsync({type: "blob"}).then(function (content) {
-                        uploadFile($scope.domain, content, function () {
+                        postContract("wallet", "store/api/upload.php", {
+                            domain: domain,
+                            file: content,
+                        }, function () {
                             showSuccess("Logo uploaded successfully")
                         })
                     });
                 }, ".svg")
-            }
-
-            $scope.uploadPreview = function () {
-                selectFile(function (file) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        $scope.imgshow = e.target.result;
-                    }
-                    reader.readAsDataURL(file);
-
-                    var zip = new JSZip();
-                    zip.file("preview.jpg", file);
-                    zip.generateAsync({type: "blob"}).then(function (content) {
-                        uploadFile($scope.domain, content, function () {
-                            showSuccess("Preview uploaded successfully")
-                        })
-                    });
-                }, ".jpg")
             }
 
             $scope.archive = function () {

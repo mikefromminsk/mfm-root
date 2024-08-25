@@ -52,21 +52,12 @@ function openLogin(success) {
 
             function setPin() {
                 getPin(function (pin) {
-                    storage.pushToArray(storageKeys.domains, wallet.gas_domain)
                     storage.setString(storageKeys.username, $scope.username)
                     storage.setString(storageKeys.passhash, encode($scope.password, pin))
                     if (pin != null)
                         storage.setString(storageKeys.hasPin, true)
-
-                    post("/wallet/api/settings/read.php", {
-                        key: "domains",
-                        user: $scope.username,
-                    }, function (response) {
-                        for (let setting of response.settings)
-                            storage.pushToArray(storageKeys.domains, setting)
-                        if (success) success()
-                        $scope.close()
-                    })
+                    if (success) success()
+                    $scope.close()
                 })
             }
         }

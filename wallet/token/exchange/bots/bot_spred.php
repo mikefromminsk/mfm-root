@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/exchange/utils/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/token/exchange/api/utils.php";
 
 $domain = get_required(domain);
 
@@ -9,8 +9,10 @@ $orderbook = getOrderbook($domain, $bookcount);
 $usdt_need = 10;
 
 $address = exchange_ . $domain . _bot_spred;
-$token_price = getCandleLastValue($domain, price);
+$token_price = getCandleLastValue($domain . _price);
 
+tokenScriptReg(usdt,exchange_ . $domain . _bot_spred, "wallet/token/exchange/bots/bot_spred.php");
+tokenScriptReg($domain,exchange_ . $domain . _bot_spred, "wallet/token/exchange/bots/bot_spred.php");
 
 $response[success] = false;
 
@@ -26,7 +28,7 @@ if ($amount_buy > 0) {
     $order_max_price = $token_price - 0.01;
     $order_min_price = round($order_max_price * 0.98, 2);
     //echo $order_min_price . " " . $order_max_price . " " . $amount_buy . "\n";
-    placeRange($order_min_price, $order_max_price, 3, $amount_buy, 0, $address);
+    placeRange($domain, $order_min_price, $order_max_price, 3, $amount_buy, 0, $address);
     $response[success] = true;
 }
 
@@ -41,7 +43,7 @@ if ($amount_sell > 0) {
     $order_min_price = $token_price + 0.01;
     $order_max_price = round($order_min_price * 1.02, 2);
     //echo $order_min_price . " " . $order_max_price . " " . $amount_sell . "\n";
-    placeRange($order_min_price, $order_max_price, 3, $amount_sell, 1, $address);
+    placeRange($domain, $order_min_price, $order_max_price, 3, $amount_sell, 1, $address);
     $response[success] = true;
 }
 

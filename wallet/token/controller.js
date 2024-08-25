@@ -14,10 +14,10 @@ function addTokens($scope) {
         openLogin(init)
     }
 
-    $scope.openTokenProfile = function (coin) {
-        openTokenProfile($scope, coin, function (result) {
+    $scope.openTokenProfile = function (domain) {
+        openTokenProfile($scope, domain, function (result) {
             if (result && result.action == "store") {
-                $scope.selectCoin(coin)
+                $scope.selectToken(domain)
             } else {
                 init()
             }
@@ -76,7 +76,7 @@ function addTokens($scope) {
 
     $scope.regAddress = function (domain) {
         getPin(function (pin) {
-            wallet.calcPass(domain, pin, function (pass) {
+            calcPass(domain, pin, function (pass) {
                 postContract("wallet", "reg.php", {
                     address: wallet.address(),
                     domain: domain,
@@ -119,6 +119,19 @@ function addTokens($scope) {
             }
         }
     }*/
+
+    function showTopMessage(message) {
+        $mdToast.show($mdToast.simple().position('top').textContent(message))
+        setTimeout(function () {
+            new Audio("/wallet/dialogs/success/payment_success.mp3").play()
+        })
+    }
+
+    subscribe("transactions", function (data) {
+        if (data.tran.to == wallet.address()) {
+            showTopMessage("You received " + $scope.formatAmount(data.tran.amount, data.tran.domain))
+        }
+    });
 
     init()
 }

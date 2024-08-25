@@ -58,7 +58,7 @@ function openTokenSettings(domain, success) {
             }
 
             $scope.saveLogo = function () {
-                postContract("wallet", "api/upload_file.php", {
+                postContract("wallet", "store/api/upload_file.php", {
                     filename: "/wallet/token/logo/img/" + domain + ".svg",
                     file: genSvg($scope.logo),
                 }, function () {

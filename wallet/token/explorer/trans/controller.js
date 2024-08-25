@@ -16,7 +16,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             if (getParam("domain")) {
                 $scope.selectDomain($scope.searchCoins[0])
                 if (getParam("txid"))
-                    openTran($scope.selectedCoin.domain, getParam("txid"))
+                    openTran($scope.selectedToken, getParam("txid"))
             }
         })
     })
@@ -41,6 +41,6 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     $scope.searchTran = function () {
-        openTran($scope.selectedCoin.domain, $scope.searchTxid)
+        openTran($scope.selectedToken, $scope.searchTxid)
     }
 }

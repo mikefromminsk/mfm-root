@@ -35,8 +35,9 @@ if ($address != null) {
         return -strcmp($a[balance] * $a[price], $b[balance] * $b[price]);
     });
 } else {
-    $domains = selectList("select distinct `domain` from addresses limit 0, 20"
-        . " and `domain` like '$search_text%'");
+    $domains = selectList("select distinct `domain` from addresses"
+        . " where `domain` like '$search_text%'"
+        . " limit 0, 20");
     foreach ($domains as $domain)
         $response[recs][] = dataWalletProfile($domain, $address);
 }

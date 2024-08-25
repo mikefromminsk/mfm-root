@@ -1,6 +1,5 @@
 <?php
-
-include_once "utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
 
 $domain = get_required(domain);
 $address = get_required(address);

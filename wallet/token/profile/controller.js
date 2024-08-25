@@ -1,9 +1,8 @@
-function openTokenProfile($rootScope, coin, success) {
+function openTokenProfile($rootScope, domain, success) {
     window.$mdDialog.show({
         templateUrl: '/wallet/token/profile/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            var domain = coin.domain
             $scope.siteExist = false
 
             function checkFavorite() {
@@ -48,12 +47,12 @@ function openTokenProfile($rootScope, coin, success) {
                 })
             }
 
-            $scope.ico_sell = function () {
-                openWeb(location.origin + "/exchange/console?is_sell=1&domain=" + domain, init)
+            $scope.sell = function () {
+                openExchange(domain, 1, init)
             }
 
-            $scope.ico_buy = function () {
-                openWeb(location.origin + "/exchange/console?is_sell=0&domain=" + domain, init)
+            $scope.buy = function () {
+                openExchange(domain, 0, init)
             }
 
             $scope.share = function () {
@@ -108,17 +107,20 @@ function openTokenProfile($rootScope, coin, success) {
                 })
             }
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.coin = response
-                    $scope.$apply()
-                })
+                loadProfile()
                 initChart()
                 loadChart()
             }
 
+            function loadProfile() {
+                postContract("wallet", "api/profile.php", {
+                    domain: domain,
+                    address: wallet.address(),
+                }, function (response) {
+                    $scope.token = response
+                    $scope.$apply()
+                })
+            }
            /* setInterval(function () {
                 loadChart()
             }, 3000)*/

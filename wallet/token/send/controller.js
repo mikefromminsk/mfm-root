@@ -18,7 +18,7 @@ function openSendDialog(domain, to_address, amount, success) {
                     return
                 }
                 getPin(function (pin) {
-                    wallet.calcPass(domain, pin, function (pass) {
+                    calcPass(domain, pin, function (pass) {
                         postContract("token", "send.php", {
                             domain: domain,
                             from_address: wallet.address(),

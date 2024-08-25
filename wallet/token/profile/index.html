@@ -4,10 +4,10 @@
         <p class="flex">Token profile</p>
         <img class="img32 radius8 img-black"
              src="/wallet/img/settings.svg"
-             ng-show="coin.owner == wallet.address()"
+             ng-show="token.owner == wallet.address()"
              ng-click="openTokenSettings()">
     </div>
-    <div class="flex col content scroll" ng-show="coin">
+    <div class="flex col content scroll" ng-show="token">
         <div id="priceChart" style="width: 100%; min-height: 300px"></div>
         <!--<ng-include src="'/wallet/card.html'"></ng-include>-->
         <div class="row scrollable-horizontal align-center-start">
@@ -33,7 +33,7 @@
                 <p class="size12 mt4 gray400-text">Store</p>
             </div>
             <div class="col align-start-center ripple"
-                 ng-show="coin.mining"
+                 ng-show="token.mining"
                  ng-click="openMining()">
                 <div class="p8 mt16 mh16 row align-center button-gray radius12">
                     <img class="img24 img-accent" src="/wallet/img/mining.svg">
@@ -41,7 +41,7 @@
                 <p class="size12 mt4 gray400-text">Mining</p>
             </div>
             <div class="col align-start-center ripple"
-                 ng-show="coin.domain == 'usdt'"
+                 ng-show="token.domain == 'usdt'"
                  ng-click="openWithdrawal()">
                 <div class="p8 mt16 mh16 row align-center button-gray radius12">
                     <img class="img24 img-accent" src="/wallet/img/upload.svg">
@@ -76,7 +76,7 @@
                      "slack":"",
                      "facebook":"",
                      "twitter":"https://twitter.com/pancakeswap",
-                     "bitcointalk":"",
+                     "bittokentalk":"",
                      "github":"https://github.com/pancakeswap",
                      "telegram":"https://t.me/PancakeSwap",
                      "wechat":"",
@@ -90,40 +90,40 @@
                 <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200); min-width: 80px">
                     <p class="gray400-text size10">MCAP</p>
                     <div class="row mt8 align-start-end">
-                        <p class="black-text size14">{{formatPrice(coin.mcap)}}</p>
+                        <p class="black-text size14">{{formatPrice(token.mcap)}}</p>
                         <p class="ml4 black-text size12"
-                           ng-class="percentColor(coin.price7dChange)">
-                            {{formatPercent(coin.price7dChange)}}
+                           ng-class="percentColor(token.price7dChange)">
+                            {{formatPercent(token.price7dChange)}}
                         </p>
                     </div>
                 </div>
                 <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
                     <p class="gray400-text size10">Wallets7d</p>
                     <div class="row mt8 align-start-end">
-                        <p class="black-text size14">{{formatAmount(coin.wallets7d)}}</p>
+                        <p class="black-text size14">{{formatAmount(token.wallets7d)}}</p>
                         <p class="ml4 black-text size12"
-                           ng-class="percentColor(coin.wallets7dChange)">
-                            {{formatPercent(coin.wallets7dChange)}}
+                           ng-class="percentColor(token.wallets7dChange)">
+                            {{formatPercent(token.wallets7dChange)}}
                         </p>
                     </div>
                 </div>
                 <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
                     <p class="gray400-text size10">Transfers7d</p>
                     <div class="row mt8 align-start-end">
-                        <p class="black-text size14">{{formatAmount(coin.transfers7d)}}</p>
+                        <p class="black-text size14">{{formatAmount(token.transfers7d)}}</p>
                         <p class="ml4 black-text size12"
-                           ng-class="percentColor(coin.transfers7dChange)">
-                            {{formatPercent(coin.transfers7dChange)}}
+                           ng-class="percentColor(token.transfers7dChange)">
+                            {{formatPercent(token.transfers7dChange)}}
                         </p>
                     </div>
                 </div>
                 <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
                     <p class="gray400-text size10">Volume7d</p>
                     <div class="row mt8 align-start-end">
-                        <p class="black-text size14">{{formatAmount(coin.volume7d)}}</p>
+                        <p class="black-text size14">{{formatAmount(token.volume7d)}}</p>
                         <p class="ml4 black-text size12"
-                           ng-class="percentColor(coin.volume7dChange)">
-                            {{formatPercent(coin.volume7dChange)}}
+                           ng-class="percentColor(token.volume7dChange)">
+                            {{formatPercent(token.volume7dChange)}}
                         </p>
                     </div>
                 </div>
@@ -133,22 +133,22 @@
                 <div class="flex col ml8 size14 gray400-text">
                     <div class="row mt4">
                         <p class="flex">Circulation supply</p>
-                        <p class="nowrap">{{formatAmount(coin.pie.circulation, coin.domain)}}</p>
+                        <p class="nowrap">{{formatAmount(token.pie.circulation, token.domain)}}</p>
                     </div>
                     <div class="divider"></div>
                     <div class="row">
                         <p class="flex">Total supply</p>
-                        <p class="nowrap">{{formatAmount(coin.total, coin.domain)}}</p>
+                        <p class="nowrap">{{formatAmount(token.total, token.domain)}}</p>
                     </div>
                     <div class="divider"></div>
                     <div class="row mt4">
                         <p class="flex">Sale pool</p>
-                        <p class="nowrap">{{formatAmount(coin.pie.ico, coin.domain)}}</p>
+                        <p class="nowrap">{{formatAmount(token.pie.ico, token.domain)}}</p>
                     </div>
                     <div class="divider"></div>
                     <div class="row mt4">
                         <p class="flex">Created</p>
-                        <p class="nowrap">{{formatTimeDiff(coin.created)}} ago</p>
+                        <p class="nowrap">{{formatTimeDiff(token.created)}} ago</p>
                     </div>
                 </div>
             </div>
@@ -159,17 +159,17 @@
                 <div class="flex col ml8 size14 gray400-text">
                     <div class="row mt4">
                         <p class="flex">Transactions</p>
-                        <p class="nowrap">{{formatAmount(coin.trans)}}</p>
+                        <p class="nowrap">{{formatAmount(token.trans)}}</p>
                     </div>
                     <div class="divider"></div>
                     <div class="row mt4">
                         <p class="flex">Wallets</p>
-                        <p class="nowrap">{{formatAmount(coin.wallets)}}</p>
+                        <p class="nowrap">{{formatAmount(token.wallets)}}</p>
                     </div>
                     <div class="divider"></div>
                     <div class="row">
                         <p class="flex">Nodes</p>
-                        <p class="nowrap">{{formatAmount(coin.nodes)}}</p>
+                        <p class="nowrap">{{formatAmount(token.nodes)}}</p>
                     </div>
                 </div>
             </div>
@@ -177,7 +177,7 @@
             <div class="row" style="margin-top: 32px;">
                 <p class="vertical-text size16 bold mt4">DApps</p>
                 <div class="flex col ml8 size14 gray400-text">
-                    <div class="col" ng-repeat="(domain, app) in coin.dapps">
+                    <div class="col" ng-repeat="(domain, app) in token.dapps">
                         <div class="row mt4">
                             <p class="flex">{{domain}}</p>
                             <p class="nowrap">{{formatHash(app.hash)}}</p>
@@ -190,30 +190,29 @@
             <div class="col mt16">
                 <p class="bold">Description</p>
                 <p class="mt8" style="white-space: normal;">
-                    {{formatTicker(coin.domain)}} = это цифровой актив (сертификат), который представляет определенную
+                    {{formatTicker(token.domain)}} = это цифровой актив (сертификат), который представляет определенную
                     стоимость, функционирует на основе блокчейна или другой децентрализованной сети и гарантирует
                     обязательства компании перед его владельцем.</p>
             </div>
             <div class="row gap16 mv16">
-                <div class="button" ng-show="coin.ui == 1" ng-click="openSite()">
+                <div class="button" ng-show="token.ui == 1" ng-click="openSite()">
                     Web site
                 </div>
-                <a class="button" ng-show="wallet" href="/explorer?domain={{coin.domain}}" target="_blank">
+                <a class="button" ng-show="wallet" href="/explorer?domain={{token.domain}}" target="_blank">
                     Explorer
                 </a>
             </div>
         </div>
     </div>
-    <div class="col mb16 align-start-center p4"
-         ng-show="coin.dapps.exchange != null">
+    <div class="col mb16 align-start-center p4">
         <div class="row block" style="gap: 4px">
             <div class="flex primary-button green-back radius4"
-                 ng-click="ico_buy()">
+                 ng-click="buy()">
                 BUY
             </div>
             <div class="flex primary-button red-back radius4"
-                 ng-click="ico_sell()"
-                 ng-disabled="coin.balance <= 0">
+                 ng-click="sell()"
+                 ng-disabled="token.balance <= 0">
                 SELL
             </div>
         </div>

@@ -67,16 +67,12 @@ const storageKeys = {
     onboardingShowed: "STORE_ONBOARDING_SHOWED",
 }
 
-
 function postContractWithGas(domain, contractHash, params, success, error) {
     wallet.postContractWithGas(domain, contractHash, params, success, error)
 }
 
-function uploadFile(domain, file, success) {
-    postContractWithGas("wallet", "store/api/upload.php", {
-        domain: domain,
-        file: file,
-    }, success)
+function calcPass(domain, pin, success, error) {
+    wallet.calcPass(domain, pin, success, error)
 }
 
 var wallet = {
@@ -123,7 +119,7 @@ var wallet = {
         var isParamsFunction = typeof params === 'function'
         getPin(function (pin) {
             if (isParamsFunction) {
-                wallet.calcPass(domain, pin,function (pass, key) {
+                calcPass(domain, pin,function (pass, key) {
                     params = params(pass)
                     if (domain == wallet.gas_domain) {
                         wallet.calcKeyHash(wallet.gas_domain, key, pin,function (gas_key, gas_next_hash) {
@@ -138,7 +134,7 @@ var wallet = {
             }
 
             function calcGas(params) {
-                wallet.calcPass(wallet.gas_domain, pin, function (pass) {
+                calcPass(wallet.gas_domain, pin, function (pass) {
                     send(params, pass)
                 })
             }
