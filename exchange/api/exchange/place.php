@@ -1,6 +1,6 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/exchange/api/exchange/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/exchange/utils/utils.php";
 
 $is_sell = get_int_required(is_sell);
 $address = get_required(address);

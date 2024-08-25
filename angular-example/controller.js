@@ -8,7 +8,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         openAccount()
     }
 
-    var domain = $scope.getUriParam("domain")
+    var domain = getParam("domain")
 
     function init() {
         loadProfile()

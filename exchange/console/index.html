@@ -12,11 +12,14 @@
     <div class="flex row">
         <p>{{formatDomain(domain)}}</p>
     </div>
-    <div class="row">
+    <div class="col align-start-end">
         <p>{{formatPrice(price)}}</p>
+        <p class="size14" ng-class="percentColor(change24)">{{formatPercent(change24)}}</p>
     </div>
     <img class="img32 img-black ripple button black-back"
-         src="/wallet/img/settings.svg" ng-click="openSettings()">
+         src="/wallet/img/settings.svg"
+         ng-show="coin.owner == wallet.address()"
+         ng-click="openSettings()">
 </div>
 <div class="col content align-start-center scroll">
     <div class="col block">
@@ -156,5 +159,5 @@
 <script async src="/wallet/dialogs/info/controller.js"></script>
 
 <script async src="/exchange/console/settings/controller.js"></script>
-<script async src="/wallet/send/controller.js"></script>
+<script async src="/wallet/token/send/controller.js"></script>
 </body>

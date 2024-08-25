@@ -1,0 +1,221 @@
+<md-dialog class="fill col">
+    <div class="row header align-start-center">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p class="flex">Token profile</p>
+        <img class="img32 radius8 img-black"
+             src="/wallet/img/settings.svg"
+             ng-show="coin.owner == wallet.address()"
+             ng-click="openTokenSettings()">
+    </div>
+    <div class="flex col content scroll" ng-show="coin">
+        <div id="priceChart" style="width: 100%; min-height: 300px"></div>
+        <!--<ng-include src="'/wallet/card.html'"></ng-include>-->
+        <div class="row scrollable-horizontal align-center-start">
+            <div class="col align-start-center ripple"
+                 ng-click="sendDialog()">
+                <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                    <img class="img24 img-accent" src="/wallet/img/send.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Send</p>
+            </div>
+            <div class="col align-start-center ripple"
+                 ng-click="share()">
+                <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                    <img class="img24 img-accent" src="/wallet/img/share.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Share</p>
+            </div>
+            <div class="col align-start-center ripple"
+                 ng-click="openStore()">
+                <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                    <img class="img24 img-accent" src="/wallet/img/store.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Store</p>
+            </div>
+            <div class="col align-start-center ripple"
+                 ng-show="coin.mining"
+                 ng-click="openMining()">
+                <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                    <img class="img24 img-accent" src="/wallet/img/mining.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Mining</p>
+            </div>
+            <div class="col align-start-center ripple"
+                 ng-show="coin.domain == 'usdt'"
+                 ng-click="openWithdrawal()">
+                <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                    <img class="img24 img-accent" src="/wallet/img/upload.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Withdrawal</p>
+            </div>
+            <div class="col align-start-center ripple"
+                 ng-click="donate()">
+                <div class="p8 mt16 mh16 row align-center button-gray radius12">
+                    <img class="img24 img-accent" src="/wallet/img/donate.svg">
+                </div>
+                <p class="size12 mt4 gray400-text">Donate</p>
+            </div>
+        </div>
+        <div class="mh16">
+            <!--
+            Потребление 24h
+            Выпуск 24h
+
+            /*         "contractAddress":"0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82",
+                     "tokenName":"PancakeSwap Token",
+                     "symbol":"Cake",
+                     "divisor":"18",
+                     "tokenType":"ERC20",
+                     "totalSupply":"431889535.843059000000000000",
+                     "blueCheckmark":"true",
+                     "description":"PancakeSwap is a yield farming project whereby users can get FLIP (LP token) for staking and get CAKE token as reward. CAKE holders can swap CAKE for SYRUP for additional incentivized staking.",
+                     "website":"https://pancakeswap.finance/",
+                     "email":"PancakeSwap@gmail.com",
+                     "blog":"https://medium.com/@pancakeswap",
+                     "reddit":"",
+                     "slack":"",
+                     "facebook":"",
+                     "twitter":"https://twitter.com/pancakeswap",
+                     "bitcointalk":"",
+                     "github":"https://github.com/pancakeswap",
+                     "telegram":"https://t.me/PancakeSwap",
+                     "wechat":"",
+                     "linkedin":"",
+                     "discord":"",
+                     "whitepaper":"",
+                     "tokenPriceUSD":"23.9300000000"*/
+            -->
+
+            <div class="row mt16 scrollable-horizontal">
+                <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200); min-width: 80px">
+                    <p class="gray400-text size10">MCAP</p>
+                    <div class="row mt8 align-start-end">
+                        <p class="black-text size14">{{formatPrice(coin.mcap)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(coin.price7dChange)">
+                            {{formatPercent(coin.price7dChange)}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
+                    <p class="gray400-text size10">Wallets7d</p>
+                    <div class="row mt8 align-start-end">
+                        <p class="black-text size14">{{formatAmount(coin.wallets7d)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(coin.wallets7dChange)">
+                            {{formatPercent(coin.wallets7dChange)}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
+                    <p class="gray400-text size10">Transfers7d</p>
+                    <div class="row mt8 align-start-end">
+                        <p class="black-text size14">{{formatAmount(coin.transfers7d)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(coin.transfers7dChange)">
+                            {{formatPercent(coin.transfers7dChange)}}
+                        </p>
+                    </div>
+                </div>
+                <div class="col p8 mr4 radius8" style="border: 1px solid var(--gray200);">
+                    <p class="gray400-text size10">Volume7d</p>
+                    <div class="row mt8 align-start-end">
+                        <p class="black-text size14">{{formatAmount(coin.volume7d)}}</p>
+                        <p class="ml4 black-text size12"
+                           ng-class="percentColor(coin.volume7dChange)">
+                            {{formatPercent(coin.volume7dChange)}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt16">
+                <p class="vertical-text size16 bold mt4">Tokenomics</p>
+                <div class="flex col ml8 size14 gray400-text">
+                    <div class="row mt4">
+                        <p class="flex">Circulation supply</p>
+                        <p class="nowrap">{{formatAmount(coin.pie.circulation, coin.domain)}}</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <p class="flex">Total supply</p>
+                        <p class="nowrap">{{formatAmount(coin.total, coin.domain)}}</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row mt4">
+                        <p class="flex">Sale pool</p>
+                        <p class="nowrap">{{formatAmount(coin.pie.ico, coin.domain)}}</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row mt4">
+                        <p class="flex">Created</p>
+                        <p class="nowrap">{{formatTimeDiff(coin.created)}} ago</p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row" style="margin-top: 32px;">
+                <p class="vertical-text size16 bold mt4">Network</p>
+                <div class="flex col ml8 size14 gray400-text">
+                    <div class="row mt4">
+                        <p class="flex">Transactions</p>
+                        <p class="nowrap">{{formatAmount(coin.trans)}}</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row mt4">
+                        <p class="flex">Wallets</p>
+                        <p class="nowrap">{{formatAmount(coin.wallets)}}</p>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="row">
+                        <p class="flex">Nodes</p>
+                        <p class="nowrap">{{formatAmount(coin.nodes)}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 32px;">
+                <p class="vertical-text size16 bold mt4">DApps</p>
+                <div class="flex col ml8 size14 gray400-text">
+                    <div class="col" ng-repeat="(domain, app) in coin.dapps">
+                        <div class="row mt4">
+                            <p class="flex">{{domain}}</p>
+                            <p class="nowrap">{{formatHash(app.hash)}}</p>
+                        </div>
+                        <div class="divider"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col mt16">
+                <p class="bold">Description</p>
+                <p class="mt8" style="white-space: normal;">
+                    {{formatTicker(coin.domain)}} = это цифровой актив (сертификат), который представляет определенную
+                    стоимость, функционирует на основе блокчейна или другой децентрализованной сети и гарантирует
+                    обязательства компании перед его владельцем.</p>
+            </div>
+            <div class="row gap16 mv16">
+                <div class="button" ng-show="coin.ui == 1" ng-click="openSite()">
+                    Web site
+                </div>
+                <a class="button" ng-show="wallet" href="/explorer?domain={{coin.domain}}" target="_blank">
+                    Explorer
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col mb16 align-start-center p4"
+         ng-show="coin.dapps.exchange != null">
+        <div class="row block" style="gap: 4px">
+            <div class="flex primary-button green-back radius4"
+                 ng-click="ico_buy()">
+                BUY
+            </div>
+            <div class="flex primary-button red-back radius4"
+                 ng-click="ico_sell()"
+                 ng-disabled="coin.balance <= 0">
+                SELL
+            </div>
+        </div>
+    </div>
+</md-dialog>

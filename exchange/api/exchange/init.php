@@ -3,12 +3,12 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
 
 $domain = getDomain();
 
-dataWalletRegScript($domain,exchange_ . $domain, $domain . "/api/exchange/place.php");
-dataWalletRegScript(usdt,exchange_ . $domain, $domain . "/api/exchange/place.php");
-dataWalletRegScript(usdt,exchange_ . $domain . _gas, $domain . "/api/exchange/place.php");
+tokenScriptReg($domain,exchange_ . $domain, $domain . "/api/exchange/place.php");
+tokenScriptReg(usdt,exchange_ . $domain, $domain . "/api/exchange/place.php");
+tokenScriptReg(usdt,exchange_ . $domain . _gas, $domain . "/api/exchange/place.php");
 
-dataWalletRegScript(usdt,exchange_ . $domain . _bot_spred, $domain . "/api/exchange/bot_spred.php");
-dataWalletRegScript($domain,exchange_ . $domain . _bot_spred, $domain . "/api/exchange/bot_spred.php");
+tokenScriptReg(usdt,exchange_ . $domain . _bot_spred, $domain . "/api/exchange/bot_spred.php");
+tokenScriptReg($domain,exchange_ . $domain . _bot_spred, $domain . "/api/exchange/bot_spred.php");
 
 if (DEBUG)
     query("DROP TABLE IF EXISTS `orders`;");

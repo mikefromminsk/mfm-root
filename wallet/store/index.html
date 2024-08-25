@@ -1,0 +1,37 @@
+<div class="row header align-start-center">
+    <div ng-style="getLogo(selectedCoin.domain, 40)"></div>
+    <p class="flex ml8 size24 bold uppercase">{{selectedCoin.domain}} Apps</p>
+    <div class="row align-start-center gap16">
+        <img class="img24 img-black" src="/wallet/img/settings.svg" ng-click="openAppSettings()">
+    </div>
+</div>
+<div class="flex col content scroll mh16">
+    <div class="col cursor mt16"
+         ng-repeat="app in apps"
+         ng-show="app.hide_in_store == 0 || app.owner == wallet.address()">
+        <div class="flex row">
+            <div ng-style="getLogo(app.domain, 64)"></div>
+            <div class="flex col ml16">
+                <p class="size14">{{app.title}}</p>
+                <p class="mt4 size12 gray400-text">{{app.owner}}</p>
+                <div class="row mt4 align-start-center">
+                    <p class="size12">4.4</p>
+                    <img class="ml4 img12 img-gray" src="img/favorite-selected.svg">
+                </div>
+            </div>
+            <div class="col align-center-center">
+                <div class="row align-start-center" ng-show="app.installed == false">
+                    <div class="button" ng-click="installApp(app)">Install</div>
+                </div>
+                <div class="row align-start-center" ng-show="app.installed == true">
+                    <div class="button" ng-click="openProfile(app)">Open</div>
+                </div>
+                <div class="row align-start-center mt4" ng-show="app.installed == true && app.uptodate == false">
+                    <div class="button" ng-click="installApp(app)">Upgrade</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="height: 100px;"></div>
+</div>

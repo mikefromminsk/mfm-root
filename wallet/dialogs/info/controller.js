@@ -12,9 +12,9 @@ function showInfoDialog(message, success) {
 }
 
 function hasToken(domain, success, error) {
-    postContract("wallet", "api/token/wallet.php", {
-        address: wallet.address(),
+    postContract("token", "address.php", {
         domain: domain,
+        address: wallet.address(),
     }, function (response) {
         if (success)
             success(response)

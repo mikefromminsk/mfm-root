@@ -1,0 +1,25 @@
+<md-dialog class="col fill">
+    <div class="row header align-start-center gray100-back">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p class="flex">Logo</p>
+    </div>
+    <div class="flex col content">
+        <div class="flex col input-content align-center-center">
+            <div class="col align-center-center gap16">
+                <div class="row">
+                    <img class="radius24" src="{{getLogo()}}"
+                         style="width: 100px; height: 100px"
+                         ng-click="uploadLogo()">
+                </div>
+                <div class="col gap16">
+                    <div class="button" ng-click="generate()">
+                        Generate
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="primary-button" ng-click="saveLogo()">
+            Save
+        </div>
+    </div>
+</md-dialog>

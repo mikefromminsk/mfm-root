@@ -4,10 +4,11 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
 
-    var domain = $scope.getUriParam("domain")
+    var domain = getParam("domain")
+    var is_sell = getParam("is_sell")
     $scope.domain = domain
 
-    $scope.is_sell = false
+    $scope.is_sell = is_sell == 1
     $scope.price = 5
     $scope.amount = 5
     $scope.total
@@ -70,7 +71,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.orders = []
 
     function loadOrders() {
-        postContract("exchange", "api/exchange/orders.php", {
+        postContract("exchange", "utils/orders.php", {
             domain: domain,
             address: wallet.address(),
         }, function (response) {
@@ -99,7 +100,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     function loadOrderbook() {
-        postContract(domain, "api/exchange/orderbook.php", {}, function (response) {
+        postContract(domain, "utils/orderbook.php", {}, function (response) {
             $scope.sell = response.sell
             $scope.buy = response.buy
             $scope.orderbook = response
@@ -116,32 +117,12 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     }, 3000)
 
 
-    var chart
     var candleSeries
 
     function initChart() {
         setTimeout(function () {
-            if (chart == null) {
-                var tradeChart = document.getElementById("tradeChart")
-                chart = LightweightCharts.createChart(tradeChart, {
-                    layout: {
-                        background: {color: '#222'},
-                        textColor: '#DDD',
-                    },
-                    grid: {
-                        vertLines: {color: '#444'},
-                        horzLines: {color: '#444'},
-                    },
-                    crosshair: {
-                        mode: LightweightCharts.CrosshairMode.Normal,
-                    },
-                });
-                candleSeries = chart.addCandlestickSeries();
-                new ResizeObserver(entries => {
-                    if (entries.length === 0 || entries[0].target !== tradeChart) return;
-                    const newRect = entries[0].contentRect;
-                    chart.applyOptions({height: newRect.height, width: newRect.width});
-                }).observe(tradeChart)
+            if (candleSeries == null) {
+                candleSeries = createChart("tradeChart").addCandlestickSeries();
             }
             $scope.setPeriod($scope.period_name)
         })
@@ -151,7 +132,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     $scope.period_name = '1M'
     $scope.setPeriod = function (period_name) {
         $scope.period_name = period_name
-        postContract("exchange", "api/exchange/candles.php", {
+        postContract("exchange", "utils/candles.php", {
             domain: domain,
             key: "price",
             period_name: period_name,
@@ -162,6 +143,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             }
             candleSeries.setData(response.candles)
             $scope.price = response.value
+            $scope.change24 = response.change24
         });
     }
 

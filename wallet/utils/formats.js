@@ -63,7 +63,7 @@ function addFormats($scope) {
         if (number == null)
             number = 0;
         if (number == 0) return "0%";
-        number = $scope.round(number, 0)
+        number = $scope.round(number, 1)
         if (number < 0)
             return "-" + number + "%";
         else if (number > 0)
@@ -130,44 +130,6 @@ function addFormats($scope) {
         return ticker.toUpperCase()
     }
 
-    $scope.drawLogo = function (context, logo) {
-        function getColor(t) {
-            return "#" + t.slice(-6)
-        }
-
-        let wh = 32
-        let wh5 = wh / 5
-        context.clearRect(0, 0, wh, wh);
-        let o = getColor(logo);
-        for (let t = 0; t < 5; t++)
-            for (let n = 0; n < 5; n++) {
-                context.fillStyle = "transparent"
-                context.moveTo(t + wh5 * n, wh5 * (n + 1))
-                parseInt(logo.charAt(3 * t + (n > 2 ? 4 - n : n)), 16) % 2 && (context.fillStyle = o)
-                context.fillRect(wh5 * n, wh5 * t, wh5, wh5)
-                context.stroke()
-            }
-        return context
-    }
-
-    $scope.genLogo = function (logo) {
-        if (logo == null) return ""
-        let canvas = document.createElement("canvas")
-        canvas.width = 32
-        canvas.height = 32
-        $scope.drawLogo(canvas.getContext("2d"), logo)
-        return canvas.toDataURL()
-    }
-
-    $scope.genSvg = function (logo) {
-        if (logo == null) return ""
-        var ctx = new C2S(32, 32);
-        $scope.drawLogo(ctx, logo)
-        var mySerializedSVG = ctx.getSerializedSvg(); //true here, if you need to convert named to numbered entities.
-        var svg = ctx.getSvg();
-        return mySerializedSVG
-    }
-
 
     $scope.back = function (result) {
         window.$mdBottomSheet.hide(result)
@@ -201,21 +163,6 @@ function addFormats($scope) {
         return result;
     }
 
-
-    $scope.isHideBalance = function () {
-        return storage.getString(storageKeys.hideBalances) != ""
-    }
-
-    $scope.hideBalances = function () {
-        storage.setString(storageKeys.hideBalances, "true")
-        $scope.hideBalance = true
-    }
-
-    $scope.showBalances = function () {
-        storage.setString(storageKeys.hideBalances, "")
-        $scope.hideBalance = false
-    }
-
     $scope.copyText = function (text) {
         var textArea = document.createElement("textarea");
         textArea.value = text;
@@ -237,12 +184,6 @@ function addFormats($scope) {
         }
 
         document.body.removeChild(textArea);
-    }
-
-    $scope.getUriParam = function (paramName) {
-        var uri = window.location.search.substring(1)
-        var params = new URLSearchParams(uri)
-        return params.get(paramName)
     }
 
     $scope.cardBack = function (coin) {
@@ -279,7 +220,7 @@ function addFormats($scope) {
             'min-height': width + 'px',
         }
         if (domain != null){
-            img['background-image'] =  "url('/" + domain + "/logo.svg')"
+            img['background-image'] =  "url('/wallet/token/logo/img/" + domain + ".svg')"
             img['background-size'] = '100% 100%'
         }
         return img

@@ -1,76 +1,124 @@
-function openTokenSettings(domain, success) {
-    window.$mdDialog.show({
-        templateUrl: '/wallet/token/index.html',
-        controller: function ($scope) {
-            addFormats($scope)
-            $scope.DEBUG = DEBUG
+function addTokens($scope) {
+    $scope.searchMode = false
+    $scope.menuIndex = 0
 
-            $scope.save = function () {
-                postContractWithGas("wallet", "api/profile_update.php", $scope.profile, function () {
-                    showSuccess("Updated success", success)
-                }, function (message) {
-                    showError(message)
-                })
+    $scope.toggleSearchMode = function () {
+        $scope.searchMode = !$scope.searchMode
+    }
+
+    if (getParam("domain")) {
+        storage.setString(storageKeys.selectedCoin, getParam("domain"))
+    }
+
+    $scope.login = function () {
+        openLogin(init)
+    }
+
+    $scope.openTokenProfile = function (coin) {
+        openTokenProfile($scope, coin, function (result) {
+            if (result && result.action == "store") {
+                $scope.selectCoin(coin)
+            } else {
+                init()
             }
+        })
+    }
 
-            $scope.uploadLogo = function () {
-                selectFile(function (file) {
-                    var zip = new JSZip();
-                    zip.file("logo.svg", file);
-                    zip.generateAsync({type: "blob"}).then(function (content) {
-                        uploadFile(domain, content, function () {
-                            showSuccess("Logo uploaded successfully")
-                        })
-                    });
-                }, ".svg")
-            }
+    $scope.openAccount = function () {
+        openAccount(init)
+    }
 
-            $scope.getLogo = function () {
-                if ($scope.logo == null)
-                    return "/" + domain + "/logo.svg"
-                return $scope.genLogo($scope.logo)
-            }
+    $scope.newCoin = function () {
+        openLaunchDialog($scope.search_text, init)
+    }
 
-            $scope.generate = async function () {
-                function getHash(t) {
-                    let e = (new TextEncoder).encode(t);
-                    return window.crypto.subtle.digest("SHA-1", e)
-                }
+    $scope.openDeposit = function () {
+        openDeposit(init)
+    }
 
-                function hexString(t) {
-                    return [...new Uint8Array(t)].map(t => t.toString(16).padStart(2, "0")).join("")
-                }
+    $scope.openWithdrawal = function () {
+        openWithdrawal(init)
+    }
 
-                $scope.logo = hexString(await getHash(randomString(4)))
-                $scope.$apply()
-            }
+    function init() {
+        tokens("")
+        //searchApp()
+        //loadTrans()
+    }
 
-            $scope.saveLogo = function () {
-                var zip = new JSZip();
-                zip.file("logo.svg", $scope.genSvg($scope.logo));
-                zip.generateAsync({type: "blob"}).then(function (content) {
-                    uploadFile(domain, content, function () {
-                        showSuccess("Logo uploaded successfully", function () {
-                            $scope.close("success")
-                        })
-                    })
-                });
-            }
+    $scope.coins = {}
 
-            function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain
-                }, function (response) {
-                    $scope.profile = response
-                    $scope.$apply()
-                })
-            }
+    function tokens(search_text) {
+        post("/wallet/token/api/tokens.php", {
+            address: wallet.address(),
+            search_text: search_text,
+        }, function (response) {
+            $scope.activeTokens = response.active
+            $scope.recTokens = response.recs
+            $scope.showBody = true
+            $scope.$apply()
+        })
+    }
 
-            init()
-
-        }
-    }).then(function (result) {
-        if (success)
-            success(result)
+    $scope.search_text = ''
+    $scope.$watch('search_text', function (newValue) {
+        if (newValue == null) return
+        tokens(newValue)
     })
+
+    $scope.getTotalBalance = function () {
+        var totalBalance = 0
+        if ($scope.activeTokens != null)
+            for (const token of $scope.activeTokens)
+                totalBalance += token.price * token.balance
+        return totalBalance
+    }
+
+    $scope.regAddress = function (domain) {
+        getPin(function (pin) {
+            wallet.calcPass(domain, pin, function (pass) {
+                postContract("wallet", "reg.php", {
+                    address: wallet.address(),
+                    domain: domain,
+                    next_hash: pass,
+                }, init)
+            })
+        })
+    }
+
+
+    $scope.openSupport = function () {
+        window.open("https://t.me/+UWS_ZfqIi1tkNmVi", init)
+    }
+
+    /*
+    function checkTransfers(from, to) {
+        if (from.length == 0) return
+
+        function showTopMessage(balanceChange, domain) {
+            $mdToast.show($mdToast.simple().position('top').textContent(
+                "You received " + $scope.formatAmount(balanceChange, domain)
+            ))
+            setTimeout(function () {
+                new Audio("/wallet/dialogs/success/payment_success.mp3").play()
+            })
+        }
+
+        for (let toToken of to) {
+            var found = false
+            for (let fromToken of from) {
+                if (toToken.domain == fromToken.domain) {
+                    found = true
+                    if (toToken.balance > fromToken.balance) {
+                        showTopMessage(toToken.balance - fromToken.balance, toToken.domain)
+                    }
+                }
+            }
+            if (!found && toToken.balance > 0) {
+                showTopMessage(toToken.balance, toToken.domain)
+            }
+        }
+    }*/
+
+    init()
 }

@@ -37,7 +37,7 @@ function openSettings(domain, success) {
             }
 
             $scope.savePumpVals = function () {
-                postContractWithGas("exchange", "api/exchange/bot_pump_init.php", {
+                postContractWithGas("exchange", "bots/bot_pump_init.php", {
                     domain: domain,
                     multiplicator: $scope.multiplicator,
                     startN: $scope.startN,
@@ -47,7 +47,7 @@ function openSettings(domain, success) {
             }
 
             $scope.loadChart = function () {
-                postContract("exchange", "api/exchange/bot_pump_chart.php", {
+                postContract("exchange", "bots/bot_pump_chart.php", {
                     domain: domain,
                     startN: $scope.startN,
                     multiplicator: $scope.multiplicator,

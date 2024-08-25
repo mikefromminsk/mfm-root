@@ -50,240 +50,23 @@
 <md-tabs class="flex" md-selected="selectedIndex" md-swipe-content>
     <md-tab label="0">
         <div class="flex col">
-            <div class="row header align-center-center">
-                <div class="row block align-start-center gap16">
-                    <div class="primary-button"
-                         ng-show="wallet.address() == 'admin'"
-                         ng-click="adminClick()">
-                        go
-                    </div>
-                    <div class="col align-start-end regular">
-                        <div class="row align-start-end">
-                            <p class="size14 regular mb4 nowrap">my Token</p>
-                        </div>
-                        <p class="size20 bold regular">SPACE</p>
-                    </div>
-                    <div class="row" ng-show="searchMode">
-                        <div class="row flex input-wrapper ml16">
-                            <img class="img20 img-gray200"
-                                 style="position: absolute; left: 8px; top: 11px"
-                                 src="/wallet/img/search.svg">
-                            <input type="text"
-                                   class="flex input ripple"
-                                   autocapitalize="off"
-                                   autocomplete="off"
-                                   ng-model="search_text"
-                                   placeholder="Find any token"
-                                   style="padding-left: 34px; border-radius: 10px; height: 40px;">
-                        </div>
-                        <img class="img40 p8 img-black ripple" src="/wallet/img/close.svg" ng-click="toggleSearchMode()">
-                    </div>
-                    <div class="row flex align-end-center" ng-hide="searchMode">
-                        <img class="img40 p8 img-black ripple" src="/wallet/img/settings.svg" ng-click="openAccount()">
-                        <img class="img40 p8 img-black ripple" src="/wallet/img/support.svg" ng-click="openSupport()">
-                        <img class="img40 p8 img-black ripple" src="/wallet/img/search.svg" ng-click="toggleSearchMode()">
-                    </div>
-                    <!--<img class="img40 p8 img-black ripple" src="/wallet/img/transactions.svg" ng-click="openTransactions()">-->
-                </div>
-            </div>
-            <div class="col content align-start-center scroll">
-                <div class="col block">
-                    <div class="col" ng-hide="searchMode">
-                        <div class="col mh16 mt16"
-                             ng-show="wallet.address()">
-                            <ng-include src="'/wallet/card.html'"></ng-include>
-                        </div>
-
-                        <div class="col align-start-center mt16" ng-click="login()" ng-hide="wallet.address()">
-                            <p class="size20 bold">Welcome to mytoken.space!</p>
-                            <p class="size16 mt16">Here you can create your own token.</p>
-                        </div>
-
-                        <div class="row mh16 mt16" ng-click="login()" ng-hide="wallet.address() || bonuses.length != 0">
-                            <div class="flex primary-button" >
-                                Login or Create account
-                            </div>
-                        </div>
-
-                        <div class="mt16 row align-center-start scroll" ng-show="bonuses.length != 0">
-                            <div class="col align-start-center" ng-repeat="item in bonuses">
-                                <img src="/wallet/img/gift-colored.svg" style="width: 100px">
-                                <div class="row ph16 pv8 align-start-center ripple" ng-click="receiveBonus(item)">
-                                    <div class="col button">
-                                        <p>Get</p>
-                                        <p>{{formatAmount(item.amount, item.domain)}}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt16 size12 lowercase gray200-back">
-                            <div class="ml16"></div>
-                            <div class="row scroll nowrap">
-                                <div class="mr4 pv8 ph8"
-                                     ng-class="{'bold uppercase': selectedCategories.length == 0}"
-                                     ng-click="clearCategoryFilter()">
-                                    All
-                                </div>
-                                <div class="mr4 pv8 ph8"
-                                     ng-class="{'bold uppercase': selectedCategories.indexOf('my_coins') != -1}"
-                                     ng-click="selectCategory('my_coins')">
-                                    my coins
-                                </div>
-                                <div class="mr4 pv8 ph8"
-                                     ng-class="{'bold uppercase': selectedCategories.indexOf('mining') != -1}"
-                                     ng-click="selectCategory('mining')">
-                                    mining
-                                </div>
-                                <div ng-repeat="item in categories"
-                                     class="mr4 pv8 ph8"
-                                     ng-class="{'bold uppercase': selectedCategories.indexOf(item) != -1}"
-                                     ng-click="selectCategory(item)">
-                                    {{item}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mh16 mt16 gray300-text" ng-show="filteredActiveCoins.length > 1">
-                            <p class="flex size10 gray400-text">Your coins</p>
-                            <p class="size10">Price</p>
-                            <p class="size10 row align-end" style="min-width: 80px">Balance</p>
-                        </div>
-                        <div class="col" ng-repeat="coin in filteredActiveCoins">
-                            <div class="col" ng-show="coin.domain != wallet.gas_domain">
-                                <ng-include src="'/wallet/coin.html'"></ng-include>
-                            </div>
-                        </div>
-
-                        <div class="mh16 mt16" ng-show="recommendedCoins.length">
-                            <p class="size10 gray400-text">Recommended coins</p>
-                        </div>
-                        <div class="col ripple"
-                             ng-repeat="coin in recommendedCoins"
-                             ng-click="options(coin)">
-                            <div class="row pv8 ph16 align-start-center">
-                                <div ng-style="getLogo(coin.domain)"></div>
-                                <div class="col flex ml8">
-                                    <p class="size16 uppercase medium">{{coin.domain}}</p>
-                                    <p class="size12 gray400-text">{{coin.owner}}</p>
-                                </div>
-                                <div class="col align-end-end">
-                                    <p>{{formatPrice(coin.price)}}</p>
-                                    <p class="size10 mt4" ng-class="percentColor(coin.price24hChange)">
-                                        {{formatPercent(coin.price24hChange)}}
-                                    </p>
-                                </div>
-                                <div class="row align-end" style="min-width: 80px">
-                                    <div class="col ml8 align-center-center button-gray p8"
-                                         ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
-                                        Add
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                        </div>
-                    </div>
-                    <div class="mh16 mt16" ng-show="searchMode">
-                        <p class="size14 gray400-text">Search results</p>
-                        <div class="col pv8 ripple"
-                             ng-repeat="coin in searchCoins"
-                             ng-click="options(coin)">
-                            <div class="row pv8 align-start-center">
-                                <div ng-style="getLogo(coin.domain)"></div>
-                                <div class="col flex ml8">
-                                    <p class="size16 uppercase medium">{{coin.domain}}</p>
-                                    <p class="size12 gray400-text">{{coin.owner}}</p>
-                                </div>
-                                <div class="col align-end-end">
-                                    <p>{{formatPrice(coin.price)}}</p>
-                                    <p class="size10 mt4" ng-class="percentColor(coin.price24hChange)">
-                                        {{formatPercent(coin.price24hChange)}}
-                                    </p>
-                                </div>
-                                <div class="row align-end" style="min-width: 80px" ng-show="!coin.isFavorite">
-                                    <div class="col ml8 align-center-center button p8"
-                                         ng-click="toggleFavorite(coin.domain); $event.stopPropagation()">
-                                        Add
-                                    </div>
-                                </div>
-                                <div class="col align-end-end" style="min-width: 80px" ng-show="coin.isFavorite">
-                                    <p ng-show="isHideBalance()">*****</p>
-                                    <p ng-show="!isHideBalance()">{{formatPrice(coin.price * coin.balance)}}</p>
-                                    <p class="size10 mt4" ng-show="isHideBalance()">*****</p>
-                                    <p class="size10 mt4" ng-show="!isHideBalance()">{{formatAmount(coin.balance)}}</p>
-                                </div>
-                            </div>
-                            <div class="divider"></div>
-                        </div>
-
-                        <div class="col" ng-hide="searchCoins.length">
-                            <div class="row align-center-center size20 gray400-text"
-                                 style="height: 200px">
-                                Nothing found
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <ng-include src="'/wallet/token/index.html'"></ng-include>
         </div>
     </md-tab>
+
+
     <md-tab label="1">
         <div class="flex col align-start-center">
             <div class="col block">
-                <div class="row header align-start-center">
-                    <div ng-style="getLogo(selectedCoin.domain, 40)"></div>
-                    <p class="flex ml8 size24 bold uppercase">{{selectedCoin.domain}} Apps</p>
-                    <div class="row align-start-center gap16">
-                        <img class="img24 img-black" src="/wallet/img/settings.svg" ng-click="openAppSettings()">
-                    </div>
-                </div>
-                <div class="flex col content scroll mh16">
-                    <div class="col cursor mt16"
-                         ng-repeat="app in apps"
-                         ng-show="app.hide_in_store == 0 || app.owner == wallet.address()">
-                        <div class="flex row">
-                            <div ng-style="getLogo(app.domain, 64)"></div>
-                            <div class="flex col ml16">
-                                <p class="size14">{{app.title}}</p>
-                                <p class="mt4 size12 gray400-text">{{app.owner}}</p>
-                                <div class="row mt4 align-start-center">
-                                    <p class="size12">4.4</p>
-                                    <img class="ml4 img12 img-gray" src="img/favorite-selected.svg">
-                                </div>
-                            </div>
-                            <div class="col align-center-center">
-                                <div class="row align-start-center" ng-show="app.installed == false">
-                                    <div class="button" ng-click="installApp(app)">Install</div>
-                                </div>
-                                <div class="row align-start-center" ng-show="app.installed == true">
-                                    <div class="button" ng-click="openProfile(app)">Open</div>
-                                </div>
-                                <div class="row align-start-center mt4" ng-show="app.installed == true && app.uptodate == false">
-                                    <div class="button" ng-click="installApp(app)">Upgrade</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="height: 100px;"></div>
-                </div>
+                <ng-include src="'/wallet/store/index.html'"></ng-include>
             </div>
         </div>
     </md-tab>
+
+
     <md-tab label="2">
         <div class="col fill">
-            <div class="row header align-start-center">
-                <div class="row">
-                    <p class="regular">Transactions</p>
-                </div>
-            </div>
-            <div class="col content align-start-center scroll" ng-hide="in_progress">
-                <div class="col block ph16">
-                    <ng-include src="'/wallet/tran/trans.html'"></ng-include>
-                </div>
-            </div>
-            <div class="fill col align-center-center" ng-show="in_progress">
-                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-            </div>
+            <ng-include src="'/wallet/store/index.html'"></ng-include>
         </div>
     </md-tab>
 </md-tabs>
@@ -345,29 +128,33 @@
 <script async src="/wallet/dialogs/info/controller.js"></script>
 <!--<script src="/wallet/onboarding/controller.js"></script>-->
 
-<script src="/wallet/login/controller.js"></script>
 <script src="controller.js"></script>
+<script  src="/wallet/trans/controller.js"></script>
+<script  src="/wallet/token/controller.js"></script>
+<script  src="/wallet/store/controller.js"></script>
 <script>
     controller(main)
     window.Telegram.WebApp.expand()
 </script>
+<script async src="/wallet/token/login/controller.js"></script>
+<script async src="/wallet/token/logo/controller.js"></script>
 <script async src="/node_modules/jszip/dist/jszip.min.js"></script>
 <script async src="/node_modules/canvas2svg-master/canvas2svg.js"></script>
 <script async src="/node_modules/qrcodejs/qrcode.min.js"></script>
 <script async src="/wallet/dialogs/pin/controller.js"></script>
-<script async src="/wallet/options/controller.js"></script>
-<script async src="/wallet/launch/controller.js"></script>
-<script async src="/wallet/send/controller.js"></script>
-<script async src="/wallet/ico/sell/controller.js"></script>
-<script async src="/wallet/ico/buy/controller.js"></script>
-<script async src="/wallet/invite/create/controller.js"></script>
-<script async src="/wallet/invite/copy/controller.js"></script>
+<script async src="/wallet/token/profile/controller.js"></script>
+<script async src="/wallet/token/launch/controller.js"></script>
+<script async src="/wallet/token/send/controller.js"></script>
+<script async src="/ico/sell/controller.js"></script>
+<script async src="/ico/buy/controller.js"></script>
 <script async src="/wallet/account/controller.js"></script>
-<script async src="/wallet/web/controller.js"></script>
+<script async src="/wallet/dialogs/web/controller.js"></script>
 <script async src="/wallet/usdt/deposit/controller.js"></script>
 <script async src="/wallet/usdt/withdrawal/controller.js"></script>
-<script async src="/wallet/tran/controller.js"></script>
-<script async src="/wallet/token/controller.js"></script>
-<script async src="/wallet/settings/controller.js"></script>
+<script async src="/wallet/trans/tran/controller.js"></script>
+<script async src="/wallet/store/settings/controller.js"></script>
+<script async src="/share/create/controller.js"></script>
+<script async src="/share/copy/controller.js"></script>
+<script async src="/share/receive/controller.js"></script>
 </body>
 </html>

@@ -1,0 +1,38 @@
+<div class="row header align-start-center">
+    <div class="row">
+        <p class="regular">Transactions</p>
+    </div>
+</div>
+<div class="col content align-start-center scroll" ng-hide="in_progress">
+    <div class="col block ph16">
+        <div ng-repeat="tran in trans"
+             class="col nowrap">
+            <div class="row size10 gray400-text">{{tran.day}}</div>
+            <div class="row align-start-center radius10 gray100-back p8 mt8"
+                 ng-repeat="item in tran.items"
+                 ng-click="openTran(item)">
+                <div class="col">
+                    <div class="row align-start-end">
+                        <p class="size10 gray400-text">{{item.from == wallet.address() ? "to " : "from "}}</p>
+                        <p class="ml4 size14 bold">{{item.from == wallet.address() ? item.to : item.from}}</p>
+                    </div>
+                    <p class="mt4 size10 gray400-text">{{formatSec(item.time)}}</p>
+                </div>
+                <div class="flex mh8" style="background-image: linear-gradient(to right, var(--gray400) 33%, rgba(255,255,255,0) 0%);
+background-position: bottom;
+background-size: 10px 1px;
+background-repeat: repeat-x;; height: 1px"></div>
+                <div class="row align-start-center">
+                    <p class="bold size16"
+                       ng-class="{'red-text': item.from == wallet.address(),'green-text': item.from != username}">
+                        {{(item.from == wallet.address() ? "-" : "+") + item.amount}}
+                    </p>
+                    <p class="ml4">{{formatTicker(item.domain)}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="fill col align-center-center" ng-show="in_progress">
+    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+</div>

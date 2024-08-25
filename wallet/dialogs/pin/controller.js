@@ -1,5 +1,5 @@
-function openPin(domain, success, cancel) {
-    if (domain != null && storage.getString(storageKeys.hasPin) == "") {
+function getPin(success, cancel) {
+    if (storage.getString(storageKeys.hasPin) == "") {
         if (success)
             success()
     } else if (window.tempPin != null) {
@@ -10,8 +10,6 @@ function openPin(domain, success, cancel) {
             templateUrl: "/wallet/dialogs/pin/index.html",
             controller: function ($scope) {
                 addFormats($scope)
-                $scope.setMode = domain == null
-                $scope.domain = $scope.setMode ? "Set pin" : domain
                 $scope.pin = ""
 
                 $scope.add = function (symbol) {
