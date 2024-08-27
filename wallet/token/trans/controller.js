@@ -1,7 +1,7 @@
 function addTransactions($scope) {
 
     function loadTrans() {
-        post("/wallet/api/trans_user.php", {
+        postContract("token", "trans.php", {
             address: wallet.address(),
         }, function (response) {
             $scope.trans = $scope.groupByTimePeriod(response.trans)

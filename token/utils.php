@@ -15,31 +15,15 @@ function tokenNextHash($domain, $address, $password, $prev_key = "")
     return md5(tokenKey($domain, $address, $password, $prev_key));
 }
 
-function tokenAddressReg($domain, $address, $next_hash, $delegate = null)
-{
-    if (tokenAddressBalance($domain, $address) !== null) {
-        if ($delegate == null)
-            error("$domain:$address exist");
-    } else {
-        insertRow(addresses, [
-            domain => $domain,
-            address => $address,
-            prev_key => "",
-            next_hash => $next_hash,
-            amount => 0,
-            delegate => $delegate,
-        ]);
-    }
-}
-
-function tokenScriptReg($domain, $address, $script)
-{
-    tokenAddressReg($domain, $address, "", $script);
-}
 
 function tokenAddressBalance($domain, $address)
 {
     return scalarWhere(addresses, amount, [domain => $domain, address => $address]);
+}
+
+function tokenScriptReg($domain, $address, $script)
+{
+    return tokenSend($domain, owner, $address, 0, ":", $script);
 }
 
 function tokenSend(
@@ -47,26 +31,43 @@ function tokenSend(
     $from_address,
     $to_address,
     $amount,
-    $pass = null
+    $pass = null,
+    $delegate = null
 )
 {
-    if ($amount == 0) error("amount is 0");
     if ($pass != null) {
         $key = explode(":", $pass)[0];
         $next_hash = explode(":", $pass)[1];
     }
     if ($from_address == owner) {
         if (strlen($domain) < 3 || strlen($domain) > 16) error("domain length has to be between 3 and 16");
-        tokenAddressReg($domain, owner, md5($key));
-        tokenAddressReg($domain, $to_address, $next_hash);
-        updateWhere(addresses, [amount => $amount], [domain => $domain, address => owner]);
+        if (tokenAddressBalance($domain, owner) === null) {
+            insertRow(addresses, [
+                domain => $domain,
+                address => owner,
+                prev_key => "",
+                next_hash => "",
+                amount => $amount,
+                delegate => "token/send.php",
+            ]);
+        }
+        if (tokenAddressBalance($domain, $to_address) === null) {
+            insertRow(addresses, [
+                domain => $domain,
+                address => $to_address,
+                prev_key => "",
+                next_hash => $next_hash,
+                amount => 0,
+                delegate => $delegate,
+            ]);
+        }
     }
 
     $from = selectRowWhere(addresses, [domain => $domain, address => $from_address]);
     $to = selectRowWhere(addresses, [domain => $domain, address => $to_address]);
     if ($from[amount] < $amount) error(strtoupper($domain) . " balance is not enough in $from_address wallet");
     if ($to == null) error("$to_address receiver doesn't exist");
-    if ($key == null && $next_hash == null) {
+    if ($from[delegate] != null) {
         if ($from[delegate] != scriptPath())
             error("script " . scriptPath() . " cannot use $from_address address. Only " . $from[delegate]);
     } else {
@@ -94,6 +95,8 @@ function tokenSend(
         from => $from_address,
         to => $to_address,
         amount => $amount,
+        prev_key => $key,
+        next_hash => $next_hash,
         time => time(),
     ];
 

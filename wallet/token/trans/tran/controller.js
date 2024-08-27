@@ -1,6 +1,6 @@
 function openTran(domain, txid, success) {
     window.$mdBottomSheet.show({
-        templateUrl: '/wallet/trans/tran/index.html',
+        templateUrl: '/wallet/token/trans/tran/index.html',
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain

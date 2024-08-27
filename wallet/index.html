@@ -47,27 +47,17 @@
          src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KDTwhLS0gVXBsb2FkZWQgdG86IFNWRyBSZXBvLCB3d3cuc3ZncmVwby5jb20sIEdlbmVyYXRvcjogU1ZHIFJlcG8gTWl4ZXIgVG9vbHMgLS0+Cjxzdmcgd2lkdGg9IjgwMHB4IiBoZWlnaHQ9IjgwMHB4IiB2aWV3Qm94PSIwIDAgMTYgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0ibm9uZSIgY2xhc3M9Imhkcy1mbGlnaHQtaWNvbi0tYW5pbWF0aW9uLWxvYWRpbmciPgoNPGcgZmlsbD0iIzAwMDAwMCIgZmlsbC1ydWxlPSJldmVub2RkIiBjbGlwLXJ1bGU9ImV2ZW5vZGQiPgoNPHBhdGggZD0iTTggMS41YTYuNSA2LjUgMCAxMDAgMTMgNi41IDYuNSAwIDAwMC0xM3pNMCA4YTggOCAwIDExMTYgMEE4IDggMCAwMTAgOHoiIG9wYWNpdHk9Ii4yIi8+Cg08cGF0aCBkPSJNNy4yNS43NUEuNzUuNzUgMCAwMTggMGE4IDggMCAwMTggOCAuNzUuNzUgMCAwMS0xLjUgMEE2LjUgNi41IDAgMDA4IDEuNWEuNzUuNzUgMCAwMS0uNzUtLjc1eiIvPgoNPC9nPgoNPC9zdmc+"/>
 </div>
 
-<md-tabs class="flex" md-selected="selectedIndex" md-swipe-content>
+<md-tabs class="col flex" md-selected="selectedIndex" md-swipe-content>
     <md-tab label="0">
-        <div class="flex col">
-            <ng-include src="'/wallet/token/index.html'"></ng-include>
-        </div>
+        <ng-include class="flex col" src="'/wallet/token/index.html'"></ng-include>
     </md-tab>
-
 
     <md-tab label="1">
-        <div class="flex col align-start-center">
-            <div class="col block">
-                <ng-include src="'/wallet/store/index.html'"></ng-include>
-            </div>
-        </div>
+        <ng-include class="flex col" src="'/wallet/store/index.html'"></ng-include>
     </md-tab>
 
-
     <md-tab label="2">
-        <div class="col fill">
-            <ng-include src="'/wallet/store/index.html'"></ng-include>
-        </div>
+        <ng-include class="flex col" src="'/wallet/token/trans/index.html'"></ng-include>
     </md-tab>
 </md-tabs>
 <div class="row gray100-back pr16 align-center-start">
@@ -129,9 +119,9 @@
 <!--<script src="/wallet/onboarding/controller.js"></script>-->
 
 <script src="controller.js"></script>
-<script  src="/wallet/trans/controller.js"></script>
-<script  src="/wallet/token/controller.js"></script>
-<script  src="/wallet/store/controller.js"></script>
+<script src="/wallet/token/trans/controller.js"></script>
+<script src="/wallet/token/controller.js"></script>
+<script src="/wallet/store/controller.js"></script>
 <script>
     controller(main)
     window.Telegram.WebApp.expand()
@@ -151,7 +141,7 @@
 <script async src="/wallet/dialogs/web/controller.js"></script>
 <script async src="/wallet/usdt/deposit/controller.js"></script>
 <script async src="/wallet/usdt/withdrawal/controller.js"></script>
-<script async src="/wallet/trans/tran/controller.js"></script>
+<script async src="/wallet/token/trans/tran/controller.js"></script>
 <script async src="/wallet/store/settings/controller.js"></script>
 <script async src="/share/create/controller.js"></script>
 <script async src="/share/copy/controller.js"></script>

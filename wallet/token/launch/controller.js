@@ -40,18 +40,16 @@ function openLaunchDialog(domain, success) {
             }
 
             $scope.checkLaunch = function () {
-                hasBalance(wallet.gas_domain, function () {
-                    wallet.calcStartHash($scope.domain, function (next_hash) {
-                        postContract("token", "send.php", {
-                            domain: $scope.domain,
-                            from_address: "owner",
-                            to_address: wallet.address(),
-                            pass: ":" + next_hash,
-                            amount: 1000000,
-                        }, function () {
-                            storage.pushToArray(storageKeys.domains, $scope.domain)
-                            $scope.startLaunching()
-                        })
+                wallet.calcStartHash($scope.domain, function (next_hash) {
+                    postContract("token", "send.php", {
+                        domain: $scope.domain,
+                        from_address: "owner",
+                        to_address: wallet.address(),
+                        pass: ":" + next_hash,
+                        amount: 1000000,
+                    }, function () {
+                        storage.pushToArray(storageKeys.domains, $scope.domain)
+                        $scope.startLaunching()
                     })
                 })
             }

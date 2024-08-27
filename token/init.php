@@ -10,8 +10,8 @@ query("CREATE TABLE IF NOT EXISTS `addresses` (
   `address` varchar(256) COLLATE utf8_bin NOT NULL,
   `prev_key` varchar(256) COLLATE utf8_bin NOT NULL,
   `next_hash` varchar(256) COLLATE utf8_bin NOT NULL,
-  `amount` int(11) NOT NULL,
-  `delegate` varchar(256) COLLATE utf8_bin DEFAULT NULL
+  `delegate` varchar(256) COLLATE utf8_bin DEFAULT NULL,
+  `amount` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 query("DROP TABLE IF EXISTS `trans`;");
@@ -20,13 +20,22 @@ query("CREATE TABLE IF NOT EXISTS `trans` (
   `domain` varchar(256) COLLATE utf8_bin NOT NULL,
   `from` varchar(256) COLLATE utf8_bin NOT NULL,
   `to` varchar(256) COLLATE utf8_bin NOT NULL,
+  `prev_key` varchar(256) COLLATE utf8_bin NOT NULL,
+  `next_hash` varchar(256) COLLATE utf8_bin NOT NULL,
+  `delegate` varchar(256) COLLATE utf8_bin DEFAULT NULL,
   `amount` int(11) NOT NULL,    
   `time` int(11) NOT NULL,    
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 
-tokenSend($gas_domain, owner, admin, 100000000, ":" . tokenNextHash($gas_domain, admin, pass));
+requestEquals("localhost/token/send.php", [
+    domain => $gas_domain,
+    from_address => owner,
+    to_address => admin,
+    amount => 100000000,
+    pass => ":" . tokenNextHash($gas_domain, admin, pass)
+], tran_id);
 
 query("DROP TABLE IF EXISTS `orders`;");
 query("CREATE TABLE IF NOT EXISTS `orders` (

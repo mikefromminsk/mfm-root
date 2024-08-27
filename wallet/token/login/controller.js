@@ -31,10 +31,12 @@ function openLogin(success) {
                     }
                 }, function () {
                     $scope.in_progress = false
-                    postContract("token", "reg.php", {
+                    postContract("token", "send.php", {
                         domain: wallet.gas_domain,
-                        address: $scope.username,
-                        next_hash: md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
+                        from_address: "owner",
+                        to_address: $scope.username,
+                        amount: 0,
+                        pass: ":" + md5(wallet.calcHash(wallet.gas_domain, $scope.username, $scope.password))
                     }, function () {
                         setPin()
                     })

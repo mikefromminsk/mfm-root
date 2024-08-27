@@ -94,7 +94,7 @@ function openTokenProfile($rootScope, domain, success) {
             }
 
             function loadChart() {
-                postContract("exchange", "utils/chart.php", {
+                /*postContract("exchange", "utils/chart.php", {
                     domain: domain,
                     key: "price",
                     period_name: "1M",
@@ -104,7 +104,7 @@ function openTokenProfile($rootScope, domain, success) {
                             new Date(response.chart[i].time * 1000 + (i * 60 * 60 * 24 * 1000)).toJSON().slice(0, 10)
                     }
                     lineSeries.setData(response.chart)
-                })
+                })*/
             }
             function init() {
                 loadProfile()
