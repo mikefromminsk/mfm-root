@@ -1,4 +1,4 @@
-/*
+package com.sockets.test;/*
  * Copyright (c) 2010-2020 Nathan Rajlich
  *
  *  Permission is hereby granted, free of charge, to any person
@@ -37,26 +37,31 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Scanner;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 
+import com.sockets.test.Base64;
+import com.sockets.test.Sockets;
 import org.java_websocket.server.DefaultSSLWebSocketServerFactory;
 
 
 /**
- * SSL Example using the LetsEncrypt certificate See https://github.com/TooTallNate/Java-WebSocket/wiki/Getting-a-SSLContext-from-different-sources#getting-a-sslcontext-using-a-lets-encrypt-certificate
+ * com.sockets.test.SSL Example using the LetsEncrypt certificate See https://github.com/TooTallNate/Java-WebSocket/wiki/Getting-a-SSLContext-from-different-sources#getting-a-sslcontext-using-a-lets-encrypt-certificate
  */
 public class SSL {
 
     public static void main(String[] args) throws Exception {
-        Sockets chatserver = new Sockets(8887);
+        Sockets sockets = new Sockets(8887);
         SSLContext context = getContext();
         if (context != null) {
-            chatserver.setWebSocketFactory(new DefaultSSLWebSocketServerFactory(getContext()));
+            sockets.setWebSocketFactory(new DefaultSSLWebSocketServerFactory(getContext()));
         }
-        chatserver.setConnectionLostTimeout(30);
-        chatserver.start();
+        sockets.setConnectionLostTimeout(30);
+        sockets.start();
+        System.out.println("WSS started on port: 8887");
+        new Scanner(System.in).nextLine();
     }
 
     private static SSLContext getContext() {
@@ -84,7 +89,7 @@ public class SSL {
             KeyManager[] km = kmf.getKeyManagers();
 
             context.init(km, null, null);
-            System.out.println("SSL context created");
+            System.out.println("com.sockets.test.SSL context created");
         } catch (Exception e) {
             e.printStackTrace();
             context = null;

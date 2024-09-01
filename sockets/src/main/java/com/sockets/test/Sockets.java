@@ -1,4 +1,4 @@
-/*
+package com.sockets.test;/*
  * Copyright (c) 2010-2020 Nathan Rajlich
  *
  *  Permission is hereby granted, free of charge, to any person
@@ -29,7 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,8 +36,8 @@ import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import model.Message;
-import model.Subscription;
+import com.sockets.test.model.Message;
+import com.sockets.test.model.Subscription;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -48,26 +47,25 @@ public class Sockets extends WebSocketServer {
     static Gson json = new Gson();
     static Map<String, HashSet<WebSocket>> channels = new HashMap<>();
 
-    public Sockets(int port) throws UnknownHostException {
+    public Sockets(int port) throws UnknownHostException, IOException {
         super(new InetSocketAddress(port));
+
+        HttpServer server = HttpServer.create(new InetSocketAddress(8002), 0);
+        server.createContext("/test", new MyHandler());
+        server.setExecutor(null);
+        server.start();
+        log("Http started on port: 8002");
+    }
+
+    public static void main(String[] args) throws UnknownHostException, IOException {
+        new Sockets(8887).start();
+        log("WS started on port: 8887");
     }
 
     public static void log(String message) {
         System.out.println(message);
     }
 
-
-    public static void main(String[] args) throws InterruptedException, IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8002), 0);
-        server.createContext("/test", new MyHandler());
-        server.setExecutor(null);
-        server.start();
-        log("Http started on port: 8002");
-
-        Sockets s = new Sockets(8887);
-        s.start();
-        log("WS started on port: 8887");
-    }
 
     static class MyHandler implements HttpHandler {
         @Override
@@ -87,7 +85,7 @@ public class Sockets extends WebSocketServer {
                     }
                 }
             }
-
+            log("channel: " + message.channel);
             String response = "This is the response";
             t.sendResponseHeaders(200, response.length());
             OutputStream os = t.getResponseBody();

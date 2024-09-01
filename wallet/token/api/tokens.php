@@ -11,8 +11,8 @@ function dataWalletProfile($domain, $address = null)
 {
     return [
         domain => $domain,
-        price => getCandleLastValue($domain, price),
-        price24 => getCandleChange24($domain, price),
+        price => getCandleLastValue($domain . _price),
+        price24 => getCandleChange24($domain . _price),
         balance => tokenAddressBalance($domain, $address),
     ];
 }

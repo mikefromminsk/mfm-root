@@ -60,6 +60,11 @@ function openLogin(success) {
                         storage.setString(storageKeys.hasPin, true)
                     if (success) success()
                     $scope.close()
+                }, function () {
+                    storage.setString(storageKeys.username, $scope.username)
+                    storage.setString(storageKeys.passhash, $scope.password)
+                    if (success) success()
+                    $scope.close()
                 })
             }
         }

@@ -26,9 +26,9 @@ function openShare(domain, success) {
 
             $scope.getMax = function () {
                 if (domain == wallet.gas_domain){
-                    return Math.round(Math.max(0, $scope.coin.balance - $scope.gas_recommended), 2)
+                    return Math.round(Math.max(0, $scope.token.balance - $scope.gas_recommended), 2)
                 } else {
-                    return $scope.coin.balance
+                    return $scope.token.balance
                 }
             }
 
@@ -50,11 +50,8 @@ function openShare(domain, success) {
 
 
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.coin = response
+                getProfile(domain, function (response) {
+                    $scope.token = response
                     $scope.$apply()
                 })
                 /*postContract(domain, "api/token/invite/create.php", {

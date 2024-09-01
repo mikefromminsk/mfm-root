@@ -1,10 +1,7 @@
 function getPin(success, cancel) {
-    if (storage.getString(storageKeys.hasPin) == "") {
+    if (cancel == null && storage.getString(storageKeys.hasPin) == "") {
         if (success)
             success()
-    } else if (window.tempPin != null) {
-        if (success)
-            success(window.tempPin)
     } else {
         window.$mdBottomSheet.show({
             templateUrl: "/wallet/dialogs/pin/index.html",
@@ -28,6 +25,5 @@ function getPin(success, cancel) {
             if (success)
                 success(result)
         })
-
     }
 }

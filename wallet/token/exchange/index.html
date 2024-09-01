@@ -1,31 +1,32 @@
-<md-bottom-sheet class="col fill black-back">
+<md-dialog class="col fill white-back black-text">
     <div class="row header align-start-center">
-        <img class="img38 img-black ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="openTokenProfile()">
         <div class="flex row">
-            <p>{{formatDomain(domain)}}</p>
+            {{formatTicker(token.domain)}}
         </div>
         <div class="col align-start-end">
-            <p>{{formatPrice(price)}}</p>
-            <p class="size14" ng-class="percentColor(change24)">{{formatPercent(change24)}}</p>
+            <p>{{formatPrice(token.price)}}</p>
+            <!--<p class="size14" ng-class="percentColor(change24)">{{formatPercent(change24)}}</p>-->
         </div>
-        <img class="img32 img-black ripple button black-back"
+
+        <img class="img32 img-black ripple"
              src="/wallet/img/settings.svg"
              ng-show="token.owner == wallet.address()"
-             ng-click="openSettings()">
+             ng-click="openExchangeSettings()">
     </div>
     <div class="col content align-start-center scroll">
         <div class="col block">
-            <div id="tradeChart" style="width: 100%; min-height: 300px"></div>
+            <!--<ng-include src="'/wallet/dialogs/chart/chart.html'"></ng-include>-->
             <div class="row mt16 mh8">
                 <div class="col" style="min-width: 200px;">
                     <div class="row r3" style="height: 32px">
                         <div class="flex row align-center-center r3"
-                             ng-class="{'green-back white-text': !is_sell, 'green-text': is_sell}"
+                             ng-class="{'green-back static-white-text': !is_sell, 'green-text': is_sell}"
                              ng-click="is_sell = false">
                             Buy
                         </div>
                         <div class="flex row align-center-center r3"
-                             ng-class="{'red-back white-text': is_sell, 'red-text': !is_sell}"
+                             ng-class="{'red-back static-white-text': is_sell, 'red-text': !is_sell}"
                              ng-click="is_sell = true">
                             Sell
                         </div>
@@ -41,7 +42,7 @@
                         <input type="number" ng-model="amount" ng-change="changeAmount()">
                     </div>
                     <div class="row" style="height: 22px">
-                        <div ng-repeat="item in [25,50,75,100]"
+                        <div ng-repeat="item in [25, 50, 75, 100]"
                              class="flex row align-center-center size12 ripple"
                              style="border: 1px solid var(--gray200);"
                              ng-click="setPortion(item)">
@@ -55,7 +56,7 @@
 
                     <div class="row size10 mt8 nowrap">
                         <div class="flex gray400-text">Available</div>
-                        <div>{{amountFormat(is_sell ? availabletoken : availableUsdt, is_sell ? domain : "USDT")}}</div>
+                        <div>{{formatAmount(is_sell ? token.balance : quote.balance, is_sell ? domain : "USDT")}}</div>
                     </div>
 
                     <div class="row mt16 primary-button uppercase align-center-center"
@@ -83,7 +84,7 @@
                         <div class="row align-start-center ripple ph8"
                              ng-repeat="item in sell"
                              style="height: 20px; position: relative"
-                             ng-click="sellLineClick($index)">
+                             ng-click="changePrice(item.price)">
                             <div class="red-back" style="position: absolute; height: 100%; opacity: 0.09;"
                                  ng-style="{'min-width': item.percent + '%'}"></div>
                             <div class="flex red-text">{{formatPrice(item.price)}}</div>
@@ -94,7 +95,7 @@
                     <div class="col align-start" style="height: calc(20px * 6)">
                         <div class="row align-start-center ripple ph8"
                              ng-repeat="item in buy" style="height: 20px; position: relative"
-                             ng-click="buyLineClick($index)">
+                             ng-click="changePrice(item.price)">
                             <div class="green-back" style="position: absolute; height: 100%; opacity: 0.09;"
                                  ng-style="{'min-width': item.percent + '%'}"></div>
                             <div class="flex green-text">{{formatPrice(item.price)}}</div>
@@ -124,4 +125,4 @@
             </div>
         </div>
     </div>
-</md-bottom-sheet>
+</md-dialog>

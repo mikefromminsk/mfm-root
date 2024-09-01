@@ -208,3 +208,19 @@ input::placeholder {
         transform: rotate(1turn);
     }
 }
+
+.green-toast .md-toast-content {
+    background: #009461;
+}
+.red-toast .md-toast-content {
+    background: var(--red);
+}
+
+@media (max-width: 600px) {
+    .red-toast, .green-toast {
+        bottom: 0 !important;
+        width: 100%;
+        left: 0;
+        right: 0;
+    }
+}

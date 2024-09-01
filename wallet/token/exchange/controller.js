@@ -1,37 +1,49 @@
 function openExchange(domain, is_sell) {
-    window.$mdBottomSheet.show({
+    window.$mdDialog.show({
         templateUrl: '/wallet/token/exchange/index.html',
         controller: function ($scope) {
             addFormats($scope)
             $scope.domain = domain
-
             $scope.is_sell = is_sell == 1
-            $scope.price = 5
-            $scope.amount = 5
-            $scope.total
-            $scope.availableCoin
-            $scope.availableUsdt
-            $scope.showChart = false
 
-            $scope.showChartToggle = function () {
-                $scope.showChart = !$scope.showChart
+            $scope.openExchangeSettings = function () {
+                $scope.back();
+                openExchangeSettings(domain);
             }
 
-            $scope.changePrice = function () {
+            if (DEBUG) {
+                $scope.price = 5
+                $scope.amount = 1
+            }
+
+            var round = $scope.round
+
+            $scope.changePrice = function (price) {
+                if (price != null)
+                    $scope.price = price
                 if ($scope.price != null && $scope.amount != null)
                     $scope.total = round($scope.price * $scope.amount, 4)
             }
 
-
-            $scope.changeAmount = function () {
+            $scope.changeAmount = function (amount) {
+                if (amount != null)
+                    $scope.amount = amount
                 if ($scope.price != null && $scope.amount != null)
                     $scope.total = round($scope.price * $scope.amount, 4)
             }
-
 
             $scope.changeTotal = function () {
                 if ($scope.price != null && $scope.total != null)
                     $scope.amount = round($scope.total / $scope.price, 2)
+            }
+
+            $scope.setPortion = function (portion) {
+                if (is_sell) {
+                    $scope.changeAmount(round($scope.token.balance * portion / 100, 2))
+                } else {
+                    $scope.total = round($scope.quote.balance * portion / 100, 4)
+                    $scope.changeTotal()
+                }
             }
 
             $scope.place = function () {
@@ -67,18 +79,25 @@ function openExchange(domain, is_sell) {
             }
 
             function init() {
-                loadProfile()
+                loadBaseProfile()
+                loadQuoteBalance()
                 loadOrderbook()
-                initChart()
                 loadOrders()
             }
 
-            function loadProfile() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
+            function loadBaseProfile() {
+                getProfile(domain, function (response) {
+                    $scope.token = response
+                    $scope.$apply()
+                })
+            }
+
+            function loadQuoteBalance() {
+                postContract("token", "address.php", {
+                    domain: wallet.quote_domain,
                     address: wallet.address(),
                 }, function (response) {
-                    $scope.token = response
+                    $scope.quote = response
                     $scope.$apply()
                 })
             }
@@ -94,52 +113,28 @@ function openExchange(domain, is_sell) {
                 })
             }
 
-            $scope.loadOrderbook = loadOrderbook;
+            //addChart($scope, domain + "_price")
 
-            /*setInterval(function () {
-                loadOrderbook()
-                //$scope.setPeriod($scope.period_name)
-            }, 3000)*/
+            subscribe("place", function (response) {
+                if (response.data.domain == domain) {
+                    $scope.token.price = response.data.price
+                    //$scope.updateChart()
+                    $scope.$apply()
+                }
+            });
 
-            var candleSeries
+            subscribe("orderbook", function (response) {
+                if (response.data.domain == domain) {
+                    loadOrderbook()
+                    $scope.$apply()
+                }
+            });
 
-            function initChart() {
-                setTimeout(function () {
-                    if (candleSeries == null) {
-                        candleSeries = createChart("tradeChart").addCandlestickSeries();
-                    }
-                    $scope.setPeriod($scope.period_name)
-                })
-            }
-
-            $scope.periods = ['1M', '1H', '1D', '1W']
-            $scope.period_name = '1M'
-            $scope.setPeriod = function (period_name) {
-                $scope.period_name = period_name
-                postContract("data", "candles.php", {
-                    key: domain + "_price",
-                    period_name: period_name,
-                }, function (response) {
-                    for (var i = 0; i < response.candles.length; i++) {
-                        response.candles[i].time =
-                            new Date(response.candles[i].time * 1000 + (i * 60 * 60 * 24 * 1000)).toJSON().slice(0, 10)
-                    }
-                    candleSeries.setData(response.candles)
-                    $scope.price = response.value
-                    $scope.change24 = response.change24
-                });
-            }
-
-            $scope.openSettings = function () {
-                openSettings(domain);
+            $scope.openTokenProfile = function () {
+                openTokenProfile(domain)
             }
 
             init()
         }
-    }).then(function () {
-        if (success)
-            success()
     })
-
-
 }

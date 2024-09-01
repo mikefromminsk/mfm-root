@@ -40,7 +40,7 @@ function openWithdrawal(success) {
             }
 
             $scope.setMax = function () {
-                $scope.amount = $scope.coin.balance
+                $scope.amount = $scope.token.balance
                 $scope.calcTotal()
             }
 
@@ -49,11 +49,8 @@ function openWithdrawal(success) {
             }
 
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: "usdt",
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.coin = response
+                getProfile("usdt", function (response) {
+                    $scope.token = response
                     $scope.$apply()
                 })
                 postContract(wallet.quote_domain, "api/providers.php", {

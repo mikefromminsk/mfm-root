@@ -1,11 +1,8 @@
-function openSettings(domain, success) {
+function openExchangeSettings(domain, success) {
     window.$mdDialog.show({
         templateUrl: '/wallet/token/exchange/settings/index.html',
         controller: function ($scope) {
             addFormats($scope)
-            window.$mdToast = $mdToast
-            window.$mdBottomSheet = $mdBottomSheet
-            window.$mdDialog = $mdDialog
 
             $scope.domain = domain
             $scope.multiplicator = 1
@@ -47,7 +44,7 @@ function openSettings(domain, success) {
             }
 
             $scope.loadChart = function () {
-                postContract("exchange", "bots/bot_pump_chart.php", {
+                /*postContract("exchange", "bots/bot_pump_chart.php", {
                     domain: domain,
                     startN: $scope.startN,
                     multiplicator: $scope.multiplicator,
@@ -57,15 +54,15 @@ function openSettings(domain, success) {
                             new Date(response.chart[i].time * 1000 + (i * 60 * 60 * 24 * 1000)).toJSON().slice(0, 10)
                     }
                     lineSeries.setData(response.chart)
-                })
+                })*/
             }
 
             var lineSeries
             function initChart() {
-                setTimeout(function () {
+                /*setTimeout(function () {
                     if (lineSeries == null)
                         lineSeries = createChart("priceChart").addLineSeries();
-                })
+                })*/
             }
 
 

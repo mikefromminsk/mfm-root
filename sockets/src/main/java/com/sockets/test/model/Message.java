@@ -1,4 +1,4 @@
-package model;
+package com.sockets.test.model;
 
 public class Message {
 

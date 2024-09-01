@@ -1,10 +1,10 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.5.21'
+    id 'com.github.johnrengelman.shadow' version '7.1.0'
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -20,4 +20,12 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'com.sockets.test.SSL'
+    }
+    archiveClassifier.set('')
+    mergeServiceFiles()
 }

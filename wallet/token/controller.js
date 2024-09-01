@@ -15,9 +15,10 @@ function addTokens($scope) {
     }
 
     $scope.openTokenProfile = function (domain) {
-        openTokenProfile($scope, domain, function (result) {
+        openTokenProfile(domain, function (result) {
             if (result && result.action == "store") {
-                $scope.selectToken(domain)
+                $scope.selectedToken = domain
+                $scope.selectTab(1)
             } else {
                 init()
             }
@@ -40,13 +41,17 @@ function addTokens($scope) {
         openWithdrawal(init)
     }
 
+    $scope.openSupport = function () {
+        window.open("https://t.me/+UWS_ZfqIi1tkNmVi", init)
+    }
+
     function init() {
         tokens("")
         //searchApp()
         //loadTrans()
     }
 
-    $scope.coins = {}
+    $scope.tokens = {}
 
     function tokens(search_text) {
         post("/wallet/token/api/tokens.php", {
@@ -77,60 +82,43 @@ function addTokens($scope) {
     $scope.regAddress = function (domain) {
         getPin(function (pin) {
             calcPass(domain, pin, function (pass) {
-                postContract("wallet", "reg.php", {
-                    address: wallet.address(),
+                postContract("token", "send.php", {
                     domain: domain,
-                    next_hash: pass,
-                }, init)
+                    from_address: "owner",
+                    to_address: wallet.address(),
+                    amount: 0,
+                    pass: pass
+                }, function () {
+                    init()
+                })
             })
         })
     }
 
-
-    $scope.openSupport = function () {
-        window.open("https://t.me/+UWS_ZfqIi1tkNmVi", init)
-    }
-
-    /*
-    function checkTransfers(from, to) {
-        if (from.length == 0) return
-
-        function showTopMessage(balanceChange, domain) {
-            $mdToast.show($mdToast.simple().position('top').textContent(
-                "You received " + $scope.formatAmount(balanceChange, domain)
-            ))
+    subscribe("transactions", function (response) {
+        if (response.data.to == wallet.address()) {
+            showSuccess("You received " + $scope.formatAmount(response.data.amount, response.data.domain))
             setTimeout(function () {
                 new Audio("/wallet/dialogs/success/payment_success.mp3").play()
             })
+            tokens("")
         }
+    });
 
-        for (let toToken of to) {
-            var found = false
-            for (let fromToken of from) {
-                if (toToken.domain == fromToken.domain) {
-                    found = true
-                    if (toToken.balance > fromToken.balance) {
-                        showTopMessage(toToken.balance - fromToken.balance, toToken.domain)
+    subscribe("place", function (response) {
+        function updateTokens(tokenList, domain, price) {
+            if (tokenList != null)
+                for (let token of tokenList) {
+                    if (token.domain == domain) {
+                        token.price = price
+                        $scope.$apply()
+                        break;
                     }
                 }
-            }
-            if (!found && toToken.balance > 0) {
-                showTopMessage(toToken.balance, toToken.domain)
-            }
         }
-    }*/
 
-    function showTopMessage(message) {
-        $mdToast.show($mdToast.simple().position('top').textContent(message))
-        setTimeout(function () {
-            new Audio("/wallet/dialogs/success/payment_success.mp3").play()
-        })
-    }
-
-    subscribe("transactions", function (data) {
-        if (data.tran.to == wallet.address()) {
-            showTopMessage("You received " + $scope.formatAmount(data.tran.amount, data.tran.domain))
-        }
+        updateTokens($scope.activeTokens, response.data.domain, response.data.price)
+        updateTokens($scope.recTokens, response.data.domain, response.data.price)
     });
 
     init()

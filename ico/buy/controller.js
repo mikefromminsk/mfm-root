@@ -25,20 +25,17 @@ function openIcoBuy($rootScope, domain, success) {
             }
 
             $scope.setMax = function () {
-                $scope.total = $scope.coin.gas_balance
+                $scope.total = $scope.token.gas_balance
                 $scope.calcAmount()
             }
 
             $scope.calcAmount = function () {
-                $scope.amount = Math.max(0, $scope.round(($scope.total - $scope.gas_recommended) / $scope.coin.price, 2))
+                $scope.amount = Math.max(0, $scope.round(($scope.total - $scope.gas_recommended) / $scope.token.price, 2))
             }
 
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.coin = response
+                getProfile(domain, function (response) {
+                    $scope.token = response
                     $scope.$apply()
                 })
                 postContract(domain, "api/token/ico/sell.php", {

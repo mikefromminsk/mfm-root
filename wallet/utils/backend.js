@@ -88,15 +88,8 @@ var wallet = {
     calcHash: function (domain, username, password, prev_key) {
         return md5(domain + username + password + (prev_key || ""))
     },
-    calcStartKey: function (domain, success) {
-        window.getPin(function (pin) {
-            success(wallet.calcHash(domain, wallet.address(), decode(storage.getString(storageKeys.passhash), pin)))
-        })
-    },
-    calcStartHash: function (domain, success) {
-        this.calcStartKey(domain, function (key) {
-            success(md5(key))
-        })
+    calcStartHash: function (domain, pin, success) {
+        success(md5(wallet.calcHash(domain, wallet.address(), decode(storage.getString(storageKeys.passhash), pin))))
     },
     calcKeyHash: function (domain, prev_key, pin, success) {
         var passhash = storage.getString(storageKeys.passhash)
@@ -113,16 +106,20 @@ var wallet = {
             wallet.calcKeyHash(domain, response.prev_key, pin, function (key, next_hash) {
                 success(key + ":" + next_hash, key, next_hash)
             })
-        }, error)
+        }, function () {
+            wallet.calcStartHash(domain, pin, function (next_hash) {
+                success(":" + next_hash, "", next_hash)
+            })
+        })
     },
     postContractWithGas: function (domain, path, params, success, error) {
         var isParamsFunction = typeof params === 'function'
         getPin(function (pin) {
             if (isParamsFunction) {
-                calcPass(domain, pin,function (pass, key) {
+                calcPass(domain, pin, function (pass, key) {
                     params = params(pass)
                     if (domain == wallet.gas_domain) {
-                        wallet.calcKeyHash(wallet.gas_domain, key, pin,function (gas_key, gas_next_hash) {
+                        wallet.calcKeyHash(wallet.gas_domain, key, pin, function (gas_key, gas_next_hash) {
                             send(params, gas_key + ":" + gas_next_hash)
                         })
                     } else {

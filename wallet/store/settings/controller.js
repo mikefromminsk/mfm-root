@@ -55,10 +55,7 @@ function openAppSettings(domain, success) {
             }
 
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
-                    address: wallet.address(),
-                }, function (response) {
+                getProfile(domain, function (response) {
                     $scope.title = response.title
                     $scope.hide_in_store = response.hide_in_store
                     $scope.$apply()

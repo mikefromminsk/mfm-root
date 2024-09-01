@@ -8,32 +8,29 @@ $address = get_string(address);
 $token[domain] = $domain;
 $token[title] = dataGet([wallet, info, $domain, title]);
 $token[hide_in_store] = dataGet([wallet, info, $domain, hide_in_store]) == 1;
-$token[total] = dataGet([wallet, info, $domain, total]);
-$token[owner] = getTokenOwner($domain);
-$token[trans] = dataCount([$domain, trans]);
-$token[wallets] = dataCount([$domain, token]);
 $token[nodes] = 1;
-$token[created] = dataInfo([$domain])[data_time];
-$token[dapps] = [];
-$token[ui] = dataGet([wallet, info, $domain, ui]);
-$token[mining] = dataExist([$domain, mining]);
+$tran = tokenFirstTran($domain);
+$token[created] = $tran[time];
+$token[total] = $tran[amount];
+$token[owner] = $tran[to];
+$token[circulation] = $tran[amount] - tokenAddressBalance($domain, $token[owner]);
+
 $token[description] = dataGet([wallet, info, $domain, description]);
-$token[ico_balance] = tokenAddressBalance($domain, ico);
-$token[gas_balance] = tokenAddressBalance($gas_domain, $address);
+$token[balance] = tokenAddressBalance($domain, $address);
+$token[price] = getCandleLastValue($domain . _price);
+$token[price24] = getCandleChange24($domain . _price);
+$token[trans] = getCandleLastValue($domain . _trans);
+$token[addresses] = getCandleLastValue($domain . _addresses);
+$token[volume] = getCandleLastValue($domain . _volume);
 
 
-$token[price] = dataGet([$domain, price]);
-$token[price24] = getCandleChange24($domain, price);
-/*$token[volume] = 100;
-$token[wallets] = 100;
-$token[transfers] = 100;
-$token[volume] = 100;*/
 $token[mcap] = $token[total] * $token[price];
 
 
-foreach (dataKeys([$domain, packages]) as $app_domain) {
+$token[dapps] = [];
+foreach (dataKeys([wallet, $domain, packages]) as $app_domain) {
     $token[dapps][$app_domain] = [
-        hash => dataGet([$domain, packages, $app_domain, hash]),
+        hash => dataGet([wallet, $domain, packages, $app_domain, hash]),
     ];
 }
 

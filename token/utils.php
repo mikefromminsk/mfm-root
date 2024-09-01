@@ -5,6 +5,17 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/data/track.php";
 
 $gas_domain = "usdt";
 
+
+function broadcast($channel, $data)
+{
+    if (WEB_SOCKETS_ENABLED) {
+        http_post("localhost:8002/test", [
+            channel => $channel,
+            data => $data,
+        ]);
+    }
+}
+
 function tokenKey($domain, $address, $password, $prev_key = "")
 {
     return md5($domain . $address . $password . $prev_key);
@@ -15,15 +26,36 @@ function tokenNextHash($domain, $address, $password, $prev_key = "")
     return md5(tokenKey($domain, $address, $password, $prev_key));
 }
 
+function tokenFirstTran($domain)
+{
+    return selectRow("select * from `trans` where `domain` = '$domain' and `from` = 'owner' order by `time` asc limit 1");
+}
+
+function tokenAddress($domain, $address)
+{
+    return selectRowWhere(addresses, [domain => $domain, address => $address]);
+}
 
 function tokenAddressBalance($domain, $address)
 {
-    return scalarWhere(addresses, amount, [domain => $domain, address => $address]);
+    $address = tokenAddress($domain, $address);
+    if ($address != null) {
+        return $address[balance];
+    }
+    return null;
 }
 
 function tokenScriptReg($domain, $address, $script)
 {
-    return tokenSend($domain, owner, $address, 0, ":", $script);
+    return requestEquals("localhost/token/send.php", [
+        domain => $domain,
+        from_address => owner,
+        to_address => $address,
+        amount => "0",
+        pass => ":",
+        script => $script,
+        delegate => $script,
+    ], success);
 }
 
 function tokenSend(
@@ -31,7 +63,7 @@ function tokenSend(
     $from_address,
     $to_address,
     $amount,
-    $pass = null,
+    $pass = ":",
     $delegate = null
 )
 {
@@ -47,7 +79,7 @@ function tokenSend(
                 address => owner,
                 prev_key => "",
                 next_hash => "",
-                amount => $amount,
+                balance => $amount,
                 delegate => "token/send.php",
             ]);
         }
@@ -57,15 +89,16 @@ function tokenSend(
                 address => $to_address,
                 prev_key => "",
                 next_hash => $next_hash,
-                amount => 0,
+                balance => 0,
                 delegate => $delegate,
             ]);
+            trackAccumulate($domain . _addresses);
         }
     }
 
     $from = selectRowWhere(addresses, [domain => $domain, address => $from_address]);
     $to = selectRowWhere(addresses, [domain => $domain, address => $to_address]);
-    if ($from[amount] < $amount) error(strtoupper($domain) . " balance is not enough in $from_address wallet");
+    if ($from[balance] < $amount) error(strtoupper($domain) . " balance is not enough in $from_address wallet");
     if ($to == null) error("$to_address receiver doesn't exist");
     if ($from[delegate] != null) {
         if ($from[delegate] != scriptPath())
@@ -76,18 +109,18 @@ function tokenSend(
 
     if ($from[delegate] != null) {
         updateWhere(addresses, [
-            amount => $from[amount] - $amount,
+            balance => $from[balance] - $amount,
         ], [domain => $domain, address => $from_address]);
     } else {
         updateWhere(addresses, [
-            amount => $from[amount] - $amount,
+            balance => $from[balance] - $amount,
             prev_key => $key,
             next_hash => $next_hash,
         ], [domain => $domain, address => $from_address]);
     }
 
     updateWhere(addresses, [
-        amount => $to[amount] + $amount
+        balance => $to[balance] + $amount
     ], [domain => $domain, address => $to_address]);
 
     $tran = [
@@ -95,27 +128,19 @@ function tokenSend(
         from => $from_address,
         to => $to_address,
         amount => $amount,
-        prev_key => $key,
+        key => $key,
         next_hash => $next_hash,
         time => time(),
     ];
 
-    http_post("localhost:8002/test", [
+    broadcast("localhost:8002/test", [
         channel => transactions,
-        tran => $tran,
+        data => $tran,
     ]);
 
+    trackAccumulate($domain . _trans);
+
     return insertRowAndGetId(trans, $tran);
-}
-
-function getTran($domain, $txid)
-{
-
-}
-
-function getTokenOwner($domain)
-{
-    return scalar("select `to` from `trans` where `domain` = '$domain' and `from` = 'owner' order by `time` asc limit 1");
 }
 
 function commit($response, $gas_address = null)
@@ -150,11 +175,10 @@ function commit($response, $gas_address = null)
 }
 
 
-
-function place($domain, $address, int $is_sell, $price, $amount, $pass = null)
+function place($domain, $address, int $is_sell, $price, $amount, $pass = ":")
 {
-    tokenScriptReg($domain,exchange_ . $domain, "token/place.php");
-    tokenScriptReg(usdt,exchange_ . $domain, "token/place.php");
+    tokenScriptReg($domain, exchange_ . $domain, "token/place.php");
+    tokenScriptReg(usdt, exchange_ . $domain, "token/place.php");
 
     if ($price !== round($price, 2)) error("price tick is 0.01");
     if ($amount !== round($amount, 2)) error("amount tick is 0.01");
@@ -208,20 +232,37 @@ function place($domain, $address, int $is_sell, $price, $amount, $pass = null)
     }
 
     if ($last_trade_price != null) {
-        /*trackVolume($domain, volume, $trade_volume);*/
-        trackCandles($domain . _price, $last_trade_price);
+        trackAccumulate($domain . _volume, $trade_volume);
+        trackLinear($domain . _price, $last_trade_price);
+
+        broadcast(place, [
+            domain => $domain,
+            price => $last_trade_price,
+        ]);
     }
+
+    broadcast(orderbook, [
+        domain => $domain,
+    ]);
+
     return $order_id;
 }
 
 
-function placeRange($domain, $min_price, $max_price, $count, $amount_usdt, $is_sell, $address, $pass = null)
+function placeRange($domain, $min_price, $max_price, $count, $amount_usdt, $is_sell, $address, $pass = ":")
 {
+    if ($min_price <= 0) error("min_price less than 0");
+    if ($max_price <= 0) error("max_price less than 0");
+    if ($min_price >= $max_price) error("min_price is greater than max_price");
+    if ($count <= 0) error("count less than 0");
+    if ($amount_usdt <= 0) error("amount_usdt less than 0");
+
     if ($amount_usdt < 0.01 * $count) {
         $price = ($is_sell == 1) ? $min_price : $max_price;
         $amount_base = round($amount_usdt / $price, 2);
-        if ($amount_base > 0)
+        if ($amount_base > 0) {
             place($domain, $address, $is_sell, $price, $amount_base, $pass);
+        }
     } else {
         $price = $min_price;
         $price_step = round(($max_price - $min_price) / ($count - 1), 2);

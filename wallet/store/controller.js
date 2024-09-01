@@ -4,12 +4,6 @@ function addStore($scope) {
         openAppSettings($scope.selectedToken, init)
     }
 
-    $scope.selectToken = function (domain) {
-        $scope.selectedToken = domain
-        $scope.selectTab(1)
-        loadApps()
-    }
-
     $scope.openProfile = function (app) {
         if (app.installed) {
             openWeb(location.origin + "/" + app.domain + "?domain=" + $scope.selectedToken, init)

@@ -40,9 +40,9 @@ function openSendDialog(domain, to_address, amount, success) {
 
             $scope.getMax = function () {
                 if (domain == wallet.gas_domain) {
-                    return Math.round(Math.max(0, $scope.coin.balance - $scope.gas_recommended), 2)
+                    return Math.round(Math.max(0, $scope.token.balance - $scope.gas_recommended), 2)
                 } else {
-                    return $scope.coin.balance
+                    return $scope.token.balance
                 }
             }
 
@@ -51,18 +51,8 @@ function openSendDialog(domain, to_address, amount, success) {
             }
 
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.coin = response
-                    $scope.$apply()
-                })
-
-                postContract(domain, "api/token/send.php", {
-                    gas_spent: 1,
-                }, function (response) {
-                    $scope.gas_recommended = response.gas_recommended
+                getProfile(domain, function (response) {
+                    $scope.token = response
                     $scope.$apply()
                 })
             }

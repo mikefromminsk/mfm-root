@@ -15,11 +15,8 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     }
 
     function loadProfile() {
-        postContract("wallet", "api/profile.php", {
-            domain: domain,
-            address: wallet.address(),
-        }, function (response) {
-            $scope.coin = response
+        getProfile(domain, function (response) {
+            $scope.token = response
             $scope.$apply()
         })
     }

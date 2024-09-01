@@ -4,7 +4,7 @@ function subscribe(channel, callback) {
     if (subscriptions[channel] == null)
         subscriptions[channel] = []
     subscriptions[channel].push(callback)
-    if (window.conn != null)
+    if (window.conn != null && subscriptions[channel].length == 1)
         window.conn.send(JSON.stringify({channel: channel}))
 }
 

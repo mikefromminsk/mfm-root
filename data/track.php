@@ -54,7 +54,7 @@ function getChart($domain, $key, $period_name)
 }*/
 
 
-function trackCandles($key, $value)
+function trackLinear($key, $value)
 {
     $timestamp = time();
     foreach (defaultChartSettings() as $period_name => $period) {
@@ -69,7 +69,7 @@ function trackCandles($key, $value)
                 period_time => $period_time,
                 low => $value,
                 high => $value,
-                open => $value,
+                open => $last_candle[close] ?: $value,
                 close => $value
             ]);
         } else {
@@ -84,6 +84,11 @@ function trackCandles($key, $value)
             ]);
         }
     }
+}
+
+function trackAccumulate($key, $value = 1)
+{
+    trackLinear($key, getCandleLastValue($key) + $value);
 }
 
 function optimizeCandles($candles)

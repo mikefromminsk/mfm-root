@@ -10,4 +10,6 @@ $delegate = get_string(delegate);
 
 $response[tran_id] = tokenSend($domain, $from_address, $to_address, $amount, $pass, $delegate);
 
+$response[success] = [tran_id] != null;
+
 commit($response);

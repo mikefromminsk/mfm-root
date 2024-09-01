@@ -1,5 +1,4 @@
 <?php
-
 include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
 
 if (!DEBUG) error("cannot use not in debug session");
@@ -11,7 +10,7 @@ query("CREATE TABLE IF NOT EXISTS `addresses` (
   `prev_key` varchar(256) COLLATE utf8_bin NOT NULL,
   `next_hash` varchar(256) COLLATE utf8_bin NOT NULL,
   `delegate` varchar(256) COLLATE utf8_bin DEFAULT NULL,
-  `amount` int(11) NOT NULL
+  `balance` float NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 query("DROP TABLE IF EXISTS `trans`;");
@@ -20,22 +19,22 @@ query("CREATE TABLE IF NOT EXISTS `trans` (
   `domain` varchar(256) COLLATE utf8_bin NOT NULL,
   `from` varchar(256) COLLATE utf8_bin NOT NULL,
   `to` varchar(256) COLLATE utf8_bin NOT NULL,
-  `prev_key` varchar(256) COLLATE utf8_bin NOT NULL,
+  `key` varchar(256) COLLATE utf8_bin NOT NULL,
   `next_hash` varchar(256) COLLATE utf8_bin NOT NULL,
   `delegate` varchar(256) COLLATE utf8_bin DEFAULT NULL,
-  `amount` int(11) NOT NULL,    
+  `amount` float NOT NULL,    
   `time` int(11) NOT NULL,    
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-
-requestEquals("localhost/token/send.php", [
+//https://mytoken.space/token/send.php?domain=usdt&from_address=owner&to_address=admin&amount=100000000&pass=:d7ca392100808830932ba9746fea206f
+/*requestEquals("localhost/token/send.php", [
     domain => $gas_domain,
     from_address => owner,
     to_address => admin,
     amount => 100000000,
     pass => ":" . tokenNextHash($gas_domain, admin, pass)
-], tran_id);
+], tran_id);*/
 
 query("DROP TABLE IF EXISTS `orders`;");
 query("CREATE TABLE IF NOT EXISTS `orders` (

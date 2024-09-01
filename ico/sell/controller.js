@@ -19,7 +19,7 @@ function openIcoSell($rootScope, domain, success) {
                             key: key,
                             next_hash: hash,
                             amount: $scope.amount,
-                            price: $scope.coin.price || $scope.price,
+                            price: $scope.token.price || $scope.price,
                         }
                     }, function () {
                         showSuccessDialog("You open for sale " + $scope.formatTicker(domain), success)
@@ -28,20 +28,17 @@ function openIcoSell($rootScope, domain, success) {
             }
 
             $scope.setMax = function () {
-                $scope.amount = $scope.coin.balance
+                $scope.amount = $scope.token.balance
                 $scope.calcTotal()
             }
 
             $scope.calcTotal = function () {
-                $scope.total = Math.max(0, $scope.round($scope.amount * $scope.coin.price - $scope.gas_recommended, 2))
+                $scope.total = Math.max(0, $scope.round($scope.amount * $scope.token.price - $scope.gas_recommended, 2))
             }
 
             function init() {
-                postContract("wallet", "api/profile.php", {
-                    domain: domain,
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.coin = response
+                getProfile(domain, function (response) {
+                    $scope.token = response
                     $scope.$apply()
                 })
                 postContract(domain, "api/token/ico/sell.php", {
