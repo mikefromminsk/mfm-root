@@ -1,6 +1,6 @@
-class Trees extends Scene {
+class Stones extends Scene {
     constructor() {
-        super({key: 'Trees'});
+        super({key: 'Stones'});
     }
 
     preload() {
@@ -15,23 +15,11 @@ class Trees extends Scene {
     }
 
     randomObjects() {
-        this.objects = this.emptyGrid();
         this.forGrid((x, y) => {
             if (Phaser.Math.Between(1, 3) == 3) {
+                this.objects[x][y].texture = 'stone';
+            } else if (Phaser.Math.Between(1, 10) == 3) {
                 this.objects[x][y].texture = 'tree';
-            }
-        })
-    }
-
-    drawObjects() {
-        this.forGrid((x, y) => {
-            if (this.objects[x][y].texture != null) {
-                this.objects[x][y].sprite = this.add.sprite(
-                    x * this.cellSize,
-                    y * this.cellSize,
-                    'basic',
-                    this.basic[this.objects[x][y].texture]
-                ).setOrigin(0);
             }
         })
     }

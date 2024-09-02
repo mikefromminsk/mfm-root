@@ -16,7 +16,9 @@ class Scene extends Phaser.Scene {
             grass: 11,
             flowers: 12,
             water: 13,
-            tree: 76,
+            tree: 38,
+            stone: 58,
+            shop: 47,
         }
     }
 
@@ -30,6 +32,46 @@ class Scene extends Phaser.Scene {
 
         this.background = this.add.tileSprite(0, 0, this.worldWidth, this.worldHeight, 'basic', this.basic[texture])
         this.background.setOrigin(0, 0)
+
+        this.objects = this.emptyGrid();
+
+
+    }
+
+    drawObjects() {
+        let sprites = []
+        this.forGrid((x, y) => {
+            if (this.objects[x][y].texture != null) {
+                let sprite = this.physics.add.sprite(
+                    x * this.cellSize,
+                    y * this.cellSize,
+                    'basic',
+                    this.basic[this.objects[x][y].texture]
+                ).setOrigin(0);
+                sprite.setData('object', this.objects[x][y])
+                this.objects[x][y].sprite = sprite
+                sprites.push(sprite)
+            }
+        })
+        this.physics.add.overlap(this.player, sprites, this.overlap, null, this)
+    }
+
+    overlap(player, object) {
+        if (this.lastTouchObject != object || new Date().getTime() - this.lastTouchTime > 100) {
+            this.lastTouchObject = object
+            this.startTouchTime = new Date().getTime()
+            this.lastTouchTime = new Date().getTime()
+            this.touched = false
+        } else {
+            this.lastTouchTime = new Date().getTime()
+            if (!this.touched &&new Date().getTime() - this.startTouchTime > 500) {
+                this.touched = true
+                this.touch(object.data.values.object)
+            }
+        }
+    }
+
+    touch(object) {
     }
 
     emptyGrid() {
@@ -65,8 +107,15 @@ class Scene extends Phaser.Scene {
         }
     }
 
+    randomPos(callback) {
+        let x = Phaser.Math.Between(5, 10) // this.gridWidth - 1
+        let y = Phaser.Math.Between(5, 10) // this.gridHeight - 1
+        callback(x, y)
+    }
+
     create() {
-        this.player = this.physics.add.sprite(200, 200, 'dude')
+
+        this.player = this.physics.add.sprite(15, 30, 'dude')
         this.player.setCollideWorldBounds(true)
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setZoom(2);
