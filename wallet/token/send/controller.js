@@ -51,7 +51,10 @@ function openSendDialog(domain, to_address, amount, success) {
             }
 
             function init() {
-                getProfile(domain, function (response) {
+                postContract("wallet", "api/profile.php", {
+                    domain: domain,
+                    address: wallet.address(),
+                }, function (response) {
                     $scope.token = response
                     $scope.$apply()
                 })

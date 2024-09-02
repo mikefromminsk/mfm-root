@@ -24,7 +24,7 @@ class Shop extends Scene {
 
     touch(object) {
         if (object.texture == 'shop') {
-            console.log(object)
+            openSendDialog('usdt', "admin", 1000);
         }
     }
 }

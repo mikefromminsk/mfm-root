@@ -5,4 +5,9 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdDialog = $mdDialog
 
 
+    function init() {
+    }
+
+
+    init()
 }
