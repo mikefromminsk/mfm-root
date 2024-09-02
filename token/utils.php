@@ -1,5 +1,4 @@
 <?php
-
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/data/track.php";
 
@@ -9,7 +8,7 @@ $gas_domain = "usdt";
 function broadcast($channel, $data)
 {
     if (WEB_SOCKETS_ENABLED) {
-        http_post("localhost:8002/test", [
+        http_post("localhost:8002/demo", [
             channel => $channel,
             data => $data,
         ]);
@@ -133,7 +132,7 @@ function tokenSend(
         time => time(),
     ];
 
-    broadcast("localhost:8002/test", [
+    broadcast("localhost:8002/demo", [
         channel => transactions,
         data => $tran,
     ]);

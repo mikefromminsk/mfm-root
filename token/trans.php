@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
 
 $domain = get_string(domain);
 $address = get_required(address);

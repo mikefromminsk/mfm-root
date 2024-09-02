@@ -1,16 +1,95 @@
-class BaseScene extends Phaser.Scene {
+class Scene extends Phaser.Scene {
     constructor(config) {
         super(config)
         this.maxSpeed = 200
+        this.cellSize = 16
     }
 
     preload() {
-        this.load.spritesheet('dude', 'assets/dude.png', {frameWidth: 32, frameHeight: 48})
+        this.load.image('sky', 'assets/demo/sky.png')
+        this.load.spritesheet('dude', 'assets/demo/dude.png', {frameWidth: 32, frameHeight: 48})
+        this.load.spritesheet('basic', 'assets/basic/basictiles.png', {
+            frameWidth: 16,
+            frameHeight: 16
+        });
+        this.basic = {
+            grass: 11,
+            flowers: 12,
+            water: 13,
+            tree: 76,
+        }
+    }
+
+    createWorld(width, height, texture) {
+        this.worldWidth = width
+        this.worldHeight = height
+        this.gridWidth = Math.ceil(width / this.cellSize)
+        this.gridHeight = Math.ceil(height / this.cellSize)
+        this.physics.world.setBounds(0, 0, width, height)
+        this.cameras.main.setBounds(0, 0, width, height)
+
+        this.background = this.add.tileSprite(0, 0, this.worldWidth, this.worldHeight, 'basic', this.basic[texture])
+        this.background.setOrigin(0, 0)
+    }
+
+    emptyGrid() {
+        let grid = []
+        for (let x = 0; x < this.gridWidth; x++) {
+            grid[x] = [];
+            for (let y = 0; y < this.gridHeight; y++) {
+                grid[x][y] = {};
+            }
+        }
+        return grid
+    }
+
+    forGrid(callback) {
+        for (let x = 0; x < this.gridWidth; x++) {
+            for (let y = 0; y < this.gridHeight; y++) {
+                callback(x, y)
+            }
+        }
+    }
+
+    forNear(distance, callback) {
+        for (let x = 0; x < this.gridWidth; x++) {
+            for (let y = 0; y < this.gridHeight; y++) {
+                let distanceWithPlayer = Phaser.Math.Distance.Between(
+                    this.player.x, this.player.y,
+                    x * this.cellSize, y * this.cellSize
+                );
+                if (distanceWithPlayer < distance) {
+                    callback(x, y, distance)
+                }
+            }
+        }
     }
 
     create() {
-        this.player = this.physics.add.sprite(400, 300, 'dude')
+        this.player = this.physics.add.sprite(200, 200, 'dude')
         this.player.setCollideWorldBounds(true)
+        this.cameras.main.startFollow(this.player)
+        this.cameras.main.setZoom(2);
+
+        this.anims.create({
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'turn',
+            frames: [{key: 'dude', frame: 4}],
+            frameRate: 20
+        })
+
+        this.anims.create({
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+            frameRate: 10,
+            repeat: -1
+        })
 
         this.joystick = document.getElementById('joystick')
         this.stick = this.joystick.querySelector('.stick')

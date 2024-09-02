@@ -13,7 +13,7 @@ function openWithdrawal(success) {
             }
 
             $scope.withdrawal = function () {
-                // test withdrawal address
+                // demo withdrawal address
                 if (!$scope.withdrawal_address.startsWith("T") || !$scope.withdrawal_address.length == 34) {
                     $scope.errorAddress = "Invalid address"
                     return
