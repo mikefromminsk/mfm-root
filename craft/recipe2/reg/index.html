@@ -1,0 +1,26 @@
+<md-dialog class="col fill">
+    <div class="row header align-start-center">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p>Settings</p>
+    </div>
+    <div class="col content align-start-center">
+        <div class="col block">
+            <div style="background: url('/constructor/img/furnace.png'); width: 100%; height: 150px">
+
+            </div>
+            <div class="flex row input-wrapper-black">
+                <div class="input-label uppercase">Domain1</div>
+                <input type="text"
+                       ng-model="domain1">
+            </div>
+            <div class="flex row input-wrapper-black">
+                <div class="input-label uppercase">Domain2</div>
+                <input type="text"
+                       ng-model="domain2">
+            </div>
+            <div class="primary-button">
+                <button ng-click="create()">Create</button>
+            </div>
+        </div>
+    </div>
+</md-dialog>

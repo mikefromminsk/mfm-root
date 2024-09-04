@@ -5,14 +5,16 @@ class Shop extends Scene {
 
     preload() {
         super.preload();
+        this.loadBlock('green_concrete_powder')
+        this.loadBlock('furnace_front_on')
     }
 
     create() {
         super.create();
-        this.createWorld(1600, 1000, 'grass');
+        this.createWorld(1600, 1000, 'green_concrete_powder');
 
         this.randomPos((x, y) => {
-            this.objects[x][y].texture = 'shop';
+            this.objects[x][y].texture = 'furnace_front_on';
         })
 
         this.drawObjects();
@@ -23,8 +25,10 @@ class Shop extends Scene {
     }
 
     touch(object) {
-        if (object.texture == 'shop') {
-            openSendDialog('usdt', "admin", 1000);
+        if (object.texture == 'furnace_front_on') {
+            openConstruct(function () {
+
+            });
         }
     }
 }

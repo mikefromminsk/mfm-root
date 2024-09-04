@@ -30,6 +30,11 @@ function tokenFirstTran($domain)
     return selectRow("select * from `trans` where `domain` = '$domain' and `from` = 'owner' order by `time` asc limit 1");
 }
 
+function tokenOwner($domain)
+{
+    return tokenFirstTran($domain)[to];
+}
+
 function tokenAddress($domain, $address)
 {
     return selectRowWhere(addresses, [domain => $domain, address => $address]);
@@ -46,15 +51,19 @@ function tokenAddressBalance($domain, $address)
 
 function tokenScriptReg($domain, $address, $script)
 {
-    return requestEquals("localhost/token/send.php", [
-        domain => $domain,
-        from_address => owner,
-        to_address => $address,
-        amount => "0",
-        pass => ":",
-        script => $script,
-        delegate => $script,
-    ], success);
+    if (tokenAddress($domain, $address) == null) {
+        return requestEquals("localhost/token/send.php", [
+            domain => $domain,
+            from_address => owner,
+            to_address => $address,
+            amount => "0",
+            pass => ":",
+            script => $script,
+            delegate => $script,
+        ], success);
+    } else {
+        return false;
+    }
 }
 
 function tokenSend(

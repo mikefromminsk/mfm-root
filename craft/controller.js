@@ -4,11 +4,11 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     window.$mdBottomSheet = $mdBottomSheet
     window.$mdDialog = $mdDialog
 
-    $scope.openAccount = function () {
-        openAccount()
-    }
-
     var domain = getParam("domain")
+
+    $scope.openRegRecipe2 = function () {
+        openRegRecipe2(domain)
+    }
 
     function init() {
         loadProfile()

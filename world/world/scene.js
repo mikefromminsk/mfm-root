@@ -2,11 +2,14 @@ class Scene extends Phaser.Scene {
     constructor(config) {
         super(config)
         this.maxSpeed = 200
-        this.cellSize = 16
+        this.cellSize = 32
+    }
+
+    loadBlock(texture) {
+        this.load.image(texture, 'assets/block/' + texture + '.png')
     }
 
     preload() {
-        this.load.image('sky', 'assets/demo/sky.png')
         this.load.spritesheet('dude', 'assets/demo/dude.png', {frameWidth: 32, frameHeight: 48})
         this.load.spritesheet('basic', 'assets/basic/basictiles.png', {
             frameWidth: 16,
@@ -30,12 +33,10 @@ class Scene extends Phaser.Scene {
         this.physics.world.setBounds(0, 0, width, height)
         this.cameras.main.setBounds(0, 0, width, height)
 
-        this.background = this.add.tileSprite(0, 0, this.worldWidth, this.worldHeight, 'basic', this.basic[texture])
+        this.background = this.add.tileSprite(0, 0, this.worldWidth, this.worldHeight, texture)
         this.background.setOrigin(0, 0)
 
         this.objects = this.emptyGrid();
-
-
     }
 
     drawObjects() {
@@ -45,8 +46,7 @@ class Scene extends Phaser.Scene {
                 let sprite = this.physics.add.sprite(
                     x * this.cellSize,
                     y * this.cellSize,
-                    'basic',
-                    this.basic[this.objects[x][y].texture]
+                    this.objects[x][y].texture
                 ).setOrigin(0);
                 sprite.setData('object', this.objects[x][y])
                 this.objects[x][y].sprite = sprite
@@ -64,7 +64,7 @@ class Scene extends Phaser.Scene {
             this.touched = false
         } else {
             this.lastTouchTime = new Date().getTime()
-            if (!this.touched &&new Date().getTime() - this.startTouchTime > 500) {
+            if (!this.touched && new Date().getTime() - this.startTouchTime > 300) {
                 this.touched = true
                 this.touch(object.data.values.object)
             }
@@ -108,8 +108,8 @@ class Scene extends Phaser.Scene {
     }
 
     randomPos(callback) {
-        let x = Phaser.Math.Between(5, 10) // this.gridWidth - 1
-        let y = Phaser.Math.Between(5, 10) // this.gridHeight - 1
+        let x = Phaser.Math.Between(2, 2) // this.gridWidth - 1
+        let y = Phaser.Math.Between(2, 2) // this.gridHeight - 1
         callback(x, y)
     }
 
@@ -118,7 +118,7 @@ class Scene extends Phaser.Scene {
         this.player = this.physics.add.sprite(15, 30, 'dude')
         this.player.setCollideWorldBounds(true)
         this.cameras.main.startFollow(this.player)
-        this.cameras.main.setZoom(2);
+        this.cameras.main.setZoom(1.5);
 
         this.anims.create({
             key: 'left',

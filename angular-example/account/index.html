@@ -1,4 +1,4 @@
-<md-dialog class="col fill">
+<md-bottom-sheet class="col fill">
     <div class="row header align-start-center">
         <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
         <p>Settings</p>
@@ -6,6 +6,11 @@
     <div class="col content align-start-center">
         <div class="col block">
             Content
+            <div class="flex row input-wrapper-black">
+                <div class="input-label uppercase">Domain1</div>
+                <input type="text"
+                       ng-model="domain1">
+            </div>
         </div>
     </div>
-</md-dialog>
+</md-bottom-sheet>

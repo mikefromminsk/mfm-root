@@ -45,16 +45,8 @@ function addTokens($scope) {
         window.open("https://t.me/+UWS_ZfqIi1tkNmVi", init)
     }
 
-    function init() {
-        tokens("")
-        //searchApp()
-        //loadTrans()
-    }
-
-    $scope.tokens = {}
-
     function tokens(search_text) {
-        post("/wallet/token/api/tokens.php", {
+        postContract("wallet", "token/api/tokens.php", {
             address: wallet.address(),
             search_text: search_text,
         }, function (response) {
@@ -120,6 +112,34 @@ function addTokens($scope) {
         updateTokens($scope.activeTokens, response.data.domain, response.data.price)
         updateTokens($scope.recTokens, response.data.domain, response.data.price)
     });
+
+    $scope.mode = "tokens"
+    $scope.setMode = function (mode) {
+        $scope.mode = mode
+        if (mode == "tokens") {
+            tokens("")
+        } else if (mode == "recipes") {
+            recipes("")
+        }
+    }
+
+    $scope.recipes = {}
+
+    function recipes(search_text) {
+        post("/wallet/token/api/recepes.php", {}, function (response) {
+            $scope.recipes = response.recipes
+            $scope.$apply()
+        })
+    }
+
+    $scope.openCraft2 = function (recipe) {
+        openCraft2(recipe, init)
+    }
+
+
+    function init() {
+        $scope.setMode($scope.mode)
+    }
 
     init()
 }

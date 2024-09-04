@@ -1,6 +1,5 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/wallet/api/utils.php";
-include_once $_SERVER["DOCUMENT_ROOT"] . "/data/track.php";
 
 $address = get_string(address);
 $search_text = get_string(search_text);
