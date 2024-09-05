@@ -1,0 +1,35 @@
+<md-bottom-sheet class="col fill">
+    <div class="row header align-start-center">
+        <img class="ripple" src="/wallet/img/back.svg" ng-click="close()">
+        <p>Create scene</p>
+    </div>
+    <div class="col content align-start-center">
+        <div class="col block input-content">
+            <div class="flex row input-wrapper">
+                <div class="input-label uppercase">scene</div>
+                <input type="text"
+                       ng-model="scene">
+            </div>
+            <div class="flex row input-wrapper">
+                <div class="input-label uppercase">width</div>
+                <input type="number"
+                       ng-model="width">
+            </div>
+            <div class="flex row input-wrapper">
+                <div class="input-label uppercase">height</div>
+                <input type="number"
+                       ng-model="height">
+            </div>
+            <div class="flex row input-wrapper">
+                <div class="input-label uppercase">texture</div>
+                <input type="text"
+                       ng-model="texture">
+            </div>
+            
+            <div class="primary_button"
+                ng-click="create()">
+                Create
+            </div>
+        </div>
+    </div>
+</md-bottom-sheet>

@@ -67,8 +67,8 @@ const storageKeys = {
     onboardingShowed: "STORE_ONBOARDING_SHOWED",
 }
 
-function postContractWithGas(domain, contractHash, params, success, error) {
-    wallet.postContractWithGas(domain, contractHash, params, success, error)
+function postContractWithGas(domain, path, params, success, error) {
+    wallet.postContractWithGas(domain, path, params, success, error)
 }
 
 function calcPass(domain, pin, success, error) {

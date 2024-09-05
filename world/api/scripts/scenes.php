@@ -41,15 +41,15 @@ function placeObjectsInMatrix(&$matrix, $objects) {
 function addObjectsToScene($worldFilePath, $sceneId, $owner, $newObjects) {
     $worldData = loadWorldData($worldFilePath);
 
-    if (!isset($worldData['scenes'][$sceneId])) {
-        die("Error: Scene does not exist.");
+    if (!isset($worldData['scene'][$sceneId])) {
+        die("Error: Base does not exist.");
     }
 
-    if ($worldData['scenes'][$sceneId]['owner'] !== $owner) {
+    if ($worldData['scene'][$sceneId]['owner'] !== $owner) {
         die("Error: You do not have permission to modify this scene.");
     }
 
-    $scene = $worldData['scenes'][$sceneId];
+    $scene = $worldData['scene'][$sceneId];
     $width = $scene['width'];
     $height = $scene['height'];
     $existingObjects = $scene['objects'];
@@ -66,14 +66,14 @@ function addObjectsToScene($worldFilePath, $sceneId, $owner, $newObjects) {
 
     foreach ($newObjects as $object) {
         $objectId = $object['id'];
-        $worldData['scenes'][$sceneId]['objects'][$objectId] = $object;
+        $worldData['scene'][$sceneId]['objects'][$objectId] = $object;
     }
 
     saveWorldData($worldFilePath, $worldData);
 }
 
 // Пример использования
-$worldFilePath = 'path/to/world.json';
+$worldFilePath = 'path/to/scene.json';
 $sceneId = 'scene1';
 $owner = 'user1';
 $newObjects = [

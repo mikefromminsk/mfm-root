@@ -25,11 +25,11 @@ query("CREATE TABLE IF NOT EXISTS `history` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
-dataSet([data], "Hello world!");
+dataSet([data], "Hello scene!");
 
 dataCommit();
 
-assertEquals("data put", dataGet([data]), "Hello world!");
+assertEquals("data put", dataGet([data]), "Hello scene!");
 
 $response[success] = true;
 

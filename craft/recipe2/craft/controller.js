@@ -1,5 +1,5 @@
 function openCraft2(domain, success) {
-    window.$mdDialog.show({
+    window.$mdBottomSheet.show({
         templateUrl: '/craft/recipe2/craft/index.html',
         controller: function ($scope) {
             addFormats($scope)

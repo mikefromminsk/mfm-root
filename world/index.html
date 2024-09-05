@@ -1,6 +1,6 @@
 <head>
     <title>Title</title>
-    <link rel="icon" href="/wallet/logo.svg">
+    <link rel="icon" href="/world/assets/diamond_pickaxe.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -31,39 +31,24 @@
 <script src="/wallet/utils/backend.js"></script>
 <script src="/wallet/utils/ui.js"></script>
 
-<script src="/wallet/token/send/controller.js"></script>
-<script src="/constructor/construct/controller.js"></script>
+
+<script src="scene/Utils.js"></script>
+<script src="scene/Base.js"></script>
+<script src="scene/Shop.js"></script>
+<script src="scene/UIScene.js"></script>
+<script src="scene/controls/Switcher.js"></script>
+<script src="/wallet/token/login/controller.js"></script>
 
 <script src="controller.js"></script>
 <script>
     controller(main)
 </script>
 
-<script src="world/scene.js"></script>
-<script src="world/ground.js"></script>
-<script src="world/portals.js"></script>
-<script src="world/stones.js"></script>
-<script src="world/shop.js"></script>
-
-<script>
-    var config = {
-        type: Phaser.AUTO,
-        width: window.innerWidth,
-        height: window.innerHeight,
-        physics: {
-            default: 'arcade',
-            arcade: {
-                gravity: { y: 0 },
-                debug: false
-            }
-        },
-        scene: [Shop, Ground]
-    }
-
-    window.addEventListener('resize', () => {
-        game.scale.resize(window.innerWidth, window.innerHeight)
-    })
-
-    new Phaser.Game(config)
-</script>
+<script async src="/craft/recipe2/craft/controller.js"></script>
+<script async src="/wallet/token/send/controller.js"></script>
+<script async src="/wallet/dialogs/pin/controller.js"></script>
+<script async src="/wallet/dialogs/success/controller.js"></script>
+<script async src="/wallet/dialogs/info/controller.js"></script>
+<script async src="/world/scene/scene_create/controller.js"></script>
+<script async src="/world/scene/select_token/controller.js"></script>
 </body>

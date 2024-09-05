@@ -1,77 +1,69 @@
-class Scene extends Phaser.Scene {
+class Base extends Utils {
     constructor(config) {
         super(config)
         this.maxSpeed = 200
         this.cellSize = 32
+        this.touchData = new Map();
     }
 
-    loadBlock(texture) {
-        this.load.image(texture, 'assets/block/' + texture + '.png')
-    }
-
-    preload() {
-        this.load.spritesheet('dude', 'assets/demo/dude.png', {frameWidth: 32, frameHeight: 48})
-        this.load.spritesheet('basic', 'assets/basic/basictiles.png', {
-            frameWidth: 16,
-            frameHeight: 16
-        });
-        this.basic = {
-            grass: 11,
-            flowers: 12,
-            water: 13,
-            tree: 38,
-            stone: 58,
-            shop: 47,
-        }
-    }
-
-    createWorld(width, height, texture) {
-        this.worldWidth = width
-        this.worldHeight = height
-        this.gridWidth = Math.ceil(width / this.cellSize)
-        this.gridHeight = Math.ceil(height / this.cellSize)
+    createWorld(gridWidth, gridHeight, texture) {
+        let width = gridWidth * this.cellSize
+        let height = gridHeight * this.cellSize
         this.physics.world.setBounds(0, 0, width, height)
         this.cameras.main.setBounds(0, 0, width, height)
 
-        this.background = this.add.tileSprite(0, 0, this.worldWidth, this.worldHeight, texture)
+        this.background = this.add.tileSprite(0, 0, width, height, texture)
         this.background.setOrigin(0, 0)
 
+        this.gridWidth = gridWidth
+        this.gridHeight = gridHeight
         this.objects = this.emptyGrid();
     }
 
     drawObjects() {
         let sprites = []
         this.forGrid((x, y) => {
-            if (this.objects[x][y].texture != null) {
+            var object = this.objects[x][y]
+            if (object.texture != null) {
+                if (object.sprite != null) {
+                    object.sprite.destroy()
+                }
                 let sprite = this.physics.add.sprite(
                     x * this.cellSize,
                     y * this.cellSize,
-                    this.objects[x][y].texture
+                    object.texture
                 ).setOrigin(0);
-                sprite.setData('object', this.objects[x][y])
-                this.objects[x][y].sprite = sprite
+                sprite.setData('object', object)
+                object.sprite = sprite
                 sprites.push(sprite)
             }
         })
-        this.physics.add.overlap(this.player, sprites, this.overlap, null, this)
+        if (this.objectCollaider != null)
+            this.physics.world.removeCollider(this.objectCollaider);
+        this.objectCollaider = this.physics.add.overlap(this.player, sprites, this.touchCheck, null, this)
+        this.touchGrid = this.emptyGrid();
     }
 
-    overlap(player, object) {
-        if (this.lastTouchObject != object || new Date().getTime() - this.lastTouchTime > 100) {
-            this.lastTouchObject = object
-            this.startTouchTime = new Date().getTime()
-            this.lastTouchTime = new Date().getTime()
-            this.touched = false
-        } else {
-            this.lastTouchTime = new Date().getTime()
-            if (!this.touched && new Date().getTime() - this.startTouchTime > 300) {
-                this.touched = true
-                this.touch(object.data.values.object)
-            }
+    touchCheck(player, sprite) {
+        const currentTime = new Date().getTime();
+        var x = Math.ceil(sprite.x / this.cellSize)
+        var y = Math.ceil(sprite.y / this.cellSize)
+        var data = this.touchGrid[x][y]
+        if (data.startTouch == null) {
+            data = {startTouch: 0, lastTouch: 0}
+            this.touchGrid[x][y] = data
         }
+        if (currentTime - data.lastTouch > 300) {
+            data.startTouch = currentTime;
+        }
+        if (data.startTouch + 300 > currentTime) {
+            data.startTouch = 0
+            this.touch(sprite.data.values.object, x, y)
+        }
+        data.lastTouch = currentTime;
     }
 
-    touch(object) {
+    touch(object, x, y) {
     }
 
     emptyGrid() {
@@ -94,17 +86,15 @@ class Scene extends Phaser.Scene {
     }
 
     forNear(distance, callback) {
-        for (let x = 0; x < this.gridWidth; x++) {
-            for (let y = 0; y < this.gridHeight; y++) {
-                let distanceWithPlayer = Phaser.Math.Distance.Between(
-                    this.player.x, this.player.y,
-                    x * this.cellSize, y * this.cellSize
-                );
-                if (distanceWithPlayer < distance) {
-                    callback(x, y, distance)
-                }
+        this.forGrid(function (x, y) {
+            let distanceWithPlayer = Phaser.Math.Distance.Between(
+                this.player.x, this.player.y,
+                x * this.cellSize, y * this.cellSize
+            );
+            if (distanceWithPlayer < distance) {
+                callback(x, y, distance)
             }
-        }
+        })
     }
 
     randomPos(callback) {
@@ -113,29 +103,38 @@ class Scene extends Phaser.Scene {
         callback(x, y)
     }
 
-    create() {
 
-        this.player = this.physics.add.sprite(15, 30, 'dude')
+    loadImage(texture) {
+        this.load.image(texture, 'assets/' + texture + '.png')
+    }
+
+    preload() {
+        this.load.spritesheet('avatar', 'assets/avatar.png', {frameWidth: 32, frameHeight: 48})
+        this.loadImage("diamond_pickaxe")
+    }
+
+    create() {
+        this.player = this.physics.add.sprite(15, 30, 'avatar')
         this.player.setCollideWorldBounds(true)
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setZoom(1.5);
 
         this.anims.create({
             key: 'left',
-            frames: this.anims.generateFrameNumbers('dude', {start: 0, end: 3}),
+            frames: this.anims.generateFrameNumbers('avatar', {start: 0, end: 3}),
             frameRate: 10,
             repeat: -1
         })
 
         this.anims.create({
             key: 'turn',
-            frames: [{key: 'dude', frame: 4}],
+            frames: [{key: 'avatar', frame: 4}],
             frameRate: 20
         })
 
         this.anims.create({
             key: 'right',
-            frames: this.anims.generateFrameNumbers('dude', {start: 5, end: 8}),
+            frames: this.anims.generateFrameNumbers('avatar', {start: 5, end: 8}),
             frameRate: 10,
             repeat: -1
         })
@@ -179,14 +178,18 @@ class Scene extends Phaser.Scene {
         })
 
         this.joystick.addEventListener('pointerup', () => {
-            this.joystick.style.display = 'none'
-            this.stick.style.left = '25px'
-            this.stick.style.top = '25px'
-            this.player.setVelocity(0)
-            this.player.anims.play('turn')
+            this.stop()
         })
 
         this.input.keyboard.addKeys('W,A,S,D')
+    }
+
+    stop() {
+        this.joystick.style.display = 'none'
+        this.stick.style.left = '25px'
+        this.stick.style.top = '25px'
+        this.player.setVelocity(0)
+        this.player.anims.play('turn')
     }
 
     update() {
