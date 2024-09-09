@@ -26,6 +26,10 @@ function openCraft2(domain, success) {
                                 pass2: pass2,
                             }, function () {
                                 showSuccessDialog("Crafted", $scope.hide)
+                            }, (error) => {
+                                if (error.indexOf("receiver doesn't exist") != -1) {
+                                    regAddress(domain, $scope.create)
+                                }
                             })
                         })
                     })

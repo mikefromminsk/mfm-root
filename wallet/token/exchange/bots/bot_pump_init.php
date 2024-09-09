@@ -9,7 +9,4 @@ dataSet([exchange, pump, $domain], [
     startN => $n,
     multiplicator => $multiplicator
 ]);
-
-$response[success] = true;
-
-commit($response);
+commit();

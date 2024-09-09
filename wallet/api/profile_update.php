@@ -9,7 +9,4 @@ if ($description != null){
     if (strlen($description) < 10) error("Description is too short");
     dataSet([wallet, info, $domain, description], $description);
 }
-
-$response[success] = true;
-
-commit($response);
+commit();

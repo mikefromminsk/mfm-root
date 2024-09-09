@@ -12,6 +12,4 @@ $order_id = place($domain, $address, $is_sell, $price, $amount, $pass);
 
 if ($order_id == null) error("place error");
 
-$response[success] = true;
-
-commit($response);
+commit();

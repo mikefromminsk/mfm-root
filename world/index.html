@@ -20,6 +20,7 @@
 <script src="/node_modules/angular-material/angular-material.min.js"></script>
 
 <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <link href="/flex/flex.css" rel="stylesheet">
 <link href="/flex/shorts.css" rel="stylesheet">
@@ -34,7 +35,7 @@
 
 <script src="scene/Utils.js"></script>
 <script src="scene/Base.js"></script>
-<script src="scene/Shop.js"></script>
+<script src="scene/Home.js"></script>
 <script src="scene/UIScene.js"></script>
 <script src="scene/controls/Switcher.js"></script>
 <script src="/wallet/token/login/controller.js"></script>
@@ -42,10 +43,12 @@
 <script src="controller.js"></script>
 <script>
     controller(main)
+    window.Telegram.WebApp.expand()
 </script>
 
 <script async src="/craft/recipe2/craft/controller.js"></script>
 <script async src="/wallet/token/send/controller.js"></script>
+<script async src="/wallet/token/controller.js"></script>
 <script async src="/wallet/dialogs/pin/controller.js"></script>
 <script async src="/wallet/dialogs/success/controller.js"></script>
 <script async src="/wallet/dialogs/info/controller.js"></script>

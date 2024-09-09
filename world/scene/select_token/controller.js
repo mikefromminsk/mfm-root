@@ -4,10 +4,10 @@ function openSelectToken(success) {
         controller: function ($scope) {
             addFormats($scope)
 
-            postContract("wallet", "token/api/tokens.php", {
+            postContract("world", "api/inventory.php", {
                 address: wallet.address(),
             }, (response) => {
-                $scope.activeTokens = response.active
+                $scope.inventory = response.inventory
             })
         }
     }).then(function (scene) {

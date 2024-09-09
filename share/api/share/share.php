@@ -15,7 +15,4 @@ tokenScriptReg($domain, share, "$domain/api/share/receive.php");
 tokenSend($domain, $gas_address, share, $amount, $pass);
 
 dataSet([$domain, share, $invite_next_hash, amount], $amount);
-
-$response[success] = true;
-
-commit($response);
+commit();

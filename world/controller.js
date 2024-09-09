@@ -21,9 +21,9 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
 
     function loadScene(scene) {
         postContract("world", "api/scene.php", {scene: scene}, function (data) {
-            game.scene.add('Shop', Shop)
+            game.scene.add('Home', Home)
             game.scene.add('UIScene', UIScene)
-            game.scene.start('Shop', data)
+            game.scene.start('Home', data)
         }, function () {
             openCreateScene(function (scene) {
                 loadScene(scene)

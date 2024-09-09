@@ -9,18 +9,27 @@ $response[name] = $scene;
 $response[width] = dataGet([world, $scene, settings, width]);
 $response[height] = dataGet([world, $scene, settings, height]);
 $response[texture] = dataGet([world, $scene, settings, texture]);
-$positions = dataKeys([world, $scene, objects], 1, 1000);
 
+$object_pos = dataKeys([world, $scene, objects], 1, 1000);
 $response[objects] = [];
-foreach ($positions as $position) {
-    $object[texture] = dataGet([world, $scene, objects, $position, texture]);
-    if ($object[texture] == null) continue;
+foreach ($object_pos as $position) {
+    $object[domain] = dataGet([world, $scene, objects, $position, domain]);
+    if ($object[domain] == null) continue;
     $coords = explode(":", $position);
     $object[x] = $coords[0];
     $object[y] = $coords[1];
     $response[objects][] = $object;
 }
 
-$response[succes] = true;
+$avatar_pos = dataKeys([world, $scene, avatars], 1, 1000);
+$response[avatars] = [];
+foreach ($avatar_pos as $position) {
+    $avatar[address] = dataGet([world, $scene, avatars, $position]);
+    if ($avatar[address] == null) continue;
+    $coords = explode(":", $position);
+    $avatar[x] = $coords[0];
+    $avatar[y] = $coords[1];
+    $response[avatars][] = $avatar;
+}
 
 commit($response);

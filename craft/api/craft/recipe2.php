@@ -6,6 +6,4 @@ $domain2 = get_required(domain2);
 
 recipe2($domain1, $domain2);
 
-$response[success] = true;
-
-commit($response);
+commit();

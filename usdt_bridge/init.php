@@ -7,7 +7,4 @@ tokenScriptReg(usdt,usdt_deposit_start, "usdt/api/deposit/start.php");
 tokenScriptReg(usdt,usdt_withdrawals, "usdt/api/withdrawal/success.php");
 tokenScriptReg(usdt,usdt_withdrawal_success, "usdt/api/withdrawal/success.php");
 tokenScriptReg(usdt,usdt_withdrawal_start, "usdt/api/withdrawal/start.php");
-
-$response[success] = true;
-
-commit($response);
+commit();

@@ -3,7 +3,7 @@ class Base extends Utils {
         super(config)
         this.maxSpeed = 200
         this.cellSize = 32
-        this.touchData = new Map();
+        this.currentScene = null
     }
 
     createWorld(gridWidth, gridHeight, texture) {
@@ -21,26 +21,48 @@ class Base extends Utils {
     }
 
     drawObjects() {
-        let sprites = []
-        this.forGrid((x, y) => {
-            var object = this.objects[x][y]
-            if (object.texture != null) {
-                if (object.sprite != null) {
-                    object.sprite.destroy()
-                }
-                let sprite = this.physics.add.sprite(
-                    x * this.cellSize,
-                    y * this.cellSize,
-                    object.texture
-                ).setOrigin(0);
-                sprite.setData('object', object)
-                object.sprite = sprite
-                sprites.push(sprite)
+        if (this.currentScene !== this.scene.name) {
+            this.currentScene = this.scene.name;
+            if (this.background) {
+                this.background.destroy();
             }
-        })
-        if (this.objectCollaider != null)
+            this.createWorld(this.scene.width, this.scene.height, this.scene.texture);
+        }
+
+        if (this.sprites != null)
+            this.sprites.forEach((sprite) => {
+                sprite.destroy()
+            })
+
+        this.sprites = []
+
+        for (let object of this.scene.objects) {
+            this.objects[object.x][object.y] = object
+            let sprite = this.physics.add.sprite(
+                object.x * this.cellSize,
+                object.y * this.cellSize,
+                object.domain
+            ).setOrigin(0)
+            sprite.setData('object', object)
+            this.sprites.push(sprite)
+        }
+
+        for (let avatar of this.scene.avatars) {
+            if (avatar.address == wallet.address()) continue;
+            let sprite = this.physics.add.sprite(
+                avatar.x * this.cellSize,
+                avatar.y * this.cellSize,
+                'avatar'
+            ).setOrigin(0)
+            sprite.setData('avatar', avatar)
+            this.sprites.push(sprite)
+        }
+
+        if (this.objectCollaider != null) {
             this.physics.world.removeCollider(this.objectCollaider);
-        this.objectCollaider = this.physics.add.overlap(this.player, sprites, this.touchCheck, null, this)
+        }
+        this.objectCollaider = this.physics.add.overlap(this.player, this.sprites, this.touchCheck, null, this);
+
         this.touchGrid = this.emptyGrid();
     }
 
@@ -58,7 +80,7 @@ class Base extends Utils {
         }
         if (data.startTouch + 300 > currentTime) {
             data.startTouch = 0
-            this.touch(sprite.data.values.object, x, y)
+            this.touch(sprite.data.values, x, y)
         }
         data.lastTouch = currentTime;
     }
@@ -85,28 +107,30 @@ class Base extends Utils {
         }
     }
 
-    forNear(distance, callback) {
-        this.forGrid(function (x, y) {
-            let distanceWithPlayer = Phaser.Math.Distance.Between(
-                this.player.x, this.player.y,
-                x * this.cellSize, y * this.cellSize
-            );
-            if (distanceWithPlayer < distance) {
-                callback(x, y, distance)
-            }
-        })
+    loadImage(domain) {
+        this.load.image(domain, Base.convertDomainToTextureUrl(domain));
     }
 
-    randomPos(callback) {
-        let x = Phaser.Math.Between(2, 2) // this.gridWidth - 1
-        let y = Phaser.Math.Between(2, 2) // this.gridHeight - 1
-        callback(x, y)
+    static convertDomainToTexture(domain) {
+        switch (domain) {
+            case 'wood':
+                return 'log_oak';
+            case 'stone':
+                return 'masonry_andesite';
+            case 'axe':
+                return 'diamond_pickaxe';
+            case 'sword':
+                return 'diamond_sword';
+            case 'table':
+                return 'utility_crafting_table';
+        }
+        return domain
     }
 
-
-    loadImage(texture) {
-        this.load.image(texture, 'assets/' + texture + '.png')
+    static convertDomainToTextureUrl(domain) {
+        return "/world/assets/" + Base.convertDomainToTexture(domain) + '.png'
     }
+
 
     preload() {
         this.load.spritesheet('avatar', 'assets/avatar.png', {frameWidth: 32, frameHeight: 48})

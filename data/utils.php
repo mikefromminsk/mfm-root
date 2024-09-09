@@ -61,6 +61,8 @@ function dataNew($path, $create = false)
 
 function dataSet($path, $value, $addHistory = true)
 {
+    // проверить если параметр уже имеет такое значение то не устанавливать\
+
     if (is_array($path))
         $path = implode("/", $path);
     $path_array = explode("/", $path);
@@ -181,7 +183,7 @@ function getDomain()
     return explode("/", scriptPath())[0];
 }
 
-function dataInc(array $path, $inc_val, $addHistory = null)
+function dataInc(array $path, $inc_val = 1, $addHistory = null)
 {
     $value = dataGet($path);
     $value = ($value ?: 0) + $inc_val;
@@ -189,7 +191,7 @@ function dataInc(array $path, $inc_val, $addHistory = null)
     return $value;
 }
 
-function dataDec(array $path, $dec_val, $addHistory = null)
+function dataDec(array $path, $dec_val = 1, $addHistory = null)
 {
     return dataInc($path, -$dec_val, $addHistory);
 }

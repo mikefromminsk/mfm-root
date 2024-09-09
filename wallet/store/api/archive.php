@@ -24,8 +24,5 @@ $zip->close();
 
 $archive_hash = hash_file(md5, $_SERVER[DOCUMENT_ROOT] . "/wallet/store/apps/$domain.zip");
 dataSet([wallet, $domain, packages, $domain, hash], $archive_hash);
-
-$response[success] = true;
-
-commit($response);
+commit();
 

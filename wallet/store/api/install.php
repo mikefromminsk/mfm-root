@@ -31,6 +31,4 @@ $zip->close();
 
 $response[file_hash] = $file_hash;
 
-$response[success] = true;
-
 commit($response);

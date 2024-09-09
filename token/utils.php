@@ -151,8 +151,11 @@ function tokenSend(
     return insertRowAndGetId(trans, $tran);
 }
 
-function commit($response, $gas_address = null)
+function commit($response = null, $gas_address = null)
 {
+    if ($response == null)
+        $response = [];
+    $response[success] = true;
     $gas_rows = 0;
     $gas_rows += count($GLOBALS[new_data]);
     $gas_rows += count($GLOBALS[new_history]);

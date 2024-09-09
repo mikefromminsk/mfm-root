@@ -1,6 +1,6 @@
 class UIScene extends Utils {
     constructor() {
-        super({key: 'UIScene', active: true});
+        super({active: true});
     }
 
     preload() {

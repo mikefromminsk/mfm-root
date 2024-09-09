@@ -1,3 +1,20 @@
+function regAddress(domain, success) {
+    getPin(function (pin) {
+        calcPass(domain, pin, function (pass) {
+            postContract("token", "send.php", {
+                domain: domain,
+                from_address: "owner",
+                to_address: wallet.address(),
+                amount: 0,
+                pass: pass
+            }, function () {
+                if (success)
+                    success()
+            })
+        })
+    })
+}
+
 function addTokens($scope) {
     $scope.searchMode = false
     $scope.menuIndex = 0
@@ -72,30 +89,18 @@ function addTokens($scope) {
     }
 
     $scope.regAddress = function (domain) {
-        getPin(function (pin) {
-            calcPass(domain, pin, function (pass) {
-                postContract("token", "send.php", {
-                    domain: domain,
-                    from_address: "owner",
-                    to_address: wallet.address(),
-                    amount: 0,
-                    pass: pass
-                }, function () {
-                    init()
-                })
-            })
-        })
+        regAddress(domain, init)
     }
 
-    subscribe("transactions", function (response) {
-        if (response.data.to == wallet.address()) {
-            showSuccess("You received " + $scope.formatAmount(response.data.amount, response.data.domain))
-            setTimeout(function () {
-                new Audio("/wallet/dialogs/success/payment_success.mp3").play()
-            })
-            tokens("")
-        }
-    });
+        subscribe("transactions", function (response) {
+            if (response.data.to == wallet.address()) {
+                showSuccess("You received " + $scope.formatAmount(response.data.amount, response.data.domain))
+                setTimeout(function () {
+                    new Audio("/wallet/dialogs/success/payment_success.mp3").play()
+                })
+                tokens("")
+            }
+        });
 
     subscribe("place", function (response) {
         function updateTokens(tokenList, domain, price) {

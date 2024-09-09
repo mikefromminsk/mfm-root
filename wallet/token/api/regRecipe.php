@@ -7,7 +7,4 @@ $type = get_required(type);
 if (!dataExist([$domain, $type])) error("recipe2 not found");
 
 dataSet([wallet, recipes, $domain], $type);
-
-$response[success] = true;
-
-commit($response);
+commit();

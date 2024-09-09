@@ -12,6 +12,4 @@ dataSet([world, $scene, settings, width], $width);
 dataSet([world, $scene, settings, height], $height);
 dataSet([world, $scene, settings, texture], $texture);
 
-$response[succes] = true;
-
-commit($response);
+commit();
