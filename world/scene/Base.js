@@ -4,11 +4,12 @@ class Base extends Utils {
         this.maxSpeed = 200; // 106
         this.cellSize = 32;
         this.currentScene = null;
+        this.isAnimationPlaying = false; // Флаг для блокировки анимаций при движении
     }
 
     preload() {
         this.load.spritesheet('avatar64', 'assets/avatar2.png', {frameWidth: 64, frameHeight: 64});
-        this.load.spritesheet('avatar192', 'assets/avatar2.png', {frameWidth: 192, frameHeight: 192});
+        this.load.spritesheet('avatar192', 'assets/avatar2.png', {frameWidth: 192, frameHeight: 195});
         this.loadImage("diamond_pickaxe");
     }
 
@@ -82,12 +83,12 @@ class Base extends Utils {
             let frameCount = texture.source[0].width / 32;
 
             // Создаем анимацию для аватара
-            /*this.anims.create({
+            this.anims.create({
                 key: `avatar_${avatar.address}`,
                 frames: this.anims.generateFrameNumbers('avatar', {start: 0, end: frameCount - 1}),
                 frameRate: 10,
                 hideOnComplete: true
-            });*/
+            });
         }
 
         if (this.objectCollaider != null) {
@@ -112,6 +113,36 @@ class Base extends Utils {
         }
         if (data.startTouch + 300 > currentTime) {
             data.startTouch = 0;
+
+// Останавливаем все текущие анимации
+            this.player.anims.stop();
+
+            // Определяем направление стика
+            var rect = this.joystick.getBoundingClientRect();
+            var stickRect = this.stick.getBoundingClientRect();
+            var deltaX = stickRect.left - rect.left - 25;
+            var deltaY = stickRect.top - rect.top - 25;
+
+            // Активируем анимацию атаки игрока в зависимости от направления стика
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                if (deltaX < 0) {
+                    this.player.anims.play('fight_left');
+                } else {
+                    this.player.anims.play('fight_right');
+                }
+            } else {
+                if (deltaY < 0) {
+                    this.player.anims.play('fight_top');
+                } else {
+                    this.player.anims.play('fight_bottom');
+                }
+            }
+
+            // Устанавливаем флаг блокировки анимаций при движении
+            this.isAnimationPlaying = true;
+            this.player.on('animationcomplete', () => {
+                this.isAnimationPlaying = false;
+            });
 
             // Проигрываем анимацию при касании
             if (sprite.data.get('object')) {
@@ -180,13 +211,6 @@ class Base extends Utils {
         this.cameras.main.setZoom(1.5);
 
         this.anims.create({
-            key: 'left',
-            frames: this.anims.generateFrameNumbers('avatar64', {start: (10 - 1) * 18, end: (10 - 1) * 18 + (9 - 1)}),
-            frameRate: 10,
-            repeat: -1
-        });
-
-        this.anims.create({
             key: 'turn_left',
             frames: [{key: 'avatar64', frame: (10 - 1) * 18}],
             frameRate: 20
@@ -199,15 +223,15 @@ class Base extends Utils {
         });
 
         this.anims.create({
-            key: 'right',
-            frames: this.anims.generateFrameNumbers('avatar64', {start: (12 - 1) * 18, end: (12 - 1) * 18 + (9 - 1)}),
+            key: 'left',
+            frames: this.anims.generateFrameNumbers('avatar64', {start: (10 - 1) * 18, end: (10 - 1) * 18 + (9 - 1)}),
             frameRate: 10,
             repeat: -1
         });
 
         this.anims.create({
-            key: 'fight',
-            frames: this.anims.generateFrameNumbers('avatar192', {start: (16 - 1) * 6, end: (16 - 1) * 6 + (6 - 1)}),
+            key: 'right',
+            frames: this.anims.generateFrameNumbers('avatar64', {start: (12 - 1) * 18, end: (12 - 1) * 18 + (9 - 1)}),
             frameRate: 10,
             repeat: -1
         });
@@ -224,6 +248,30 @@ class Base extends Utils {
             frames: this.anims.generateFrameNumbers('avatar64', {start: (11 - 1) * 18, end: (11 - 1) * 18 + (9 - 1)}),
             frameRate: 10,
             repeat: -1
+        });
+
+        this.anims.create({
+            key: 'fight_top',
+            frames: this.anims.generateFrameNumbers('avatar192', {start: (16 - 1) * 6, end: (16 - 1) * 6 + (6 - 1)}),
+            frameRate: 10,
+        });
+
+        this.anims.create({
+            key: 'fight_left',
+            frames: this.anims.generateFrameNumbers('avatar192', {start: (17 - 1) * 6, end: (17 - 1) * 6 + (6 - 1)}),
+            frameRate: 10,
+        });
+
+        this.anims.create({
+            key: 'fight_bottom',
+            frames: this.anims.generateFrameNumbers('avatar192', {start: (18 - 1) * 6, end: (18 - 1) * 6 + (6 - 1)}),
+            frameRate: 10,
+        });
+
+        this.anims.create({
+            key: 'fight_right',
+            frames: this.anims.generateFrameNumbers('avatar192', {start: (19 - 1) * 6, end: (19 - 1) * 6 + (6 - 2)}),
+            frameRate: 10,
         });
 
         this.joystick = document.getElementById('joystick');
@@ -257,20 +305,21 @@ class Base extends Utils {
 
         this.input.on('pointerup', (pointer) => {
             if (this.joystick.dataset.pointerId == pointer.id) {
-
-                // Остановка движения
                 this.player.setVelocity(0, 0);
 
                 var rect = this.joystick.getBoundingClientRect();
                 var stickRect = this.stick.getBoundingClientRect();
                 var deltaX = stickRect.left - rect.left - 25;
 
+                this.joystick.style.display = 'none';
+                if (this.isAnimationPlaying) {
+                    return;
+                }
                 if (deltaX < 0) {
                     this.player.anims.play('turn_left');
                 } else {
                     this.player.anims.play('turn_right');
                 }
-                this.joystick.style.display = 'none';
             }
         });
     }
@@ -285,11 +334,14 @@ class Base extends Utils {
         var speedFactor = Math.min(distance / maxDistance, 1);
         var speed = this.maxSpeed * speedFactor;
 
+        this.player.setDepth(this.player.y);
         if (this.joystick.style.display === 'block') {
             var angle = Math.atan2(deltaY, deltaX);
             this.player.setVelocityX(speed * Math.cos(angle));
             this.player.setVelocityY(speed * Math.sin(angle));
-
+            if (this.isAnimationPlaying) {
+                return; // Блокируем проигрывание анимаций при движении
+            }
             if (deltaX < -10) {
                 this.player.anims.play('left', true);
             } else if (deltaX > 10) {
@@ -300,6 +352,5 @@ class Base extends Utils {
                 this.player.anims.play('down', true);
             }
         }
-        this.player.setDepth(this.player.y);
     }
 }

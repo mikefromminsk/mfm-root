@@ -47,7 +47,6 @@ class Home extends Base {
                             x: x,
                             y: y,
                         }, () => {
-                            showSuccess("Object created")
                             this.reload();
                         })
                     })
@@ -63,16 +62,15 @@ class Home extends Base {
     }
 
     touch(values, x, y) {
-        this.player.anims.play('fight', true);
         if (values.object != null) {
             if (values.object.domain == 'table') {
                 openCraft2("axe", function () {
 
                 })
             } else if (values.object.domain == 'chest') {
-                openCraft2("axe", function () {
+                /*openCraft2("axe", function () {
 
-                })
+                })*/
             } else {
                 postContractWithGas("world", "api/move.php", {
                     scene: this.scene.name,
