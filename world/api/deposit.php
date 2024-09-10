@@ -8,6 +8,7 @@ $pass = get_required(pass);
 
 if (tokenAddress($domain, world) == null)
     tokenScriptReg($domain, world, "world/api/move.php");
+
 tokenSend($domain, $gas_address, world, $amount, $pass);
 dataInc([world, avatar, $gas_address, inventory, $domain], $amount);
 

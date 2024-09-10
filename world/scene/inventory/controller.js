@@ -1,13 +1,13 @@
-function openSelectToken(success) {
+function openInventory(success) {
     window.$mdBottomSheet.show({
-        templateUrl: '/world/scene/select_token/index.html',
+        templateUrl: '/world/scene/inventory/index.html',
         controller: function ($scope) {
             addFormats($scope)
 
-            postContract("wallet", "token/api/tokens.php", {
+            postContract("world", "api/inventory.php", {
                 address: wallet.address(),
             }, (response) => {
-                $scope.activeTokens = response.active
+                $scope.inventory = response.inventory
             })
         }
     }).then(function (scene) {

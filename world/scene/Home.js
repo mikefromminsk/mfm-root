@@ -63,8 +63,13 @@ class Home extends Base {
     }
 
     touch(values, x, y) {
+        this.player.anims.play('fight', true);
         if (values.object != null) {
             if (values.object.domain == 'table') {
+                openCraft2("axe", function () {
+
+                })
+            } else if (values.object.domain == 'chest') {
                 openCraft2("axe", function () {
 
                 })
@@ -78,7 +83,7 @@ class Home extends Base {
                 })
             }
         }
-        if (values.avatar != null) {
+        /*if (values.avatar != null) {
             postContractWithGas("world", "api/move.php", {
                 scene: this.scene.name,
                 x: x,
@@ -86,6 +91,6 @@ class Home extends Base {
             }, () => {
                 this.reload();
             })
-        }
+        }*/
     }
 }
