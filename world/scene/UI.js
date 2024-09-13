@@ -1,4 +1,4 @@
-class UIScene extends Utils {
+class UI extends Utils {
     constructor() {
         super({active: true});
     }
@@ -7,7 +7,7 @@ class UIScene extends Utils {
         this.loadImage('diamond_pickaxe');
         this.loadImage('diamond_sword');
         this.loadImage('plus');
-        this.load.spritesheet('buttonSpriteSheet', 'assets/chest16f.png', { frameWidth: 32, frameHeight: 32 });
+        this.load.spritesheet('buttonSpriteSheet', 'assets/chest.png', { frameWidth: 32, frameHeight: 32 });
     }
 
     create() {

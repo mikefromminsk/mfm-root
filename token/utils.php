@@ -8,7 +8,7 @@ $gas_domain = "usdt";
 function broadcast($channel, $data)
 {
     if (WEB_SOCKETS_ENABLED) {
-        http_post("localhost:8002/demo", [
+        http_post("localhost:8002/test", [
             channel => $channel,
             data => $data,
         ]);
@@ -141,10 +141,7 @@ function tokenSend(
         time => time(),
     ];
 
-    broadcast("localhost:8002/demo", [
-        channel => transactions,
-        data => $tran,
-    ]);
+    broadcast(transactions, $tran);
 
     trackAccumulate($domain . _trans);
 
@@ -162,7 +159,7 @@ function commit($response = null, $gas_address = null)
     $gas_spent = 0.001 * $gas_rows;
 
     if ($gas_rows != 0) {
-        if ($gas_address != null) {
+        /*if ($gas_address != null) {
             $dataTxid = tokenSend(
                 $GLOBALS[gas_domain],
                 $gas_address,
@@ -176,13 +173,13 @@ function commit($response = null, $gas_address = null)
                 $gas_spent,
                 get_required(gas_pass),
             );
-        }
-        //dataSet([analytics, gas_spent, scriptPath()], $gas_spent, false);
+        }*/
         dataCommit();
         $response[gas_spend] = $gas_spent;
         $response[gas_txid] = $dataTxid;
     }
     echo json_encode($response);
+    die();
 }
 
 

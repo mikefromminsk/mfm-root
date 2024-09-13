@@ -1,19 +1,18 @@
 <?php
-
 include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
 
-define("DATA_UNSET", -1);
-define("DATA_NULL", 0);
-define("DATA_BOOL", 1);
-define("DATA_NUMBER", 2);
-define("DATA_STRING", 3);
+const DATA_OBJECT = -1;
+const DATA_NULL = 0;
+const DATA_BOOL = 1;
+const DATA_NUMBER = 2;
+const DATA_STRING = 3;
 
-define("MAX_VALUE_SIZE", 256);
-define("FILE_ROW_SIZE", 256 + 64);
-define("HASH_ROW_SIZE", 32);
+const MAX_VALUE_SIZE = 256;
+const FILE_ROW_SIZE = 256 + 64;
+const HASH_ROW_SIZE = 32;
 
-define("PAGE_SIZE_DEFAULT", 20);
-define("BLOCK_SIZE", 10000);
+const PAGE_SIZE_DEFAULT = 20;
+const BLOCK_SIZE = 10000;
 
 function dataCreateRow($data_parent_id, $data_key, $data_type)
 {
@@ -49,7 +48,7 @@ function dataNew($path, $create = false)
         }
         if ($data_id == null) {
             if ($create == true) {
-                $data_id = dataCreateRow($data_parent_id, $key, DATA_UNSET);
+                $data_id = dataCreateRow($data_parent_id, $key, DATA_OBJECT);
             } else {
                 return null;
             }
@@ -59,10 +58,8 @@ function dataNew($path, $create = false)
     return $data_id;
 }
 
-function dataSet($path, $value, $addHistory = true)
+function dataSet($path, $value)
 {
-    // проверить если параметр уже имеет такое значение то не устанавливать\
-
     if (is_array($path))
         $path = implode("/", $path);
     $path_array = explode("/", $path);
@@ -92,10 +89,8 @@ function dataSet($path, $value, $addHistory = true)
             dataSet(array_merge($path_array, [$key]), $subvalue);
     }
     $GLOBALS[update_data][$data_id] = $data;
-    if ($addHistory) {
-        $data[data_path] = $path;
-        $GLOBALS[new_history][] = $data;
-    }
+    $data[data_path] = $path;
+    $GLOBALS[new_history][] = $data;
 }
 
 function dataNode($data_id)
@@ -140,12 +135,15 @@ function dataExist($path)
     return true; //intval(scalarWhere(data, "count(*)", [data_parent_id => $data_id])) !== false;
 }
 
-function dataKeys(array $path, $page = 1, $size = PAGE_SIZE_DEFAULT)
+function dataKeys(array $path, $count, $page = 1)
 {
-    $offset = ($page - 1) * $size;
+    $offset = ($page - 1) * $count;
     $data_id = dataNew($path);
     if ($data_id == null) return [];
-    return selectList("select data_key from `data` where data_parent_id = $data_id limit $offset, $size");
+    return selectList("select data_key from `data`"
+        . " where data_parent_id = $data_id "
+        . " and data_type <> " . DATA_NULL
+        . " limit $offset, $count");
 }
 
 function dataCount(array $path)
@@ -210,9 +208,13 @@ function dataCommit()
     foreach ($GLOBALS[new_data] as $data_id => $data) {
         insertRow(data, $data);
     }
+    foreach ($GLOBALS[update_data] as $data_id => $data) {
+        updateWhere(data, $data, [data_id => $data_id]);
+    }
+
     foreach ($GLOBALS[new_history] as $data) {
         $id = insertRowAndGetId(history, $data);
-        if ($id % BLOCK_SIZE == 0) {
+        /*if ($id % BLOCK_SIZE == 0) {
             while ($id > 0) {
                 $id -= BLOCK_SIZE;
                 $block = select("select * from history where `id` >= $id limit 0," . BLOCK_SIZE);
@@ -225,9 +227,41 @@ function dataCommit()
                     break;
                 }
             }
+        }*/
+    }
+    broadcast(data, $GLOBALS[new_history]);
+}
+
+function dataObject(array $path, $limit, &$count = 0)
+{
+    if (!dataExist($path)) error("path not found");
+    $keys = dataKeys($path, $limit - $count);
+    $result = [];
+    foreach ($keys as $key) {
+        if ($count >= $limit) error("limit exceeded");
+
+        $fullPath = array_merge($path, [$key]);
+        $data = dataInfo($fullPath);
+
+        if ($data[data_type] == DATA_OBJECT) {
+            $result[$key] = dataObject($fullPath, $limit, $count);
+        } else {
+            switch ($data[data_type]) {
+                case DATA_BOOL:
+                    $result[$key] = boolval($data[data_value]);
+                    break;
+                case DATA_NUMBER:
+                    $result[$key] = doubleval($data[data_value]);
+                    break;
+                case DATA_STRING:
+                    $result[$key] = $data[data_value];
+                    break;
+                case DATA_NULL:
+                    $result[$key] = null;
+                    break;
+            }
         }
+        $count++;
     }
-    foreach ($GLOBALS[update_data] as $data_id => $data) {
-        updateWhere(data, $data, [data_id => $data_id]);
-    }
+    return $result;
 }

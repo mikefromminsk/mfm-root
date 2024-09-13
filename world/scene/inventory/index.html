@@ -5,16 +5,10 @@
     </div>
     <div class="col content align-start-center">
         <div class="row wrap block">>
-            <div class="col m8" ng-repeat="item in inventory"
-                 ng-click="back(item.domain)">
-                <div ng-style="getLogo(item.domain)"></div>
-                <p class="size16 uppercase medium">{{formatAmount(item.amount, item.domain)}}</p>
-            </div>
-            <div class="col" ng-hide="activeTokens.length">
-                <div class="row align-center-center size20 gray400-text"
-                     style="height: 200px">
-                    Nothing found
-                </div>
+            <div class="col m8" ng-repeat="(domain, amount) in inventory"
+                 ng-click="back(domain)">
+                <div ng-style="getLogo(domain)"></div>
+                <p class="size16 uppercase medium">{{formatAmount(amount, domain)}}</p>
             </div>
         </div>
     </div>

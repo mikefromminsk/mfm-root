@@ -9,6 +9,8 @@ $y = get_int_required(y);
 
 $pos = "$x:$y";
 
+if (dataGet([world, avatar, $gas_address, inventory, $domain]) <= 0)  error("Not enough items");
+
 dataDec([world, avatar, $gas_address, inventory, $domain]);
 dataSet([world, $scene, objects, $pos, domain], $domain);
 

@@ -12,7 +12,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             default: 'arcade',
             arcade: {
                 gravity: {y: 0},
-                debug: false
+                debug: true
             }
         },
     }
@@ -20,10 +20,10 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     var game = new Phaser.Game(config)
 
     function loadScene(scene) {
-        postContract("world", "api/scene.php", {scene: scene}, function (data) {
-            game.scene.add('Home', Home)
-            game.scene.add('UIScene', UIScene)
-            game.scene.start('Home', data)
+        dataExist("world/" + scene, function () {
+            game.scene.add('Scene', Scene)
+            game.scene.add('UIScene', UI)
+            game.scene.start('Scene', scene)
         }, function () {
             openCreateScene(function (scene) {
                 loadScene(scene)
@@ -31,11 +31,14 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
         })
     }
 
+    var startScene = "home4"
     if (wallet.address() == "") {
         openLogin(function () {
-            loadScene("home")
+            loadScene(startScene)
         })
     } else {
-        loadScene("home")
+        loadScene(startScene)
     }
+
+    connectWs();
 }

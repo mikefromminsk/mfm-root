@@ -28,7 +28,7 @@ $token[mcap] = $token[total] * $token[price];
 
 
 $token[dapps] = [];
-foreach (dataKeys([wallet, $domain, packages]) as $app_domain) {
+foreach (dataKeys([wallet, $domain, packages], 100) as $app_domain) {
     $token[dapps][$app_domain] = [
         hash => dataGet([wallet, $domain, packages, $app_domain, hash]),
     ];

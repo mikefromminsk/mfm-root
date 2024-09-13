@@ -92,9 +92,9 @@ function addTokens($scope) {
         regAddress(domain, init)
     }
 
-        subscribe("transactions", function (response) {
-            if (response.data.to == wallet.address()) {
-                showSuccess("You received " + $scope.formatAmount(response.data.amount, response.data.domain))
+        subscribe("transactions", function (data) {
+            if (data.to == wallet.address()) {
+                showSuccess("You received " + $scope.formatAmount(data.amount, data.domain))
                 setTimeout(function () {
                     new Audio("/wallet/dialogs/success/payment_success.mp3").play()
                 })
@@ -102,7 +102,7 @@ function addTokens($scope) {
             }
         });
 
-    subscribe("place", function (response) {
+    subscribe("place", function (data) {
         function updateTokens(tokenList, domain, price) {
             if (tokenList != null)
                 for (let token of tokenList) {
@@ -114,8 +114,8 @@ function addTokens($scope) {
                 }
         }
 
-        updateTokens($scope.activeTokens, response.data.domain, response.data.price)
-        updateTokens($scope.recTokens, response.data.domain, response.data.price)
+        updateTokens($scope.activeTokens, data.domain, data.price)
+        updateTokens($scope.recTokens, data.domain, data.price)
     });
 
     $scope.mode = "tokens"

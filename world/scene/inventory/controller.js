@@ -4,10 +4,9 @@ function openInventory(success) {
         controller: function ($scope) {
             addFormats($scope)
 
-            postContract("world", "api/inventory.php", {
-                address: wallet.address(),
-            }, (response) => {
-                $scope.inventory = response.inventory
+            dataObject("world/avatar/" + wallet.address() + "/inventory", (inventory) => {
+                $scope.inventory = inventory
+                $scope.$apply()
             })
         }
     }).then(function (scene) {

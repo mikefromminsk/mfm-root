@@ -10,7 +10,7 @@ function openCreateScene(success) {
                     height: $scope.height,
                     texture: $scope.texture
                 }, function () {
-                    $mdDialog.hide($scope.scene)
+                    $scope.back($scope.scene)
                 })
             }
         }

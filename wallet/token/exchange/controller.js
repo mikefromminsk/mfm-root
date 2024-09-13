@@ -115,16 +115,16 @@ function openExchange(domain, is_sell) {
 
             //addChart($scope, domain + "_price")
 
-            subscribe("place", function (response) {
-                if (response.data.domain == domain) {
-                    $scope.token.price = response.data.price
+            subscribe("place", function (data) {
+                if (data.domain == domain) {
+                    $scope.token.price = data.price
                     //$scope.updateChart()
                     $scope.$apply()
                 }
             });
 
-            subscribe("orderbook", function (response) {
-                if (response.data.domain == domain) {
+            subscribe("orderbook", function (data) {
+                if (data.domain == domain) {
                     loadOrderbook()
                     $scope.$apply()
                 }

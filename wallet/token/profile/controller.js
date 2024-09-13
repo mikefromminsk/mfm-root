@@ -98,9 +98,9 @@ function openTokenProfile(domain, success) {
 
             addChart($scope, domain + "_price")
 
-            subscribe("place", function (response) {
-                if (response.data.domain == domain) {
-                    $scope.token.price = response.data.price
+            subscribe("place", function (data) {
+                if (data.domain == domain) {
+                    $scope.token.price = data.price
                     $scope.updateChart()
                     $scope.$apply()
                 }

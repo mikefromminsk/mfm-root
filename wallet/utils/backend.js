@@ -1,5 +1,35 @@
 const DEBUG = location.hostname == "localhost"
 
+var subscriptions = {}
+
+function subscribe(channel, callback) {
+    if (subscriptions[channel] == null)
+        subscriptions[channel] = []
+    subscriptions[channel].push(callback)
+    if (window.conn != null && window.conn.readyState === 1 && subscriptions[channel].length == 1)
+        window.conn.send(JSON.stringify({channel: channel}))
+}
+
+function connectWs() {
+    if (window.WebSocket) {
+        if (document.location.protocol === "https:") {
+            window.conn = new WebSocket("wss://" + document.location.host + ":8887")
+        } else {
+            window.conn = new WebSocket("ws://" + document.location.host + ":8887")
+        }
+        window.conn.onopen = function () {
+            for (var channel of Object.keys(subscriptions))
+                window.conn.send(JSON.stringify({channel: channel}))
+        }
+        window.conn.onmessage = function (evt) {
+            var message = JSON.parse(evt.data)
+            for (let callback of subscriptions[message.channel]) {
+                callback(message.data)
+            }
+        }
+    }
+}
+
 function getParam(paramName) {
     var uri = window.location.search.substring(1)
     var params = new URLSearchParams(uri)
@@ -46,13 +76,35 @@ function postContract(domain, path, params, success, error) {
     post("/" + domain + "/" + path, params, success, error)
 }
 
-function dataGet(path, callback) {
-    post("/data/get.php", {
+function dataObject(path, success, error) {
+    postContract("data", "object.php", {
+        path: path,
+    }, (response) => {
+        if (success)
+            success(response.object)
+    }, error)
+}
+
+function dataGet(path, success, error) {
+    postContract("data", "get.php", {
         path: path,
     }, function (response) {
-        if (callback)
-            callback(response.value)
-    })
+        if (success)
+            success(response.value)
+    }, error)
+}
+
+function dataInfo(path, success, error) {
+    postContract("data", "info.php", {
+        path: path,
+    }, function (response) {
+        if (success)
+            success(response.info)
+    }, error)
+}
+
+function dataExist(path, success, error) {
+    dataInfo(path, success, error)
 }
 
 const storageKeys = {

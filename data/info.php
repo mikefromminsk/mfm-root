@@ -7,6 +7,6 @@ $path = explode("/", $path);
 
 if (!dataExist($path)) error("Path not found");
 
-$response[value] = dataGet($path);
+$response[info] = dataInfo($path);
 
 echo json_encode($response);
