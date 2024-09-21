@@ -1,11 +1,4 @@
 {
-  "name": "heychain",
-  "version": "0.19",
-  "author": "x29a100@gmail.com",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gaiduduk/DarkNet.git"
-  },
   "dependencies": {
     "angular": "^1.8.2",
     "angular-animate": "^1.7.2",
