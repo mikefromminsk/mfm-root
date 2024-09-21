@@ -13,3 +13,5 @@ _gsdata_
 properties.php
 *.iml
 db
+node_modules
+package-lock.json
