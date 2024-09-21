@@ -2,4 +2,4 @@
 .idea
 node_modules
 package-lock.json
-properties.php
+db/properties.php
