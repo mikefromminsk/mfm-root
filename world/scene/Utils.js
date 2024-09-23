@@ -1,4 +1,5 @@
-class MessageBus extends Phaser.Events.EventEmitter {}
+class MessageBus extends Phaser.Events.EventEmitter {
+}
 
 const messageBus = new MessageBus();
 
@@ -8,6 +9,7 @@ class Utils extends Phaser.Scene {
     }
 
     static isClicked = false;
+
     static click(callback) {
         return function (pointer) {
             if (!Utils.isClicked) {
@@ -18,6 +20,20 @@ class Utils extends Phaser.Scene {
                 }, 100);
             }
         }
+    }
+
+    loadItem(texture) {
+        if (texture != null)
+            this.load.image(texture, 'assets/item/' + texture + '.png')
+    }
+
+    loadBlock(texture) {
+        if (texture != null)
+            this.load.image(texture, 'assets/block/' + texture + '.png')
+    }
+
+    loadUI(texture) {
+        this.load.image(texture, 'assets/ui/' + texture + '.png')
     }
 
     loadImage(texture) {

@@ -8,9 +8,9 @@ $y = get_int_required(y);
 
 $pos = "$x:$y";
 
-$object_domain = dataGet([world, $scene, objects, $pos, domain]);
-if ($object_domain != null) {
-    dataSet([world, $scene, objects, $pos, domain], null);
+if (dataExist([world, $scene, objects, $pos])) {
+    dataSet([world, $scene, objects, $pos], null);
+    $object_domain = dataGet([world, $scene, objects, $pos, domain]);
     dataInc([world, avatar, $gas_address, inventory, $object_domain]);
 }
 

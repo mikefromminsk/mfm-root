@@ -25,13 +25,20 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             game.scene.add('UIScene', UI)
             game.scene.start('Scene', scene)
         }, function () {
-            openCreateScene(function (scene) {
+            postContractWithGas("world", "api/scene_insert.php", {
+                scene: scene,
+                width: 100,
+                height: 100
+            }, function () {
                 loadScene(scene)
             })
+            /*openCreateScene(function (scene) {
+                loadScene(scene)
+            })*/
         })
     }
 
-    var startScene = "home4"
+    var startScene = "home"
     if (wallet.address() == "") {
         openLogin(function () {
             loadScene(startScene)

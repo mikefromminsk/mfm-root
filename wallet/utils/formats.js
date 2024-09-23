@@ -224,6 +224,22 @@ function addFormats($scope) {
         return img
     }
 
+    $scope.getTexture = function (domain, width) {
+        if (width == null)
+            width = 32
+        var img = {
+            'width': width + 'px',
+            'height': width + 'px',
+            'min-width': width + 'px',
+            'min-height': width + 'px',
+        }
+        if (domain != null){
+            img['background-image'] =  "url('/world/assets/item/" + domain + ".png')"
+            img['background-size'] = '100% 100%'
+        }
+        return img
+    }
+
     $scope.max = function (a, b) {
         return Math.max(a, b)
     }

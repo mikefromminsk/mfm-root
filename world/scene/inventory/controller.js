@@ -8,6 +8,12 @@ function openInventory(success) {
                 $scope.inventory = inventory
                 $scope.$apply()
             })
+
+            $scope.openDeposit = function () {
+                openWorldDeposit(function () {
+                    openInventory()
+                })
+            }
         }
     }).then(function (scene) {
         if (success)

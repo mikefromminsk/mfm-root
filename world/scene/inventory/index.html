@@ -4,12 +4,17 @@
         <p>Select item</p>
     </div>
     <div class="col content align-start-center">
-        <div class="row wrap block">>
+        <div class="row wrap block">
             <div class="col m8" ng-repeat="(domain, amount) in inventory"
                  ng-click="back(domain)">
-                <div ng-style="getLogo(domain)"></div>
-                <p class="size16 uppercase medium">{{formatAmount(amount, domain)}}</p>
+                <div ng-style="getTexture(domain)"></div>
+                <p class="size16 uppercase medium">{{amount}}</p>
             </div>
+
+            <img class="img32"
+                 src="/world/scene/inventory/img/plus.png"
+                 ng-click="openDeposit()"
+                 style="position: absolute; right: 30px; bottom: 30px;">
         </div>
     </div>
 </md-bottom-sheet>

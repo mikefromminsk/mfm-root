@@ -1,0 +1,2 @@
+загрузить всё в npm
+использовать папку node_modules как document root. Установки проводить npm install

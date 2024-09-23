@@ -39,21 +39,24 @@ class Scene extends Utils {
             if (this.avatar.texture == null)
                 this.avatar.texture = "base";
             this.load.spritesheet(this.avatar.texture + '64',
-                'assets/avatars/' + this.avatar.texture + '.png',
+                'assets/avatar/' + this.avatar.texture + '.png',
                 {frameWidth: 64, frameHeight: 64});
             this.load.spritesheet(this.avatar.texture + '192',
-                'assets/avatars/' + this.avatar.texture + '.png',
+                'assets/avatar/' + this.avatar.texture + '.png',
                 {frameWidth: 192, frameHeight: 195});
-            this.loadImage(this.scene.settings.texture);
-            (this.scene.objects || []).forEach(object => this.loadImage(object.domain));
+            this.scene.settings.texture = 'green_concrete'
+            this.loadBlock(this.scene.settings.texture);
+            for (const object of Object.values(this.scene.objects || {})) {
+                this.loadBlock(object.domain)
+            }
             this.load.on('complete', this.createScene, this);
             this.load.start();
         });
     }
 
     createScene() {
-        if (this.currentScene !== this.scene.name) {
-            this.currentScene = this.scene.name;
+        if (this.currentScene !== this.scene_name) {
+            this.currentScene = this.scene_name;
             this.setupScene();
         }
         this.setupJoystick();
@@ -79,12 +82,15 @@ class Scene extends Utils {
     createObjects() {
         if (this.touchable) this.touchable.forEach(sprite => sprite.destroy());
         this.touchable = [];
-        (this.scene.objects || []).forEach(object => {
-            let sprite = this.createSprite(object.x, object.y, object.domain);
+        for (const key of Object.keys(this.scene.objects || {})) {
+            var object = this.scene.objects[key]
+            var pos = key.split(':')
+            var x = parseInt(pos[0])
+            var y = parseInt(pos[1])
+            let sprite = this.createSprite(x, y, object.domain);
             sprite.setData('object', object);
             this.touchable.push(sprite);
-            this.createAnimation(`object_${object.domain}`, object.domain);
-        });
+        }
     }
 
     addEnemy(avatar) {
@@ -117,10 +123,12 @@ class Scene extends Utils {
     }
 
     setupPlayer() {
-        this.player = this.physics.add.sprite(15, 30, this.avatar.texture + '64', (10 - 1) * 18).setCollideWorldBounds(true);
-        this.cameras.main.startFollow(this.player);
-        this.cameras.main.setZoom(1.5);
-        this.createPlayerAnimations();
+        if (this.player == null){
+            this.player = this.physics.add.sprite(15, 30, this.avatar.texture + '64', (10 - 1) * 18).setCollideWorldBounds(true);
+            this.cameras.main.startFollow(this.player);
+            this.cameras.main.setZoom(1.5);
+            this.createPlayerAnimations();
+        }
     }
 
     createPlayerAnimations() {
@@ -344,7 +352,7 @@ class Scene extends Utils {
             } else if (values.object.domain === 'chest') {
                 // Handle chest interaction
             } else {
-                postContractWithGas("world", "api/touch.php", {scene: this.scene.name, x, y}, () => this.reload());
+                postContractWithGas("world", "api/touch.php", {scene: this.scene_name, x, y}, () => this.reload());
             }
         }
         if (values.avatar) {
@@ -387,7 +395,7 @@ class Scene extends Utils {
                 getPin(pin => {
                     wallet.calcPass(this.inHand, pin, pass => {
                         postContractWithGas("world", "api/object_insert.php", {
-                            scene: this.scene.name,
+                            scene: this.scene_name,
                             domain: this.inHand,
                             pass,
                             x,

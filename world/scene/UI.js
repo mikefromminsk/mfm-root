@@ -4,24 +4,14 @@ class UI extends Utils {
     }
 
     preload() {
-        this.loadImage('diamond_pickaxe');
-        this.loadImage('diamond_sword');
-        this.loadImage('plus');
-        this.load.spritesheet('buttonSpriteSheet', 'assets/chest.png', { frameWidth: 32, frameHeight: 32 });
+        this.loadUI('backpack');
     }
 
     create() {
-        new Switcher(this, 50, window.innerHeight - 50, function () {
-            openInventory(function (domain) {
+        new Button(this, 16 + 32, window.innerHeight - 16 - 32, 'backpack', () => {
+            openInventory((domain) => {
                 messageBus.emit('select', domain);
             });
-        }).setScale(2);
-
-        var button = new Button(this, 100, 100, 'buttonSpriteSheet', () => {
-            openWorldDeposit(function () {
-                button.reset()
-            })
         });
-
     }
 }
