@@ -1,0 +1,23 @@
+name: Create Issues from TODOs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  find-todos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Scan for TODOs
+        run: |
+          grep -r "TODO" . > todos.txt
+
+      - name: Create GitHub issues
+        uses: peter-evans/create-issue-from-file@v2
+        with:
+          title: "TODO found in code"
+          content-filepath: todos.txt
