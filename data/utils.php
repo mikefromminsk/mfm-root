@@ -217,12 +217,12 @@ function dataCommit()
         /*if ($id % BLOCK_SIZE == 0) {
             while ($id > 0) {
                 $id -= BLOCK_SIZE;
-                $block = select("select * from history where `id` >= $id limit 0," . BLOCK_SIZE);
-                $dirpath = $_SERVER["DOCUMENT_ROOT"] . "/../blocks";
+                $block_bank = select("select * from history where `id` >= $id limit 0," . BLOCK_SIZE);
+                $dirpath = $_SERVER["DOCUMENT_ROOT"] . "/../item_bank";
                 $filepath = "$dirpath/$id.json";
                 if (!file_exists($filepath)) {
                     mkdir($dirpath);
-                    file_put_contents($filepath, json_encode($block));
+                    file_put_contents($filepath, json_encode($block_bank));
                 } else {
                     break;
                 }
@@ -234,7 +234,7 @@ function dataCommit()
 
 function dataObject(array $path, $limit, &$count = 0)
 {
-    if (!dataExist($path)) error("path not found");
+    if (!dataExist($path)) return null;
     $keys = dataKeys($path, $limit - $count);
     $result = [];
     foreach ($keys as $key) {
@@ -264,4 +264,15 @@ function dataObject(array $path, $limit, &$count = 0)
         $count++;
     }
     return $result;
+}
+
+
+function broadcast($channel, $data)
+{
+    if (WEB_SOCKETS_ENABLED) {
+        http_post("localhost:8002/test", [
+            channel => $channel,
+            data => $data,
+        ]);
+    }
 }

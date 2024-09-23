@@ -1,16 +1,10 @@
 <?php
 include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
 
-function sortDomains($array)
-{
-    sort($array);
-    return implode("/", $array);
-}
-
 function recipe2($domain1, $domain2)
 {
     $domain = getDomain();
-    if (dataGet([$domain, recipe2]) != null) error("recipe2 already exists");
+    if (dataExist([$domain, recipe2])) error("recipe2 already exists");
     dataSet([$domain, recipe2, domain1], $domain1);
     dataSet([$domain, recipe2, domain2], $domain2);
     tokenScriptReg($domain1, $domain . _craft2, "craft/api/craft2.php");

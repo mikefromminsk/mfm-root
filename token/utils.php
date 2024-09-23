@@ -5,16 +5,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/data/track.php";
 $gas_domain = "usdt";
 
 
-function broadcast($channel, $data)
-{
-    if (WEB_SOCKETS_ENABLED) {
-        http_post("localhost:8002/test", [
-            channel => $channel,
-            data => $data,
-        ]);
-    }
-}
-
 function tokenKey($domain, $address, $password, $prev_key = "")
 {
     return md5($domain . $address . $password . $prev_key);
@@ -49,10 +39,25 @@ function tokenAddressBalance($domain, $address)
     return null;
 }
 
+function launch($domain, $address, $next_hash, $amount = 1000000)
+{
+    if (tokenAddress($domain, $address) == null) {
+        return requestEquals("token/send.php", [
+            domain => $domain,
+            from_address => owner,
+            to_address => $address,
+            amount => $amount,
+            pass => ":" . $next_hash,
+        ], success);
+    } else {
+        return false;
+    }
+}
+
 function tokenScriptReg($domain, $address, $script)
 {
     if (tokenAddress($domain, $address) == null) {
-        return requestEquals("localhost/token/send.php", [
+        return requestEquals("token/send.php", [
             domain => $domain,
             from_address => owner,
             to_address => $address,
@@ -80,7 +85,7 @@ function tokenSend(
         $next_hash = explode(":", $pass)[1];
     }
     if ($from_address == owner) {
-        if (strlen($domain) < 3 || strlen($domain) > 16) error("domain length has to be between 3 and 16");
+        if (strlen($domain) < 3 || strlen($domain) > 32) error("domain length has to be between 3 and 32");
         if (tokenAddressBalance($domain, owner) === null) {
             insertRow(addresses, [
                 domain => $domain,
