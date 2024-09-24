@@ -17,7 +17,7 @@ function openInventory(success) {
                     getPin((pin) => {
                         response.active.forEach((token) => {
                             wallet.calcPass(token.domain, pin, (pass) => {
-                                postContractWithGas("world", "api/deposit.php", {
+                                postContractWithGas("world", "api/token_deposit.php", {
                                     address: wallet.address(),
                                     domain: token.domain,
                                     amount: token.balance,
@@ -42,22 +42,24 @@ function openInventory(success) {
             $scope.setMode("tokens")
 
             function inventory(){
-                dataObject("world/avatar/" + wallet.address() + "/inventory", (inventory) => {
-                    $scope.inventory = inventory
+                postContract("world", "api/inventory.php", {
+                    address: wallet.address(),
+                }, function (response) {
+                    $scope.inventory = response.inventory
                     $scope.$apply()
                 })
             }
 
             $scope.recipes = {}
             function recipes() {
-                post("/wallet/token/api/recepes.php", {}, function (response) {
+                post("/world/api/recipes.php", {}, function (response) {
                     $scope.recipes = response.recipes
                     $scope.$apply()
                 })
             }
 
-            $scope.openCraft = function () {
-                openCraft('chest', openInventory)
+            $scope.openCraft = function (domain) {
+                openCraft(domain, openInventory)
             }
         }
     }).then(function (scene) {

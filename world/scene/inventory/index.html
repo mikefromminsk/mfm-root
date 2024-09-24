@@ -31,24 +31,11 @@
                      style="position: absolute; left: 30px; bottom: 30px;">
             </div>
             <div class="col" ng-show="mode == 'recipes'">
-                <div class="col" ng-repeat="recipe in recipes">
+                <div class="col" ng-repeat="(domain, recipe) in recipes">
                     <div class="row ph16 pv8 align-start-center ripple"
-                         ng-click="openCraft(recipe.domain)">
-                        <div ng-style="getLogo(recipe.domain)"></div>
-                        <div class="flex col  ml8">
-                            <p class="size16 uppercase medium">{{recipe.domain}}</p>
-                            <p class="size12 gray400-text">{{recipe.owner}}</p>
-                        </div>
-                        <div class="col align-end-end">
-                            <p>{{formatPrice(token.price)}}</p>
-                            <p class="size10 mt4" ng-class="percentColor(token.price24)">
-                                {{formatPercent(token.price24)}}
-                            </p>
-                        </div>
-                        <div class="col align-end-end" style="min-width: 80px">
-                            <p>{{formatPrice(token.price * token.balance)}}</p>
-                            <p class="size10 mt4">{{formatAmount(token.balance)}}</p>
-                        </div>
+                         ng-click="openCraft(domain)">
+                        <div ng-style="getTexture(domain)"></div>
+                        {{domain}}
                     </div>
                     <div class="divider"></div>
                 </div>

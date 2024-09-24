@@ -27,3 +27,16 @@ function teleportToSpawn($address) {
     teleport($address, $spawn_scene, $spawn_pos);
     dataSet([world, avatar, $address, health], 1);
 }
+
+function worldBalance($domain, $address)
+{
+    return dataGet([world, avatar, $address, inventory, $domain]) ?: 0;
+}
+
+function worldSend($domain, $from_address, $to_address, $amount)
+{
+    $from_balance = worldBalance($domain, $from_address);
+    if ($from_balance < $amount) error("insufficient balance ($from_balance)");
+    dataDec([world, avatar, $from_address, inventory, $domain], $amount);
+    dataInc([world, avatar, $to_address, inventory, $domain], $amount);
+}

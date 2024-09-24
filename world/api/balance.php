@@ -2,7 +2,8 @@
 include_once $_SERVER["DOCUMENT_ROOT"] . "/world/api/utils.php";
 
 $address = get_required(address);
+$domain = get_required(domain);
 
-$response[inventory] = dataObject([world, avatar, $address, inventory], 100);
+$response[balance] = worldBalance($domain, $address);
 
-commit($response);
+commit();

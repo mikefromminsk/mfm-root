@@ -1,6 +1,6 @@
 function openSelectToken(success) {
     window.$mdBottomSheet.show({
-        templateUrl: '/world/scene/select_token/index.html',
+        templateUrl: '/wallet/token/select_token/index.html',
         controller: function ($scope) {
             addFormats($scope)
 

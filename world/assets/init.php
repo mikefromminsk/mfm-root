@@ -37,35 +37,28 @@ function installApp($domain, $app_domain)
     ]);
 }
 
-function recipe($domain, $craft)
-{
-    postWithGas("$domain/api/craft/recipe.php", [
-        domain => $domain,
-        recipe => $craft,
-    ]);
-    requestEquals("token/send.php", [
-        domain => $domain,
-        from_address => $GLOBALS[address],
-        to_address => $domain . _craft,
-        amount => tokenAddressBalance($domain, $GLOBALS[address]),
-        pass => calcPass($domain, $GLOBALS[address], $GLOBALS[password]),
-    ]);
-
-    postWithGas("wallet/token/api/regRecipe.php", [
-        domain => $domain,
-    ]);
-}
-
 function launchList($tokens, $address, $password)
 {
     foreach ($tokens as $token) {
         $domain = $token[domain];
         $amount = $token[amount] ?: 1000000;
-        $craft = $token[craft];
+        $recipe = $token[recipe];
         launch($domain, $address, tokenNextHash($domain, $address, $password), $amount);
-        if ($token[craft] != null) {
-            installApp($domain, craft);
-            recipe($domain, $craft);
+        postWithGas("world/api/token_deposit.php", [
+            domain => $domain,
+            amount => tokenAddressBalance($domain, $GLOBALS[address]),
+            pass => calcPass($domain, $GLOBALS[address], $GLOBALS[password]),
+        ]);
+        if ($token[recipe] != null) {
+            postWithGas("world/api/recipe_insert.php", [
+                domain => $domain,
+                recipe => json_encode($recipe),
+            ]);
+            postWithGas("world/api/send.php", [
+                domain => $domain,
+                to_address => world,
+                amount => $amount,
+            ]);
         }
     }
 }
@@ -80,7 +73,7 @@ $tokens = [
     [domain => "stone"],
     [
         domain => "chest",
-        craft => ["oak_log" => 8]
+        recipe => ["oak_log" => 8]
     ],
 ];
 

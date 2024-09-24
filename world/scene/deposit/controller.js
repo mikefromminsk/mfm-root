@@ -18,7 +18,7 @@ function openWorldDeposit(success) {
                 $scope.send = function () {
                     getPin((pin) => {
                         wallet.calcPass(domain, pin, (pass) => {
-                            postContractWithGas("world", "api/deposit.php", {
+                            postContractWithGas("world", "api/token_deposit.php", {
                                 address: wallet.address(),
                                 domain: domain,
                                 amount: $scope.amount,
