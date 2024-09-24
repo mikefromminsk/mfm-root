@@ -46,7 +46,7 @@ class Scene extends Utils {
                 {frameWidth: 192, frameHeight: 195});
             this.scene.settings.texture = 'green_concrete'
             this.loadBlock(this.scene.settings.texture);
-            for (const object of Object.values(this.scene.objects || {})) {
+            for (const object of Object.values(this.scene.blocks || {})) {
                 this.loadBlock(object.domain)
             }
             this.load.on('complete', this.createScene, this);
@@ -61,10 +61,10 @@ class Scene extends Utils {
         }
         this.setupJoystick();
         this.setupPlayer();
-        this.createObjects();
+        this.createBlocks();
         this.updateTouchCollider();
 
-        this.setupInputHandlers();
+        this.put();
         this.disableUpdates = false;
     }
 
@@ -79,11 +79,11 @@ class Scene extends Utils {
         this.gridHeight = this.scene.settings.height;
     }
 
-    createObjects() {
+    createBlocks() {
         if (this.touchable) this.touchable.forEach(sprite => sprite.destroy());
         this.touchable = [];
-        for (const key of Object.keys(this.scene.objects || {})) {
-            var object = this.scene.objects[key]
+        for (const key of Object.keys(this.scene.blocks || {})) {
+            var object = this.scene.blocks[key]
             var pos = key.split(':')
             var x = parseInt(pos[0])
             var y = parseInt(pos[1])
@@ -123,7 +123,7 @@ class Scene extends Utils {
     }
 
     setupPlayer() {
-        if (this.player == null){
+        if (this.player == null) {
             this.player = this.physics.add.sprite(15, 30, this.avatar.texture + '64', (10 - 1) * 18).setCollideWorldBounds(true);
             this.cameras.main.startFollow(this.player);
             this.cameras.main.setZoom(1.5);
@@ -352,7 +352,10 @@ class Scene extends Utils {
             } else if (values.object.domain === 'chest') {
                 // Handle chest interaction
             } else {
-                postContractWithGas("world", "api/touch.php", {scene: this.scene_name, x, y}, () => this.reload());
+                postContractWithGas("world", "api/touch.php", {
+                    scene: this.scene_name,
+                    pos: x + ':' + y
+                }, () => this.reload());
             }
         }
         if (values.avatar) {
@@ -373,6 +376,42 @@ class Scene extends Utils {
         }
     }
 
+    put() {
+        this.input.on('pointerdown', Utils.click(pointer => {
+                if (this.disableUpdates) {
+                    let x = Math.floor(pointer.worldX / this.cellSize);
+                    let y = Math.floor(pointer.worldY / this.cellSize);
+                    if (this.inHand === 'generator_oak_tree') {
+                        for (let i = 0; i < Math.floor(Math.random() * 10) + 10; i++) {
+                            let x = Math.floor(Math.random() * 20)//this.gridWidth);
+                            let y = Math.floor(Math.random() * 20)// this.gridHeight);
+                            if (this.touchGrid[x][y].domain == null) {
+                                this.touchGrid[x][y].domain = 'oak_tree'
+                                postContractWithGas("world", "api/put_block.php", {
+                                    scene: this.scene_name,
+                                    domain: 'oak_tree',
+                                    pos: x + ':' + y,
+                                }, () => console.log('done put oak_tree'));
+                                postContractWithGas("world", "api/put_inventory.php", {
+                                    scene: this.scene_name,
+                                    domain: 'oak_log',
+                                    pos: x + ':' + y,
+                                    amount: 1,
+                                }, () => console.log('done put inventory oak_log'))
+                            }
+                        }
+                        setTimeout(() => this.reload(), 3000);
+                    } else {
+                        postContractWithGas("world", "api/put_block.php", {
+                            scene: this.scene_name,
+                            domain: this.inHand,
+                            pos: x + ':' + y
+                        }, () => this.reload());
+                    }
+                }
+            }
+        ))
+    }
 
     getJoystickDeltas() {
         let rect = this.joystick.getBoundingClientRect();
@@ -385,25 +424,5 @@ class Scene extends Utils {
 
     emptyGrid() {
         return Array.from({length: this.gridWidth}, () => Array.from({length: this.gridHeight}, () => ({})));
-    }
-
-    setupInputHandlers() {
-        this.input.on('pointerdown', Utils.click(pointer => {
-            if (this.disableUpdates) {
-                let x = Math.floor(pointer.worldX / this.cellSize);
-                let y = Math.floor(pointer.worldY / this.cellSize);
-                getPin(pin => {
-                    wallet.calcPass(this.inHand, pin, pass => {
-                        postContractWithGas("world", "api/object_insert.php", {
-                            scene: this.scene_name,
-                            domain: this.inHand,
-                            pass,
-                            x,
-                            y
-                        }, () => this.reload());
-                    });
-                });
-            }
-        }));
     }
 }

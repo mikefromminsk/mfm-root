@@ -234,7 +234,7 @@ function addFormats($scope) {
             'min-height': width + 'px',
         }
         if (domain != null){
-            img['background-image'] =  "url('/world/assets/item/" + domain + ".png')"
+            img['background-image'] =  "url('/world/assets/block/" + domain + ".png')"
             img['background-size'] = '100% 100%'
         }
         return img

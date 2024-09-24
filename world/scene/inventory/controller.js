@@ -10,8 +10,26 @@ function openInventory(success) {
             })
 
             $scope.openDeposit = function () {
-                openWorldDeposit(function () {
-                    openInventory()
+                openWorldDeposit(openInventory)
+            }
+
+            $scope.depositAll = function () {
+                postContract("wallet", "token/api/tokens.php", {
+                    address: wallet.address(),
+                }, (response) => {
+                    getPin((pin) => {
+                        response.active.forEach((token) => {
+                            wallet.calcPass(token.domain, pin, (pass) => {
+                                postContractWithGas("world", "api/deposit.php", {
+                                    address: wallet.address(),
+                                    domain: token.domain,
+                                    amount: token.balance,
+                                    pass: pass,
+                                })
+                            })
+                        })
+                        showSuccessDialog("Deposits successful", openInventory)
+                    })
                 })
             }
         }

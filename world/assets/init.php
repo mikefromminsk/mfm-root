@@ -26,7 +26,7 @@ function launchList($tokens, $address, $password)
 {
     foreach ($tokens as $token) {
         $domain = $token[domain];
-        $amount = $token[amount];
+        $amount = $token[amount] ?: 1000000;
         launch($domain, $address, tokenNextHash($domain, $address, $password), $amount);
         if ($token[craft] != null) {
             $domain1 = array_keys($token[craft])[0];
@@ -40,9 +40,16 @@ function launchList($tokens, $address, $password)
 
 
 $tokens = [
-    [domain => "oak_log", amount => 1000000],
-    [domain => "stone", amount => 1000000],
-    [domain => "utility_crafting_table", amount => 1000000, craft => ["oak_log" => 1, "stone" => 1]],
+    [domain => "generator_oak_tree"],
+    [domain => "generator_rock"],
+    [domain => "oak_tree"],
+    [domain => "rock"],
+    [domain => "oak_log"],
+    [domain => "stone"],
+    [
+        domain => "utility_crafting_table",
+        craft => ["oak_log" => 1, "stone" => 1]
+    ],
 ];
 
 launchList($tokens, $address, $password);

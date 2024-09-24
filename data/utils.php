@@ -181,17 +181,17 @@ function getDomain()
     return explode("/", scriptPath())[0];
 }
 
-function dataInc(array $path, $inc_val = 1, $addHistory = null)
+function dataInc(array $path, $inc_val = 1)
 {
     $value = dataGet($path);
     $value = ($value ?: 0) + $inc_val;
-    dataSet($path, $value, $addHistory);
+    dataSet($path, $value);
     return $value;
 }
 
-function dataDec(array $path, $dec_val = 1, $addHistory = null)
+function dataDec(array $path, $dec_val = 1)
 {
-    return dataInc($path, -$dec_val, $addHistory);
+    return dataInc($path, -$dec_val);
 }
 
 function dataSearch($path, $search_text, $page = 1, $size = PAGE_SIZE_DEFAULT)

@@ -120,7 +120,11 @@ const storageKeys = {
 }
 
 function postContractWithGas(domain, path, params, success, error) {
-    wallet.postContractWithGas(domain, path, params, success, error)
+    if (wallet.requestInProcess) {
+        wallet.requestQueue.push({domain: domain, path: path, params: params, success: success, error: error})
+    } else {
+        wallet.postContractWithGas(domain, path, params, success, error)
+    }
 }
 
 function calcPass(domain, pin, success, error) {
@@ -164,7 +168,10 @@ var wallet = {
             })
         })
     },
+    requestQueue: [],
+    requestInProcess: false,
     postContractWithGas: function (domain, path, params, success, error) {
+        wallet.requestInProcess = true
         var isParamsFunction = typeof params === 'function'
         getPin(function (pin) {
             if (isParamsFunction) {
@@ -188,11 +195,31 @@ var wallet = {
                 })
             }
 
+            function checkNextRequest(afterCallback) {
+                var nextRequest = wallet.requestQueue.shift()
+                if (nextRequest != null){
+                    wallet.postContractWithGas(
+                        nextRequest.domain,
+                        nextRequest.path,
+                        nextRequest.params,
+                        nextRequest.success,
+                        nextRequest.error)
+                } else {
+                    wallet.requestInProcess = false
+                    if (afterCallback)
+                        afterCallback()
+                }
+            }
+
             function send(params, pass) {
                 if (params == null) return
                 params.gas_address = wallet.address()
                 params.gas_pass = pass
-                postContract(domain, path, params, success, error)
+                postContract(domain, path, params, () => {
+                    checkNextRequest(success)
+                }, () => {
+                    checkNextRequest(error)
+                })
             }
         })
     },

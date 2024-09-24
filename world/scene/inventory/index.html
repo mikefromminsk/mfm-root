@@ -8,9 +8,13 @@
             <div class="col m8" ng-repeat="(domain, amount) in inventory"
                  ng-click="back(domain)">
                 <div ng-style="getTexture(domain)"></div>
-                <p class="size16 uppercase medium">{{amount}}</p>
+                <p class="size16 uppercase medium">{{formatAmount(amount)}}</p>
             </div>
 
+            <img class="img32"
+                 src="/world/scene/inventory/img/plus.png"
+                 ng-click="depositAll()"
+                 style="position: absolute; left: 30px; bottom: 30px;">
             <img class="img32"
                  src="/world/scene/inventory/img/plus.png"
                  ng-click="openDeposit()"
