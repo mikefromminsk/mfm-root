@@ -153,7 +153,7 @@ function tokenSend(
     return insertRowAndGetId(trans, $tran);
 }
 
-function commit($response = null, $gas_address = null)
+function commit($response = null)
 {
     if ($response == null)
         $response = [];
@@ -164,24 +164,15 @@ function commit($response = null, $gas_address = null)
     $gas_spent = 0.001 * $gas_rows;
 
     if ($gas_rows != 0) {
-        /*if ($gas_address != null) {
-            $dataTxid = tokenSend(
-                $GLOBALS[gas_domain],
-                $gas_address,
-                admin,
-                $gas_spent);
-        } else {
-            $dataTxid = tokenSend(
-                $GLOBALS[gas_domain],
-                get_required(gas_address),
-                admin,
-                $gas_spent,
-                get_required(gas_pass),
-            );
-        }*/
+        tokenSend(
+            $GLOBALS[gas_domain],
+            get_required(gas_address),
+            admin,
+            $gas_spent,
+            get_required(gas_pass),
+        );
         dataCommit();
         $response[gas_spend] = $gas_spent;
-        $response[gas_txid] = $dataTxid;
     }
     echo json_encode($response);
     die();

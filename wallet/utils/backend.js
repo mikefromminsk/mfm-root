@@ -168,6 +168,17 @@ var wallet = {
             })
         })
     },
+    calcPassList: function (domains, pin, success, error) {
+        var passes = {}
+        for (const domain of domains) {
+            wallet.calcPass(domain, pin, (pass) => {
+                passes[domain] = pass
+                if (Object.keys(domains).length == Object.keys(passes).length) {
+                    success(passes)
+                }
+            }, error)
+        }
+    },
     requestQueue: [],
     requestInProcess: false,
     postContractWithGas: function (domain, path, params, success, error) {

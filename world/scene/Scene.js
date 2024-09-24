@@ -347,7 +347,7 @@ class Scene extends Utils {
     touch(values, x, y) {
         if (values.object) {
             if (values.object.domain === 'table') {
-                openCraft2("axe", () => {
+                openCraft("axe", () => {
                 });
             } else if (values.object.domain === 'chest') {
                 // Handle chest interaction

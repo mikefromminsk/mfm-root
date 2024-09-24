@@ -4,21 +4,55 @@
         <p>Select item</p>
     </div>
     <div class="col content align-start-center">
-        <div class="row wrap block">
-            <div class="col m8" ng-repeat="(domain, amount) in inventory"
-                 ng-click="back(domain)">
-                <div ng-style="getTexture(domain)"></div>
-                <p class="size16 uppercase medium">{{formatAmount(amount)}}</p>
+        <div class="col block">
+            <div class="row mt8 pv8 gray300-back">
+                <div class="ml16"
+                     ng-class="{'bold': mode == 'tokens'}"
+                     ng-click="setMode('tokens')">
+                    Tokens
+                </div>
+                <div class="ml8"
+                     ng-class="{'bold': mode == 'recipes'}"
+                     ng-click="setMode('recipes')">
+                    recipes
+                </div>
             </div>
 
-            <img class="img32"
-                 src="/world/scene/inventory/img/plus.png"
-                 ng-click="depositAll()"
-                 style="position: absolute; left: 30px; bottom: 30px;">
-            <img class="img32"
-                 src="/world/scene/inventory/img/plus.png"
-                 ng-click="openDeposit()"
-                 style="position: absolute; right: 30px; bottom: 30px;">
+            <div class="row wrap" ng-show="mode == 'tokens'">
+                <div class="col m8" ng-repeat="(domain, amount) in inventory"
+                     ng-click="back(domain)">
+                    <div ng-style="getTexture(domain)"></div>
+                    <p class="size16 uppercase medium">{{formatAmount(amount)}}</p>
+                </div>
+
+                <img class="img32"
+                     src="/world/scene/inventory/img/plus.png"
+                     ng-click="depositAll()"
+                     style="position: absolute; left: 30px; bottom: 30px;">
+            </div>
+            <div class="col" ng-show="mode == 'recipes'">
+                <div class="col" ng-repeat="recipe in recipes">
+                    <div class="row ph16 pv8 align-start-center ripple"
+                         ng-click="openCraft(recipe.domain)">
+                        <div ng-style="getLogo(recipe.domain)"></div>
+                        <div class="flex col  ml8">
+                            <p class="size16 uppercase medium">{{recipe.domain}}</p>
+                            <p class="size12 gray400-text">{{recipe.owner}}</p>
+                        </div>
+                        <div class="col align-end-end">
+                            <p>{{formatPrice(token.price)}}</p>
+                            <p class="size10 mt4" ng-class="percentColor(token.price24)">
+                                {{formatPercent(token.price24)}}
+                            </p>
+                        </div>
+                        <div class="col align-end-end" style="min-width: 80px">
+                            <p>{{formatPrice(token.price * token.balance)}}</p>
+                            <p class="size10 mt4">{{formatAmount(token.balance)}}</p>
+                        </div>
+                    </div>
+                    <div class="divider"></div>
+                </div>
+            </div>
         </div>
     </div>
 </md-bottom-sheet>

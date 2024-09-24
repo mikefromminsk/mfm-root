@@ -1,12 +1,27 @@
 <?php
 
-include_once $_SERVER["DOCUMENT_ROOT"] . "/craft/api/utils.php";
 include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
 
 $address = get_required(address);
 $password = get_required(password);
 
 if (!DEBUG) error("cannot use not in debug session");
+
+function calcPass($domain, $address, $password)
+{
+    $account = tokenAddress($domain, $address);
+    $key = tokenKey($domain, $address, $password, $account[prev_key]);
+    $next_hash = tokenNextHash($domain, $address, $password, $key);
+    return "$key:$next_hash";
+}
+
+function postWithGas($url, $params)
+{
+    requestEquals($url, array_merge($params, [
+        gas_address => $GLOBALS[address],
+        gas_pass => calcPass($GLOBALS[gas_domain], $GLOBALS[address], $GLOBALS[password]),
+    ]));
+}
 
 requestEquals("token/init.php", [
     address => $address,
@@ -15,10 +30,29 @@ requestEquals("token/init.php", [
 
 function installApp($domain, $app_domain)
 {
-    requestEquals("wallet/store/api/archive.php", [domain => $app_domain]);
-    requestEquals("wallet/store/api/install.php", [
+    postWithGas("wallet/store/api/archive.php", [domain => $app_domain]);
+    postWithGas("wallet/store/api/install.php", [
         domain => $domain,
         app_domain => $app_domain,
+    ]);
+}
+
+function recipe($domain, $craft)
+{
+    postWithGas("$domain/api/craft/recipe.php", [
+        domain => $domain,
+        recipe => $craft,
+    ]);
+    requestEquals("token/send.php", [
+        domain => $domain,
+        from_address => $GLOBALS[address],
+        to_address => $domain . _craft,
+        amount => tokenAddressBalance($domain, $GLOBALS[address]),
+        pass => calcPass($domain, $GLOBALS[address], $GLOBALS[password]),
+    ]);
+
+    postWithGas("wallet/token/api/regRecipe.php", [
+        domain => $domain,
     ]);
 }
 
@@ -27,13 +61,11 @@ function launchList($tokens, $address, $password)
     foreach ($tokens as $token) {
         $domain = $token[domain];
         $amount = $token[amount] ?: 1000000;
+        $craft = $token[craft];
         launch($domain, $address, tokenNextHash($domain, $address, $password), $amount);
         if ($token[craft] != null) {
-            $domain1 = array_keys($token[craft])[0];
-            $domain2 = array_keys($token[craft])[1];
             installApp($domain, craft);
-            // if (!dataExist([$domain, recipe2]))
-            recipe2($domain1, $domain2);
+            recipe($domain, $craft);
         }
     }
 }
@@ -47,8 +79,8 @@ $tokens = [
     [domain => "oak_log"],
     [domain => "stone"],
     [
-        domain => "utility_crafting_table",
-        craft => ["oak_log" => 1, "stone" => 1]
+        domain => "chest",
+        craft => ["oak_log" => 8]
     ],
 ];
 

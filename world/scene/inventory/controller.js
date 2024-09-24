@@ -4,10 +4,7 @@ function openInventory(success) {
         controller: function ($scope) {
             addFormats($scope)
 
-            dataObject("world/avatar/" + wallet.address() + "/inventory", (inventory) => {
-                $scope.inventory = inventory
-                $scope.$apply()
-            })
+
 
             $scope.openDeposit = function () {
                 openWorldDeposit(openInventory)
@@ -31,6 +28,36 @@ function openInventory(success) {
                         showSuccessDialog("Deposits successful", openInventory)
                     })
                 })
+            }
+
+            $scope.mode = ""
+            $scope.setMode = function (mode) {
+                $scope.mode = mode
+                if (mode == "tokens") {
+                    inventory("")
+                } else if (mode == "recipes") {
+                    recipes()
+                }
+            }
+            $scope.setMode("tokens")
+
+            function inventory(){
+                dataObject("world/avatar/" + wallet.address() + "/inventory", (inventory) => {
+                    $scope.inventory = inventory
+                    $scope.$apply()
+                })
+            }
+
+            $scope.recipes = {}
+            function recipes() {
+                post("/wallet/token/api/recepes.php", {}, function (response) {
+                    $scope.recipes = response.recipes
+                    $scope.$apply()
+                })
+            }
+
+            $scope.openCraft = function () {
+                openCraft('chest', openInventory)
             }
         }
     }).then(function (scene) {

@@ -138,7 +138,7 @@ function addTokens($scope) {
     }
 
     $scope.openCraft2 = function (recipe) {
-        openCraft2(recipe, init)
+        openCraft(recipe, init)
     }
 
 
