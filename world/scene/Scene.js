@@ -350,7 +350,9 @@ class Scene extends Utils {
                 openCraft("axe", () => {
                 });
             } else if (values.object.domain === 'chest') {
-                // Handle chest interaction
+                openChest(this.scene_name, x + ':' + y, () => {
+
+                });
             } else {
                 postContractWithGas("world", "api/touch.php", {
                     scene: this.scene_name,
