@@ -39,4 +39,30 @@ class Utils extends Phaser.Scene {
     loadImage(texture) {
         this.load.image(texture, 'assets/' + texture + '.png')
     }
+
+    loadAvatar(texture) {
+        this.load.spritesheet(texture + '64',
+            'assets/avatar/' + texture + '.png',
+            {frameWidth: 64, frameHeight: 64});
+        this.load.spritesheet(texture + '192',
+            'assets/avatar/' + texture + '.png',
+            {frameWidth: 192, frameHeight: 195});
+    }
+
+
+    createAnimation(key, texture) {
+        let frameCount = this.textures.get(texture).source[0].width / 32;
+        this.anims.create({
+            key: key,
+            frames: this.anims.generateFrameNumbers(texture, {start: 0, end: frameCount - 1}),
+            frameRate: 10,
+            hideOnComplete: true
+        });
+    }
+
+
+
+    createSprite(x, y, texture, frame) {
+        return this.physics.add.sprite(x * this.cellSize, y * this.cellSize, texture, frame || 0);
+    }
 }

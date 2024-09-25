@@ -42,18 +42,16 @@ function openInventory(success) {
             $scope.setMode("tokens")
 
             function inventory(){
-                postContract("world", "api/inventory.php", {
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.inventory = response.inventory
+                dataObject(`world/avatar/${wallet.address()}/inventory`, function (inventory) {
+                    $scope.inventory = inventory
                     $scope.$apply()
                 })
             }
 
             $scope.recipes = {}
             function recipes() {
-                post("/world/api/recipes.php", {}, function (response) {
-                    $scope.recipes = response.recipes
+                dataObject("world/recipe", function (recipes) {
+                    $scope.recipes = recipes
                     $scope.$apply()
                 })
             }

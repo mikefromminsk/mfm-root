@@ -3,12 +3,15 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/world/api/utils.php";
 
 $gas_address = get_required(gas_address);
 $domain = get_required(domain);
-$recipe = get_required(recipe);
+$info = get_required(info);
 
-$recipe = json_decode($recipe, true);
+$info = json_decode($info, true);
 
 if ($gas_address != admin) error("only admin can insert recipe");
 
-dataSet([world, recipe, $domain], $recipe);
+dataSet([world, info, $domain], $info);
+
+if ($info[recipe] != null)
+    dataSet([world, recipe, $domain], $info[recipe]);
 
 commit();

@@ -6,6 +6,7 @@ class Scene extends Utils {
         this.currentScene = null;
         this.disableMoveAnimation = false;
         this.inHand = null;
+        this.scene_name = ""
     }
 
     preload() {
@@ -13,7 +14,7 @@ class Scene extends Utils {
     }
 
     init(scene_name) {
-        this.scene_name = scene_name;
+        this.new_scene_name = scene_name;
     }
 
     create() {
@@ -30,20 +31,26 @@ class Scene extends Utils {
 
     reload() {
         this.disableUpdates = true;
+        if (this.new_scene_name !== this.scene_name) {
+            this.scene_name = this.new_scene_name;
+            postContractWithGas("world", "api/scene_load.php", {
+                scene: this.scene_name,
+                address: wallet.address(),
+            }, () => {
+                this.reload();
+            })
+        }
         postContract("world", "api/scene.php", {
             scene: this.scene_name,
             address: wallet.address(),
         }, (response) => {
             this.scene = response.scene;
             this.avatar = response.avatar;
-            if (this.avatar.texture == null)
-                this.avatar.texture = "base";
-            this.load.spritesheet(this.avatar.texture + '64',
-                'assets/avatar/' + this.avatar.texture + '.png',
-                {frameWidth: 64, frameHeight: 64});
-            this.load.spritesheet(this.avatar.texture + '192',
-                'assets/avatar/' + this.avatar.texture + '.png',
-                {frameWidth: 192, frameHeight: 195});
+            this.avatar.texture = "base";
+            this.loadAvatar(this.avatar.texture);
+            for (const mob of Object.values(this.scene.mobs || {})) {
+                this.loadAvatar(mob.domain)
+            }
             this.scene.settings.texture = 'green_concrete'
             this.loadBlock(this.scene.settings.texture);
             for (const object of Object.values(this.scene.blocks || {})) {
@@ -62,6 +69,9 @@ class Scene extends Utils {
         this.setupJoystick();
         this.setupPlayer();
         this.createBlocks();
+        for (const key of Object.keys(this.scene.mobs || {})) {
+            this.addMob(key, this.scene.mobs[key]);
+        }
         this.updateTouchCollider();
 
         this.put();
@@ -83,56 +93,28 @@ class Scene extends Utils {
         if (this.touchable) this.touchable.forEach(sprite => sprite.destroy());
         this.touchable = [];
         for (const key of Object.keys(this.scene.blocks || {})) {
-            var object = this.scene.blocks[key]
-            var pos = key.split(':')
-            var x = parseInt(pos[0])
-            var y = parseInt(pos[1])
+            let object = this.scene.blocks[key]
+            let pos = key.split(':')
+            let x = parseInt(pos[0])
+            let y = parseInt(pos[1])
             let sprite = this.createSprite(x, y, object.domain);
             sprite.setData('object', object);
             this.touchable.push(sprite);
         }
     }
 
-    addEnemy(avatar) {
-        if (avatar.address !== wallet.address()) {
-            let sprite = this.createSprite(avatar.x, avatar.y, this.avatar.texture + '64', 3);
-            sprite.setData('avatar', avatar);
-            this.touchable.push(sprite);
-            //this.createAnimation(`avatar_${avatar.address}`, 'avatar');
-        }
-    }
-
-    updateTouchCollider() {
-        if (this.touchCollaider) this.physics.world.removeCollider(this.touchCollaider);
-        this.touchCollaider = this.physics.add.overlap(this.player, this.touchable, this.touchCheck, null, this);
-        this.touchGrid = this.emptyGrid();
-    }
-
-    createSprite(x, y, texture, frame) {
-        return this.physics.add.sprite(x * this.cellSize, y * this.cellSize, texture, frame || 0);
-    }
-
-    createAnimation(key, texture) {
-        let frameCount = this.textures.get(texture).source[0].width / 32;
-        this.anims.create({
-            key: key,
-            frames: this.anims.generateFrameNumbers(texture, {start: 0, end: frameCount - 1}),
-            frameRate: 10,
-            hideOnComplete: true
-        });
-    }
 
     setupPlayer() {
         if (this.player == null) {
-            this.player = this.physics.add.sprite(15, 30, this.avatar.texture + '64', (10 - 1) * 18).setCollideWorldBounds(true);
+            this.player = this.createAvatarAnims(this.avatar.texture, this.avatar.pos);
             this.cameras.main.startFollow(this.player);
             this.cameras.main.setZoom(1.5);
-            this.createPlayerAnimations();
         }
     }
 
-    createPlayerAnimations() {
-        let avatar = this.avatar.texture;
+    createAvatarAnims(avatar) {
+        var player = this.createSprite(1, 1, avatar + '64', (10 - 1) * 18)
+        player.setCollideWorldBounds(true);
         let anims = this.anims
         anims.create({key: 'turn_left', frames: [{key: avatar + '64', frame: (10 - 1) * 18}], frameRate: 20});
         anims.create({key: 'turn_right', frames: [{key: avatar + '64', frame: (12 - 1) * 18}], frameRate: 20});
@@ -173,12 +155,12 @@ class Scene extends Utils {
         fightAnim('fight_left', 17);
         fightAnim('fight_bottom', 18);
         fightAnim('fight_right', 19);
-
-        this.player.on('animationcomplete', function (animation) {
+        player.on('animationcomplete', function (animation) {
             if (animation.key.startsWith('fight')) {
                 this.anims.play('turn_right');
             }
         })
+        return player
     }
 
     setupJoystick() {
@@ -266,7 +248,7 @@ class Scene extends Utils {
 
     receiveEnemyPos(enemy) {
         if (enemy.address !== wallet.address()) {
-            let sprite = this.touchable.find(sprite => sprite.data.get('avatar').address === enemy.address);
+            let sprite = this.touchable.find(sprite => sprite.data.get('enemy').address === enemy.address);
             if (sprite) {
                 if (enemy.speedX === 0 && enemy.speedY === 0) {
                     sprite.setVelocity(0, 0);
@@ -281,10 +263,32 @@ class Scene extends Utils {
                     sprite.setVelocity(deltaX, deltaY);
                 }
             } else {
-                this.addEnemy(enemy);
+                this.addAvatar(enemy);
                 this.updateTouchCollider();
             }
         }
+    }
+
+    addAvatar(avatar) {
+        if (avatar.address !== wallet.address()) {
+            let texture = 'base';
+            let sprite = this.createSprite(avatar.x, avatar.y, texture + '64', 3);
+            sprite.setData('avatar', avatar);
+            this.touchable.push(sprite);
+        }
+    }
+
+    addMob(pos, mob) {
+        pos = pos.split(':');
+        let sprite = this.createSprite(parseInt(pos[0]), parseInt(pos[1]), mob.domain + '64', 3);
+        sprite.setData('mob', mob);
+        this.touchable.push(sprite);
+    }
+
+    updateTouchCollider() {
+        if (this.touchCollaider) this.physics.world.removeCollider(this.touchCollaider);
+        this.touchCollaider = this.physics.add.overlap(this.player, this.touchable, this.touchCheck, null, this);
+        this.touchGrid = this.emptyGrid();
     }
 
 
@@ -293,7 +297,7 @@ class Scene extends Utils {
             /*this.scene_name = data.scene;
             this.reload();*/
         } else {
-            let sprite = this.touchable.find(sprite => sprite.data.get('avatar').address === data.address);
+            let sprite = this.touchable.find(sprite => sprite.data.get('enemy').address === data.address);
             if (sprite) {
                 if (data.scene == this.scene_name) {
                     sprite.x = data.x * this.cellSize;
@@ -323,7 +327,7 @@ class Scene extends Utils {
         if (data.startTouch + 300 > currentTime) {
             data.startTouch = 0;
 
-            this.player.anims.stop();
+            //this.player.anims.stop();
 
             var animKey = '';
             var rect = this.joystick.getBoundingClientRect();
@@ -339,42 +343,38 @@ class Scene extends Utils {
             this.disableMoveAnimation = true;
             setTimeout(() => {
                 this.disableMoveAnimation = false;
-                this.touch(sprite.data.values, x, y)
+                this.touch(sprite.data.values, x + ":" + y)
             }, 1000);
         }
     }
 
-    touch(values, x, y) {
+    touch(values, pos) {
         if (values.object) {
             if (values.object.domain === 'table') {
                 openCraft("axe", () => {
                 });
             } else if (values.object.domain === 'chest') {
-                openChest(this.scene_name, x + ':' + y, () => {
+                openChest(this.scene_name, pos, () => {
 
                 });
             } else {
                 postContractWithGas("world", "api/touch.php", {
                     scene: this.scene_name,
-                    pos: x + ':' + y
+                    pos: pos
                 }, () => this.reload());
             }
         }
         if (values.avatar) {
-            postContract("token", "address.php", {
-                domain: wallet.gas_domain,
-                address: values.avatar.address,
-            }, function (response) {
-                postContractWithGas("world", "api/fight.php", {
-                    defender_address: values.avatar.address,
-                    defender_next_hash: response.next_hash,
-                }, (data) => {
-                    //console.log(data)
-                }, () => {
-                    //console.log("error");
-                })
-            })
-
+            postContractWithGas("world", "api/fight.php", {
+                fight_pos: pos,
+                defender_path: "world/avatar/" + values.avatar.address,
+            }, () => this.reload());
+        }
+        if (values.mob) {
+            postContractWithGas("world", "api/fight.php", {
+                fight_pos: pos,
+                defender_path: "world/" + this.scene_name + "/mobs/" + pos,
+            }, () => this.reload());
         }
     }
 
@@ -383,25 +383,23 @@ class Scene extends Utils {
                 if (this.disableUpdates) {
                     let x = Math.floor(pointer.worldX / this.cellSize);
                     let y = Math.floor(pointer.worldY / this.cellSize);
-                    if (this.inHand === 'generator_oak_tree') {
-                        for (let i = 0; i < Math.floor(Math.random() * 10) + 10; i++) {
-                            let x = Math.floor(Math.random() * 20)//this.gridWidth);
-                            let y = Math.floor(Math.random() * 20)// this.gridHeight);
-                            if (this.touchGrid[x][y].domain == null) {
-                                this.touchGrid[x][y].domain = 'oak_tree'
-                                postContractWithGas("world", "api/put_block.php", {
-                                    scene: this.scene_name,
-                                    domain: 'oak_tree',
-                                    pos: x + ':' + y,
-                                }, () => console.log('done put oak_tree'));
-                                postContractWithGas("world", "api/put_inventory.php", {
-                                    scene: this.scene_name,
-                                    domain: 'oak_log',
-                                    pos: x + ':' + y,
-                                    amount: 1,
-                                }, () => console.log('done put inventory oak_log'))
+                    if (this.inHand.endsWith('_generator')) {
+                        var domain = this.inHand.replace('_generator', '');
+                        dataObject(`world/info/${domain}`, (info) => {
+                            for (let i = 0; i < Math.floor(Math.random() * 10) + 10; i++) {
+                                let x = Math.floor(Math.random() * 20)//this.gridWidth)
+                                let y = Math.floor(Math.random() * 20)//this.gridHeight)
+                                let pos = x + ':' + y;
+                                if (this.touchGrid[x][y].domain == null) {
+                                    this.touchGrid[x][y].domain = domain
+                                    postContractWithGas("world", "api/put_block.php", {
+                                        scene: this.scene_name,
+                                        domain: domain,
+                                        pos: pos,
+                                    }, () => console.log('done put ' + domain));
+                                }
                             }
-                        }
+                        })
                         setTimeout(() => this.reload(), 3000);
                     } else {
                         postContractWithGas("world", "api/put_block.php", {

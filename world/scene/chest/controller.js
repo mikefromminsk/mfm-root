@@ -5,36 +5,33 @@ function openChest(scene, pos, success) {
             addFormats($scope)
 
             $scope.chestGet = function (domain) {
-                postContractWithGas("world", "api/chest_get.php", {
-                    scene: scene,
-                    pos: pos,
+                postContractWithGas("world", "api/send.php", {
+                    from_path: `world/${scene}/blocks/${pos}`,
+                    to_path: `world/avatar/${wallet.address()}`,
                     domain: domain,
+                    amount: 1,
                 }, init)
             }
 
             $scope.chestPut = function (domain) {
-                postContractWithGas("world", "api/chest_put.php", {
-                    scene: scene,
-                    pos: pos,
+                postContractWithGas("world", "api/send.php", {
+                    from_path: `world/avatar/${wallet.address()}`,
+                    to_path: `world/${scene}/blocks/${pos}`,
                     domain: domain,
+                    amount: 1,
                 }, init)
             }
 
             function avatarInventory(){
-                postContract("world", "api/inventory.php", {
-                    address: wallet.address(),
-                }, function (response) {
-                    $scope.inventory = response.inventory
+                dataObject(`world/avatar/${wallet.address()}/inventory`, function (inventory) {
+                    $scope.inventory = inventory
                     $scope.$apply()
                 })
             }
 
             function chestInventory(){
-                postContract("world", "api/chest.php", {
-                    scene: scene,
-                    pos: pos,
-                }, function (response) {
-                    $scope.chest = response.chest
+                dataObject(`world/${scene}/blocks/${pos}/inventory`, function (chest) {
+                    $scope.chest = chest
                     $scope.$apply()
                 })
             }

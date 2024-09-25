@@ -1,6 +1,7 @@
 <?php
 
 include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/world/api/utils.php";
 
 $address = get_required(address);
 $password = get_required(password);
@@ -42,38 +43,55 @@ function launchList($tokens, $address, $password)
     foreach ($tokens as $token) {
         $domain = $token[domain];
         $amount = $token[amount] ?: 1000000;
-        $recipe = $token[recipe];
         launch($domain, $address, tokenNextHash($domain, $address, $password), $amount);
-        postWithGas("world/api/token_deposit.php", [
-            domain => $domain,
-            amount => tokenAddressBalance($domain, $GLOBALS[address]),
-            pass => calcPass($domain, $GLOBALS[address], $GLOBALS[password]),
-        ]);
-        if ($token[recipe] != null) {
-            postWithGas("world/api/recipe_insert.php", [
+        if (tokenAddressBalance($domain, $GLOBALS[address]) > 0)
+            postWithGas("world/api/token_deposit.php", [
                 domain => $domain,
-                recipe => json_encode($recipe),
+                amount => tokenAddressBalance($domain, $GLOBALS[address]),
+                pass => calcPass($domain, $GLOBALS[address], $GLOBALS[password]),
             ]);
-            postWithGas("world/api/send.php", [
+        unset($token[domain]);
+        if (sizeof(array_keys($token)) > 0) {
+            postWithGas("world/api/info_set.php", [
                 domain => $domain,
-                to_address => world,
-                amount => $amount,
+                info => json_encode($token),
             ]);
         }
+        if (worldBalance($domain, [world, avatar, $GLOBALS[address]]) == 1000000)
+            postWithGas("world/api/send.php", [
+                from_path => implode("/", [world, avatar, $GLOBALS[address]]),
+                to_path => world,
+                domain => $domain,
+                amount => $amount / 2,
+            ]);
     }
 }
 
 
 $tokens = [
-    [domain => "generator_oak_tree"],
-    [domain => "generator_rock"],
-    [domain => "oak_tree"],
+    [domain => "oak_tree_generator"],
+    [domain => "rock"],
+    [
+        domain => "oak_tree",
+        loot => [
+            "oak_log" => 1,
+        ],
+    ],
     [domain => "rock"],
     [domain => "oak_log"],
     [domain => "stone"],
+    [domain => "zombie",
+        loot => [
+            "stone" => 1,
+        ],
+    ],
+    [domain => "zombie_spawner"],
+    [domain => "zombie_spawner_generator"],
     [
         domain => "chest",
-        recipe => ["oak_log" => 8]
+        recipe => [
+            "oak_log" => 8
+        ]
     ],
 ];
 
