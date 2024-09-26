@@ -24,15 +24,15 @@ function postWithGas($url, $params)
     ]));
 }
 
-requestEquals("token/init.php", [
+requestEquals("/token/init.php", [
     address => $address,
     password => $password
 ]);
 
 function installApp($domain, $app_domain)
 {
-    postWithGas("wallet/store/api/archive.php", [domain => $app_domain]);
-    postWithGas("wallet/store/api/install.php", [
+    postWithGas("/wallet/store/api/archive.php", [domain => $app_domain]);
+    postWithGas("/wallet/store/api/install.php", [
         domain => $domain,
         app_domain => $app_domain,
     ]);
@@ -45,20 +45,20 @@ function launchList($tokens, $address, $password)
         $amount = $token[amount] ?: 1000000;
         launch($domain, $address, tokenNextHash($domain, $address, $password), $amount);
         if (tokenAddressBalance($domain, $GLOBALS[address]) > 0)
-            postWithGas("world/api/token_deposit.php", [
+            postWithGas("/world/api/token_deposit.php", [
                 domain => $domain,
                 amount => tokenAddressBalance($domain, $GLOBALS[address]),
                 pass => calcPass($domain, $GLOBALS[address], $GLOBALS[password]),
             ]);
         unset($token[domain]);
         if (sizeof(array_keys($token)) > 0) {
-            postWithGas("world/api/info_set.php", [
+            postWithGas("/world/api/info_set.php", [
                 domain => $domain,
                 info => json_encode($token),
             ]);
         }
         if (worldBalance($domain, [world, avatar, $GLOBALS[address]]) == 1000000)
-            postWithGas("world/api/send.php", [
+            postWithGas("/world/api/send.php", [
                 from_path => implode("/", [world, avatar, $GLOBALS[address]]),
                 to_path => world,
                 domain => $domain,

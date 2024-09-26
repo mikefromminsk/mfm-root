@@ -11,12 +11,12 @@ $tokens = [
 
 
 foreach ($tokens as $token) {
-    requestEquals("" . $token[domain] . "/api/exchange/bot_pump.php", [
+    requestEquals("/" . $token[domain] . "/api/exchange/bot_pump.php", [
         domain => $token[domain],
         address => $token[address],
         password => $token[password],
     ], success, true, false);
-    requestEquals("" . $token[domain] . "/api/exchange/bot_spred.php", [
+    requestEquals("/" . $token[domain] . "/api/exchange/bot_spred.php", [
         domain => $token[domain],
     ], success, true, false);
 }

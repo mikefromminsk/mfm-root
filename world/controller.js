@@ -12,7 +12,7 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
             default: 'arcade',
             arcade: {
                 gravity: {y: 0},
-                debug: true
+                debug: false
             }
         },
     }

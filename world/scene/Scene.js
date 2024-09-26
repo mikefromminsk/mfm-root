@@ -248,7 +248,7 @@ class Scene extends Utils {
 
     receiveEnemyPos(enemy) {
         if (enemy.address !== wallet.address()) {
-            let sprite = this.touchable.find(sprite => sprite.data.get('enemy').address === enemy.address);
+            let sprite = this.touchable.find(sprite => (sprite.data.get('avatar') || {}).address === enemy.address);
             if (sprite) {
                 if (enemy.speedX === 0 && enemy.speedY === 0) {
                     sprite.setVelocity(0, 0);
@@ -280,7 +280,7 @@ class Scene extends Utils {
 
     addMob(pos, mob) {
         pos = pos.split(':');
-        let sprite = this.createSprite(parseInt(pos[0]), parseInt(pos[1]), mob.domain + '64', 3);
+        let sprite = this.createSprite(parseInt(pos[0]), parseInt(pos[1]), mob.domain + '64', (2) * 18 );
         sprite.setData('mob', mob);
         this.touchable.push(sprite);
     }
@@ -297,7 +297,7 @@ class Scene extends Utils {
             /*this.scene_name = data.scene;
             this.reload();*/
         } else {
-            let sprite = this.touchable.find(sprite => sprite.data.get('enemy').address === data.address);
+            let sprite = this.touchable.find(sprite => sprite.data.get('avatar').address === data.address);
             if (sprite) {
                 if (data.scene == this.scene_name) {
                     sprite.x = data.x * this.cellSize;
@@ -357,6 +357,8 @@ class Scene extends Utils {
                 openChest(this.scene_name, pos, () => {
 
                 });
+            } else if (values.object.domain.endsWith('_spawner')) {
+
             } else {
                 postContractWithGas("world", "api/touch.php", {
                     scene: this.scene_name,
@@ -392,11 +394,22 @@ class Scene extends Utils {
                                 let pos = x + ':' + y;
                                 if (this.touchGrid[x][y].domain == null) {
                                     this.touchGrid[x][y].domain = domain
-                                    postContractWithGas("world", "api/put_block.php", {
+                                    postContractWithGas("world", "api/put_block.php", { // change to send and first put is domain set
                                         scene: this.scene_name,
                                         domain: domain,
                                         pos: pos,
                                     }, () => console.log('done put ' + domain));
+
+                                    if (info != null)
+                                    for (let domain of (Object.keys(info.loot) || {})) {
+                                        let amount = info.loot[domain]
+                                        postContractWithGas("world", "api/send.php", {
+                                            from_path: `world/avatar/${wallet.address()}`,
+                                            to_path: `world/${this.scene_name}/blocks/${pos}`,
+                                            domain: domain,
+                                            amount: amount,
+                                        }, () => console.log('done put ' + domain));
+                                    }
                                 }
                             }
                         })

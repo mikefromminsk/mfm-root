@@ -3,7 +3,7 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/token/utils.php";
 
 if (!DEBUG) error("cannot use not in debug session");
 
-requestEquals("data/init.php");
+requestEquals("/data/init.php");
 
 $address = get_required(address);
 $password = get_required(password);
@@ -44,7 +44,7 @@ query("CREATE TABLE IF NOT EXISTS `candles` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
 //https://mytoken.space/token/send.php?domain=usdt&from_address=owner&to_address=admin&amount=100000000&pass=:d7ca392100808830932ba9746fea206f
-requestEquals("token/send.php", [
+requestEquals("/token/send.php", [
     domain => $gas_domain,
     from_address => owner,
     to_address => $address,

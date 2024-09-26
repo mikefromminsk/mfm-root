@@ -270,7 +270,7 @@ function dataObject(array $path, $limit, &$count = 0)
 function broadcast($channel, $data)
 {
     if (WEB_SOCKETS_ENABLED) {
-        http_post("localhost:8002/test", [
+        http_post(":8002/test", [
             channel => $channel,
             data => $data,
         ]);

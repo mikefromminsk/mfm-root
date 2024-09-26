@@ -63,6 +63,8 @@ class Utils extends Phaser.Scene {
 
 
     createSprite(x, y, texture, frame) {
-        return this.physics.add.sprite(x * this.cellSize, y * this.cellSize, texture, frame || 0);
+        let sprite = this.physics.add.sprite(x * this.cellSize, y * this.cellSize, texture, frame || 0)
+        sprite.setDepth(y * this.cellSize)
+        return sprite;
     }
 }

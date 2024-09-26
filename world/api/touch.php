@@ -9,13 +9,9 @@ $avatar = implode("/", [world, avatar, $gas_address]);
 $block = implode("/", [world, $scene, blocks, $pos]);
 
 if (dataExist([$block])) {
-    foreach (dataKeys([$block, inventory], 100) as $domain) {
-        $amount = dataGet([$block, inventory, $domain]);
-        //dataDec([world, $scene, blocks, $pos, inventory, $domain], $amount);
-        dataInc([$avatar, inventory, $domain], $amount);
+    foreach (dataObject([$block, inventory], 100) as $domain => $amount) {
+        worldSend($domain, [$block], [$avatar], $amount);
     }
-    // $domain = dataGet([world, $scene, blocks, $pos, domain]);
-    // send to admin avatar
     dataSet([world, $scene, blocks, $pos], null);
 }
 

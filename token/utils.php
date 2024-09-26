@@ -42,7 +42,7 @@ function tokenAddressBalance($domain, $address)
 function launch($domain, $address, $next_hash, $amount = 1000000)
 {
     if (tokenAddress($domain, $address) == null) {
-        return requestEquals("token/send.php", [
+        return requestEquals("/token/send.php", [
             domain => $domain,
             from_address => owner,
             to_address => $address,
@@ -57,7 +57,7 @@ function launch($domain, $address, $next_hash, $amount = 1000000)
 function tokenScriptReg($domain, $address, $script)
 {
     if (tokenAddress($domain, $address) == null) {
-        return requestEquals("token/send.php", [
+        return requestEquals("/token/send.php", [
             domain => $domain,
             from_address => owner,
             to_address => $address,
