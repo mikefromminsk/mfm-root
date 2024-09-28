@@ -25,6 +25,16 @@ query("CREATE TABLE IF NOT EXISTS `history` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 
+query("DROP TABLE IF EXISTS `candles`;");
+query("CREATE TABLE IF NOT EXISTS `candles` (
+  `key` varchar(256) COLLATE utf8_bin NOT NULL,
+  `period_name` varchar(2) COLLATE utf8_bin NOT NULL,
+  `period_time` int(11) NOT NULL,
+  `low` float NOT NULL,
+  `high` float NOT NULL,
+  `open` float NOT NULL,
+  `close` float NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 dataSet([data], "Hello scene!");
 
 dataCommit();

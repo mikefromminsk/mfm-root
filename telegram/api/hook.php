@@ -1,8 +1,22 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/telegram/api/utils.php";
 
-$update_id = get_required(update_id);
+$bot = get_required(bot);
 $message = get_required(message);
+
+$chat_id = $message[chat][id];
+$username = $message[chat][username];
+
+
+if (!dataExist([telegram, users, $username, $bot]))
+    dataSet([telegram, users, $username, $bot], $chat_id);
+
+
+spendGasOf(get_required(gas_address), get_required(gas_password));
+commit();
+
+telegramSendToUsername($bot, $username, "Hello, $username! Tap Play button.");
+
 
 /*"message":{
     "date":1441645532,
@@ -29,11 +43,3 @@ $message = get_required(message);
   "text":"/start"
 }*/
 
-$response[response] = http_post("https://api.telegram.org/bot$telegram_bot_api/sendMessage", [
-    chat_id => $message[chat][id],
-    text => "wewf",
-]);
-
-$response[success] = true;
-
-file_put_contents("echo.json", json_encode($response));

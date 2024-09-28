@@ -49,7 +49,7 @@ function openExchange(domain, is_sell) {
             $scope.place = function () {
                 getPin(function (pin) {
                     calcPass($scope.is_sell ? domain : "usdt", pin, function (pass) {
-                        postContract("token", "place.php", {
+                        postContract("exchange", "place.php", {
                             domain: domain,
                             is_sell: $scope.is_sell ? 1 : 0,
                             address: wallet.address(),
@@ -67,7 +67,7 @@ function openExchange(domain, is_sell) {
             $scope.orders = []
 
             function loadOrders() {
-                postContract("token", "orders.php", {
+                postContract("exchange", "orders.php", {
                     domain: domain,
                     address: wallet.address(),
                 }, function (response) {
@@ -103,7 +103,7 @@ function openExchange(domain, is_sell) {
             }
 
             function loadOrderbook() {
-                postContract("token", "orderbook.php", {
+                postContract("exchange", "orderbook.php", {
                     domain: domain,
                 }, function (response) {
                     $scope.sell = response.sell

@@ -21,12 +21,6 @@ function teleport($address, $scene, $pos)
     ]);
 }
 
-
-function teleportToSpawn($address)
-{
-
-}
-
 function worldBalance($domain, array $address)
 {
     return dataGet(array_merge($address, [inventory, $domain])) ?: 0;

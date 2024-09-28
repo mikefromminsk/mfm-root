@@ -1,4 +1,7 @@
 <?php
+include_once $_SERVER["DOCUMENT_ROOT"] . "/telegram/api/utils.php";
+
+$telegram_bot_api = get_required(telegram_bot_api);
 
 $response[instraction] = [
     "// получи API ключ в BotFather",
@@ -9,7 +12,7 @@ $response[instraction] = [
 ];
 
 
-$response[url] = "https://api.telegram.org/bot$telegram_bot_api/setWebhook",
+$response[url] = "https://api.telegram.org/bot$telegram_bot_api/setWebhook";
 $response[form_data] = [
     url => "https://mytoken.space/telegram/api/hook.php",
     certificate => "[c:\\webserver.cert]"

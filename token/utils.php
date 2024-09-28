@@ -4,7 +4,6 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/data/track.php";
 
 $gas_domain = "usdt";
 
-
 function tokenKey($domain, $address, $password, $prev_key = "")
 {
     return md5($domain . $address . $password . $prev_key);
@@ -13,6 +12,14 @@ function tokenKey($domain, $address, $password, $prev_key = "")
 function tokenNextHash($domain, $address, $password, $prev_key = "")
 {
     return md5(tokenKey($domain, $address, $password, $prev_key));
+}
+
+function tokenPass($domain, $address, $password)
+{
+    $account = tokenAddress($domain, $address);
+    $key = tokenKey($domain, $address, $password, $account[prev_key]);
+    $next_hash = tokenNextHash($domain, $address, $password, $key);
+    return "$key:$next_hash";
 }
 
 function tokenFirstTran($domain)
@@ -25,6 +32,7 @@ function tokenOwner($domain)
     return tokenFirstTran($domain)[to];
 }
 
+// todo change Address to Account and in schema
 function tokenAddress($domain, $address)
 {
     return selectRowWhere(addresses, [domain => $domain, address => $address]);
@@ -39,16 +47,16 @@ function tokenAddressBalance($domain, $address)
     return null;
 }
 
-function launch($domain, $address, $next_hash, $amount = 1000000)
+function tokenAccountReg($domain, $address, $password, $amount = 0)
 {
     if (tokenAddress($domain, $address) == null) {
         return requestEquals("/token/send.php", [
             domain => $domain,
             from_address => owner,
             to_address => $address,
-            amount => $amount,
-            pass => ":" . $next_hash,
-        ], success);
+            amount => "$amount",
+            pass => ":" . tokenNextHash($domain, $address, $password),
+        ]);
     } else {
         return false;
     }
@@ -61,11 +69,26 @@ function tokenScriptReg($domain, $address, $script)
             domain => $domain,
             from_address => owner,
             to_address => $address,
-            amount => "0",
+            amount => "0", // TODO если отправить 0 то ошибка
             pass => ":",
             script => $script,
             delegate => $script,
-        ], success);
+        ]);
+    } else {
+        return false;
+    }
+}
+
+function tokenSendAndCommit($domain, $from, $to, $password, $amount)
+{
+    if (tokenAddress($domain, $from) != null) {
+        return requestEquals("/token/send.php", [
+            domain => $domain,
+            from_address => $from,
+            to_address => $to,
+            amount => "$amount",
+            pass => tokenPass($domain, $from, $password),
+        ]);
     } else {
         return false;
     }
@@ -153,6 +176,12 @@ function tokenSend(
     return insertRowAndGetId(trans, $tran);
 }
 
+function spendGasOf($gas_address, $gas_password)
+{
+    $gas_domain = get_required(gas_domain);
+    $GLOBALS[gas_pass] = tokenPass($gas_domain, $gas_address, $gas_password);
+}
+
 function commit($response = null)
 {
     if ($response == null)
@@ -174,8 +203,7 @@ function commit($response = null)
         dataCommit();
         $response[gas_spend] = $gas_spent;
     }
-    echo json_encode($response);
-    die();
+    echo json_encode_readable($response);
 }
 
 
