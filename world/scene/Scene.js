@@ -212,7 +212,7 @@ class Scene extends Utils {
             let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             let speedFactor = Math.min(distance / 50, 1);
             let speed = this.maxSpeed * speedFactor;
-            this.player.setDepth(this.player.y);
+            this.player.setDepth(this.player.y + this.player.height / 2);
             if (this.joystick.style.display === 'block') {
                 let angle = Math.atan2(deltaY, deltaX);
                 this.player.setVelocityX(speed * Math.cos(angle));
@@ -280,7 +280,7 @@ class Scene extends Utils {
 
     addMob(pos, mob) {
         pos = pos.split(':');
-        let sprite = this.createSprite(parseInt(pos[0]), parseInt(pos[1]), mob.domain + '64', (2) * 18 );
+        let sprite = this.createSprite(parseInt(pos[0]), parseInt(pos[1]), mob.domain + '64', (2) * 18);
         sprite.setData('mob', mob);
         this.touchable.push(sprite);
     }
@@ -312,39 +312,41 @@ class Scene extends Utils {
     }
 
     touchCheck(player, sprite) {
-        const currentTime = new Date().getTime();
-        var x = Math.ceil(sprite.x / this.cellSize);
-        var y = Math.ceil(sprite.y / this.cellSize);
-        var data = this.touchGrid[x][y];
-        if (data.startTouch == null) {
-            data.startTouch = 0;
-            data.lastTouch = 0;
-        }
-        if (currentTime - data.lastTouch > 300) {
-            data.startTouch = currentTime;
-        }
-        data.lastTouch = currentTime;
-        if (data.startTouch + 300 > currentTime) {
-            data.startTouch = 0;
-
-            //this.player.anims.stop();
-
-            var animKey = '';
-            var rect = this.joystick.getBoundingClientRect();
-            var stickRect = this.stick.getBoundingClientRect();
-            var deltaX = stickRect.left - rect.left - 25;
-            var deltaY = stickRect.top - rect.top - 25;
-            if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                animKey = deltaX < 0 ? 'fight_left' : 'fight_right'
-            } else {
-                animKey = deltaY < 0 ? 'fight_top' : 'fight_bottom'
+        if (this.player.body.velocity.x === 0 && this.player.body.velocity.y === 0) {
+            const currentTime = new Date().getTime();
+            var x = Math.ceil(sprite.x / this.cellSize);
+            var y = Math.ceil(sprite.y / this.cellSize);
+            var data = this.touchGrid[x][y];
+            if (data.startTouch == null) {
+                data.startTouch = 0;
+                data.lastTouch = 0;
             }
-            this.player.anims.play(animKey);
-            this.disableMoveAnimation = true;
-            setTimeout(() => {
-                this.disableMoveAnimation = false;
-                this.touch(sprite.data.values, x + ":" + y)
-            }, 1000);
+            if (currentTime - data.lastTouch > 300) {
+                data.startTouch = currentTime;
+            }
+            data.lastTouch = currentTime;
+            if (data.startTouch + 300 > currentTime) {
+                data.startTouch = 0;
+
+                //this.player.anims.stop();
+
+                var animKey = '';
+                var rect = this.joystick.getBoundingClientRect();
+                var stickRect = this.stick.getBoundingClientRect();
+                var deltaX = stickRect.left - rect.left - 25;
+                var deltaY = stickRect.top - rect.top - 25;
+                if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                    animKey = deltaX < 0 ? 'fight_left' : 'fight_right'
+                } else {
+                    animKey = deltaY < 0 ? 'fight_top' : 'fight_bottom'
+                }
+                this.player.anims.play(animKey);
+                this.disableMoveAnimation = true;
+                setTimeout(() => {
+                    this.disableMoveAnimation = false;
+                    this.touch(sprite.data.values, x + ":" + y)
+                }, 1000);
+            }
         }
     }
 
@@ -401,15 +403,15 @@ class Scene extends Utils {
                                     }, () => console.log('done put ' + domain));
 
                                     if (info != null)
-                                    for (let domain of (Object.keys(info.loot) || {})) {
-                                        let amount = info.loot[domain]
-                                        postContractWithGas("world", "api/send.php", {
-                                            from_path: `world/avatar/${wallet.address()}`,
-                                            to_path: `world/${this.scene_name}/blocks/${pos}`,
-                                            domain: domain,
-                                            amount: amount,
-                                        }, () => console.log('done put ' + domain));
-                                    }
+                                        for (let domain of (Object.keys(info.loot) || {})) {
+                                            let amount = info.loot[domain]
+                                            postContractWithGas("world", "api/send.php", {
+                                                from_path: `world/avatar/${wallet.address()}`,
+                                                to_path: `world/${this.scene_name}/blocks/${pos}`,
+                                                domain: domain,
+                                                amount: amount,
+                                            }, () => console.log('done put ' + domain));
+                                        }
                                 }
                             }
                         })

@@ -15,8 +15,8 @@ class Utils extends Phaser.Scene {
             if (!Utils.isClicked) {
                 Utils.isClicked = true;
                 setTimeout(() => {
-                    callback(pointer)
                     Utils.isClicked = false;
+                    callback(pointer)
                 }, 100);
             }
         }
@@ -64,7 +64,7 @@ class Utils extends Phaser.Scene {
 
     createSprite(x, y, texture, frame) {
         let sprite = this.physics.add.sprite(x * this.cellSize, y * this.cellSize, texture, frame || 0)
-        sprite.setDepth(y * this.cellSize)
+        sprite.setDepth(y * this.cellSize +  + sprite.height / 2)
         return sprite;
     }
 }
