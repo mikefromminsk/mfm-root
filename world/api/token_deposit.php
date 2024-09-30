@@ -6,7 +6,7 @@ $domain = get_required(domain);
 $amount = get_int_required(amount);
 $pass = get_required(pass);
 
-if (tokenAddress($domain, world) == null)
+if (getAccount($domain, world) == null)
     tokenScriptReg($domain, world, "world/api/token_withdrawal.php");
 
 if ($domain == $gas_domain) error("cannot deposit gas");

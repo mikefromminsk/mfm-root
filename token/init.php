@@ -8,8 +8,8 @@ requestEquals("/data/init.php");
 $address = get_required(address);
 $password = get_required(password);
 
-query("DROP TABLE IF EXISTS `addresses`;");
-query("CREATE TABLE IF NOT EXISTS `addresses` (
+query("DROP TABLE IF EXISTS `accounts`;");
+query("CREATE TABLE IF NOT EXISTS `accounts` (
   `domain` varchar(256) COLLATE utf8_bin NOT NULL,
   `address` varchar(256) COLLATE utf8_bin NOT NULL,
   `prev_key` varchar(256) COLLATE utf8_bin NOT NULL,
@@ -31,6 +31,9 @@ query("CREATE TABLE IF NOT EXISTS `trans` (
   `time` int(11) NOT NULL,    
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+
+$amount = 1000000000;
+$gas_domain = get_required(gas_domain);
 
 tokenAccountReg($gas_domain, $address, $password, 100000000);
 

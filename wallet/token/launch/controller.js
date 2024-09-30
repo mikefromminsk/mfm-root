@@ -23,7 +23,7 @@ function openLaunchDialog(domain, success) {
             $scope.next = function () {
                 if ($scope.selectedIndex == 0) {
                     $scope.in_progress = true
-                    postContract("token", "address.php", {
+                    postContract("token", "account.php", {
                         domain: $scope.domain,
                         address: "owner",
                     }, function (response) {

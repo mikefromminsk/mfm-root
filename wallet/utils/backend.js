@@ -155,7 +155,7 @@ var wallet = {
         success(key, next_hash)
     },
     calcPass: function (domain, pin, success, error) {
-        postContract("token", "address.php", {
+        postContract("token", "account.php", {
             domain: domain,
             address: wallet.address(),
         }, function (response) {

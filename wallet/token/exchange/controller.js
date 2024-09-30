@@ -93,7 +93,7 @@ function openExchange(domain, is_sell) {
             }
 
             function loadQuoteBalance() {
-                postContract("token", "address.php", {
+                postContract("token", "account.php", {
                     domain: wallet.quote_domain,
                     address: wallet.address(),
                 }, function (response) {

@@ -19,7 +19,7 @@ function openLogin(success) {
                     return
                 }
                 $scope.in_progress = true
-                postContract("token", "address.php", {
+                postContract("token", "account.php", {
                     domain: wallet.gas_domain,
                     address: $scope.username,
                 }, function (response) {

@@ -16,7 +16,7 @@ function tokenNextHash($domain, $address, $password, $prev_key = "")
 
 function tokenPass($domain, $address, $password)
 {
-    $account = tokenAddress($domain, $address);
+    $account = getAccount($domain, $address);
     $key = tokenKey($domain, $address, $password, $account[prev_key]);
     $next_hash = tokenNextHash($domain, $address, $password, $key);
     return "$key:$next_hash";
@@ -32,15 +32,10 @@ function tokenOwner($domain)
     return tokenFirstTran($domain)[to];
 }
 
-// todo change Address to Account and in schema
-function tokenAddress($domain, $address)
-{
-    return selectRowWhere(addresses, [domain => $domain, address => $address]);
-}
 
 function tokenAddressBalance($domain, $address)
 {
-    $address = tokenAddress($domain, $address);
+    $address = getAccount($domain, $address);
     if ($address != null) {
         return $address[balance];
     }
@@ -49,7 +44,7 @@ function tokenAddressBalance($domain, $address)
 
 function tokenAccountReg($domain, $address, $password, $amount = 0)
 {
-    if (tokenAddress($domain, $address) == null) {
+    if (getAccount($domain, $address) == null) {
         return requestEquals("/token/send.php", [
             domain => $domain,
             from_address => owner,
@@ -64,7 +59,7 @@ function tokenAccountReg($domain, $address, $password, $amount = 0)
 
 function tokenScriptReg($domain, $address, $script)
 {
-    if (tokenAddress($domain, $address) == null) {
+    if (getAccount($domain, $address) == null) {
         return requestEquals("/token/send.php", [
             domain => $domain,
             from_address => owner,
@@ -81,7 +76,7 @@ function tokenScriptReg($domain, $address, $script)
 
 function tokenSendAndCommit($domain, $from, $to, $password, $amount)
 {
-    if (tokenAddress($domain, $from) != null) {
+    if (getAccount($domain, $from) != null) {
         return requestEquals("/token/send.php", [
             domain => $domain,
             from_address => $from,
@@ -91,6 +86,79 @@ function tokenSendAndCommit($domain, $from, $to, $password, $amount)
         ]);
     } else {
         return false;
+    }
+}
+
+function commitAccounts()
+{
+    if ($GLOBALS[accounts] != null) {
+        foreach ($GLOBALS[accounts] as $domain => $accounts) {
+            foreach ($accounts as $address => $account) {
+                $commit = $account[commit];
+                unset($account[commit]);
+                if ($commit == insert) {
+                    insertRow(accounts, $account);
+                    trackAccumulate($domain . _accounts);
+                } else if ($commit == update) {
+                    updateWhere(accounts, $account, [domain => $domain, address => $address]);
+                }
+            }
+        }
+    }
+}
+
+function setAccount($domain, $address, $params)
+{
+    $account = getAccount($domain, $address);
+    if ($account == null) {
+        $account = $params;
+        $account[commit] = insert;
+        $account[domain] = $domain;
+        $account[address] = $address;
+    } else {
+        if ($account[commit] == null) {
+            $account[commit] = update;
+        }
+        foreach ($params as $param => $value) {
+            $account[$param] = $value;
+        }
+    }
+    $GLOBALS[accounts][$domain][$address] = $account;
+}
+
+// todo change Address to Account and in schema
+function getAccount($domain, $address)
+{
+    if ($GLOBALS[accounts] == null) {
+        $GLOBALS[accounts] = [];
+    }
+    if ($GLOBALS[accounts][$domain] == null) {
+        $GLOBALS[accounts][$domain] = [];
+    }
+    $account = $GLOBALS[accounts][$domain][$address];
+    if ($account == null) {
+        $account = selectRowWhere(accounts, [domain => $domain, address => $address]);
+    }
+    $GLOBALS[accounts][$domain][$address] = $account;
+    return $account;
+}
+
+function saveTran($tran)
+{
+    if ($GLOBALS[trans] == null) {
+        $GLOBALS[trans] = [];
+    }
+    $GLOBALS[trans][] = $tran;
+}
+
+function commitTrans()
+{
+    if ($GLOBALS[trans] != null) {
+        foreach ($GLOBALS[trans] as $tran) {
+            insertRow(trans, $tran);
+            broadcast(transactions, $tran);
+            trackAccumulate($tran[domain] . _trans);
+        }
     }
 }
 
@@ -110,9 +178,7 @@ function tokenSend(
     if ($from_address == owner) {
         if (strlen($domain) < 3 || strlen($domain) > 32) error("domain length has to be between 3 and 32");
         if (tokenAddressBalance($domain, owner) === null) {
-            insertRow(addresses, [
-                domain => $domain,
-                address => owner,
+            setAccount($domain, owner, [
                 prev_key => "",
                 next_hash => "",
                 balance => $amount,
@@ -120,46 +186,42 @@ function tokenSend(
             ]);
         }
         if (tokenAddressBalance($domain, $to_address) === null) {
-            insertRow(addresses, [
-                domain => $domain,
-                address => $to_address,
+            setAccount($domain, $to_address, [
                 prev_key => "",
                 next_hash => $next_hash,
                 balance => 0,
                 delegate => $delegate,
             ]);
-            trackAccumulate($domain . _addresses);
         }
     }
 
-    $from = selectRowWhere(addresses, [domain => $domain, address => $from_address]);
-    $to = selectRowWhere(addresses, [domain => $domain, address => $to_address]);
+    $from = getAccount($domain, $from_address);
+    $to = getAccount($domain, $to_address);
     if ($from[balance] < $amount) error(strtoupper($domain) . " balance is not enough in $from_address wallet");
     if ($to == null) error("$to_address receiver doesn't exist");
     if ($from[delegate] != null) {
         if ($from[delegate] != scriptPath())
             error("script " . scriptPath() . " cannot use $from_address address. Only " . $from[delegate]);
     } else {
-        if ($from[next_hash] != md5($key)) error("key is not right");
+        if ($from[next_hash] != md5($key)) error("$domain key is not right");
     }
 
     if ($from[delegate] != null) {
-        updateWhere(addresses, [
+        setAccount($domain, $from_address, [
             balance => $from[balance] - $amount,
-        ], [domain => $domain, address => $from_address]);
+        ]);
     } else {
-        updateWhere(addresses, [
+        setAccount($domain, $from_address, [
             balance => $from[balance] - $amount,
             prev_key => $key,
             next_hash => $next_hash,
-        ], [domain => $domain, address => $from_address]);
+        ]);
     }
-
-    updateWhere(addresses, [
+    setAccount($domain, $to_address, [
         balance => $to[balance] + $amount
-    ], [domain => $domain, address => $to_address]);
+    ]);
 
-    $tran = [
+    saveTran([
         domain => $domain,
         from => $from_address,
         to => $to_address,
@@ -167,13 +229,7 @@ function tokenSend(
         key => $key,
         next_hash => $next_hash,
         time => time(),
-    ];
-
-    broadcast(transactions, $tran);
-
-    trackAccumulate($domain . _trans);
-
-    return insertRowAndGetId(trans, $tran);
+    ]);
 }
 
 function spendGasOf($gas_address, $gas_password)
@@ -200,9 +256,11 @@ function commit($response = null)
             $gas_spent,
             get_required(gas_pass),
         );
-        dataCommit();
+        commitData();
         $response[gas_spend] = $gas_spent;
     }
+    commitAccounts();
+    commitTrans();
     echo json_encode_readable($response);
 }
 

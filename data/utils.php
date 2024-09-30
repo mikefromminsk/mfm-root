@@ -204,7 +204,7 @@ function dataSearch($path, $search_text, $page = 1, $size = PAGE_SIZE_DEFAULT)
         . " limit $offset, $size");
 }
 
-function dataCommit()
+function commitData()
 {
     foreach ($GLOBALS[new_data] as $data_id => $data) {
         insertRow(data, $data);
