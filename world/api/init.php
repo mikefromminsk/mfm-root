@@ -51,12 +51,12 @@ function launchList($tokens, $address, $password)
         $amount = $token[amount] ?: 1000000;
         tokenAccountReg($domain, $address, $password, $amount);
         $account = requestAccount($domain, $GLOBALS[address]);
-        if ($account[amount] > 0){
+        if ($account[balance] > 0){
             $key = tokenKey($domain, $address, $password, $account[prev_key]);
             $next_hash = tokenNextHash($domain, $address, $password, $key);
             postWithGas("/world/api/token_deposit.php", [
                 domain => $domain,
-                amount => $account[amount],
+                amount => $account[balance],
                 pass => "$key:$next_hash"
             ]);
         }
