@@ -98,7 +98,7 @@ class Scene extends Utils {
             let x = parseInt(pos[0])
             let y = parseInt(pos[1])
             let sprite = this.createSprite(x, y, object.domain);
-            if (sprite.body.width > 32){
+            if (sprite.body.width > 64){
                 sprite.setOrigin(0.5, 1);
                 sprite.setDepth(y * this.cellSize);
                 sprite = this.createSprite(x, y, "enter");
