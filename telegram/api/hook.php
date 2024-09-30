@@ -8,8 +8,8 @@ $chat_id = $message[chat][id];
 $username = $message[chat][username];
 
 
-if (!dataExist([telegram, users, $username, $bot]))
-    dataSet([telegram, users, $username, $bot], $chat_id);
+if (!dataExist([users, $username, $bot]))
+    dataSet([users, $username, $bot], $chat_id);
 
 
 spendGasOf(get_required(gas_address), get_required(gas_password));

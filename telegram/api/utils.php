@@ -7,7 +7,7 @@ function telegramSendToUsername($bot, $username, $text)
 {
     $telegram_bot_api = get_required(telegram_bot_apis)[$bot];
     return http_post("https://api.telegram.org/bot$telegram_bot_api/sendMessage", [
-        chat_id => dataGet([telegram, users, $username, $bot]),
+        chat_id => dataGet([users, $username, $bot]),
         text => $text,
     ]);
 }
@@ -15,7 +15,7 @@ function telegramSendToUsername($bot, $username, $text)
 
 function telegramSendToAddress($bot, $address, $text)
 {
-    $username = dataGet([telegram, accounts, $address]);
+    $username = dataGet([accounts, $address]);
     if ($username) {
         return telegramSendToUsername($bot, $username, $text);
     }
