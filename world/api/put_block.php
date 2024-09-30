@@ -6,9 +6,9 @@ $scene = get_required(scene);
 $domain = get_required(domain);
 $pos = get_required(pos);
 
-if (dataGet([world, avatar, $gas_address, inventory, $domain]) <= 0)  error("Not enough items");
+if (dataGet([avatar, $gas_address, inventory, $domain]) <= 0)  error("Not enough items");
 
-dataDec([world, avatar, $gas_address, inventory, $domain]);
-dataSet([world, $scene, blocks, $pos, domain], $domain);
+dataDec([avatar, $gas_address, inventory, $domain]);
+dataSet([$scene, blocks, $pos, domain], $domain);
 
 commit();

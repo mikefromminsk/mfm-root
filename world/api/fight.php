@@ -5,7 +5,7 @@ $attacker_address = get_required(gas_address);
 $fight_pos = get_required(fight_pos);
 $defender_path = get_required(defender_path);
 
-$attacker_path = implode("/", [world, avatar, $attacker_address]);
+$attacker_path = implode("/", [avatar, $attacker_address]);
 
 $attacker = dataObject([$attacker_path], 100);
 $defender = dataObject([$defender_path], 100);

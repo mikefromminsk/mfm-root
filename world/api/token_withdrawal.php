@@ -7,9 +7,9 @@ $amount = get_int_required(amount);
 
 if ($domain == $gas_domain) error("cannot deposit gas");
 
-if (worldBalance($domain, [world, avatar, $gas_address]) < $amount) error("not enough balance");
+if (worldBalance($domain, [avatar, $gas_address]) < $amount) error("not enough balance");
 
 tokenSend($domain, world, $gas_address, $amount);
-dataDec([world, avatar, $gas_address, inventory, $domain], $amount);
+dataDec([avatar, $gas_address, inventory, $domain], $amount);
 
 commit();

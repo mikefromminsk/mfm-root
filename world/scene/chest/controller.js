@@ -6,8 +6,8 @@ function openChest(scene, pos, success) {
 
             $scope.chestGet = function (domain) {
                 postContractWithGas("world", "api/send.php", {
-                    from_path: `world/${scene}/blocks/${pos}`,
-                    to_path: `world/avatar/${wallet.address()}`,
+                    from_path: scene + `/blocks/` + pos,
+                    to_path: `avatar/` + wallet.address(),
                     domain: domain,
                     amount: 1,
                 }, init)
@@ -15,23 +15,27 @@ function openChest(scene, pos, success) {
 
             $scope.chestPut = function (domain) {
                 postContractWithGas("world", "api/send.php", {
-                    from_path: `world/avatar/${wallet.address()}`,
-                    to_path: `world/${scene}/blocks/${pos}`,
+                    from_path: `avatar/` + wallet.address(),
+                    to_path: scene + `/blocks/` + pos,
                     domain: domain,
                     amount: 1,
                 }, init)
             }
 
             function avatarInventory(){
-                dataObject(`world/avatar/${wallet.address()}/inventory`, function (inventory) {
-                    $scope.inventory = inventory
+                postContract("world", "api/inventory.php", {
+                    path: `avatar/` + wallet.address()
+                }, function (response) {
+                    $scope.inventory = response.inventory
                     $scope.$apply()
                 })
             }
 
             function chestInventory(){
-                dataObject(`world/${scene}/blocks/${pos}/inventory`, function (chest) {
-                    $scope.chest = chest
+                postContract("world", "api/inventory.php", {
+                    path: scene + `/blocks/` + pos
+                }, function (response) {
+                    $scope.chest = response.inventory
                     $scope.$apply()
                 })
             }

@@ -4,13 +4,13 @@ include_once $_SERVER["DOCUMENT_ROOT"] . "/data/utils.php";
 
 function teleport($address, $scene, $pos)
 {
-    $prev_scene = dataGet([world, avatar, $address, scene]);
-    $prev_pos = dataGet([world, avatar, $address, pos]);
-    dataSet([world, $prev_scene, avatars, $prev_pos], null);
+    $prev_scene = dataGet([avatar, $address, scene]);
+    $prev_pos = dataGet([avatar, $address, pos]);
+    dataSet([$prev_scene, avatars, $prev_pos], null);
 
-    dataSet([world, $scene, avatars, $pos], $address);
-    dataSet([world, avatar, $address, scene], $scene);
-    dataSet([world, avatar, $address, pos], $pos);
+    dataSet([$scene, avatars, $pos], $address);
+    dataSet([avatar, $address, scene], $scene);
+    dataSet([avatar, $address, pos], $pos);
 
     $pos = explode(":", $pos);
     broadcast('teleport', [

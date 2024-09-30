@@ -32,7 +32,8 @@ function dataNew($path, $create = false)
 {
     if (is_array($path))
         $path = implode("/", $path);
-    $path = explode("/", $path);
+    $path = explode("/", getDomain() . "/$path");
+    $path = array_filter($path);
     $data_id = null;
     foreach ($path as $key) {
         if (!is_string($key))
@@ -64,7 +65,7 @@ function dataSet($path, $value)
         $path = implode("/", $path);
     $path_array = explode("/", $path);
 
-    if ($path_array[0] != getDomain()) error("script cannot set in $path_array[0] domain");
+/*    if ($path_array[0] != getDomain()) error("script cannot set in $path_array[0] domain");*/
 
     $data_id = dataNew($path_array, true);
     if ($data_id == null) return false;

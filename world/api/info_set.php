@@ -9,9 +9,9 @@ $info = json_decode($info, true);
 
 if ($gas_address != admin) error("only admin can insert recipe");
 
-dataSet([world, info, $domain], $info);
+dataSet([info, $domain], $info);
 
 if ($info[recipe] != null)
-    dataSet([world, recipe, $domain], $info[recipe]);
+    dataSet([recipe, $domain], $info[recipe]);
 
 commit();

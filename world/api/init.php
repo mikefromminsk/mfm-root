@@ -49,9 +49,9 @@ function launchList($tokens, $address, $password)
                 info => json_encode($token),
             ]);
         }
-        if (worldBalance($domain, [world, avatar, $GLOBALS[address]]) == 1000000)
+        if (worldBalance($domain, [avatar, $GLOBALS[address]]) == 1000000)
             postWithGas("/world/api/send.php", [
-                from_path => implode("/", [world, avatar, $GLOBALS[address]]),
+                from_path => implode("/", [avatar, $GLOBALS[address]]),
                 to_path => world,
                 domain => $domain,
                 amount => $amount / 2,
@@ -61,12 +61,11 @@ function launchList($tokens, $address, $password)
 
 
 $tokens = [
-    [domain => "oak_tree_generator"],
     [domain => "rock"],
+    [domain => "oak_tree_generator"],
     [domain => "oak_tree", loot => [
         "oak_log" => 1,
     ]],
-    [domain => "rock"],
     [domain => "oak_log"],
     [domain => "stone"],
     [domain => "house1", recipe => [

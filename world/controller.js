@@ -20,21 +20,14 @@ function main($scope, $mdBottomSheet, $mdDialog, $mdToast) {
     var game = new Phaser.Game(config)
 
     function loadScene(scene) {
-        dataExist("world/" + scene, function () {
+        postContractWithGas("world", "api/scene_insert.php", {
+            scene: scene,
+            width: 100,
+            height: 100
+        }, function () {
             game.scene.add('Scene', Scene)
             game.scene.add('UIScene', UI)
             game.scene.start('Scene', scene)
-        }, function () {
-            postContractWithGas("world", "api/scene_insert.php", {
-                scene: scene,
-                width: 100,
-                height: 100
-            }, function () {
-                loadScene(scene)
-            })
-            /*openCreateScene(function (scene) {
-                loadScene(scene)
-            })*/
         })
     }
 

@@ -35,11 +35,6 @@ query("CREATE TABLE IF NOT EXISTS `candles` (
   `open` float NOT NULL,
   `close` float NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
-dataSet([data], "Hello scene!");
-
-dataCommit();
-
-assertEquals("data put", dataGet([data]), "Hello scene!");
 
 $response[success] = true;
 

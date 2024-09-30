@@ -380,13 +380,13 @@ class Scene extends Utils {
         if (values.avatar) {
             postContractWithGas("world", "api/fight.php", {
                 fight_pos: pos,
-                defender_path: "world/avatar/" + values.avatar.address,
+                defender_path: "avatar/" + values.avatar.address,
             }, () => this.reload());
         }
         if (values.mob) {
             postContractWithGas("world", "api/fight.php", {
                 fight_pos: pos,
-                defender_path: "world/" + this.scene_name + "/mobs/" + pos,
+                defender_path: this.scene_name + "/mobs/" + pos,
             }, () => this.reload());
         }
     }
@@ -398,7 +398,7 @@ class Scene extends Utils {
                     let y = Math.floor(pointer.worldY / this.cellSize);
                     if (this.inHand.endsWith('_generator')) {
                         var domain = this.inHand.replace('_generator', '');
-                        dataObject(`world/info/${domain}`, (info) => {
+                        postContract("world", "api/settings.php", {}, (response) => {
                             for (let i = 0; i < Math.floor(Math.random() * 10) + 10; i++) {
                                 let x = Math.floor(Math.random() * 20)//this.gridWidth)
                                 let y = Math.floor(Math.random() * 20)//this.gridHeight)
@@ -411,15 +411,15 @@ class Scene extends Utils {
                                         pos: pos,
                                     }, () => console.log('done put ' + domain));
 
-                                    if (info != null)
-                                        for (let domain of (Object.keys(info.loot) || {})) {
-                                            let amount = info.loot[domain]
+                                    if (response.info != null)
+                                        for (let lootDomain of (Object.keys(response.info[domain].loot) || {})) {
+                                            let amount = response.info[domain].loot[lootDomain]
                                             postContractWithGas("world", "api/send.php", {
-                                                from_path: `world/avatar/${wallet.address()}`,
-                                                to_path: `world/${this.scene_name}/blocks/${pos}`,
-                                                domain: domain,
+                                                from_path: `avatar/` + wallet.address(),
+                                                to_path: this.scene_name + `/blocks/` + pos,
+                                                domain: lootDomain,
                                                 amount: amount,
-                                            }, () => console.log('done put ' + domain));
+                                            }, () => console.log('done put ' + lootDomain));
                                         }
                                 }
                             }

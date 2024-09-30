@@ -4,8 +4,6 @@ function openInventory(success) {
         controller: function ($scope) {
             addFormats($scope)
 
-
-
             $scope.openDeposit = function () {
                 openWorldDeposit(openInventory)
             }
@@ -42,16 +40,19 @@ function openInventory(success) {
             $scope.setMode("tokens")
 
             function inventory(){
-                dataObject(`world/avatar/${wallet.address()}/inventory`, function (inventory) {
-                    $scope.inventory = inventory
+                postContract("world", "api/inventory.php", {
+                    path: `avatar/${wallet.address()}`
+                }, function (response) {
+                    $scope.inventory = response.inventory
                     $scope.$apply()
                 })
             }
 
             $scope.recipes = {}
             function recipes() {
-                dataObject("world/recipe", function (recipes) {
-                    $scope.recipes = recipes
+                postContract("world", "api/settings.php", {
+                }, function (response) {
+                    $scope.recipes = response.recipe
                     $scope.$apply()
                 })
             }
