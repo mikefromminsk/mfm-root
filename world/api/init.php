@@ -63,28 +63,29 @@ function launchList($tokens, $address, $password)
 $tokens = [
     [domain => "oak_tree_generator"],
     [domain => "rock"],
-    [
-        domain => "oak_tree",
-        loot => [
-            "oak_log" => 1,
-        ],
-    ],
+    [domain => "oak_tree", loot => [
+        "oak_log" => 1,
+    ]],
     [domain => "rock"],
     [domain => "oak_log"],
     [domain => "stone"],
-    [domain => "zombie",
-        loot => [
-            "stone" => 1,
-        ],
-    ],
+    [domain => "house1", recipe => [
+        "oak_log" => 8
+    ]],
+    [domain => "house2", recipe => [
+        "oak_log" => 20
+    ]],
+    [domain => "house3", recipe => [
+        "stone" => 30
+    ]],
+    [domain => "zombie", loot => [
+        "stone" => 1,
+    ]],
     [domain => "zombie_spawner"],
     [domain => "zombie_spawner_generator"],
-    [
-        domain => "chest",
-        recipe => [
-            "oak_log" => 8
-        ]
-    ],
+    [domain => "chest", recipe => [
+        "oak_log" => 8
+    ]],
 ];
 
 launchList($tokens, $address, $password);

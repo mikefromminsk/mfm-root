@@ -10,7 +10,7 @@ class Scene extends Utils {
     }
 
     preload() {
-
+        this.loadUI("enter")
     }
 
     init(scene_name) {
@@ -98,6 +98,13 @@ class Scene extends Utils {
             let x = parseInt(pos[0])
             let y = parseInt(pos[1])
             let sprite = this.createSprite(x, y, object.domain);
+            if (sprite.body.width > 32){
+                sprite.setOrigin(0.5, 1);
+                sprite.setDepth(y * this.cellSize);
+                sprite = this.createSprite(x, y, "enter");
+                sprite.setDepth(0)
+            }
+
             sprite.setData('object', object);
             this.touchable.push(sprite);
         }
@@ -355,6 +362,8 @@ class Scene extends Utils {
             if (values.object.domain === 'table') {
                 openCraft("axe", () => {
                 });
+            } else if (values.object.domain.startsWith('house')) {
+                this.teleport()
             } else if (values.object.domain === 'chest') {
                 openChest(this.scene_name, pos, () => {
 
