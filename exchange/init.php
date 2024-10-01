@@ -1,5 +1,5 @@
 <?php
-include_once $_SERVER["DOCUMENT_ROOT"] . "/db/db.php";
+include_once $_SERVER["DOCUMENT_ROOT"] . "/mfm-db/db.php";
 
 if (!DEBUG) error("cannot use not in debug session");
 
