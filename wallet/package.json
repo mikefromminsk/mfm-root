@@ -1,6 +1,6 @@
 {
   "name": "mfm-wallet",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "author": "x29a100@gmail.com",
   "dependencies": {
     "angular": "^1.8.2",
