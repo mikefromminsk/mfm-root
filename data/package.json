@@ -1,8 +1,0 @@
-{
-  "name": "mfm-data",
-  "version": "1.0.0",
-  "author": "x29a100@gmail.com",
-  "dependencies": {
-    "mfm-db": "^1.0.0"
-  }
-}
