@@ -106,22 +106,24 @@ function getVersionChanges()
     foreach (array_filter(glob("$tmp/node_modules/mfm*"), 'is_dir') as $remote) {
         $subDir = substr($remote, strpos($remote, "node_modules/") + strlen("node_modules/"));
         $local = "/wamp/www/node_modules/$subDir";
+        $remote_vertion = json_decode(file_get_contents("$remote/package.json"), true)['version'];
+        $local_vertion = json_decode(file_get_contents("$local/package.json"), true)['version'];
         if (direcroriesNotEquals($local, $remote)) {
             $response[updates][] = [
                 'folder' => $subDir,
-                'remote' => json_decode(file_get_contents("$remote/package.json"), true)['version'],
-                'locale' => json_decode(file_get_contents("$local/package.json"), true)['version'],
+                'remote' => $remote_vertion,
+                'locale' => $local_vertion,
                 'change' => $newVersion
             ];
         } else {
             $response[uptodate][] = [
                 'folder' => $subDir,
-                'remote' => json_decode(file_get_contents("$remote/package.json"), true)['version'],
-                'locale' => json_decode(file_get_contents("$local/package.json"), true)['version'],
+                'remote' => $remote_vertion,
+                'locale' => $local_vertion,
             ];
         }
     }
-    rrmdir('/tmp');
+    rrmdir($tmp);
     return $response;
 }
 
