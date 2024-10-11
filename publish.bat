@@ -1,9 +1,7 @@
-REM Поиск всех папок с префиксом mfm
-for /d %%d in (../mfm*) do (
-    REM Публикация пакета %%d
+cd ..
+for /d %%d in (mfm*) do (
     cd %%d
     npm publish
     cd ..
+    set /p DUMMY=Hit ENTER to continue...
 )
-
-pause

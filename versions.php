@@ -1,8 +1,6 @@
 <?php
 
-error_reporting(1);
-
-header("Content-type: application/json;charset=utf-8");
+include_once $_SERVER["DOCUMENT_ROOT"] . "/mfm-db/params.php";
 
 function executeCommand($command, $directory = null)
 {
@@ -32,29 +30,19 @@ function getDirectoryContents($dir) {
         }
         if ($file->isFile()) {
             $relativePath = str_replace($dir, '', $file->getPathname());
-            $contents[$relativePath] = [
-                'size' => $file->getSize(),
-                'mtime' => $file->getMTime(),
-                'hash' => hash_file('md5', $file->getPathname())
-            ];
+            $contents[$relativePath] = hash_file('md5', $file->getPathname());
         }
     }
 
     return $contents;
 }
 
-function getFileHash($filePath)
-{
-    return hash_file('sha256', $filePath);
-}
 
 function direcroriesNotEquals($dir1, $dir2)
 {
     $contents1 = getDirectoryContents($dir1);
     $contents2 = getDirectoryContents($dir2);
-
-    $differences = array_diff_assoc($contents1, $contents2);
-
+    $differences = array_diff($contents1, $contents2);
     return $differences != [];
 }
 
@@ -115,15 +103,21 @@ function getVersionChanges()
     $highestVersion = getHighestVersion();
     $newVersion = incrementVersion($highestVersion);
     $response = [];
-    foreach (array_filter(glob("$tmp/node_modules/mfm*"), 'is_dir') as $nodeSubDir) {
-        $subDir = substr($nodeSubDir, strpos($nodeSubDir, "node_modules/") + strlen("node_modules/"));
-        $dir = "/wamp/www/node_modules/$subDir";
-        if (direcroriesNotEquals($dir, $nodeSubDir)) {
-            $response[] = [
-                'name' => $subDir,
-                'curr' => json_decode(file_get_contents("$nodeSubDir/package.json"), true)['version'],
-                'from' => json_decode(file_get_contents("$dir/package.json"), true)['version'],
-                'into' => $newVersion
+    foreach (array_filter(glob("$tmp/node_modules/mfm*"), 'is_dir') as $remote) {
+        $subDir = substr($remote, strpos($remote, "node_modules/") + strlen("node_modules/"));
+        $local = "/wamp/www/node_modules/$subDir";
+        if (direcroriesNotEquals($local, $remote)) {
+            $response[updates][] = [
+                'folder' => $subDir,
+                'remote' => json_decode(file_get_contents("$remote/package.json"), true)['version'],
+                'locale' => json_decode(file_get_contents("$local/package.json"), true)['version'],
+                'change' => $newVersion
+            ];
+        } else {
+            $response[uptodate][] = [
+                'folder' => $subDir,
+                'remote' => json_decode(file_get_contents("$remote/package.json"), true)['version'],
+                'locale' => json_decode(file_get_contents("$local/package.json"), true)['version'],
             ];
         }
     }

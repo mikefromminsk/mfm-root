@@ -6,3 +6,6 @@ RewriteCond %{HTTP_HOST} !^localhost [NC]
 # Условие для редиректа с HTTP на HTTPS
 RewriteCond %{HTTPS} off
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Redirect root directory to mfm-wallet
+RewriteRule ^$ /mfm-wallet [L,R=301]
