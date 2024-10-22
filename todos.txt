@@ -1,7 +1,10 @@
-+ утечка токенов при echange
++ утечка токенов при exchange
++ восстановить майнинг
++ восстанвоить mfm-store.
++ markdon_viewver
 
-$ help wiki explorer markdon_viewver
-$ восстановить майнинг рецепты. mfm-data approve dataSet. восстанвоить mfm-store. налоги через data
+$ help wiki explorer
+$ рецепты. mfm-data approve dataSet. налоги через data
 $ и bit mining
 
 магазин нфт
