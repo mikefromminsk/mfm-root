@@ -35,7 +35,6 @@ Mytoken.Space/bitcoin
 Notifications pricealerts
 Доходность по токена меньше чем по кредиту
 Воронка вернись и закончи push center
-Анимация нажатия это уменьшение кнопки
 Multiplicator x100
 Депозит эфир
 мультиакки
