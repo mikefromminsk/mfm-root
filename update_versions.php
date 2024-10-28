@@ -1,5 +1,4 @@
 <?php
-
 require_once 'versions.php';
 
 foreach (getVersionChanges()[updates] as $change) {

@@ -1,6 +1,5 @@
 <?php
-
-include_once $_SERVER["DOCUMENT_ROOT"] . "/mfm-db/params.php";
+require_once $_SERVER["DOCUMENT_ROOT"] . "/mfm-db/params.php";
 
 function executeCommand($command, $directory = null)
 {
