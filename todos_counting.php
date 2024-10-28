@@ -4,7 +4,7 @@ error_reporting(1);
 
 header('Content-Type: application/json');
 
-$root = $_SERVER["DOCUMENT_ROOT"];
+$root = $_SERVER[DOCUMENT_ROOT];
 
 $tasks = [];
 $story_points = [];
