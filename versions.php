@@ -1,4 +1,7 @@
 <?php
+
+use PHPMailer\Exception;
+
 require_once $_SERVER["DOCUMENT_ROOT"] . "/mfm-db/params.php";
 
 function executeCommand($command, $directory = null)
