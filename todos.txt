@@ -1,4 +1,7 @@
 
+usdt цена 1
+несколько токенов добавить
+
 merge mfm-telegram и mfm-mail в mfm-crm
 
 funnel
