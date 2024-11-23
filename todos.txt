@@ -9,6 +9,9 @@
 
 search Home most searching
 search Recent
+Home New tokens
+Home свайпать слайды
+
 mfm-bank первый слайд рассказать что нужно пройти квиз
 mfm-bank дизайн accept credit
 mfm-bank проверить что нельзя передать токены другому юзеру
@@ -27,7 +30,6 @@ mfm-mining анимацию радуги крутится
 сделать реконнект сокетов если был дисконнект
 portion ползунок на exchange
 переименовать mfm-angular-template
-Home New tokens
 
 
 iphone при приходе денег не видно уведомления и не обновляется
