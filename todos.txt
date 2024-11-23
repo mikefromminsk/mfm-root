@@ -15,7 +15,6 @@ mfm-bank нет обновления по возвращенияю с креди
 
 Recent search
 mfm-exhcange available socket подключить
-галочка aggree внутри галочка правее ниже центра
 кнопка спрятать md-bottom-sheet справа сверху а слева иконку действия из walllet
 max withdrawal удалить
 депозит launch Купить токен за 19.99 сначала оплата
