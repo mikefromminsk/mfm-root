@@ -27,6 +27,7 @@ slides базируются на pro оплатах
 slides нарисовать крассивые слайды
 mfm-bank дизайн accept credit
 mfm-bank проверить что нельзя передать токены другому юзеру
+mfm-bank вопросы в квизе выпадают одинаковые
 mfm-exchange available socket подключить
 mfm-exchange portion ползунок
 mfm-exchange делать реконнект сокетов если был дисконнект
