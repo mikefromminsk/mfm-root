@@ -15,24 +15,17 @@
     ребрендинг лого и название чейна и девиз
     в описании проета контакты владельца
 
+mfm-wallet settings увеличить кнопки
+mfm-wallet send max to admin double make assets (check sum assets)
 mfm-wallet когда незалогинен то транзакции видны(сделать обновление по переходу на страницу истории)
 mfm-wallet login по нажатию на wallet в незалогиненном состоянии открывать login
-mfm-wallet login галочку aggree на два пикселя вверх
-mfm-wallet login убрать фокус с пароля по нажанию на login
 mfm-wallet login использовать логин телеграма по умолчанию в логине и генерировать пароль случайным образом и отправлять в чат как секретные данные
 mfm-wallet больше контента в незалогиненом
-mfm-wallet settings увеличить кнопки
-mfm-wallet settings кнопка удалить аккаунт - удаление аналитических ивентов
-mfm-wallet упрощённый график
 mfm-wallet send recent addresses (autocomplete)
-mfm-wallet send max amount
-mfm-wallet по нажатию на enter отправлять транзакцию
-mfm-wallet trans иконка success левеестоит
 mfm-wallet доступ на 7 дней с письма
 mfm-wallet При поиске не уменьшается экран в мобиле
 mfm-wallet Перехватывать события кнопки назад и закрывать диалоги
 mfm-wallet звук прихода денег тоже перевести
-mfm-wallet Анимация коунтера на тотале в wallet
 mfm-wallet launch После загрузки уменьшать размер изображения до 64 пикселей
 mfm-wallet launch нельзя перейти на про после лаунча перейти на про макс
 mfm-wallet launch дважды показывается уведомление о приходе денег
@@ -40,23 +33,18 @@ mfm-wallet launch В загрузке логотипа предлагать св
 mfm-wallet launch сжимать лого при лаунче
 mfm-wallet launch после оплаты pro ревью
 mfm-wallet launch промакс бесплатный майниг
-mfm-wallet launch промакс Создание то каналов
+mfm-wallet launch промакс Создание тг каналов
 mfm-wallet launch промакс контент план
-mfm-wallet launch промакс контент план
-mfm-wallet launch промакс залив контрактов
 mfm-wallet launch промакс Активности
 mfm-wallet launch промакс аренда майнера
-mfm-wallet launch Только английские символы
+mfm-wallet launch промакс панель управления
 mfm-wallet account логин сверху на home что бы понимать в каком ты акке
-mfm-wallet account delegate сделать окно
 mfm-wallet account (уровни пользователя) Сделать базу прогрева те люди которые знают о запуске
-mfm-wallet топ поиск топ обмен топ майнинг (топ использования)
 mfm-wallet Телеграм не сворачивать приложение по свайпу вниз
 mfm-wallet Блокировка кнопки buy sell и credit на exchange и токен профиле
 mfm-wallet Сделать словарник сложных слов (i)
 mfm-wallet переделать отправку запросов через post json а не from data
 mfm-wallet кнопка close должна быть больше
-mfm-wallet change 24 не работает
 slides по рекламе реферала конкретного токена показывать слайд только его
 slides плавнее анимацию начала и конца слайдов (переключается часто изза частой инициализации)
 slides сделать интервал больше
@@ -82,7 +70,6 @@ mfm-mining анимацию радуги крутится
 mfm-mining посчитать через сколько закончится банк
 mfm-mining доход в минуту
 mfm-bank дизайн окна запроса кредита
-mfm-bank вопросы в квизе выпадают одинаковые
 mfm-bank не выдавать кредиты если фингерпринт совпадает
 mfm-bank при withdrowal сделать предложение продать свои токены если у тебя не хватает на комиссию
 mfm-bank проверить что нельзя передать токены другому юзеру
@@ -92,10 +79,14 @@ mfm-bank забрать деньги через день
 mfm-exchange соотношение токенов не должно быть больше 1 к 1 в random bot
 mfm-exchange соммиты таблиц orders
 mfm-exchange смержить ордера по одной цене одного юзера (для бота)
-mfm-exchange available socket подключить
-mfm-exchange portion ползунок
 mfm-exchange при большом количестве токенов тормозит ордербук а если 1 нет
 mfm-exchange spred bot не работает на новых токенах
+
+
+mfm-wallet settings кнопка удалить аккаунт - удаление аналитических ивентов
+mfm-wallet упрощённый график
+mfm-wallet account delegate сделать окно
+mfm-exchange portion ползунок
 iphone при приходе денег не видно уведомления и не обновляется
 iphone скрывается через время хедер на главной странице
 
