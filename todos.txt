@@ -2,43 +2,39 @@
 
 квота 5
 название придумать
-ровный дизайн
-генератор иконок
++ ровный дизайн
++ генератор иконок
 обоновления баланса
 
 не совподает по сетке расстояние между топами (есть скрины)
 
 Ребрендинг 3
     Ребрендинг coin в конце
-    анимация счетчика
     космический дизайн
     ребрендинг лого и название чейна и девиз
     в описании проета контакты владельца
 
 
 
-mfm-wallet settings увеличить кнопки
+mfm-analytics В аналитике указать среднее время на конец воронки
+mfm-analytics Указать daily active users
+mfm-analytics соммиты таблиц events
+mfm-analytics доска работоспособности сервиса (пустые свечи)
+mfm-analytics insta storiess
+mfm-analytics emails
+mfm-analytics предоставить аналитику по каждому токену
+mfm-analytics дней без проишествий вынести в отдельный дисклеймер
+mfm-analytics аналитика перехода по экранам и нажатия на кнопки
 mfm-wallet launch В загрузке логотипа предлагать свои варианты сгенерированные
 mfm-wallet launch После загрузки уменьшать размер изображения до 64 пикселей
 mfm-wallet launch сжимать лого при лаунче
 mfm-wallet launch промакс панель управления
 mfm-wallet launch нельзя перейти на про после лаунча перейти на про макс
 mfm-wallet launch после оплаты pro ревью
-mfm-wallet settings уровни пользователя В настройках
 mfm-wallet Телеграм не сворачивать приложение по свайпу вниз
 mfm-wallet кнопка close должна быть больше
-mfm-analytics воронка не открыватеся отправлено просмотрено открыто
-mfm-analytics reviews не работают
-mfm-analytics Процент просмотров в воронке
-mfm-analytics В аналитике указать среднее время на конец воронки
-mfm-analytics Указать daily active users
-mfm-analytics соммиты таблиц events
-mfm-analytics доска работоспособности сервиса
-mfm-analytics insta storiess
-mfm-analytics emails
-mfm-analytics предоставить аналитику по каждому токену
-mfm-analytics дней без проишествий вынести в отдельный дисклеймер
-mfm-analytics аналитика перехода по экранам и нажатия на кнопки
+mfm-wallet settings увеличить кнопки
+mfm-wallet settings уровни пользователя В настройках
 mfm-mining не останавливается worker
 mfm-mining показывать баланс токена и газа
 mfm-mining loader animation
