@@ -20,6 +20,7 @@ mfm-analytics В аналитике указать среднее время н�
 mfm-analytics Указать daily active users
 mfm-analytics соммиты таблиц events
 mfm-analytics доска работоспособности сервиса (пустые свечи)
+mfm-analytics dao аккомулируемое по дням (как volume)
 mfm-analytics insta storiess
 mfm-analytics emails
 mfm-analytics предоставить аналитику по каждому токену
