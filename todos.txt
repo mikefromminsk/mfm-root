@@ -31,19 +31,18 @@ Global
     2 node
     java tps 1000
 
-mfm-wallet launch spred bot не работает на новых токенах
-mfm-mining доход в минуту
-mfm-mining показывать баланс токена
-mfm-wallet settings увеличить кнопки
+
 mfm-analytics соммиты таблиц events
-mfm-wallet больше контента в незалогиненом (токены из поиска)
-mfm-bank дизайн окна запроса кредита
-mfm-bank оплачено слишком большое число
+mfm-wallet больше контента в незалогиненом (токены из top search)
+
+mfm-mining показывать баланс токена
 mfm-mining анимацию радуги крутится
-mfm-exchange соотношение токенов не должно быть больше 1 к 1 в random bot
 mfm-mining не останавливается worker
 
+mfm-bank дизайн окна запроса кредита
+mfm-exchange соотношение токенов не должно быть больше 1 к 1 в random bot
 
+mfm-wallet settings backup
 mfm-bank проверить что нельзя передать токены другому юзеру
 mfm-bank насильное возвращение кредита
 mfm-wallet settings уровни пользователя В настройках и обучение для повышения
@@ -92,6 +91,7 @@ mfm-wallet Перехватывать события кнопки назад и 
     crm
     twitter
     instagram
+    landing video kopters first block
     telegram news
     linkedin
     tiktok
@@ -108,6 +108,15 @@ mfm-wallet Перехватывать события кнопки назад и 
         статья как добавить поддержку токена на сайт
         White Paper
         сделать статью по созданию ядра биржи
+user level
+    1 buy token
+    2 deposit usdt
+    3 create token
+token level
+    1 suppert 100$
+    2 website
+    3 wallets 100
+
 
 ui speedup
     telegram-web-app.js load only open in telegram (has bot parameter)
