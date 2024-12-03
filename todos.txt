@@ -32,9 +32,7 @@ Global
     java tps 1000
 
 
-mfm-mining показывать баланс токена
 mfm-mining анимацию радуги крутится
-mfm-mining не останавливается worker
 mfm-bank дизайн окна запроса кредита
 mfm-exchange соотношение токенов не должно быть больше 1 к 1 в random bot
 
