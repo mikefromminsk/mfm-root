@@ -31,7 +31,6 @@ Global
     2 node
     java tps 1000
 
-mfm-wallet launch tokenomic start
 mfm-wallet launch spred bot не работает на новых токенах
 mfm-bank вы должны вернуть число слишком большое
 mfm-mining доход в минуту
