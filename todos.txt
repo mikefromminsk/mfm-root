@@ -27,8 +27,8 @@ Global
     2 node
     java tps 1000
 
+Автологин через telegram (Анимация входа) и смена пароля
 mfm-wallet упрощённый график
-Автологин через telegram и смена пароля
 mfm-analytics доска работоспособности сервиса (пустые свечи)
 mfm-analytics dao chart аккомулируемое по дням (как volume)
 mfm-exchange соотношение токенов не должно быть больше 1 к 1 в random bot
