@@ -65,6 +65,7 @@ mfm-wallet Перехватывать события кнопки назад и 
     Сделать коды переводов как в блик
 
 Идеи маркетинг
+    открыть почту для каждого аккаунта
     google seo + start speed
     Multisocial loader
     news interval
