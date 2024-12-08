@@ -10,7 +10,6 @@ staking
 
 
 mfm-analytics[проверить] подсчет funnel по сессиям
-mfm-analytics[проверить] пустые свечи сначала
 mfm-wallet заполнить топы создать rock(10s) iron(60s) gold diamond
 mfm-mining динамический сложность майнинга
 mfm-wallet добавить попкулярные токены что они ещё не торгуются
@@ -19,6 +18,9 @@ mfm-bank staking Уведомлять о том что стейкинг акка
 mfm-analytics DAU chart аккомулируемое по дням (как volume)
 mfm-telegram обновить описание бота
 mfm-telegram Автологин через telegram (Анимация входа) и смена пароля
+
+
+mfm-analytics[проверить] подсчет funnel по сессиям
 mfm-wallet localhost/#bitcoin
 mfm-wallet график волюмов
 mfm-wallet received сделать как blik
@@ -61,6 +63,7 @@ mfm-telegram не больше 10 уведомлений в день
 mfm-telegram если юзер зне записал номер чата все равно записывать его логин
 mfm-db разобраться с json post запросом и парсингом параметров
 mfm-db проверить сколько будет весить разные кодировки при создании базы данных
+mfm-db включать debug mode через параметры
 mfm-bank если фокус пропадает со страницы то блокировать банкинг
 mfm-bank можно бесконечно брать кредиты
 mfm-bank deposit в закрытом виде не приходит событие о депозите
