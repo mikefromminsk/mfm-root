@@ -1,31 +1,30 @@
 квота 500
-скрины пофиксить
-после свайпа закрывается окно
++ скрины пофиксить
++ после свайпа закрывается окно
 адреса как в крипте
-сделать airdrop кнопка на профиле
+сделать airdrop кнопка на профиле вместо сканера
 staking
 логотип качество
 телеграм канал
 
 
 
-mfm-analytics[проверить] подсчет funnel по сессиям
+mfm-bank staking
+mfm-analytics подсчет funnel по сессиям
 mfm-wallet заполнить топы создать rock(10s) iron(60s) gold diamond
 mfm-mining динамический сложность майнинга
 mfm-wallet добавить попкулярные токены что они ещё не торгуются
-mfm-bank staking игра в mmm
-mfm-bank staking Уведомлять о том что стейкинг аккаунт был поддержан на 10% от общего объема
 mfm-analytics DAU chart аккомулируемое по дням (как volume)
 mfm-telegram обновить описание бота
 mfm-telegram Автологин через telegram (Анимация входа) и смена пароля
 
 
-mfm-analytics[проверить] подсчет funnel по сессиям
+mfm-wallet анимированные лого
+mfm-bank staking игра в mmm
 mfm-wallet localhost/#bitcoin
 mfm-wallet график волюмов
 mfm-wallet received сделать как blik
 mfm-wallet funnel DAU большими числами в начало что бы стремиться
-mfm-wallet логотипы майнрафта скрины
 mfm-wallet из эксченджа открыть токен профиль кнопка возле покупки
 mfm-wallet при закрытии экранов появляется клавиатура на милисекунду
 mfm-wallet share восстановить share
