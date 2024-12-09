@@ -8,9 +8,9 @@ staking
 телеграм канал
 
 
-mfm-bank staking
-mfm-telegram обновить описание бота
+mfm-bank staking UI
 mfm-analytics подсчет funnel по сессиям
+mfm-telegram обновить описание бота
 mfm-wallet заполнить топы создать rock(10s) iron(60s) gold diamond
 mfm-mining динамический сложность майнинга
 mfm-wallet добавить попкулярные токены что они ещё не торгуются
@@ -31,6 +31,8 @@ mfm-wallet settings backup
 mfm-wallet settings уровни пользователя В настройках и обучение для повышения
 mfm-wallet account указать кому делегировано
 mfm-wallet funnel аналитику выдачу кредитов
+mfm-wallet logo в inputs
+mfm-wallet при init.php блокировать сокеты DEBUG
 mfm-exchange суммировать заявки от одного адреса и одной цены [если в конце очереди]
 mfm-exchange смержить ордера по одной цене одного юзера (для бота)
 mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
