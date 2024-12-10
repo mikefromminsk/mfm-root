@@ -15,6 +15,7 @@ mfm-analytics подсчет funnel по сессиям и рассылка
 mfm-bank staking UI
 mfm-telegram обновить описание бота
 
+mfm-wallet skip переделать на кнопку
 mfm-bank Проверять при покупке что акк domain:bank передан в управление
 mfm-telegram автологин через telegram и смена пароля
 mfm-wallet добавить попкулярные токены что они ещё не торгуются
