@@ -8,25 +8,23 @@ staking
 телеграм канал
 
 
-mfm-bank staking UI
-mfm-analytics подсчет funnel по сессиям
-mfm-telegram обновить описание бота
-mfm-wallet заполнить топы создать rock(10s) iron(60s) gold diamond
 mfm-mining динамический сложность майнинга
+mfm-telegram автологин через telegram и смена пароля
+mfm-analytics подсчет funnel по сессиям и рассылка
+mfm-telegram обновить описание бота
+mfm-bank staking UI
+mfm-wallet share восстановить share
+mfm-wallet share восстановить рефералку
+
+
 mfm-wallet добавить попкулярные токены что они ещё не торгуются
-mfm-telegram Автологин через telegram (Анимация входа) и смена пароля
-
-
 mfm-wallet анимированные лого
 mfm-bank staking игра в mmm
-mfm-wallet localhost/#bitcoin
 mfm-wallet график волюмов
 mfm-wallet received сделать как blik
 mfm-wallet funnel DAU большими числами в начало что бы стремиться
 mfm-wallet из эксченджа открыть токен профиль кнопка возле покупки
 mfm-wallet при закрытии экранов появляется клавиатура на милисекунду
-mfm-wallet share восстановить share
-mfm-wallet share восстановить рефералку
 mfm-wallet settings backup
 mfm-wallet settings уровни пользователя В настройках и обучение для повышения
 mfm-wallet account указать кому делегировано
