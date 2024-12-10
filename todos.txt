@@ -8,15 +8,14 @@ staking
 телеграм канал
 
 
-mfm-mining динамический сложность майнинга
-mfm-telegram автологин через telegram и смена пароля
-mfm-analytics подсчет funnel по сессиям и рассылка
-mfm-telegram обновить описание бота
-mfm-bank staking UI
+
 mfm-wallet share восстановить share
 mfm-wallet share восстановить рефералку
+mfm-analytics подсчет funnel по сессиям и рассылка
+mfm-bank staking UI
+mfm-telegram обновить описание бота
 
-
+mfm-telegram автологин через telegram и смена пароля
 mfm-wallet добавить попкулярные токены что они ещё не торгуются
 mfm-wallet анимированные лого
 mfm-bank staking игра в mmm
