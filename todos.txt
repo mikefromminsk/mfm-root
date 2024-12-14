@@ -14,7 +14,6 @@ mining 0 bank block mining
 
 
 mfm-wallet share восстановить share
-mfm-bank staking UI
 mfm-telegram обновить описание бота
 mfm-wallet share восстановить рефералку
 mfm-token адреса как в крипте
