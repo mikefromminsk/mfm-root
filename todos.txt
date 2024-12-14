@@ -1,5 +1,6 @@
 logo share bold
 share заменить на drop
+
 mining 0 bank block mining
 телеграм канал
 
@@ -12,7 +13,8 @@ mining 0 bank block mining
 
 
 
-
+стейкинг в дистрибуции
+стейкинг в топах
 mfm-wallet share восстановить share
 mfm-telegram обновить описание бота
 mfm-wallet share восстановить рефералку
