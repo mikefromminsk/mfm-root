@@ -1,19 +1,25 @@
-квота 500
-+ скрины пофиксить
-+ после свайпа закрывается окно
-адреса как в крипте
-+ сделать airdrop кнопка на профиле вместо сканера
-+ staking
-+ логотип качество
+logo share bold
+share заменить на drop
+mining 0 bank block mining
 телеграм канал
 
 
 
+
+
+
+
+
+
+
+
 mfm-wallet share восстановить share
-mfm-wallet share восстановить рефералку
 mfm-bank staking UI
 mfm-telegram обновить описание бота
-
+mfm-wallet share восстановить рефералку
+mfm-token адреса как в крипте
+mfm-wallet показывать на профиле и на воллете сразу данные 7% staking 50 coin from mining $30 from bank
+mfm-wallet $top_search response wrong
 mfm-wallet skip переделать на кнопку
 mfm-bank Проверять при покупке что акк domain:bank передан в управление
 mfm-telegram автологин через telegram и смена пароля
@@ -96,6 +102,7 @@ mfm-token docs white_paper.md
 mfm-token iron emit 1_000_000_000
 mfm-mail время отсылки письма по локации определять
 mfm-wallet Сделать словарник сложных слов (i)
+mfm-mail unsubscribe
 
 
 mfm-token сделать библиотеку по сложению чисел что бы убрать проблеме 0.3000001
