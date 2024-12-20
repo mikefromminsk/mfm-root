@@ -1,6 +1,8 @@
+убрать автопродление доменов
+
+
 logo share bold
 share заменить на drop
-
 телеграм канал
 
 
@@ -122,7 +124,6 @@ bot strategy
     news interval
     info@mytoken.space
     trustpilot
-    crm
     twitter
     instagram
     landing video kopters first block
@@ -158,6 +159,7 @@ ui speedup
     remove nocahce
     удалить angular material
     Удалить .block в md-dialog
+    сделать send без getAccount.prev_key
 
 Переводы
 ошибок
@@ -188,7 +190,8 @@ readme.md на русском
     Notification center + priceAlerts
     Безопасная сделка
     ИИ разработка миниконтрактов
-    Аукцион магазин нфт
+    Аукцион как ico
+    магазин нфт
     Терминал оплаты
     мод для майнкрафта
     популярные токены bitcoin therium Депозит эфир и хеджирование
@@ -245,4 +248,5 @@ readme.md на русском
     Найти защиту от фермы ботов
     делать лимиты на создание токенов в день от ботов
     после того как были установлены пароли то устанавливать дебаг в false. DEBUG вынести в config.php
+    отключить стектрейс на продакшене
 
