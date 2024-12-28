@@ -3,13 +3,6 @@ domain to ticker
 убрать автопродление доменов
 
 
-logo share bold
-share заменить на drop
-телеграм канал
-
-
-
-
 mfm-bank стейкинг в дистрибуции
 mfm-wallet стейкинг в топах
 mfm-wallet share восстановить share
@@ -88,7 +81,7 @@ mfm-token md5 -> sha1
 mfm-token блоки синхронизации создавать в функции commit а потом синхронизировать
 mfm-token mfm-data когда транзакция не прошла, всёравно менять пароль от газ аккаунта get_pass_required('pass')
 mfm-token docs white_paper.md
-mfm-token iron emit 1_000_000_000
+mfm-token emit 1_000_000_000 bug
 mfm-mail время отсылки письма по локации определять
 mfm-wallet Сделать словарник сложных слов (i)
 mfm-mail unsubscribe
@@ -108,8 +101,7 @@ bot strategy
     random
     x^3 per week from last transaction
     place on 00 levels
-    mfm-exchange соотношение токенов не должно быть больше 1 к 1 в random bot
-    количество подключений по сокетам к паре говорит о частоте обновления пары
+    соотношение токенов не должно быть больше 1 к 1 в random bot
     деактивация random бота по достижению лимита баланса
 
 терминалы как ноды
