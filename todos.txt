@@ -1,108 +1,100 @@
-domain to ticker
 
-убрать автопродление доменов
+mfm-exchange нет аналитики
+mfm-exchange voluyme24 = 0
+mfm-analytics to BigHash (очистка аналитики кендлов после определенного времени)
+mfm-bank массовые aidrops
+mfm-wallet login сделать seed фразу
+mfm-wallet exchange поставить цену по умолчанию
+mfm-exchange в стакане 2% находится gas в зависипости от цены
+mfm-exchange нет заполнения через сокеты
+mfm-wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
+mfm-wallet distribution дисклеймер что сколько придет на баланс
+mfm-storage не уменьшается иконка токена после загрукзки
+mfm-wallet login показать сообщение что залогинился
+mfm-wallet share восстановить share (рефералку, airdrop)
+mfm-wallet send убрать md-dialog и сразу показывать клаву
+mfm-bank php восстановить
+mfm-token убрать delegate и сделать архивную ноду
 
+mfm-wallet login после ввода логин пароль и submit не закрывает окно (со второго раза срабоатывает)
+mfm-wallet после создания токена не закрывается последнее окно
 
-mfm-bank стейкинг в дистрибуции
-mfm-wallet стейкинг в топах
-mfm-wallet share восстановить share
-mfm-telegram обновить описание бота
-mfm-wallet share восстановить рефералку
+mfm-wallet $top_search multisearch (BigLongListMap)
+mfm-exchange to BigHash
+mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
+
 mfm-token адреса как в крипте
-mfm-wallet $top_search response wrong
-mfm-bank Проверять при покупке что акк domain:bank передан в управление
-mfm-telegram автологин через telegram и смена пароля
-mfm-wallet добавить попкулярные токены что они ещё не торгуются
-mfm-wallet анимированные лого
-mfm-wallet received сделать как blik
+mfm-analytics chart volume colors
+mfm-telegram создать нового бота
+mfm-token заблокировать тикеры CMC
 mfm-wallet funnel DAU большими числами в начало что бы стремиться
 mfm-wallet из эксченджа открыть токен профиль кнопка возле покупки
-mfm-wallet settings backup
-mfm-wallet settings уровни пользователя В настройках и обучение для повышения
-mfm-wallet при init.php блокировать сокеты DEBUG
-mfm-exchange суммировать заявки от одного адреса и одной цены [если в конце очереди]
-mfm-exchange смержить ордера по одной цене одного юзера (для бота)
-mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
-mfm-exchange получить ордербук на количество токенов или квоты и встроить в place и считать спред в 100$
-mfm-exchange подсчет что столько сколько задепозители столько и в стаканах в сумме
-mfm-exchange показть саксесс ордер плейст перед отзывом
-mfm-exchange при большом количестве токенов тормозит ордербук а если 1 нет
+mfm-token логировать ошибки + отправлять об ошибках в отдельный бот
+mfm-bank можно бесконечно брать кредиты
+mfm-bank вы не можете вывести средства уходят за экран
+mfm-bank запретить передавать токены другому юзеру если делегирован
+mfm-token emit 1_000_000_000 bug
+mfm-wallet стейкинг в дистрибуции
+mfm-wallet стейкинг в топах
+mfm-bank не выдается кредит изза unique в trans
+mfm-mining После получения кредита не обновляется баланс на майнинг
+
+low priority
+mfm-token разрешить удалять аккаунты если баланс 0 и нет транзакций
+mfm-token и разрешить удалить домен
+mfm-data после установки null устанавливать рекрсивно null
+mfm-telegram + mfm-mail получить время и язык пользователя по ip
+mfm-telegram + mfm-mail ночью прайсалетры не отправлять
+mfm-token разбить send.php на несколько файлов делегация,перевод,регистрация,запуск
+mfm-mail unsubscribe
+mfm-bank насильное возвращение кредита
+mfm-bank если фокус пропадает со страницы то блокировать банкинг
+deposit в закрытом виде не приходит событие о депозите
+mfm-token проблема если пользователь создал аккаунт не gas токена после делегирования кредита
+mfm-wallet Обучение кликам
 mfm-analytics В аналитике указать среднее время на конец воронки
 mfm-analytics добавить аналитику TPS
 mfm-analytics доска работоспособности сервиса
-mfm-analytics buy sell volume colors
-mfm-analytics очистка аналитики кендлов после определенного времени
-mfm-mining После окончания цикла майнинга отправлять сообщения о том что ничего не найдено
 mfm-mining проблема с подсчетом времени time()
-mfm-mining при майнине в браузере перезагружать через 10 mint
-mfm-mining После получения кредита не обновляется баланс на майнинг
-mfm-telegram в логине и генерировать пароль случайным образом и отправлять в чат как секретные данные
-java Сделать майнер на джаве который подбирает все майнинговые токены
-java после создания токена намайнить по одному разу и сразу отправить в exchagne
-java проблема загрузки mysql
-java встроить mfm-servers в npm package
-java Делать в майнинге перерывы если телефон перегрелся
-java php interpretator
-mfm-telegram получить время и язык пользователя по ip
-mfm-telegram отправлять об ошибках в отдельный бот
-mfm-telegram ночью прайсалетры не отправлять
-mfm-telegram не больше 10 уведомлений в день
-mfm-telegram если юзер зне записал номер чата все равно записывать его логин
-mfm-db разобраться с json post запросом и парсингом параметров
-mfm-db проверить сколько будет весить разные кодировки при создании базы данных
-mfm-db включать debug mode через параметры
-mfm-bank если фокус пропадает со страницы то блокировать банкинг
-mfm-bank можно бесконечно брать кредиты
-mfm-bank deposit в закрытом виде не приходит событие о депозите
+java miner
+mfm-data help параметры+дескрипшен+данные в кеше (показывать в пинкоде сколько отправляет)
+mfm-telegram поднять на java
+mfm-token trans нет received
+
+
+идеи
+mfm-wallet settings backup
+mfm-bank Кредитный рейтинг
+mfm-bank генерировать username из seed
+mfm-bank не выдавать кредиты если фингерпринт совпадает
+mfm-bank rating пригласить друзей
+mfm-bank rating зависит от страны
 mfm-bank deposit перейти на usdc
 mfm-bank сохранять ответы в аналитику
-mfm-bank вы не можете вывести средства уходят за экран
-mfm-bank насильное возвращение кредита
-mfm-bank проверить что нельзя передать токены другому юзеру
-mfm-bank не выдавать кредиты если фингерпринт совпадает
-!!! mfm-bank не выдается кредит изза unique в trans
-mfm-storage проверять права на изменение картинки с помощью mfm-tokens
-mfm-storage подсчитывать аналитику загрузок
-mfm-data для того что бы посмотреть газ нужно отправить help
-mfm-data help параметры дескрипшен и данные в кеше в конце (при сравнении пассов всегда тру)
-mfm-data сделать загрузку транзакций из другой ноды
-mfm-data после установки null устанавливать рекрсивно null
-mfm-token процент синхронизации побитовое
-mfm-token сделать загрузку транзакций из другой ноды
-mfm-token TPS merge all insert and update request in one sql request
-mfm-token разбить send.php на несколько файлов делегация,перевод,регистрация,запуск
-mfm-token проблема если пользователь создал аккаунт не gas токена после делегирования кредита
-mfm-token жудкие тормоза когда не работает broadcast() не работает
-mfm-token разрешить удалять аккаунты если баланс 0 и нет транзакций
-mfm-token и разрешить удалить домен
-mfm-token поменять owner на token_creator или другой для сообщения You have received 1 ROCK from [owner]
-mfm-token триггеры после получения на акк дергать delegate script
-mfm-token md5 -> sha1
-mfm-token блоки синхронизации создавать в функции commit а потом синхронизировать
-mfm-token mfm-data когда транзакция не прошла, всёравно менять пароль от газ аккаунта get_pass_required('pass')
-mfm-token docs white_paper.md
-mfm-token emit 1_000_000_000 bug
-mfm-mail время отсылки письма по локации определять
-mfm-wallet Сделать словарник сложных слов (i)
-mfm-mail unsubscribe
-
-
-
-mfm-token сделать библиотеку по сложению чисел что бы убрать проблеме 0.3000001
-mfm-wallet share При получении клакого-либо токена регистрировать кошелёк и деегировать контракту который отдает usdt владельцу
+mfm-wallet received сделать как blik
+нейросеть которая сама создает токены
+mfm-exhcnage рассчитывать стартовую цену по circularion supply
+Мод для Майнкрафта(передавать предметы между вайпами)
+mfm-token consensus процент побитовое
+mfm-wallet settings уровни пользователя В настройках и обучение для повышения
 mfm-wallet на холме сверху указывать домен сервера к которому подключён
+mfm-wallet анимированные лого
+mfm-telegram автологин через telegram и смена пароля (генерировать пароль)
 
-идеи Кредитный рейтинг
-    предоставить адрес своего кошелька
-    пригласить друзей
-    зависит от страны
+Global
+    Три ноды android (node list)
+    consensus
+
+Инвестиции
+    mfm-token docs white_paper.md
+
+Goverments
+    налоги
+    штрафы
 
 bot strategy
-    random
     x^3 per week from last transaction
     place on 00 levels
-    соотношение токенов не должно быть больше 1 к 1 в random bot
-    деактивация random бота по достижению лимита баланса
 
 терминалы как ноды
     cканер штрих кодов
@@ -111,9 +103,12 @@ bot strategy
     Сделать токен для скидок в бир-бэнде
 
 Идеи маркетинг
+    Instalike как валюта
+    Построить бизнес-план
     открыть почту для каждого аккаунта
     staking игра в mmm
     google seo + start speed
+    Создвать токены по Google трендам
     Multisocial loader
     news interval
     info@mytoken.space
@@ -142,18 +137,18 @@ bot strategy
     космический дизайн
     ребрендинг лого
 
-
-Global
-    staking
-    2 node oracles
-    tps 1000
-
 ui speedup
     telegram-web-app.js load only open in telegram (has bot parameter)
     remove nocahce
     удалить angular material
     Удалить .block в md-dialog
     сделать send без getAccount.prev_key
+refactoring
+    domain to ticker
+    Оценить классы через AI на 6 из 10
+    mfm-token поменять owner на token_creator или другой для сообщения You have received 1 ROCK from [owner]
+    usdt to usd
+    mfm-token сделать библиотеку по сложению чисел что бы убрать проблеме 0.3000001
 
 Переводы
 ошибок
@@ -216,7 +211,6 @@ readme.md на русском
         error log ui errors to analytics
         error log java errors to file
 2 nodes
-    Сделать на одном физическом сервере 2 реальных хоста прод и тест
     Перейти на compose
     docker образ wamp
     переделать хостинг на телефон
@@ -228,6 +222,7 @@ readme.md на русском
     сделать функцию по получению времени из количества блоков gas_domain
     людям нужны похожие на крипту адреса
     "message": "Connection failed: Unknown database 'dev' check properties.php file" при старте проекта
+    убрать автопродление доменов
 
 безопасность
     автоматизированный поиск уязвимостей
@@ -243,4 +238,7 @@ readme.md на русском
     делать лимиты на создание токенов в день от ботов
     после того как были установлены пароли то устанавливать дебаг в false. DEBUG вынести в config.php
     отключить стектрейс на продакшене
+    mfm-token md5 -> sha1
+    mfm-token mfm-data когда транзакция не прошла, всёравно менять пароль от газ аккаунта get_pass_required('pass')
+    mfm-storage проверять права на изменение картинки с помощью mfm-tokens
 
