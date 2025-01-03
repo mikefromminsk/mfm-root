@@ -1,25 +1,19 @@
 
-mfm-exchange нет аналитики
-mfm-exchange voluyme24 = 0
-mfm-analytics to BigHash (очистка аналитики кендлов после определенного времени)
-mfm-bank массовые aidrops
-mfm-wallet login сделать seed фразу
-mfm-wallet exchange поставить цену по умолчанию
-mfm-exchange в стакане 2% находится gas в зависипости от цены
 mfm-exchange нет заполнения через сокеты
-mfm-wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
-mfm-wallet distribution дисклеймер что сколько придет на баланс
-mfm-storage не уменьшается иконка токена после загрукзки
+mfm-exchange voluyme24 = 0
+mfm-bank массовые aidrops
+mfm-wallet восстановить share (рефералку, airdrop)
+mfm-wallet login сделать seed фразу
 mfm-wallet login показать сообщение что залогинился
-mfm-wallet share восстановить share (рефералку, airdrop)
-mfm-wallet send убрать md-dialog и сразу показывать клаву
+mfm-exchange в стакане 2% находится gas в зависипости от цены
+mfm-wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
+mfm-storage не уменьшается иконка токена после загрукзки
 mfm-bank php восстановить
 mfm-token убрать delegate и сделать архивную ноду
 
 mfm-wallet login после ввода логин пароль и submit не закрывает окно (со второго раза срабоатывает)
 mfm-wallet после создания токена не закрывается последнее окно
 
-mfm-wallet $top_search multisearch (BigLongListMap)
 mfm-exchange to BigHash
 mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
 
