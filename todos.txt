@@ -1,14 +1,12 @@
 
-mfm-exchange нет заполнения через сокеты
-mfm-exchange voluyme24 = 0
-mfm-bank массовые aidrops
+
+mfm-token массовые aidrops
+mfm-token восстановить staking
 mfm-wallet восстановить share (рефералку, airdrop)
-mfm-wallet login сделать seed фразу
-mfm-wallet login показать сообщение что залогинился
-mfm-exchange в стакане 2% находится gas в зависипости от цены
+mfm-exchange voluyme24 = 0
 mfm-wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
-mfm-storage не уменьшается иконка токена после загрукзки
-mfm-bank php восстановить
+mfm-storage не уменьшается иконка токена после загрукзки в storage
+
 mfm-token убрать delegate и сделать архивную ноду
 
 mfm-wallet login после ввода логин пароль и submit не закрывает окно (со второго раза срабоатывает)
@@ -32,6 +30,7 @@ mfm-wallet стейкинг в дистрибуции
 mfm-wallet стейкинг в топах
 mfm-bank не выдается кредит изза unique в trans
 mfm-mining После получения кредита не обновляется баланс на майнинг
+mfm-exchange в стакане 2% находится gas в зависипости от цены
 
 low priority
 mfm-token разрешить удалять аккаунты если баланс 0 и нет транзакций
@@ -54,6 +53,7 @@ java miner
 mfm-data help параметры+дескрипшен+данные в кеше (показывать в пинкоде сколько отправляет)
 mfm-telegram поднять на java
 mfm-token trans нет received
+mfm-exchange нет заполнения через сокеты
 
 
 идеи
@@ -143,6 +143,7 @@ refactoring
     mfm-token поменять owner на token_creator или другой для сообщения You have received 1 ROCK from [owner]
     usdt to usd
     mfm-token сделать библиотеку по сложению чисел что бы убрать проблеме 0.3000001
+    getProfile -> getAccount
 
 Переводы
 ошибок
