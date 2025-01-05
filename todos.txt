@@ -1,8 +1,8 @@
 
 
 mfm-token массовые aidrops
-mfm-token восстановить staking
 mfm-wallet восстановить share (рефералку, airdrop)
+mfm-token восстановить staking
 mfm-exchange voluyme24 = 0
 mfm-wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
 mfm-storage не уменьшается иконка токена после загрукзки в storage
