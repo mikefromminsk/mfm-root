@@ -144,6 +144,7 @@ refactoring
     usdt to usd
     mfm-token сделать библиотеку по сложению чисел что бы убрать проблеме 0.3000001
     getProfile -> getAccount
+    GENESIS_ADDRESS = "owner"; -> registrator
 
 Переводы
 ошибок
