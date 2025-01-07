@@ -1,14 +1,10 @@
 
 перейти на linux сервера
 
-mfm-token массовые aidrops
-mfm-wallet восстановить share (рефералку, airdrop)
-mfm-token восстановить staking
 mfm-exchange voluyme24 = 0
 mfm-wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
 mfm-storage не уменьшается иконка токена после загрукзки в storage
-
-mfm-token убрать delegate и сделать архивную ноду
+mfm-token сделать архивную ноду
 
 mfm-wallet login после ввода логин пароль и submit не закрывает окно (со второго раза срабоатывает)
 mfm-wallet после создания токена не закрывается последнее окно
@@ -16,15 +12,10 @@ mfm-wallet после создания токена не закрывается 
 mfm-exchange to BigHash
 mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
 
-mfm-token адреса как в крипте
 mfm-analytics chart volume colors
-mfm-telegram создать нового бота
 mfm-token заблокировать тикеры CMC
 mfm-wallet funnel DAU большими числами в начало что бы стремиться
-mfm-wallet из эксченджа открыть токен профиль кнопка возле покупки
 mfm-token логировать ошибки + отправлять об ошибках в отдельный бот
-mfm-bank можно бесконечно брать кредиты
-mfm-bank вы не можете вывести средства уходят за экран
 mfm-bank запретить передавать токены другому юзеру если делегирован
 mfm-token emit 1_000_000_000 bug
 mfm-wallet стейкинг в дистрибуции
@@ -55,6 +46,7 @@ mfm-data help параметры+дескрипшен+данные в кеше (
 mfm-telegram поднять на java
 mfm-token trans нет received
 mfm-exchange нет заполнения через сокеты
+mfm-token массовые aidrops max 3 receivers
 
 
 идеи
