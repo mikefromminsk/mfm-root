@@ -19,7 +19,6 @@ mfm-exchange в стакане 2% находится gas в зависипост
 mfm-exchange Выделить свою заявку другим цветом в стакане (с меньшей прозрачностю)
 mfm-exchange bot Увеличить диапазоны работы бота с 5 минут на 15
 mfm-staking сколько максимально можно застейкать
-mfm-staking при загрузке показывается 0 милисекнду
 mfm-staking Стейкинг автоматически отменился на аккаунте ed79bfb00ac613b079f0d27ea1fbd662
 mfm-staking нельзя стейкать свое показтьне сообщением а текстом на экране
 mfm-staking на русском языке минимальное количество награды выходят за экран
@@ -36,13 +35,8 @@ mfm-wallet ответы на русском ошибки
 mfm-wallet toast usdt key is not right Заменить на pin code is not right (ключи с сервера переводить на клиенте)
 mfm-wallet toast вы получили деньги от в сообщении в toast
 mfm-wallet trans двойной клин на транзакцию открывает 2 окна
-mfm-wallet trans удалить на транзакций логин автоматический
 mfm-wallet trans для логина оставить меню снижу
-mfm-wallet login сделать проверку что ты сохранил код
-mfm-wallet login после удаления seed можно нажать логин
 mfm-wallet login нужно 12 слов указать в логине
-mfm-wallet login третья строчка в логине перекрывается textarea
-mfm-wallet login скопировать кнопка в логине
 mfm-wallet search закрыть в поиске для удаления текста
 mfm-wallet settings Сделать список токенов созданный конкретным пользователем
 mfm-wallet settings при перезагрузке слетает язык (ru-BY)
@@ -51,7 +45,7 @@ mfm-wallet settings скрыть админскую панель для юзер
 mfm-wallet settings funnel DAU большими числами в начало что бы стремиться
 mfm-wallet settings оцените нас на trust pilot старое название
 mfm-wallet settings dayly active users не показывает и расстояние до title нет
-mfm-wallet profile mfна часовом графике неправильно стоят свечи
+mfm-wallet profile на часовом графике неправильно стоят свечи
 mfm-wallet profile аналитика не работатет на токенпрофиле
 mfm-wallet profile Проверить что куда подевался токен бруклин в токеномике (вместо cicrulation supply сделать соклько у юзеров)
 mfm-wallet profile readme токена на профайле обновить
