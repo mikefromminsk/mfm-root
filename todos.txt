@@ -1,19 +1,13 @@
-mfm-wallet открывается токен профиль при перезагрузке если даже ты вышел на главную
 mfm-token сделать архивную ноду
-mfm-wallet home тикеры полныe с тремя точками а не сокращение
-mfm-exchange exchange to BigHash
-    mfm-exchange добавить историю ордеров + title для cols таблицы orders
-    mfm-exchange заявка поменять на активные заявки
-mfm-exchange сохранение пинкода для exchange убрать
-mfm-exchange orders средняя цена покупки
-mfm-exchange При закрытии открытии биржи не отключаются и не переподключены ются сокеты
-mfm-exchange volume24 = 0
-mfm-exchange Выделить свою заявку другим цветом в стакане (с меньшей прозрачностю)
+mfm-exchange При закрытии открытии биржи не отключаются и не переподключаются сокеты
 mfm-mining отрубать майнинг если окно закрыто
 safari login после ввода логин пароль и submit не закрывает окно (со второго раза срабоатывает)
 safari после создания токена не закрывается последнее окно
 safari mfm-wallet не открывается автоматически логин на айфоне
 safari при вводе пинкода один символ за два на айфоне
+safari distribution убрать выделение на дистрибуции на айфоне
+mfm-wallet home открывается токен профиль при перезагрузке если даже ты вышел на главную
+mfm-wallet home тикеры полныe с тремя точками а не сокращение
 mfm-wallet ответы на русском ошибки
 mfm-wallet toast usdt key is not right Заменить на pin code is not right (ключи с сервера переводить на клиенте)
 mfm-wallet toast вы получили деньги от в сообщении в toast
@@ -23,28 +17,23 @@ mfm-wallet settings при перезагрузке слетает язык (ru-
 mfm-wallet settings язык браузера заменить на язык который используется
 mfm-wallet settings скрыть админскую панель для юзеров у которых нет токена владельцев
 mfm-wallet settings funnel DAU большими числами в начало что бы стремиться
-mfm-wallet settings оцените нас на trust pilot старое название
-mfm-wallet settings dayly active users не показывает и расстояние до title нет
-mfm-wallet profile на часовом графике неправильно стоят свечи
+mfm-wallet settings daily active users не показывает и расстояние до title нет
 mfm-wallet profile аналитика не работатет на токенпрофиле
 mfm-wallet profile Проверить что куда подевался токен бруклин в токеномике (вместо cicrulation supply сделать соклько у юзеров)
 mfm-wallet profile readme токена на профайле обновить
-mfm-wallet wallet добавить на кошелёк сразу адрес скопировать
 mfm-wallet wallet пользователь хочет видеть что он купил токены даже пока заявка в обработке
 mfm-wallet distribution exchange должен быть минимум 1 процент
     mfm-exchange Указать минимальное количество токенов для саппорта бота
-mfm-wallet distribution убрать выделение на дистрибуции на айфоне
 mfm-wallet distribution Описать красным цветом сколько человек получит
-
 mfm-wallet airdrop promocode огранить пробелы и симловы
 mfm-wallet airdrop инкогнито при использовании айрдропов открывается окно логина даже если ты залогинен
-mfm-wallet airdrop А не указывается что я получил когда вписал промокод
+mfm-wallet airdrop не указывается что я получил когда вписал промокод
 mfm-wallet airdrop А когда создаёшь airdrop надо указывать количество человек которые будут получать этот игрок
 mfm-wallet airdrop не понятно что это создавать а не получать (описание снизу как работает airdrop)
-mfm-wallet airdrop box называть (giftbox) make box, open box
 mfm-telegram отписать что в обработке
 
 low priority
+mfm-wallet search default "" top search
 mfm-staking Стейкинг автоматически отменился на аккаунте ed79bfb00ac613b079f0d27ea1fbd662
 mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
 mfm-wallet trans поле отправить в чате
@@ -92,6 +81,7 @@ mfm-wallet home сделать дизайн md крассивый как landing
 mfm-staking сколько максимально можно застейкать (разделить аккаунты ревордов и депозитов)
 mfm-wallet trans двойной клик на транзакцию открывает 2 окна
 mfm-exchange сокеты группировать отсылку по секундам
+mfm-exchange orders средняя цена покупки
 
 восстановить explorer
 восстановить recipies
