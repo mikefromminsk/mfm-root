@@ -1,3 +1,46 @@
+mfm-home анимация показать что обновляется страница
+mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
+mfm-profile графики брать с койнмаркеткапа
+mfm-home бургер меню
+mfm-home бесконечный список токенов
+error settings Serach
+mfm-login копировать кнопка анимация мигания
+mfm-settings нет в pushhistry
+mfm-search нет в pushhistry
+mfm-credit нет в pushhistry
+mfm-language смена языка без перезагрузки
+mfm-telegram vavilon с большой буквы в боте
+mfm-slides dots сделать под лайдами
+mfm-slides сделать 5 слайдов что бы было незаметна последняя анимация
+mfm-slides выводить на полноэкранную рекламу
+mfm-trans удалю все регистрации
+mfm-trans выбор периода
+mfm-trans выбор вида чат или список транзакций
+mfm-trans support в чате не открывается
+mfm-wallet title увеличить
+mfm-airdrop текст сместить влело
+mmf-airdrop секретный промокод anal
+mfm-send книга людей с транзакциями
+mfm-send после того как сделал send именуй кошелек
+
+mfm-wallet shadow убрать у слайдов
+mmf-token загрузка предыдушего снепшота
+mfm-p2p отправка уведомлений
+mfm-login пробел между условия и приложениями
+mfm-bot настройка какой аккаунт куда
+mfm-exchange перенести кнопку настройки бота
+настройки ботов берут аккаунты из своего кошелька
+mfm-wallet send 050
+mfm-login когда скопировал ширина кнопки копировать меняется
+mfm-distribution logo изменить дефаултные иконки
+mfm-walet аналитика все токены неправильная (указывет что всего 2 токена)
+mfm-settings изменить пинкод
+mfm-pin
+mfm-airdrop статистика airdrop и уведомлдения что кто то получил
+mfm-trans ц=вет отправки красный должен быть угадай какой
+mfm-wallet указать Кошелек 1
+
+
 safari login после ввода логин пароль и submit не закрывает окно (со второго раза срабоатывает)
 safari после создания токена не закрывается последнее окно
 safari mfm-wallet не открывается автоматически логин на айфоне
@@ -66,35 +109,21 @@ mfm-wallet settings скрыть админскую панель для юзер
 восстановить explorer
 восстановить recipies
 Восстановить депозиты и withdrawals
-восстановить налоги
-    % налогов из data
+восстановить налоги (% налогов из data)
 
-идеи
-mfm-token stocks Отправлять дивиденды только топу у которого находится минимум 1% от соплая
-mfm-token Сделать аренду токенов на получение Газа
-mfm-wallet settings backup
-mfm-bank Кредитный рейтинг
-mfm-bank генерировать username из seed
-mfm-bank не выдавать кредиты если фингерпринт совпадает
-mfm-bank rating пригласить друзей
-mfm-bank rating зависит от страны
-mfm-bank deposit перейти на usdc
-mfm-bank сохранять ответы в аналитику
-mfm-wallet received сделать как blik
+settings backup
+blik
 нейросеть которая сама создает токены
-mfm-exhcnage рассчитывать стартовую цену по circularion supply
 Мод для Майнкрафта(передавать предметы между вайпами)
-mfm-token consensus процент побитовое
-mfm-wallet settings уровни пользователя В настройках и обучение для повышения
-mfm-wallet на холме сверху указывать домен сервера к которому подключён
-mfm-wallet анимированные лого
-mfm-telegram автологин через telegram и смена пароля (генерировать пароль)
+анимированные лого
+вход через telegram и смена пароля (генерировать пароль)
+хеджирование
+мемпул
+node list
 
 Global
     p2p
     перейти на linux
-    убрать wamp
-    Три ноды android (node list)
     consensus
 
 Инвестиции
