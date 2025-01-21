@@ -1,3 +1,10 @@
+offers cancel
+send payment id
+profile analytics
+gas based on usdt
+select pln byn
+sell buy offers
+
 mfm-home анимация показать что обновляется страница
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
 mfm-profile графики брать с койнмаркеткапа
@@ -22,8 +29,6 @@ mfm-airdrop текст сместить влело
 mmf-airdrop секретный промокод anal
 mfm-send книга людей с транзакциями
 mfm-send после того как сделал send именуй кошелек
-
-mfm-wallet shadow убрать у слайдов
 mmf-token загрузка предыдушего снепшота
 mfm-p2p отправка уведомлений
 mfm-login пробел между условия и приложениями
