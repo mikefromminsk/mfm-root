@@ -1,6 +1,8 @@
-offers cancel
-send payment id
 sell buy offers
+send payment id
+offers cancel
+message order created
+appeal attach file
 
 mfm-home анимация показать что обновляется страница
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
