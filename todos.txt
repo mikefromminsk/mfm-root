@@ -1,8 +1,5 @@
 offers cancel
 send payment id
-profile analytics
-gas based on usdt
-select pln byn
 sell buy offers
 
 mfm-home анимация показать что обновляется страница
