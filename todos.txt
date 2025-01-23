@@ -1,8 +1,8 @@
-sell buy offers
 send payment id
 offers cancel
-message order created
+message order changed
 appeal attach file
+antiprice
 
 mfm-home анимация показать что обновляется страница
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
