@@ -1,3 +1,34 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+mfm-mining список нод
+mfm-mining сделать второй чейн для контрактов (data HashMap to BigMap)
+mfm-mining /mfm-mining25m10 50% year 10 min mint
+mfm-release минграции при старте если версия базы выше то удалить все кроме транзакций и выполнить заново тразакции (удаление всего кроме транзакций токенов и контраактов)
+mfm-release синхронизация или с клиента или с сервера
+mfm-release files sync
+
+mfm-release В каждой дистрибуции новой версии сети указывать номер истории майнинга как даты
+mfm-start Инструкция по поднятию ноды
+mfm-release соревнование на TPS айдроп
+mfm-mining отрубать майнинг если окно закрыто
+mfm-mining процент минтинга
+mfm-release Сделать невидимым в индексе.гид
+mfm-release Разделить ветки а гите
+
 mfm-p2p send payment id
 mfm-p2p offers cancel
 mfm-p2p appeal attach file
@@ -13,23 +44,12 @@ mfm-p2p разобраться с статусами а том мерчанту 
 mfm-p2p уведомление после смены статуса
 mfm-p2p уведомление чат
 mfm-p2p лимиты на офферах anvalible без блокировки и фила
-mfm-mining Топ 10 аккаунтов токена
-mfm-mining /mfm-mining25m10 50% year 10 min mint
-mfm-mining сделать второй чейн для контрактов
-mfm-mining отрубать майнинг если окно закрыто
-mfm-start В каждой дистрибуции новой версии сети указывать номер истории майнинга как даты
-mfm-start сделать архивную ноду
-mfm-start при старте если версия базы выше то удалить все кроме транзакций и выполнить заново тразакции
-mmf-start загрузка предыдушего снепшота (удаление всего кроме транзакций токенов и контраактов)
-mfm-start data HashMap to BigMap
-mfm-start Инструкция по поднятию ноды
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
 mfm-home бесконечный список токенов
 mfm-language смена языка без перезагрузки
 mfm-distribution logo изменить дефаултные иконки
 mfm-airdrop статистика airdrop и уведомлдения что кто то получил
 mfm-exchange bot settings какой аккаунт куда
-mfm-mining процент минтинга
 
 release
 p2p finish
