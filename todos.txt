@@ -58,6 +58,7 @@ usdt init based tron
 node sync
 
 low priority
+mfm-trans полвторить транзакцию
 mfm-release соревнование на TPS айдроп
 mfm-release files sync
 mfm-profile графики брать с койнмаркеткапа
