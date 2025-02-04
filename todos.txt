@@ -1,13 +1,22 @@
 mfm-landing
 mfm-landing добавить аналитику TPS
-mfm-release sync data Синхронизация данных будет со ссылкой на next hash когда транзакция записывается то данное из буферных данных достаются в общую базу
-mfm-release sync files node.jar
-mfm-release минграции При старте по номеру версии базы данных проводить altertable
+mfm-release sync node.jar
+mfm-release перейти на сокеты jetty
 mfm-release перевести биржу и p2p на центральные сервера
+mfm-release vavilon.network
+mfm-release депозит виздравал кошелек трон
+mfm-release exchange to BigMap
+Перед релизом релиз ночь гугл плей 
+mfm-release мост трон
 mfm-mining Список узлов с пингами
 mfm-mining miner на серваке
 mfm-mining Указывать в аналитике сложность майнинга
 mfm-mining процент минтинга
+mfm-mining награда без децималов
+mfm-mining размер банка не меняется
+mfm-mining скорость 0 указывается
+mfm-mining нет последнего времени блока
+mfm-mining транзакции не в той последовательности
 mfm-wallet 0% USDT на wallet
 mfm-wallet поставить майнинг на главную и на кошелек
 mfm-wallet удаленного дебагинга и аналитики (client errors, request)
@@ -59,6 +68,7 @@ mfm-mining пулы майнинга
 mfm-mining предлагать установить приложение
 
 low priority
+mfm-release перед перезагрузкой сервиса ждать окончания всех запросов
 mfm-release Mempool
 mfm-release Explorer
 mfm-release market-maker
@@ -125,11 +135,24 @@ mfm-wallet Цены в локальных валютах
 mfm-wallet trans двойной клик на транзакцию открывает 2 окна
 mfm-wallet settings backup
 mfm-wallet Убрать кнопку "Копировать seed" для "безопасности"
+mfm-landing dev дизайн https://build.avax.network/docs/avalanche-l1s
+mfm-analytics DAU не фронта а аккаунтов сети
 
+
+mfm-explorer https://subnets.avax.network/stats/network?
 
 восстановить recipies
 Восстановить депозиты и withdrawals для быстрого p2p
 восстановить налоги (% налогов из data)
+
+Ошибки 1.0
+    99% mining 1% exchange (все токены должны майниться в 1 мин)
+    1min майнинга от 10000.0000 = 0.0019 за первый год
+    vavilon на vavicoin
+    газ сразу идет на биржу (нужен контрак дивидентов)
+    майнером негде взять первый газ
+    usdt на usdv
+
 
 сделать презентацию
     основных алгоритмов по токенам
@@ -168,6 +191,7 @@ linux
     Закрытие сервера
     если usdt аккаунт делегирован то все что создается тоже делегировано
     выгонятяь токены которые не майнят или не используются
+
 
 потребительские платежи
     cканер qr кодов
@@ -252,3 +276,17 @@ telegram messages
     Сделать контракт который говорит если не будешь пополнять баланс по все твои деньги уйдут на какой-то общий депозит
     казино
     пирамида
+
+
+// API SubtleCrypto
+async function sha256(message) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+// Пример использования
+sha256('Пример строки').then(hash => console.log(hash));
