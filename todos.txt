@@ -68,6 +68,8 @@ mfm-mining пулы майнинга
 mfm-mining предлагать установить приложение
 
 low priority
+mfm-explorer список тразакций конкретного токена
+mfm-explorer mfm-p2p версия ноды
 mfm-release перед перезагрузкой сервиса ждать окончания всех запросов
 mfm-release Mempool
 mfm-release Explorer
