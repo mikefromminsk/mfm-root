@@ -10,8 +10,6 @@ mfm-servers start
 mfm-mining Можно убрать биржу а в контракте просто накопление
 
 
-mfm-landing доделать меню
-
 mfm-release sync node.jar
 mfm-release перевести биржу и p2p на центральные сервера
 mfm-release vavilon.network
