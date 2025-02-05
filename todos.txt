@@ -1,7 +1,19 @@
+mfm-mining контракт распределения газа лотыреия
+Сделать несколько сетей отличаться они будут способом распределения комиссии
+В версии указывать
+    название сети Minenet Staynet Richnet
+    Хэш-jar версии
+    вайтлистов и список black-листов
+
+В пароли надо внедрить название сети
+При старте сервера сначала узнать у master сервера версию его обновиться до неё и потом только загружать данные
+Можно убрать биржу а в контракте просто накопление
+Mitsubishi is supposed to control contract pyramid the galaxy
+
 mfm-landing
-mfm-landing добавить аналитику TPS
-mfm-release sync node.jar
 mfm-release перейти на сокеты jetty
+mfm-wallet analytics добавить аналитику TPS
+mfm-release sync node.jar
 mfm-release перевести биржу и p2p на центральные сервера
 mfm-release vavilon.network
 mfm-release депозит виздравал кошелек трон
@@ -154,6 +166,7 @@ mfm-explorer https://subnets.avax.network/stats/network?
     газ сразу идет на биржу (нужен контрак дивидентов)
     майнером негде взять первый газ
     usdt на usdv
+    майнинг требует железо
 
 
 сделать презентацию
@@ -238,6 +251,7 @@ refactoring
     GENESIS_ADDRESS = "owner"; -> registrator
     Оптимизируя транзакцию до полумиллиона транзакций секунд
     В базе хранить неполное хеши а только начало и конец по четыре символа
+    удалить все ненужные библиотеки jar jetty
     верстка для мониторов
 
 Переводы
