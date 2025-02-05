@@ -1,32 +1,27 @@
 mfm-mining контракт распределения газа лотыреия
 Сделать несколько сетей отличаться они будут способом распределения комиссии
-В версии указывать
+mfm-mining nodes версии указывать
     название сети Minenet Staynet Richnet
-    Хэш-jar версии
+    Хэш-jar версии (При старте сервера Загрузить версию мастера)
     вайтлистов и список black-листов
 
-В пароли надо внедрить название сети
-При старте сервера сначала узнать у master сервера версию его обновиться до неё и потом только загружать данные
-Можно убрать биржу а в контракте просто накопление
-Mitsubishi is supposed to control contract pyramid the galaxy
+mfm-wallet login В пароли надо внедрить название сети
+mfm-servers start
+mfm-mining Можно убрать биржу а в контракте просто накопление
 
-mfm-landing
-mfm-release перейти на сокеты jetty
-mfm-wallet analytics добавить аналитику TPS
+
+mfm-landing доделать меню
 mfm-release sync node.jar
 mfm-release перевести биржу и p2p на центральные сервера
 mfm-release vavilon.network
 mfm-release депозит виздравал кошелек трон
 mfm-release exchange to BigMap
-Перед релизом релиз ночь гугл плей 
+mfm-release релиз на гугл плей
 mfm-release мост трон
 mfm-mining Список узлов с пингами
-mfm-mining miner на серваке
+mfm-mining miner на серваке exchange
 mfm-mining Указывать в аналитике сложность майнинга
 mfm-mining процент минтинга
-mfm-mining награда без децималов
-mfm-mining размер банка не меняется
-mfm-mining скорость 0 указывается
 mfm-mining нет последнего времени блока
 mfm-mining транзакции не в той последовательности
 mfm-wallet 0% USDT на wallet
@@ -66,7 +61,6 @@ mfm-token Вообще запретить больше 1 млн коинов
 
 mfm-telegram для саппорта нужен бот
 mfm-p2p Использовать веб-пуши
-mfm-safari лазает на влево и вправо главная страница
 mfm-release Consensus
 mfm-exchange bot хеджирование койна к койну с мультипликатором дропкойн 20% вавикаойна
 mfm-exchange bot Делит цену на циркулешницуплай
@@ -80,6 +74,7 @@ mfm-mining пулы майнинга
 mfm-mining предлагать установить приложение
 
 low priority
+mfm-wallet analytics добавить аналитику TPS
 mfm-explorer список тразакций конкретного токена
 mfm-explorer mfm-p2p версия ноды
 mfm-release перед перезагрузкой сервиса ждать окончания всех запросов
@@ -167,6 +162,8 @@ mfm-explorer https://subnets.avax.network/stats/network?
     майнером негде взять первый газ
     usdt на usdv
     майнинг требует железо
+    usdt через quiz
+    mining address started from 32 symbols
 
 
 сделать презентацию
