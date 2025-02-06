@@ -1,3 +1,7 @@
+global
+    провести aidrop
+
+
 mfm-mining контракт распределения газа лотыреия
 Сделать несколько сетей отличаться они будут способом распределения комиссии
 mfm-mining nodes версии указывать
@@ -6,17 +10,18 @@ mfm-mining nodes версии указывать
     вайтлистов и список black-листов
 
 mfm-wallet login В пароли надо внедрить название сети
-mfm-servers start
 mfm-mining Можно убрать биржу а в контракте просто накопление
 
 
 mfm-release sync node.jar
 mfm-release перевести биржу и p2p на центральные сервера
 mfm-release vavilon.network
+mfm-release vaviswap.com
 mfm-release депозит виздравал кошелек трон
 mfm-release exchange to BigMap
 mfm-release релиз на гугл плей
 mfm-release мост трон
+mfm-wallet десктопная версия
 mfm-mining miner на серваке exchange
 mfm-mining процент минтинга
 mfm-mining нет последнего времени блока
@@ -43,6 +48,7 @@ mfm-p2p order итого поставить вниз
 mfm-p2p order идентификатор
 mfm-p2p уведомление после смены статуса
 mfm-p2p уведомление чат
+mfm-airdrop придемать где кнопку поставить
 mfm-airdrop указывать дату старта эрдропа
 mfm-airdrop статистика airdrop и уведомлдения что кто то получил
 mfm-analytics calc volume by user
@@ -92,7 +98,8 @@ mfm-exchange сделать очистку всех ордеров и верну
 mfm-exchange сокеты группировать отсылку по секундам
 mfm-exchange orders средняя цена покупки
 mfm-exchange bot X определяет мультипликатор для торгового бота
-mfm-login при логине показывать GDPR и принять
+mfm-exchange убрать недельные графики из записи. Строить на основе дневнх
+mfm-login при логине показывать COOKIE save и принять
 mfm-mail unsubscribe
 mfm-mining java miner
 mfm-release соревнование на TPS аирдроп
@@ -285,17 +292,3 @@ telegram messages
     Сделать контракт который говорит если не будешь пополнять баланс по все твои деньги уйдут на какой-то общий депозит
     казино
     пирамида
-
-
-// API SubtleCrypto
-async function sha256(message) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-}
-
-// Пример использования
-sha256('Пример строки').then(hash => console.log(hash));
