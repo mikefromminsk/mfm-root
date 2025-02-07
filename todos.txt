@@ -1,7 +1,6 @@
 mfm-landing на весь экран хром мобильный iphone
 mfm-wallet home slide iphone Нельза слайды
 mfm-wallet home change 24 неверное
-mfm-settings аккаунт не найден error
 mfm-mining не показано что нужны usdt для майнинга
 mfm-mining кнопка майнинга не работает
 mfm-staking стейкинг не работает нужно плашка что банк пустой
