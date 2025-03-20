@@ -1,3 +1,5 @@
+mfm-release error log > 11 GB
+
 mfm-landing на весь экран хром мобильный iphone
 mfm-wallet home slide iphone Нельза слайды
 mfm-wallet home change 24 неверное
@@ -165,7 +167,6 @@ mfm-explorer https://subnets.avax.network/stats/network?
 Ошибки 1.0
     99% mining 1% exchange (все токены должны майниться в 1 мин)
     1min майнинга от 10000.0000 = 0.0019 за первый год
-    vavilon на vavicoin
     газ сразу идет на биржу (нужен контрак дивидентов)
     майнером негде взять первый газ
     usdt на usdv
@@ -250,6 +251,7 @@ refactoring
     В базе хранить неполное хеши а только начало и конец по четыре символа
     удалить все ненужные библиотеки jar jetty
     верстка для мониторов
+    dataSet("mining/" + domain + "/difficulty", "" + difficulty);
 
 Переводы
 telegram messages
