@@ -1,4 +1,28 @@
-mfm-release error log > 11 GB
+mfm-mining неверный nonce телефон против против сервера
+когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
+mfm-landing bagbounty программа
+mfm-landing не работают доки
+
+mfm-landing Подобрать данные для фаундеров
+mfm-landing Подготовить LinkedIn
+mfm-landing Проверить соцсети Оли
+mfm-release Запустить вторую ноду
+mfm-landing Ответить на вопрос как стать первыми на конференции (самый отвратительный коммент внизу лэндинга)
+
+mfm-release Сделать контракты на deposit and withdrawal
+mfm-release withdrawal tron разделить за стейками трон на несколько аккаунтов
+
+
+mfm-wallet список токенов на главной и поиск снизу
+mfm-wallet убрать биржу
+mfm-wallet убрать стейкинг
+mfm-wallet убрать квизы
+mfm-wallet объем в токенпрофиле
+mfm-landing цифры аналитики
+mfm-wallet своп на покупку
+mfm-wallet своп инмакт
+mfm-landing explorer version не показывать снизу если
+
 
 mfm-landing на весь экран хром мобильный iphone
 mfm-wallet home slide iphone Нельза слайды
