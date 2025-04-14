@@ -1,13 +1,33 @@
-mfm-wallet upload logo
-mfm-wallet search
-mfm-wallet pool swap
+mfm-wallet нет квизов и нет газа для майнинга
+mfm-wallet объединить священную линию и тестовую
+mfm-wallet mining выкидывает с ошибкой неверный nonce
+mfm-wallet mining продолжается
+mfm-wallet нет продаж на график е
+mfm-wallet swap не горит
+mfm-wallet swap нельлзя поменять токен
+mfm-wallet вернуть поиск
+mfm-wallet search добавить поиск на одну букву
+mfm-wallet add liquidity перед swap сначала
+mfm-wallet отсортировать активы по валюе
+базовый доллар
+    майнинг газа
+    эйдроп
+    биржа
+
+добавить в
+mfm-landing лого в хедере сравнять с текстом
+
 mfm-explorer start version
-mfm-wallet в профиле токена указывать транзакции
 mfm-swap разделить в аналитике cex price и dex price
+mfm-swap buy switcher
+mfm-swap sync issue tokenacctountreg not in transaction
+
+чего не хватает
+    шлюза вывода
+    метода распределения коммиссий
+    системы эмитирования газа
 
 mfm-landing анимация двигающихся градиентов на херо блоке
-
-съездить домой за маком
 
 mfm-mining неверный nonce телефон против против сервера
 когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
@@ -18,15 +38,14 @@ mfm-release withdrawal tron разделить за стейками трон н
 
 
 mfm-wallet список токенов на главной и поиск снизу
-mfm-wallet убрать биржу
-mfm-wallet убрать стейкинг
-mfm-wallet убрать квизы
-mfm-wallet объем в токенпрофиле
+восстановить биржу
+восстановить стейкинг
+восстановить квизы
+mfm-wallet объем в токен профиле
 mfm-landing цифры аналитики
 mfm-wallet своп на покупку
 mfm-wallet своп инмакт
 mfm-landing explorer version не показывать снизу если
-
 
 mfm-release Запустить вторую ноду
 mfm-landing на весь экран хром мобильный iphone
