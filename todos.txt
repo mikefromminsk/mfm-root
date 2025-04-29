@@ -3,15 +3,9 @@ mfm-exchange боты
 mfm-exchange цены и графики
 
 mfm-landing добавить в меню cex exchange
-mfm-exchange не приходит уведомление когда приходят деньги внутренние и депозит
-mfm-exchange поменять цвета
-mfm-exchange активы в кошельке
-mfm-exchange нет транзакций в кошельке
-mfm-exchange внутренний перевод не виден в транзакциях
 mfm-exchange депозитный адрес для всех доменов
 mfm-exchange withdrawal нет макс
 mfm-exchange withdrawal неправильное саксес сообщение
-mfm-wallet send не активировать пока 64 символа не будет
 
 
 
