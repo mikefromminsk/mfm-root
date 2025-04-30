@@ -1,12 +1,10 @@
-mfm-exchange логин olga2 12345 token invalid
-mfm-exchange боты
-mfm-exchange цены и графики
+mfm-exchange deposit tron
+mfm-wallet swap
 
-mfm-landing добавить в меню cex exchange
+mfm-exchange логин olga2 12345 token invalid
 mfm-exchange депозитный адрес для всех доменов
 mfm-exchange withdrawal нет макс
 mfm-exchange withdrawal неправильное саксес сообщение
-
 
 
 mfm-wallet нет квизов и нет газа для майнинга
