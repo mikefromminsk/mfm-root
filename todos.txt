@@ -1,7 +1,7 @@
 mfm-exchange deposit tron
-mfm-wallet swap
+usdt deposit withdrawal на строке токена
 
-mfm-exchange логин olga2 12345 token invalid
+mfm-wallet profile deposit usdt button
 mfm-exchange депозитный адрес для всех доменов
 mfm-exchange withdrawal нет макс
 mfm-exchange withdrawal неправильное саксес сообщение
@@ -11,11 +11,9 @@ mfm-wallet нет квизов и нет газа для майнинга
 mfm-wallet объединить священную линию и тестовую
 mfm-wallet mining выкидывает с ошибкой неверный nonce
 mfm-wallet mining продолжается
-mfm-wallet нет продаж на график е
-mfm-wallet swap не горит
+mfm-wallet нет продаж на графике vavilon
+mfm-wallet swap не работает
 mfm-wallet swap нельлзя поменять токен
-mfm-wallet вернуть поиск
-mfm-wallet search добавить поиск на одну букву
 mfm-wallet add liquidity перед swap сначала
 mfm-wallet отсортировать активы по валюе
 базовый доллар
