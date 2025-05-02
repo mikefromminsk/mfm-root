@@ -1,4 +1,3 @@
-mfm-exchange deposit tron
 usdt deposit withdrawal на строке токена
 
 mfm-pigeon аналитику входа
@@ -18,7 +17,7 @@ mfm-pigeon меню справа свеху иконка wallet и количе�
 mfm-exchange restore password
 mfm-wallet сохранение сид фразы и логин по одной кнопке
 mfm-exchange описание токенов
-mfm-exchange депозит не работает
+mfm-wallet депозит не работает
 mfm-exchange exchange  убрать автоизменение price input
 mfm-exchange скрывать слайды в поиске и нет нижнего подчеркивания в input
 mfm-exchange search ui bug
@@ -39,10 +38,6 @@ mfm-wallet swap не работает
 mfm-wallet swap нельлзя поменять токен
 mfm-wallet add liquidity перед swap сначала
 mfm-wallet отсортировать активы по валюе
-базовый доллар
-    майнинг газа
-    эйдроп
-    биржа
 
 добавить в
 mfm-landing лого в хедере сравнять с текстом
@@ -318,7 +313,6 @@ linux
 
 ui speedup
     telegram-web-app.js load only open in telegram (has bot parameter)
-    remove nocahce
     удалить angular material
     Удалить .block в md-dialog
     сделать send без getAccount.prev_key
