@@ -1,6 +1,30 @@
 mfm-exchange deposit tron
 usdt deposit withdrawal на строке токена
 
+mfm-pigeon аналитику входа
+mfm-pigeon фоны растягиваются
+mfm-pigeon голубка в меню за какашками и маленькая какашка
+mfm-pigeon какашки съезжают в угол
+mfm-pigeon крипты
+mfm-pigeon уровней креативные варианты в коспмосе военная база, политическая,
+mfm-pigeon счет не правильно
+mfm-pigeon гравитация какашек
+mfm-pigeon голуби по середине и если в них попадаешь то тебе пизда
+mfm-pigeon ссылку на соцсети
+mfm-pigeon название игры ShitBomb
+mfm-pigeon winscene собрать 20 токенов или перейти на следующий уровень 100 токенов
+mfm-pigeon меню справа свеху иконка wallet и количество токенов анимация развертывания с лого сети
+
+mfm-exchange restore password
+mfm-wallet сохранение сид фразы и логин по одной кнопке
+mfm-exchange описание токенов
+mfm-exchange депозит не работает
+mfm-exchange exchange  убрать автоизменение price input
+mfm-exchange скрывать слайды в поиске и нет нижнего подчеркивания в input
+mfm-exchange search ui bug
+mfm-wallet launch сообщение вы получили столько
+
+mfm-wallet storage upload file
 mfm-wallet profile deposit usdt button
 mfm-exchange депозитный адрес для всех доменов
 mfm-exchange withdrawal нет макс
@@ -8,7 +32,6 @@ mfm-exchange withdrawal неправильное саксес сообщение
 
 
 mfm-wallet нет квизов и нет газа для майнинга
-mfm-wallet объединить священную линию и тестовую
 mfm-wallet mining выкидывает с ошибкой неверный nonce
 mfm-wallet mining продолжается
 mfm-wallet нет продаж на графике vavilon
@@ -251,6 +274,7 @@ mfm-explorer https://subnets.avax.network/stats/network?
     pin показывать предварительные коммиты контракта
     файлы модифицируют index.html и скачивают на компы вирусы. Photo.scr. Автонастройка прав или контрольная сумма всего.
     На создание usdt делать задержку аккаунта чтобы нельзя было создавать мультиакки
+    ftp admin password
 
 linux
     автообновление и автосоздание сертификатов
