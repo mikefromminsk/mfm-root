@@ -1,8 +1,10 @@
 usdt deposit withdrawal на строке токена
+mfm-wallet депозит не работает
+mfm-exchange синхронизировать нодыБРаспространение других запросов
+
 
 mfm-pigeon аналитику входа
 mfm-pigeon фоны растягиваются
-mfm-pigeon голубка в меню за какашками и маленькая какашка
 mfm-pigeon какашки съезжают в угол
 mfm-pigeon крипты
 mfm-pigeon уровней креативные варианты в коспмосе военная база, политическая,
@@ -10,14 +12,11 @@ mfm-pigeon счет не правильно
 mfm-pigeon гравитация какашек
 mfm-pigeon голуби по середине и если в них попадаешь то тебе пизда
 mfm-pigeon ссылку на соцсети
-mfm-pigeon название игры ShitBomb
 mfm-pigeon winscene собрать 20 токенов или перейти на следующий уровень 100 токенов
-mfm-pigeon меню справа свеху иконка wallet и количество токенов анимация развертывания с лого сети
 
 mfm-exchange restore password
 mfm-wallet сохранение сид фразы и логин по одной кнопке
 mfm-exchange описание токенов
-mfm-wallet депозит не работает
 mfm-exchange exchange  убрать автоизменение price input
 mfm-exchange скрывать слайды в поиске и нет нижнего подчеркивания в input
 mfm-exchange search ui bug
