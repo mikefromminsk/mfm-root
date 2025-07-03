@@ -1,9 +1,36 @@
+
+
+
+логирование и рестарт биржи по депозитам виздровалам и филам
+    public void balanceIncFromNetwork(String username,
+
+
+
++ удалить запись о взаимных ботов филинг
++ удаление графиков блоками по 4 мб и старт без первых блоков
++ графики обновляются всегда через секунду
+
+
+
+
+
+
+
+
 products
 mfm-usdt gas to swap + cex hedging
 mfm-tron withdrawal
 mfm-shit ?
 mfm-storage ?
 mfm-hosting
+mfm-exchange-арбиртаж swap fees
+mfm-pegiot покупка нфт + seed check + top table and dao competition(loto)
+mfm-poker
+
+mfm-wallet простая форма покупки из биржи
+mfm-exchange кнопка листинг вместо настройки бота
+mfm-exchange логин через mfm-wallet
+mfm-exchange придумать что будет после остановки бота
 
 usdt deposit withdrawal на строке токена
 mfm-wallet депозит не работает
