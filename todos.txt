@@ -1,31 +1,45 @@
 
 
-
-логирование и рестарт биржи по депозитам виздровалам и филам
-    public void balanceIncFromNetwork(String username,
-
+mfm-wallet недавние в приложениях
+mfm-token Увеличить количество переходов в списке ссылок в большой мапе
 
 
-+ удалить запись о взаимных ботов филинг
-+ удаление графиков блоками по 4 мб и старт без первых блоков
-+ графики обновляются всегда через секунду
+депозит на троне на старте зачисляет 222 доллара на кошелек
+    slide human dutch laptop toddler pony expose fantasy lumber dignity push wait
+загрузка из удаленной ноды
+login кнопка вставить из буфера сид фразу
+нет кнопки отправки usdt на token proifle
+    ng-show="domain != wallet.gas_domain"
+не показывается кнопка продать если у тебя есть только токены на токенпрофиле
+сокеты на трейде не показывает что пришли деньги
+выкидывает из аккаунта
+после входа на логин кнопка принять не активируется после копирования сид фразы
+трейд после изменения цены не обновляется amount
 
 
 
 
 
 
-
-
-products
-mfm-usdt gas to swap + cex hedging
-mfm-tron withdrawal
+products 1000 пользователей подписчиков на тг канал
+mfm-tron withdrawal usdt
+vavilon контракт на распределение газа + landing
 mfm-shit ?
-mfm-storage ?
 mfm-hosting
-mfm-exchange-арбиртаж swap fees
 mfm-pegiot покупка нфт + seed check + top table and dao competition(loto)
+
+mfm-telegram проверка на подписку
+mfm-telegram напиши мне и я создам тебе крипту
+mfm-telegram выбор тарифного плана
+mfm-telegram уведомления что сегодня намайнило на столько койнов
+mfm-telegram инструкция по повышению стоимости и созданию приложения
+mfm-telegram 1000 пользователей проведем розыгрыш на 1000$
+
+
+
+mfm-exchange-арбиртаж swap fees
 mfm-poker
+mfm-storage ?
 
 mfm-wallet простая форма покупки из биржи
 mfm-exchange кнопка листинг вместо настройки бота
