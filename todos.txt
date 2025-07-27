@@ -1,179 +1,142 @@
 
+high priority
+mfm-mining дважды нужно депозитить
+mfm-exchange сокеты на трейде не показывает что пришли деньги
+mfm-exchange нет ордербука не ставятся ордера
+mfm-telegram приходить сообщения о том что пришли балансы
+mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
+mfm-wallet send создание работает только из бота
+mfm-wallet бот майнинг эйдроп не должно быть не у владельца
+mfm-tron 2 адреса
+mfm-wallet Обучение кликам только первое нажатие
 
-Нужна какая то глобальная цель по пути которой человек будет выполнять об\днообразные действия
-
-Июль SELENIUM
-    3 баги 100 по пути к Airdrop.
-    4
-Август 10 subs
-    1
-    2
-    3
-    4
-Сентябрь 100 sub
-    1
-    2
-    3
-    4
-Октябрь 500 sub
-    1
-    2
-    3
-    4
-Ноября 1000 subs
-    1
-
-mfm-wallet логин на главной не работает второй раз
-mfm-wallet нет обновлений цен
-mfm-wallet нет редиректа с http на https изза этого разные логины в разные аккаунты
-mfm-mining себестоимость токена
-mfm-mining эффективная цена
+medium priority
+mfm-wallet капитализация по циркуляции на цену
+mfm-release vavilon саплай = 1_000_000 ?
+mfm-telegram переводы
+mfm-release дата создания selenium
+mfm-release Цены в локальных валютах
+mfm-token sync Проверить есть ли на reconnect refresh timer стоп таймер
+mfm-token sync убрать депозит листенер с сокетов и протестировать сокеты на большом времени 1 день 1 неделя
+mfm-mining нужно показывать как деньги утекают из аккаунта по миллли доллару и указать когда баланс закончится
 mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
-mfm-analytics много мусора
-
-друзья у которых более 1000 подписчиков
-сторы игр web для shitbomp
-factory of games
-tg onlyfans for sel
-
-
-фотка человека вместо голубя который срет на фоне своего района на гопников
-треки для настольгии
-
-
-10 subs
-протести мое приложение. и всем по доллару.
-
-
-
-mfm-landing footer нет документов
-mfm-landing не переводится меню
+mfm-mining проверить что контракт правильно высвобождает токены
+mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
+mfm-mining уведомления что сегодня намайнило
+mfm-tron блокировать когда скопировал ссылку и аналитика
+mfm-tron withdrawal usdt
+mfm-tron withdrawal разделить за стейками трон на несколько аккаунтов
+mfm-tron не блокируется адрес и когда блкируетяс и не разблокируется
+mfm-load сортировка всех по времени
+mfm-airdrop статистика airdrop и уведомлдения что кто то получил
+mfm-wallet логин на главной не работает второй раз
+mfm-wallet нет редиректа с http на https изза этого разные логины в разные аккаунты
 mfm-wallet после содания токена непонятно что нужно задепозитить деньги для майнинга(фраза майнинг платный)
 mfm-wallet accoutns сделать панель для своих токенов типо запустить airdrop майнить промокод bot (usdt ввод вывод)
-mfm-release vavilon саплай = 1_000_000 ?
-mfm-mining проверить что контракт правильно высвобождает токены
-mfm-telegram отсылать аналитику если зашел пользователь
-mfm-token sync Проверить есть ли на reconnect refresh timer стоп таймер
-mfm-release переустановить ubunty. Заражение вирусом только на Вавилон
-mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
-mfm-mining бабки сразу списываться начинают а не после выбора тарифа
-mfm-exchange убрать депозит листенер с сокетов и протестировать сокеты на большом времени 1 день 1 неделя
-mfm-wallet vacilon org не показывается в гугле поменять имя
-mfm-tron 2 адреса
-mfm-bot когда < 1 доллара то останавливать и ставить цену 0.0001
-mfm-exchange сокеты на трейде не показывает что пришли деньги
-mfm-wallet сделать вечную загрузку транзакций. и в поиске
-    mfm-analytics mining сделать загрузка дальше 30 свечей и в аналитике по умолчанию дни открывать
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
-mfm-wallet login добавить иконку сверху и когда фокус на сид то скрол
-mfm-wallet login кнопка вставить из буфера сид фразу
-mfm-wallet login после входа на логин кнопка принять не активируется после копирования сид фразы
+mfm-distribution кнопка листинг вместо настройки бота и сделать это после создания токена
+mfm-landing vavilon org не показывается в гугле
+mfm-landing footer нет документов
+mfm-landing не переводится меню
 mfm-landing mfm-wallet везде убрать слово блок
-mfm-wallet недавние в приложениях
-mfm-load дата создания selenium
-mfm-load сортировка всех по времени
-mfm-tron withdrawal usdt
-mfm-telegram проверка на подписку
-mfm-telegram уведомления что сегодня намайнило на столько койнов
-mfm-exchange-арбиртаж swap fees
-mfm-wallet простая форма покупки из биржи
-mfm-exchange кнопка листинг вместо настройки бота и сделать это после создания токена
-mfm-exchange придумать что будет после остановки бота
-mfm-exchange deposit vavilon id рандомный короткий и с минусом
-mfm-wallet Deposit Vavilon если нет в кошельке
-mfm-wallet Deposit Tron не блокируется адрес и когда блкируетяс и не разблокируется
-mfm-tron deposit нет qr кода (и два qr кода)
-mfm-wallet profile кнопка купить перекидывает (отправить на биржу кнопка)
-mfm-wallet profiel заблокировать отправить если баланс 0
-mfm-exchange mfm-wallet не понятно почему дыва раза логиниться
-mfm-wallet назвать не просто адрес а типо TRC20
 mfm-landing 1 блок это бесплатный 2 блок это скорость работы 3 чем отличается от других это делегирование 4 команда и телега
-mfm-contract DAO 2 аккаунта yes no (больше меньше)
 mfm-landing Добавить все приложения из стора
-mfm-docs инструкция по повышению стоимости и созданию приложения
-mfm-docs запросы и список каналов websockets
-mfm-wallet change pin
-mfm-exchange restore password
-mfm-wallet сохранение сид фразы и логин по одной кнопке
-mfm-exchange описание токенов
-mfm-exchange скрывать слайды в поиске и нет нижнего подчеркивания в input
-mfm-wallet launch сообщение вы получили столько
-mfm-wallet storage upload file
-mfm-wallet profile deposit usdt button
-mfm-exchange депозитный адрес для всех доменов
-mfm-exchange withdrawal нет макс
-mfm-exchange withdrawal неправильное саксес сообщение
-mfm-wallet нет квизов и нет газа для майнинга
-mfm-wallet mining выкидывает с ошибкой неверный nonce
-mfm-wallet mining продолжается
-mfm-wallet нет продаж на графике vavilon
-mfm-wallet swap не работает
-mfm-wallet swap нельлзя поменять токен
-mfm-wallet add liquidity перед swap сначала
-mfm-wallet отсортировать активы по валюе
-mfm-landing лого в хедере сравнять с текстом
-mfm-explorer start version
+mfm-landing цифры аналитики
+mfm-landing на весь экран хром мобильный iphone
+mfm-landing переводы + seo + seo token profiles
+mfm-search сделать вечную загрузку транзакций. и в поиске
+mfm-search 10000 токенов
+mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
+
 mfm-swap разделить в аналитике cex price и dex price
 mfm-swap buy switcher
 mfm-swap sync issue tokenacctountreg not in transaction
-mfm-landing анимация двигающихся градиентов на херо блоке
-mfm-mining неверный nonce телефон против против сервера
-когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
-mfm-landing bagbounty программа docs
-mfm-release Сделать контракты на deposit and withdrawal
-mfm-release withdrawal tron разделить за стейками трон на несколько аккаунтов
-mfm-wallet список токенов на главной и поиск снизу
-mfm-wallet объем в токен профиле
-mfm-landing цифры аналитики
-mfm-wallet своп на покупку
-mfm-wallet своп инмакт
-mfm-landing explorer version не показывать снизу если
-mfm-landing на весь экран хром мобильный iphone
-mfm-wallet home slide iphone Нельза слайды
-mfm-wallet home change 24 неверное
-mfm-mining не показано что нужны usdt для майнинга
-mfm-staking стейкинг не работает нужно плашка что банк пустой
-mfm-wallet profile пополнить p2p onchain и внутрибиржевой
-mfm-pin code убрать фокус со всех других полей и скрыть клавиатуру
-mfm-pin Установить пинкод вместо ввести
-mfm-exchange транзакция уже существует
+mfm-swap своп инмакт
+mfm-swap add liquidity перед swap сначала
+mfm-swap когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
+
+low priority
+mfm-analytics mining сделать загрузка дальше 30 свечей и в аналитике по умолчанию дни открывать
+mfm-docs инструкция по повышению стоимости и созданию приложения
+mfm-docs запросы и список каналов websockets
+mfm-docs размеры шрифтов h1 междтрочный интервал
 mfm-distribution автозаполнение не выключено
 mfm-distribution показывать график пирога и снизу выбор как у биткойна как у эфира и раскрыть настройки
 mfm-distribution title не по середине
 mfm-distribution вы получить и конкретное количество токенов
 mfm-distribution большими буквами сколько токенов
 mfm-distribution логотип не загрузкился
-mfm-staking новый токен не открыватеся
-mfm-wallet search не рабоате
-mfm-pin введите пинкод поменять на актуальный пинкод
-mfm-landing переводы
-mfm-docs размеры шрифтов h1 междтрочный интервал
-mfm-landing не работает сразу автозаполнение данных для токена нового
-mfm-landing нельзя вернуться с кошелька на лендинг
-mfm-quiz вы получили 13 токенов
-mfm-landing стиль пустыня
-mfm-mining top 5 болей снг майнер
-    mfm-mining поговорить с майнерами
-mfm-mining контракт распределения газа лотыреия
-Сделать несколько сетей отличаться они будут способом распределения комиссии
-mfm-mining nodes версии указывать
-    название сети Minenet Staynet Richnet
-    Хэш-jar версии (При старте сервера Загрузить версию мастера)
-    вайтлистов и список black-листов
-mfm-wallet login В пароли надо внедрить название сети
-mfm-mining Можно убрать биржу а в контракте просто накопление
-mfm-release mfm-storage sync node.jar
-mfm-release перевести биржу и p2p на центральные сервера
-mfm-release релиз на гугл плей
-mfm-release landing data explorer
-mfm-release Consensus
-mfm-release Цены в локальных валютах
-mfm-wallet десктопная версия
-mfm-mining нет последнего времени блока
-mfm-wallet Обучение кликам только первое нажатие
-mfm-wallet сделать анимацию загрузки с логотипом треугольника
 mfm-distribution logo изменить дефаултные иконки
-mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
+mfm-distribution storage upload file
+mfm-pin code убрать фокус со всех других полей и скрыть клавиатуру
+mfm-pin Установить пинкод вместо ввести
+mfm-pin change pin
+mfm-pin change password + restore password
+mfm-contract DAO 2 аккаунта yes no (больше меньше)
+mfm-settings снизу соцсети
+mfm-exchange арбиртаж swap
+mfm-exchange bot когда < 1 доллара то останавливать и ставить цену 0.0001
+mfm-exchange bot хеджирование койна к койну с мультипликатором дропкойн 20% вавикаойна
+mfm-exchange bot place on 00 levels
+mfm-exchange bot графики брать с CoinMarketCap
+mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
+mfm-exchange сокеты группировать отсылку по секундам
+mfm-exchange orders средняя цена покупки
+mfm-exchange убрать недельные графики из записи. Строить на основе дневнх
+mfm-mining web продолжается когда закрываешь экран
+mfm-mining web выкидывает с ошибкой неверный nonce
+mfm-mining web показывать сложность твоего телеофна при старте
+mfm-mining предлагать установить приложение
+mfm-mining pool майнанга число что бы всегда увеличивались деньги
+mfm-landing анимация двигающихся градиентов на 1 блоке
+mfm-landing docs dev сделать как копия back_utils.js
+mfm-landing dev дизайн https://build.avax.network/docs/avalanche-l1s
+mfm-release vavilon.network
+mfm-release vaviswap.com
+mfm-release Mempool
+mfm-release Сделать невидимым в индексе .git
+mfm-release соревнование на TPS аирдроп
+mfm-release переустановить ubunty. Заражение вирусом только на Вавилон
+mfm-release mfm-storage sync node.jar
+mfm-release релиз на гугл плей
+mfm-release Consensus
+mfm-dapp minecraft-mod (передавать предметы между вайпами)
+mfm-analytics calc volume by user
+mfm-analytics В аналитике указать среднее время на конец воронки
+mfm-analytics DAU не фронта а аккаунтов сети
+mfm-analytics добавить аналитику TPS
+mfm-data после установки null устанавливать рекурсивно null
+mfm-data датаset если число, то аналитику добавить
+mfm-data help параметры + описание + данные в кеше (показывать в пинкоде сколько отправляет)
+mfm-mail unsubscribe
+mfm-storage не уменьшается иконка токена после загрузки в storage
+mfm-telegram для саппорта нужен бот
+mfm-token проблема если пользователь создал аккаунт не gas токена после делегирования кредита
+mfm-token запретить нулевые переводы
+mfm-token track accounts включить, но только если транзакций больше 2
+mfm-token trans нет received
+mfm-token serach много токенов по тикерам, не находит токены
+mfm-trans выбор периода
+mfm-wallet login кнопка вставить из буфера сид фразу
+mfm-wallet недавние в приложениях
+mfm-wallet простая форма покупки из биржи
+mfm-wallet profile описание токенов
+mfm-wallet home slide iphone Нельза слайды
+mfm-wallet home change 24
+mfm-wallet profile пополнить p2p onchain и внутрибиржевой
+mfm-wallet десктопная версия
+mfm-wallet анимацию загрузки с логотипом vavilon
+mfm-wallet удаленного дебагинга и аналитики (client errors, request)
+mfm-wallet send после того как сделал send, именовать кошелек + книга людей с транзакциями
+mfm-wallet login при логине показывать COOKIE save и принять
+mfm-wallet login изменить пароль, но для этого нужно знать все предыдущие seed-фразы
+mfm-wallet login предложить сохранить на почту и в настройках
+mfm-wallet settings скрыть админскую панель для юзеров, у которых нет токена владельцев
+mfm-wallet указать, что свайп вниз закрывает экран (демонстрация свайпа и иконка сверху)
+mfm-wallet profile PNL
+mfm-wallet мультиаккаунты указать "Кошелек 1"
+mfm-wallet trans двойной клик на транзакцию открывает 2 окна
+
 
 mfm-p2p + посередине экрана
 mfm-p2p merchant сначала сколько у меня есть денег
@@ -195,6 +158,7 @@ mfm-p2p order итого поставить вниз
 mfm-p2p order идентификатор
 mfm-p2p уведомление после смены статуса
 mfm-p2p уведомление чат
+mfm-p2p использовать веб-пуши
 
 mfm-pigeon аналитику
 mfm-pigeon safari scale 1.0
@@ -213,92 +177,6 @@ mfm-pigeon голуби по середине и если в них попада
 mfm-pigeon ссылку на соцсети
 mfm-pigeon winscene собрать 20 токенов или перейти на следующий уровень 100 токенов
 mfm-pegiot покупка нфт + seed check + top table and dao competition(loto)
-
-low priority
-mfm-mining web показывать сложность твоего телеофна при старте
-mfm-mining ручной майнинг удалить
-mfm-wallet удаленного дебагинга и аналитики (client errors, request)
-mfm-lauch distribution процент минтинга
-mfm-token Вообще запретить больше 1 млн коинов
-mfm-settings Снизу соцсети
-mfm-analytics calc volume by user
-mfm-exchange bot хеджирование койна к койну с мультипликатором дропкойн 20% вавикаойна
-mfm-exchange bot Делит цену на циркулешницуплай
-mfm-exchange bot Мультипликатор заполненности токена
-mfm-exchange bot Мультипликатор волатильности
-mfm-exchange bot Мультипликатор цены акции газового токена
-mfm-exchange bot settings какой аккаунт куда
-mfm-exchange bot place on 00 levels
-mfm-exchange bot графики брать с CoinMarketCap
-mfm-mining предлагать установить приложение
-mfm-mining пулы майнинга
-mfm-mining pool майнанга число что бы всегда увеличивались деньги
-mfm-p2p Использовать веб-пуши
-mfm-airdrop придемать где кнопку поставить
-mfm-airdrop указывать дату старта эрдропа
-mfm-airdrop статистика airdrop и уведомлдения что кто то получил
-mfm-landing docs dev сделать как копия back_utils.js
-mfm-release vavilon.network
-mfm-release vaviswap.com
-mfm-wallet analytics добавить аналитику TPS
-mfm-explorer список тразакций конкретного токена
-mfm-explorer mfm-p2p версия ноды
-mfm-release перед перезагрузкой сервиса ждать окончания всех запросов
-mfm-release Mempool
-mfm-release market-maker
-mfm-release minecraft-mod
-mfm-release Сделать невидимым в индексе .git
-mfm-analytics В аналитике указать среднее время на конец воронки
-mfm-quize если фокус пропадает со страницы, то блокировать банкинг
-mfm-data после установки null устанавливать рекурсивно null
-mfm-data датаset если число, то аналитику добавить
-mfm-data help параметры + описание + данные в кеше (показывать в пинкоде сколько отправляет)
-mfm-dapp Мод для Майнкрафта (передавать предметы между вайпами)
-mfm-exchange сделать очистку всех ордеров и вернуть всем деньги из стакана
-mfm-exchange сокеты группировать отсылку по секундам
-mfm-exchange orders средняя цена покупки
-mfm-exchange bot X определяет мультипликатор для торгового бота
-mfm-exchange убрать недельные графики из записи. Строить на основе дневнх
-mfm-login при логине показывать COOKIE save и принять
-mfm-mail unsubscribe
-mfm-release соревнование на TPS аирдроп
-mfm-send после того как сделал send, именовать кошелек + книга людей с транзакциями
-mfm-staking сколько максимально можно застейкать (разделить аккаунты ревордов и депозитов)
-mfm-storage не уменьшается иконка токена после загрузки в storage
-mfm-telegram login вход через telegram и смена пароля (генерировать пароль)
-mfm-telegram для саппорта нужен бот
-mfm-telegram поднять на Java
-mfm-telegram Соревнования: кто быстрее получит 1000-ю транзакцию на одном аккаунте, тот получает airdrop. Оглашать победителя в канале майнеров
-mfm-telegram У каждой ЦА будет закрытый чат и открытый публичный канал
-mfm-telegram + mfm-mail получить время и язык пользователя по IP
-mfm-telegram + mfm-mail ночью прайс-алерты не отправлять
-mfm-token проблема если пользователь создал аккаунт не gas токена после делегирования кредита
-mfm-token убрать фикс обновления аккаунтов
-mfm-token разрешить удалять аккаунты если баланс 0 и нет транзакций
-mfm-token track accounts включить, но только если транзакций больше 2
-mfm-token логировать не только запросы, но и выполнение контрактов
-mfm-token массовые airdrops max 3 receivers
-mfm-token trans нет received
-mfm-token Налоги — это чаевые, устанавливаются пользователем при отправке транзакции, необязательным
-mfm-token init много токенов по тикерам, не находит токены
-mfm-trans выбор периода
-mfm-wallet login изменить пароль, но для этого нужно знать все предыдущие seed-фразы
-mfm-wallet login предложить сохранить на почту и в настройках
-mfm-wallet search "" показывать top search
-mfm-wallet search при поиске запросить листинг
-mfm-wallet send адрес только 0-9A-F (переименовать bot_address, exchange_address)
-mfm-wallet settings скрыть админскую панель для юзеров, у которых нет токена владельцев
-mfm-wallet указать, что свайп вниз закрывает экран (демонстрация свайпа и иконка сверху)
-mfm-wallet home сделать дизайн MD красивый как landing
-mfm-wallet home топ моих персональных токенов
-mfm-wallet profile сделать список токенов, созданных конкретным пользователем
-mfm-wallet profile PNL PNL24 себестоимость + скрывать токеномику
-mfm-wallet airdrop кроме промокода вставлять код вместо usdt:23 -> anal
-mfm-wallet earn сделать список заданий https://www.coinbase.com/ru/learning-rewards + свайп вправо для выбора задания
-mfm-wallet мультиаккаунты указать "Кошелек 1"
-mfm-wallet trans двойной клик на транзакцию открывает 2 окна
-mfm-landing dev дизайн https://build.avax.network/docs/avalanche-l1s
-mfm-analytics DAU не фронта а аккаунтов сети
 
 
 mfm-explorer https://subnets.avax.network/stats/network?
@@ -440,6 +318,7 @@ telegram messages
     Безопасная сделка
     ИИ разработка миниконтрактов
     Аукцион как ico
+    Нужна какая то глобальная цель по пути которой человек будет выполнять однообразные действия
     магазин нфт
     Терминал оплаты
     мод для майнкрафта
