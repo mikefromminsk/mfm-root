@@ -1,22 +1,20 @@
 
 high priority
-mfm-exchange сокеты на трейде не показывает что пришли деньги
-mfm-exchange нет ордербука не ставятся ордера
-mfm-wallet send создание работает только из бота
+
+medium priority
+mfm-airdrop сколько сейчас находится в эйрдроп адресе
 mfm-tron 2 адреса
 mfm-wallet Обучение кликам только первое нажатие
 mfm-wallet обновление цен на поиске
-mfm-wallet apps вооставновить
+mfm-release Цены в локальных валютах
+mfm-wallet apps воcставновить
 mfm-mining покупка энергии на все
-
-medium priority
 mfm-mining цветом и скоростью кручения показывать Pro версию
 mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
 mfm-wallet капитализация по циркуляции на цену
 mfm-release vavilon саплай = 1_000_000 ?
 mfm-telegram переводы
 mfm-release дата создания selenium
-mfm-release Цены в локальных валютах
 mfm-token sync Проверить есть ли на reconnect refresh timer стоп таймер
 mfm-token sync убрать депозит листенер с сокетов и протестировать сокеты на большом времени 1 день 1 неделя
 mfm-mining нужно показывать как деньги утекают из аккаунта по миллли доллару и указать когда баланс закончится
@@ -49,12 +47,6 @@ mfm-search сделать вечную загрузку транзакций. и
 mfm-search 10000 токенов
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
 
-mfm-swap разделить в аналитике cex price и dex price
-mfm-swap buy switcher
-mfm-swap sync issue tokenacctountreg not in transaction
-mfm-swap своп инмакт
-mfm-swap add liquidity перед swap сначала
-mfm-swap когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
 
 low priority
 mfm-analytics mining сделать загрузка дальше 30 свечей и в аналитике по умолчанию дни открывать
@@ -138,6 +130,12 @@ mfm-wallet profile PNL
 mfm-wallet мультиаккаунты указать "Кошелек 1"
 mfm-wallet trans двойной клик на транзакцию открывает 2 окна
 
+mfm-swap разделить в аналитике cex price и dex price
+mfm-swap buy switcher
+mfm-swap sync issue tokenacctountreg not in transaction
+mfm-swap своп инмакт
+mfm-swap add liquidity перед swap сначала
+mfm-swap когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
 
 mfm-p2p + посередине экрана
 mfm-p2p merchant сначала сколько у меня есть денег
@@ -182,7 +180,6 @@ mfm-pegiot покупка нфт + seed check + top table and dao competition(lo
 
 mfm-explorer https://subnets.avax.network/stats/network?
 
-восстановить recipies
 Восстановить депозиты и withdrawals для быстрого p2p
 восстановить налоги (% налогов из data)
 
