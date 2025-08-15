@@ -4,12 +4,16 @@ mfm-wallet pin не работает
 
 
 high priority
+mfm-exchange bot pump bot
 mfm-wallet airdrop можно получить несколько дропов на один аккаунт
 mfm-exchange bot start price in chart start from 1
-
+mfm-wallet distribution closeAll
+mfm-wallet distribution подарить энергию
+mfm-wallet distribution подарить энергию
+safari свайп вбок почему то на wallet
+mfm-landing демо поменять на ссылку
 
 medium priority
-mfm-wallet autocapitalize="off"  autocomplete="off" срузу у всех через js и swipeToRefrsh
 mfm-wallet dividend всего наград аккомулируется при перезагрузке заново (разделить аналитику vavilon exchange)
 mfm-release Цены в локальных валютах (+ цены в выдуманной валюте Пива)
 mfm-wallet указывать что транзакция от майнера
@@ -47,6 +51,7 @@ mfm-search релевантность поиска биткойн на перв�
 
 
 low priority
+mfm-wallet autocapitalize="off"  autocomplete="off" срузу у всех через js и swipeToRefrsh
 mfm-wallet web miner не показывает сразу сложность
 mfm-wallet trans двойной клик на транзакцию открывает 2 окна
 mfm-gpt сделать пул реквесты для удаленного изменения gpt
