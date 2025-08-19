@@ -1,19 +1,17 @@
 
 
-mfm-wallet pin не работает
-
-
 high priority
-mfm-exchange bot pump bot
-mfm-wallet airdrop можно получить несколько дропов на один аккаунт
-mfm-exchange bot start price in chart start from 1
-mfm-wallet distribution closeAll
-mfm-wallet distribution подарить энергию
-mfm-wallet distribution подарить энергию
 safari свайп вбок почему то на wallet
-mfm-landing демо поменять на ссылку
+pin когда вводишь показывать что ты устанавливаешь и можешь неправеьлный ввести все равно нет шифрования
 
 medium priority
+mfm-analytics iphone android session tag
+mfm-telegram refferal code
+mfm-wallet swipe down to restart demonstation
+mfm-wallet send swipe right to send
+mfm-miner перевести vavilon туда и установить там бустеры
+mfm-exchange bot pump bot
+mfm-wallet distribution closeAll
 mfm-wallet dividend всего наград аккомулируется при перезагрузке заново (разделить аналитику vavilon exchange)
 mfm-release Цены в локальных валютах (+ цены в выдуманной валюте Пива)
 mfm-wallet указывать что транзакция от майнера
