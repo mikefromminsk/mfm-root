@@ -5,6 +5,8 @@ safari свайп вбок почему то на wallet
 pin когда вводишь показывать что ты устанавливаешь и можешь неправеьлный ввести все равно нет шифрования
 
 medium priority
+mfm-mining моножественное создание кошельков после майнинга если нет в кошельке частьо открывается pin код
+mfm-mining остановить анимацию если не работает майнинг
 mfm-analytics iphone android session tag
 mfm-telegram refferal code
 mfm-wallet swipe down to restart demonstation
