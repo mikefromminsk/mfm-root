@@ -1,7 +1,6 @@
 
 mfm-landing дизайн https://sberbank-500.ru/
-mfm-telegram перевести все на английский
-mfm-wallet airdrop add перевести все на английский
+
 
 high priority
 safari свайп вбок почему то на wallet
@@ -12,6 +11,7 @@ mfm-mining моножественное создание кошельков по
 mfm-mining остановить анимацию если не работает майнинг
 mfm-analytics iphone android session tag
 mfm-telegram refferal code
+mfm-token BigMap migrator
 mfm-wallet swipe down to restart demonstation
 mfm-wallet send swipe right to send
 mfm-miner перевести vavilon туда и установить там бустеры
@@ -147,6 +147,12 @@ mfm-swap sync issue tokenacctountreg not in transaction
 mfm-swap своп инмакт
 mfm-swap add liquidity перед swap сначала
 mfm-swap когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
+
+mfm-token очередь запросов на broadcaset как в кафке (группировать)
+mfm-token очередь на отсылку сообщений
+mfm-token сделать dns для каждого домена
+mfm-token доабвить пиринговую сеть
+mfm-token 1 000 000 одновременных подключений
 
 mfm-p2p + посередине экрана
 mfm-p2p merchant сначала сколько у меня есть денег
