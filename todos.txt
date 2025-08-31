@@ -5,6 +5,8 @@ mfm-landing дизайн https://sberbank-500.ru/
 high priority
 safari свайп вбок почему то на wallet
 mfm-telegram refferal code
+mfm-wallet сортировка на кошельке
+https://vavilon.org/?utm_medium=company_profile&utm_source=trustpilot&utm_campaign=logo_click
 
 medium priority
 mfm-mining моножественное создание кошельков после майнинга если нет в кошельке частьо открывается pin код
