@@ -35,15 +35,9 @@ mfm-token BigMap migrator
 mfm-wallet swipe down to restart demonstation
 mfm-wallet send swipe right to send
 mfm-miner перевести vavilon туда и установить там бустеры
-mfm-exchange bot pump bot
-mfm-wallet distribution closeAll
 mfm-wallet dividend всего наград аккомулируется при перезагрузке заново (разделить аналитику vavilon exchange)
 mfm-release Цены в локальных валютах (+ цены в выдуманной валюте Пива)
 mfm-wallet указывать что транзакция от майнера
-mfm-airdrop сколько сейчас находится в эйрдроп адресе
-mfm-tron 2 адреса
-mfm-wallet Обучение кликам только первое нажатие
-mfm-wallet apps воcставновить
 mfm-mining цветом и скоростью кручения показывать Pro версию
 mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
 mfm-wallet капитализация по циркуляции на цену
@@ -147,7 +141,6 @@ mfm-wallet недавние в приложениях
 mfm-wallet простая форма покупки из биржи
 mfm-wallet profile описание токенов
 mfm-wallet home slide iphone Нельза слайды
-mfm-wallet home change 24
 mfm-wallet profile пополнить p2p onchain и внутрибиржевой
 mfm-wallet десктопная версия
 mfm-wallet анимацию загрузки с логотипом vavilon
