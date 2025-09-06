@@ -1,0 +1,61 @@
+https://winscp.net/eng/downloads.php
+https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html
+"C:\Program Files\PuTTY\putty.exe" -ssh root@77.37.49.7 -pw "PASSWORD"
+
+# change domain name
+
+# copy mytoken.space.zip
+
+sudo apt-get install unzip -y
+unzip mytoken.space.zip
+
+sudo apt update
+sudo apt install default-jre
+
+sudo ufw allow 21
+sudo ufw allow 80
+sudo ufw allow 443
+sudo ufw allow 8843
+
+# change start.sh remove master
+chmod +x /root/start.sh
+/root/start.sh
+
+cp mfm.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable mfm.service
+
+sudo systemctl restart mfm
+
+# change start.sh add master
+
+sudo apt-get update
+sudo apt-get install certbot -y
+sudo certbot certonly --standalone -d mytoken.space
+openssl pkcs12 -export -in /etc/letsencrypt/live/mytoken.space/fullchain.pem -inkey /etc/letsencrypt/live/mytoken.space/privkey.pem -out keystore.p12 -name jetty -password pass:x29a100
+keytool -importkeystore -srckeystore keystore.p12 -srcstoretype pkcs12 -srcstorepass x29a100 -destkeystore keystore.jks -deststoretype JKS -deststorepass x29a100
+sudo apt-get remove certbot
+
+# отключить системные логи а то переполняет постоянную память
+/etc/systemd/journald.conf
+Storage=none
+sudo systemctl restart systemd-journald
+
+# поиск больших файлов
+find / -type f -size +100M -exec du -ah {} + | sort -rh
+
+
+решение:
+/etc/rsyslog.d/50-default.conf
+-
+*.*;auth,authpriv.none -/var/log/syslog
++
+*.*;auth,authpriv.none;cron.none -/var/log/syslog
+
+service rsyslog restart
+
+
+
+
+/etc/logrotate.conf
+weekly -> dayly

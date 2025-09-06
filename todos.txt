@@ -388,7 +388,6 @@ telegram messages
     mfm-poker
     mfm-storage ?
     mfm-hosting
-    Notification center + priceAlerts
     напиши мне и я создам тебе крипту
     Безопасная сделка
     ИИ разработка миниконтрактов
