@@ -50,22 +50,21 @@ mfm-mining в транзакциях покаывается + 0.0003 а долж
 mfm-mining проверить что контракт правильно высвобождает токены
 mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
 mfm-mining уведомления что сегодня намайнило
-mfm-tron блокировать когда скопировал ссылку и аналитика
+mfm-tron аналитика
 mfm-tron withdrawal usdt
 mfm-tron withdrawal разделить за стейками трон на несколько аккаунтов
 mfm-tron не блокируется адрес и когда блкируетяс и не разблокируется
-mfm-load сортировка всех по времени
 mfm-airdrop статистика airdrop и уведомлдения что кто то получил
 mfm-wallet логин на главной не работает второй раз
 mfm-wallet accoutns сделать панель для своих токенов типо запустить airdrop майнить промокод bot (usdt ввод вывод)
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
-mfm-wallet обучение сверху слева кнопка и там выдают ачивки за покупки и добавления
 mfm-distribution кнопка листинг вместо настройки бота и сделать это после создания токена
 mfm-search 10000 токенов
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
 
 
 low priority
+mfm-load сортировка всех по времени
 mfm-wallet сделать скрипт на java который чистит strings/default.js
 mfm-wallet autocapitalize="off"  autocomplete="off" срузу у всех через js и swipeToRefrsh
 mfm-wallet web miner не показывает сразу сложность
@@ -85,7 +84,6 @@ mfm-distribution логотип не загрузкился
 mfm-distribution logo изменить дефаултные иконки
 mfm-distribution storage upload file
 mfm-pin code убрать фокус со всех других полей и скрыть клавиатуру
-mfm-pin Установить пинкод вместо ввести
 mfm-pin change pin
 mfm-pin change password + restore password
 mfm-contract DAO 2 аккаунта yes no (больше меньше)
