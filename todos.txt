@@ -10,6 +10,7 @@ mfm-wallet сортировка на кошельке
 https://vavilon.org/?utm_medium=company_profile&utm_source=trustpilot&utm_campaign=logo_click
 
 medium priority
+mfm-wallet loader animation как превью в сериале
 mfm-wallet на старте баланс не показывается в тотал майнинга
 mfm-wallet profile github whitepaer не работеет
 mfm-wallet profile скрыть купить если цена 0
@@ -199,6 +200,7 @@ mfm-gpt агент ui багфиксер
 mfm-gpt агент тестер Junit
 mfm-gpt агент Управленец перепроверяющий что задача выполнена
 mfm-gpt агент оптимизатор уменьшающий работу GPT и преобразующий работу в код
+mfm-gpt агент оптимизатор пофиксить труктуру проекта
 mfm-gpt агент оптимизатор писатель документации для пакетов
 mfm-gpt агент оптимизатор писатель документации для классов
 mfm-gpt агент оптимизатор Упрощающий тестирование
