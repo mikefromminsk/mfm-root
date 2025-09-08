@@ -10,6 +10,9 @@ mfm-wallet сортировка на кошельке
 https://vavilon.org/?utm_medium=company_profile&utm_source=trustpilot&utm_campaign=logo_click
 
 medium priority
+mfm-landing автоматическое перенаправление на index/ru.html если такой есть
+mfm-contract craft сделать сжигание токенов
+mfm-telegram перевести первые сообщения в боте
 mfm-wallet loader animation как превью в сериале
 mfm-wallet на старте баланс не показывается в тотал майнинга
 mfm-wallet profile github whitepaer не работеет
