@@ -87,7 +87,6 @@ mfm-distribution большими буквами сколько токенов
 mfm-distribution логотип не загрузкился
 mfm-distribution logo изменить дефаултные иконки
 mfm-distribution storage upload file
-mfm-pin code убрать фокус со всех других полей и скрыть клавиатуру
 mfm-pin change pin
 mfm-pin change password + restore password
 mfm-contract DAO 2 аккаунта yes no (больше меньше)
