@@ -1,79 +1,115 @@
+next week
 
-mfm-landing дизайн https://sberbank-500.ru/
-
-
-high priority
+critical bugs
 safari свайп вбок почему то на wallet
-mfm-telegram refferal code
-mfm-wallet deposit копировать ссылку не работает
-mfm-wallet сортировка на кошельке
-https://vavilon.org/?utm_medium=company_profile&utm_source=trustpilot&utm_campaign=logo_click
-сохранять сиды отдельно от кода и настройки выше на уровень от всех модулей
+safari mfm-wallet текст в обучении без переноса строк
+mfm-wallet иногда не работает ng-click
+safari mfm-wallet launch distibution recipe не закрылось окно
 
-medium priority
-mfm-landing автоматическое перенаправление на index/ru.html если такой есть
-mfm-contract craft сделать сжигание токенов
-mfm-telegram перевести первые сообщения в боте
+medium bugs
+mfm-wallet deposit копировать ссылку не работает саппорт mike from vavilon
+mfm-wallet сортировка на кошельке vavilon вверх
 mfm-wallet loader animation как превью в сериале
 mfm-wallet на старте баланс не показывается в тотал майнинга
+mfm-wallet profile vavilon accounts слишком большое число
 mfm-wallet profile github whitepaer не работеет
-mfm-wallet profile скрыть купить если цена 0
+mfm-wallet profile сохранять последний открытый график M H D
+mfm-wallet profile скрыть купить если цена 0 и добавить кнопку добавить ликвидность
+mfm-wallet profile капитализация по циркуляции на цену
 mfm-wallet launch name транзакции только по запросу
-mfm-wallet после копирования ставить галочку вместо иконки копирования
 mfm-wallet launch distibution указать что это тип токена и указать что его можно поменять
 mfm-wallet launch distibution recipe нужно подсказака что такое токен1 и rate1
-mfm-wallet launch distibution recipe не закрылось окно safary
 mfm-wallet launch distibution recipe пустое добавляется и видно рецепта
 mfm-wallet launch distibution recipe проверка на существование
 mfm-wallet launch distibution recipe вверх поднимается кнопка создания
-mfm-pigeon ScoreManager round 0
-mfm-telegram вместо username firstname lastname
+mfm-wallet launch distribution кнопка листинг вместо настройки бота и сделать это после создания токена
 mfm-wallet store refresh иконка правее от центра
-mfm-wallet депозит копируется пусто
 mfm-wallet input label анимация возврата уходит левее должно быть только вверх
 mfm-wallet друзей приглашено стоит в строчку с inputом и сделать input неизменяемый
-safary mfm-wallet текст в обучении без переноса строк
-mfm-mining моножественное создание кошельков после майнинга если нет в кошельке частьо открывается pin код
-mfm-mining остановить анимацию если не работает майнинг
-mfm-analytics iphone android session tag
-mfm-token BigMap migrator
-mfm-wallet swipe down to restart demonstation
-mfm-wallet send swipe right to send
-mfm-miner перевести vavilon туда и установить там бустеры
 mfm-wallet dividend всего наград аккомулируется при перезагрузке заново (разделить аналитику vavilon exchange)
-mfm-release Цены в локальных валютах (+ цены в выдуманной валюте Пива)
 mfm-wallet указывать что транзакция от майнера
-mfm-mining цветом и скоростью кручения показывать Pro версию
-mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
-mfm-wallet капитализация по циркуляции на цену
-mfm-release vavilon саплай = 1_000_000 ?
-mfm-release дата создания selenium
-mfm-token sync Проверить есть ли на reconnect refresh timer стоп таймер
-mfm-token sync убрать депозит листенер с сокетов и протестировать сокеты на большом времени 1 день 1 неделя
-mfm-mining нужно показывать как деньги утекают из аккаунта по миллли доллару и указать когда баланс закончится
-mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
-mfm-mining проверить что контракт правильно высвобождает токены
-mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
-mfm-mining уведомления что сегодня намайнило
-mfm-tron аналитика
-mfm-tron withdrawal usdt
-mfm-tron withdrawal разделить за стейками трон на несколько аккаунтов
-mfm-tron не блокируется адрес и когда блкируетяс и не разблокируется
-mfm-airdrop статистика airdrop и уведомлдения что кто то получил
 mfm-wallet логин на главной не работает второй раз
 mfm-wallet accoutns сделать панель для своих токенов типо запустить airdrop майнить промокод bot (usdt ввод вывод)
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
-mfm-distribution кнопка листинг вместо настройки бота и сделать это после создания токена
+mfm-wallet pin воодить при первом входе
+mfm-mining моножественное создание кошельков после майнинга если нет в кошельке частьо открывается pin код
+mfm-mining остановить анимацию если не работает майнинг
+mfm-mining цветом и скоростью кручения показывать Pro версию
+mfm-mining нужно показывать как деньги утекают из аккаунта по миллли доллару и указать когда баланс закончится
+mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
+mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
+mfm-mining топ получателей майнинга
+mfm-mining перевести vavilon туда и установить там бустеры
+mfm-telegram перевести первые сообщения в боте
+mfm-telegram токен достиг исторического максимума
+mfm-telegram задание для спящих пользователй что бы получить энергию
+mfm-telegram вместо username firstname lastname
+mfm-telegram уведомления что сегодня намайнило
+mfm-telegram статистика airdrop и уведомлдения что кто то получил
+mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
+mfm-telegram до завершения эпохи примерно час
+mfm-exchange добавить ликвидность ендпойнт
+mfm-exchange bot добавление ликвидности потихоньку
+mfm-exchange bot майнер который покупает энергию если выгодно и использует в контракте
+mfm-exchange bot который повышает цену по приближению к концу эпохи
+mfm-exchange вернуть историю ордеров
+mfm-pigeon ScoreManager round 0
+mfm-deposit если нет лока то депозитить на SGT
+mfm-deposit сохранять сиды отдельно от кода и настройки выше на уровень от всех модулей
+mfm-token sync Проверить есть ли на reconnect refresh timer стоп таймер
+mfm-tron аналитика
+mfm-tron withdrawal usdt
+mfm-landing автоматическое перенаправление на index/ru.html если такой есть
+
+
+low bugs and ideas
+mfm-wallet после копирования ставить галочку вместо иконки копирования
+mfm-landing дизайн 3.0 https://sberbank-500.ru/
+mfm-landing footer нет документов
+mfm-landing не переводится меню
+mfm-landing mfm-wallet везде убрать слово блок
+mfm-landing 1 блок это бесплатный 2 блок это скорость работы 3 чем отличается от других это делегирование 4 команда и телега
+mfm-landing Добавить все приложения из стора
+mfm-landing цифры аналитики
+mfm-landing на весь экран хром мобильный iphone
+mfm-landing переводы + seo + seo token profilesd Mustache
+mfm-landing Реклама тонкинов на лендинге как на КиноПоиске фильмы рекламируют
+mfm-landing Лендинг поменять на Эксплорер
+mfm-landing Поменять докс на форум и туда статьи
+mfm-landing Топ недели
+mfm-landing https://vavilon.org/?utm_medium=company_profile&utm_source=trustpilot&utm_campaign=logo_click
+mfm-telegram refferal code
+mfm-release sync убрать депозит листенер с сокетов и протестировать сокеты на большом времени 1 день 1 неделя
+mfm-release vavilon саплай = 1_000_000 ?
+mfm-release дата создания selenium
+mfm-release mining проверить что контракт правильно высвобождает токены
 mfm-search 10000 токенов
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
-
-
-low priority
-mfm-load сортировка всех по времени
+mfm-wallet send swipe right to send
+mfm-wallet swipe down to restart demonstation
 mfm-wallet сделать скрипт на java который чистит strings/default.js
 mfm-wallet autocapitalize="off"  autocomplete="off" срузу у всех через js и swipeToRefrsh
 mfm-wallet web miner не показывает сразу сложность
 mfm-wallet trans двойной клик на транзакцию открывает 2 окна
+mfm-wallet login кнопка вставить из буфера сид фразу
+mfm-wallet store недавние в приложениях
+mfm-wallet store iphone Нельза слайды
+mfm-wallet exchange простая форма покупки из биржи
+mfm-wallet profile описание токенов
+mfm-wallet profile пополнить p2p onchain и внутрибиржевой
+mfm-wallet десктопная версия
+mfm-wallet анимацию загрузки с логотипом vavilon
+mfm-wallet удаленного дебагинга и аналитики (client errors, request)
+mfm-wallet send после того как сделал send, именовать кошелек + книга людей с транзакциями
+mfm-wallet login при логине показывать COOKIE save и принять
+mfm-wallet login изменить пароль, но для этого нужно знать все предыдущие seed-фразы
+mfm-wallet login предложить сохранить на почту и в настройках
+mfm-wallet settings скрыть админскую панель для юзеров, у которых нет токена владельцев
+mfm-wallet указать, что свайп вниз закрывает экран (демонстрация свайпа и иконка сверху)
+mfm-wallet мультиаккаунты указать "Кошелек 1"
+mfm-contract craft сделать сжигание токенов
+mfm-release Цены в локальных валютах (+ цены в выдуманной валюте Пива)
+mfm-load сортировка всех по времени
 mfm-gpt сделать пул реквесты для удаленного изменения gpt
 mfm-analytics mining сделать загрузка дальше 30 свечей и в аналитике по умолчанию дни открывать
 mfm-docs инструкция по повышению стоимости и созданию приложения
@@ -135,25 +171,14 @@ mfm-token запретить нулевые переводы
 mfm-token track accounts включить, но только если транзакций больше 2
 mfm-token trans нет received
 mfm-token serach много токенов по тикерам, не находит токены
+mfm-token очередь запросов на broadcaset как в кафке (группировать)
+mfm-token очередь на отсылку сообщений
+mfm-token сделать dns для каждого домена
+mfm-token доабвить пиринговую сеть
+mfm-token 1 000 000 одновременных подключений
 mfm-trans выбор периода
 mfm-trans AI консенсус адаптивный самоулучшающийся
 mfm-trans limits На создание usdt делать задержку аккаунта чтобы нельзя было создавать мультиакки
-mfm-wallet login кнопка вставить из буфера сид фразу
-mfm-wallet недавние в приложениях
-mfm-wallet простая форма покупки из биржи
-mfm-wallet profile описание токенов
-mfm-wallet home slide iphone Нельза слайды
-mfm-wallet profile пополнить p2p onchain и внутрибиржевой
-mfm-wallet десктопная версия
-mfm-wallet анимацию загрузки с логотипом vavilon
-mfm-wallet удаленного дебагинга и аналитики (client errors, request)
-mfm-wallet send после того как сделал send, именовать кошелек + книга людей с транзакциями
-mfm-wallet login при логине показывать COOKIE save и принять
-mfm-wallet login изменить пароль, но для этого нужно знать все предыдущие seed-фразы
-mfm-wallet login предложить сохранить на почту и в настройках
-mfm-wallet settings скрыть админскую панель для юзеров, у которых нет токена владельцев
-mfm-wallet указать, что свайп вниз закрывает экран (демонстрация свайпа и иконка сверху)
-mfm-wallet мультиаккаунты указать "Кошелек 1"
 
 mfm-swap разделить в аналитике cex price и dex price
 mfm-swap buy switcher
@@ -161,12 +186,6 @@ mfm-swap sync issue tokenacctountreg not in transaction
 mfm-swap своп инмакт
 mfm-swap add liquidity перед swap сначала
 mfm-swap когда баланс токена 0 то после свапа на продажу показывается ошибка недостаточно средств
-
-mfm-token очередь запросов на broadcaset как в кафке (группировать)
-mfm-token очередь на отсылку сообщений
-mfm-token сделать dns для каждого домена
-mfm-token доабвить пиринговую сеть
-mfm-token 1 000 000 одновременных подключений
 
 mfm-p2p + посередине экрана
 mfm-p2p merchant сначала сколько у меня есть денег
@@ -195,6 +214,8 @@ mfm-gpt агент безопасник
 mfm-gpt агент оптимизатор пофиксить труктуру проекта
 mfm-gpt агент оптимизатор уменьшающий размер файлов разбивая их на модули
 mfm-gpt агент оптимизатор создание шаблонов шаблонизатор старается все сделать единообразным
+mfm-gpt агент оптимизатор Упрощающий тестирование
+mfm-gpt агент оптимизатор уменьшающий работу GPT и преобразующий работу в код
 mfm-gpt агент багфиксер исключений java по стектрейсу
 mfm-gpt агент багфиксер выполняет todo
 mfm-gpt агент документатор писатель документации для модулей
@@ -208,30 +229,17 @@ mfm-gpt агент оптимизатор ui шаблонизатор
 mfm-gpt агент исследователь ui технолог
 mfm-gpt агент багфиксер ui багфиксер
 mfm-gpt агент Загрузка торрентов
-mfm-gpt агент Управленец перепроверяющий что задача выполнена
-mfm-gpt агент оптимизатор Упрощающий тестирование
+mfm-gpt агент управленец перепроверяющий что задача выполнена
+mfm-gpt агент управленец таски в totos.txt
+mfm-gpt агент управленец консерватор который не дает пофиксить более 30%
 mfm-gpt агент тестер api пограничные результаты
 mfm-gpt агент тестер api увеличивающий нагрузку
 mfm-gpt агент Улучшающий агентов
-mfm-gpt агент управленец консерватор который не дает пофиксить более 30%
 mfm-gpt агент исследователь который предлагает варианты внедрения новых технологий
 mfm-gpt агент исследователь улучшающий стоимость разработки
 mfm-gpt консилиум всех перед отправкой на коммит изменений И генерациия комментария к коммиту
-mfm-gpt агент оптимизатор уменьшающий работу GPT и преобразующий работу в код
 
 
-mfm-landing footer нет документов
-mfm-landing не переводится меню
-mfm-landing mfm-wallet везде убрать слово блок
-mfm-landing 1 блок это бесплатный 2 блок это скорость работы 3 чем отличается от других это делегирование 4 команда и телега
-mfm-landing Добавить все приложения из стора
-mfm-landing цифры аналитики
-mfm-landing на весь экран хром мобильный iphone
-mfm-landing переводы + seo + seo token profilesd Mustache
-mfm-landing Реклама тонкинов на лендинге как на КиноПоиске фильмы рекламируют
-mfm-landing Лендинг поменять на Эксплорер
-mfm-landing Поменять докс на форум и туда статьи
-mfm-landing Топ недели
 
 mfm-world Продажа земли в мета-вселенной по хешированному идентификатору земли
 
@@ -271,7 +279,6 @@ mfm-explorer https://subnets.avax.network/stats/network?
     расходы на маркетинг
 
 Ошибки 1.0
-    99% mining 1% exchange (все токены должны майниться в 1 мин)
     1min майнинга от 10000.0000 = 0.0019 за первый год
     газ сразу идет на биржу (нужен контрак дивидентов)
     майнером негде взять первый газ
@@ -358,7 +365,6 @@ ui speedup
     сделать send без getAccount.prev_key
 
 refactoring
-    mfm-token поменять owner на token_creator или другой для сообщения You have received 1 ROCK from [owner]
     usdt to usd
     mfm-token сделать библиотеку по сложению чисел что бы убрать проблеме 0.3000001
     GENESIS_ADDRESS = "owner"; -> registrator
