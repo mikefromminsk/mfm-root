@@ -5,36 +5,16 @@ safari свайп вбок почему то на wallet
 safari mfm-wallet текст в обучении без переноса строк
 mfm-wallet иногда не работает ng-click
 safari mfm-wallet launch distibution recipe не закрылось окно
+mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 
 medium bugs
 mfm-wallet на старте баланс не показывается в тотал майнинга
-mfm-wallet profile github whitepaer не работеет
-mfm-wallet profile скрыть купить если цена 0 и добавить кнопку добавить ликвидность
-mfm-wallet profile капитализация по циркуляции на цену
-mfm-wallet launch name транзакции только по запросу
-mfm-wallet launch distibution указать что это тип токена и указать что его можно поменять
-mfm-wallet launch distibution recipe нужно подсказака что такое токен1 и rate1
-mfm-wallet launch distibution recipe пустое добавляется и видно рецепта
-mfm-wallet launch distibution recipe проверка на существование
-mfm-wallet launch distibution recipe вверх поднимается кнопка создания
-mfm-wallet launch distribution кнопка листинг вместо настройки бота и сделать это после создания токена
-mfm-wallet store refresh иконка правее от центра
-mfm-wallet input label анимация возврата уходит левее должно быть только вверх
-mfm-wallet друзей приглашено стоит в строчку с inputом и сделать input неизменяемый
-mfm-wallet dividend всего наград аккомулируется при перезагрузке заново (разделить аналитику vavilon exchange)
 mfm-wallet указывать что транзакция от майнера
 mfm-wallet логин на главной не работает второй раз
-mfm-wallet accoutns сделать панель для своих токенов типо запустить airdrop майнить промокод bot (usdt ввод вывод)
-mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 mfm-wallet pin воодить при первом входе
-mfm-mining моножественное создание кошельков после майнинга если нет в кошельке частьо открывается pin код
-mfm-mining остановить анимацию если не работает майнинг
-mfm-mining цветом и скоростью кручения показывать Pro версию
-mfm-mining нужно показывать как деньги утекают из аккаунта по миллли доллару и указать когда баланс закончится
+mfm-mining нужно показывать когда баланс закончится
 mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
 mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
-mfm-mining топ получателей майнинга
-mfm-mining перевести vavilon туда и установить там бустеры
 mfm-telegram перевести первые сообщения в боте
 mfm-telegram токен достиг исторического максимума
 mfm-telegram задание для спящих пользователй что бы получить энергию
@@ -43,19 +23,26 @@ mfm-telegram уведомления что сегодня намайнило
 mfm-telegram статистика airdrop и уведомлдения что кто то получил
 mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
 mfm-telegram до завершения эпохи примерно час
-mfm-exchange добавить ликвидность ендпойнт
 mfm-exchange bot майнер который покупает энергию если выгодно и использует в контракте
 mfm-exchange bot который повышает цену по приближению к концу эпохи
-mfm-pigeon ScoreManager round 0
-mfm-deposit если нет лока то депозитить на SGT
-mfm-deposit сохранять сиды отдельно от кода и настройки выше на уровень от всех модулей
-mfm-token sync Проверить есть ли на reconnect refresh timer стоп таймер
+mfm-deposit сохранять сиды отдельно от кода и настройки выше на уровень от всех модулей + keystore
 mfm-tron аналитика
 mfm-tron withdrawal usdt
 mfm-landing автоматическое перенаправление на index/ru.html если такой есть
 
 
 low bugs and ideas
+mfm-telegram RegularMessages
+mfm-mining топ получателей майнинга
+mfm-mining установить бустеры
+mfm-release sync Проверить есть ли на reconnect refresh timer стоп таймер
+mfm-mining остановить анимацию если не работает майнинг
+mfm-mining цветом и скоростью кручения показывать Pro версию
+mfm-wallet launch distibution recipe нужно подсказака что такое токен1 и rate1
+mfm-wallet launch distibution recipe пустое добавляется и видно рецепта
+mfm-wallet launch distibution recipe проверка на существование
+mfm-wallet launch distibution recipe вверх поднимается кнопка создания
+mfm-wallet profile github whitepaer не работеет (опубликовать mfm-token)
 mfm-wallet сортировка на кошельке vavilon вверх
 mfm-wallet loader animation как превью в сериале
 mfm-wallet после копирования ставить галочку вместо иконки копирования
@@ -300,7 +287,7 @@ mfm-explorer https://subnets.avax.network/stats/network?
     отключить стектрейс на продакшене
     mfm-storage проверять права на изменение картинки с помощью mfm-tokens
     Ддос
-    проблема что может кто угодно прийти с Asic майнером и забрать все
+    keystore сертификата спрятать на уровень вверх
     Бот наебать
     Создать кучу токенов
     Создавать циклические транзакции
