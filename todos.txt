@@ -7,7 +7,6 @@ next week
 critical bugs
 mfm-wallet переделать под контракт usdt
 mfm-wallet убрать сиды
-mfm-servers убрать сиды и запушить в npm
 mfm-telegram принять и войти в телеге
 mfm-wallet автоматически закрываются диалоги
 mfm-wallet иногда не работает ng-click
@@ -29,7 +28,6 @@ mfm-wallet home airdrops убрать пиксели от оли
 mfm-wallet home логин на главной не работает второй раз
 mfm-wallet search топ по volume24
 mfm-wallet search топ по ликвидности
-mfm-wallet language не переключается язык
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 mfm-wallet на старте баланс не показывается в тотал майнинга
 mfm-wallet звук при старте как вход в виндовс
