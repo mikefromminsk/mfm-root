@@ -17,26 +17,17 @@ mfm-release выкупить 5 вавилонов
 medium bugs
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
-safari запретить выделять текст
 mfm-wallet profile Создано 14 hours назад
 mfm-wallet profile рекоммендации задевают другие события
 mfm-wallet profile топ первых пользователей валюты и токенов
 mfm-wallet miner инструмент по статистике кто сколько майнит
 mfm-wallet airdrop приглашенные друзья 0 не скрывается вместе с input
-mfm-wallet home красная картинка майнинга
-mfm-wallet home airdrops убрать пиксели от оли
-mfm-wallet home логин на главной не работает второй раз
 mfm-wallet search топ по volume24
 mfm-wallet search топ по ликвидности
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 mfm-wallet на старте баланс не показывается в тотал майнинга
-mfm-wallet звук при старте как вход в виндовс
-mfm-wallet \"path\": \"mfm-token/send\",\n" + тестировать что первый символ не /
 mfm-wallet pin воодить при первом входе
 mfm-wallet загрузить паки лого
-mfm-wallet спросить хочешь ли закрыть страницу
-mfm-wallet send второй раз заблокирована кнопка
-mfm-wallet dividend когда закрываешь send без платежа пишет что токены заблочены
 mfm-wallet генерация seed по деревативному пути
 mfm-token генерация seed по деревативному пути
 mfm-landing скачать apk
@@ -88,6 +79,7 @@ mfm-android андройд приложение в сторе и скачать 
 
 
 low bugs and ideas
+mfm-wallet звук при старте как вход в виндовс
 mfm-exchange simple trande
 mfm-exchange арбиртаж swap
 mfm-exchange bot когда < 1 доллара то останавливать и ставить цену 0.0001
