@@ -17,7 +17,6 @@ mfm-release выкупить 5 вавилонов
 medium bugs
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
-mfm-wallet profile Создано 14 hours назад
 mfm-wallet profile рекоммендации задевают другие события
 mfm-wallet profile топ первых пользователей валюты и токенов
 mfm-wallet miner инструмент по статистике кто сколько майнит
@@ -27,7 +26,6 @@ mfm-wallet search топ по ликвидности
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 mfm-wallet на старте баланс не показывается в тотал майнинга
 mfm-wallet pin воодить при первом входе
-mfm-wallet загрузить паки лого
 mfm-wallet генерация seed по деревативному пути
 mfm-token генерация seed по деревативному пути
 mfm-landing скачать apk
