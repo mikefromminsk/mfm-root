@@ -17,14 +17,7 @@ mfm-release выкупить 5 вавилонов
 medium bugs
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
-mfm-wallet profile рекоммендации задевают другие события
-mfm-wallet profile топ первых пользователей валюты и токенов
 mfm-wallet miner инструмент по статистике кто сколько майнит
-mfm-wallet airdrop приглашенные друзья 0 не скрывается вместе с input
-mfm-wallet search топ по volume24
-mfm-wallet search топ по ликвидности
-mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
-mfm-wallet на старте баланс не показывается в тотал майнинга
 mfm-wallet pin воодить при первом входе
 mfm-wallet генерация seed по деревативному пути
 mfm-token генерация seed по деревативному пути
@@ -77,6 +70,7 @@ mfm-android андройд приложение в сторе и скачать 
 
 
 low bugs and ideas
+mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 mfm-wallet звук при старте как вход в виндовс
 mfm-exchange simple trande
 mfm-exchange арбиртаж swap
@@ -124,6 +118,7 @@ mfm-release дата создания selenium
 mfm-release mining проверить что контракт правильно высвобождает токены
 mfm-search 10000 токенов
 mfm-search релевантность поиска биткойн на первом месте eth etherreum ton starknet doge
+mfm-wallet profile топ первых пользователей валюты и токенов
 mfm-wallet указывать что транзакция от майнера
 mfm-wallet onboarding награды на майнинг передать в несоклько акков которые проверяют была ли уже отравка или эйрдроп
 mfm-wallet launch distibution recipe нужно подсказака что такое токен1 и rate1
