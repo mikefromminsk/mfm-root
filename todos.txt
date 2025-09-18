@@ -19,6 +19,7 @@ mfm-landing docs аналитика на серкаке
 medium bugs
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
+mfm-wallet search предзагрузкить топ волюма
 mfm-wallet home если не залогинен то не показывается иконка звездочки
 mfm-wallet miner инструмент по статистике кто сколько майнит
 mfm-wallet pin воодить при первом входе
