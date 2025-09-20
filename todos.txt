@@ -11,12 +11,19 @@ mfm-telegram принять и войти в телеге
 mfm-wallet автоматически закрываются диалоги
 mfm-wallet иногда не работает ng-click
 mfm-wallet выяснить кто поднял до 23M сложность
+mfm-wallet - секунд
+mfm-exchange нет цен не вавилона
+mfm-telegram нет умедомление на опуск цены
 mfm-release выкупить 5 вавилонов
 mfm-telegram перевести первые сообщения в боте
+mfm-telegram цена упала не приходит сообщение
 mfm-landing docs аналитика на серкаке
+mfm-landing кеши поубирать в mustache
+mfm-landing token Your token в дескрипшен
 
 
 medium bugs
+mfm-landing www
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
 mfm-wallet search предзагрузкить топ волюма
@@ -73,12 +80,15 @@ mfm-android андройд приложение в сторе и скачать 
 
 
 low bugs and ideas
+mfm-telegram эмулировать работу эфириум ноды
+mfm-telegram сообщение чтопересчет закончен
 mfm-telegram уведомления что сегодня намайнило если энергии больше 1000
 mfm-telegram уведомления что не просто отправлены деньги а пришел депозит
 mfm-wallet не всегда открывается по ссылке окно через # потому что первое переписывается на openWallet
 mfm-wallet звук при старте как вход в виндовс
 mfm-exchange подтверждение постановки ордера и галочка не показывать его
 mfm-exchange simple trande
+mfm-exchange топ трейдеров средняя стоимсть куплено продано нереализованыый убыток https://www.geckoterminal.com/ru/ton/pools/EQCaY8Ifl2S6lRBMBJeY35LIuMXPc8JfItWG4tl7lBGrSoR2
 mfm-exchange арбиртаж swap
 mfm-exchange bot когда < 1 доллара то останавливать и ставить цену 0.0001
 mfm-exchange bot хеджирование койна к койну с мультипликатором дропкойн 20% вавикаойна
