@@ -1,0 +1,1 @@
+java -cp "C:\Users\user\Desktop\servers\lib\*;C:\Users\user\Desktop\servers\*" ai.vavilon.Main
