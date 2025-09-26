@@ -4,6 +4,7 @@ next week
     бренд это новые криптовалюты
     массовое принятие это платежный сервис и магазин
     storage dao vibecoders
+    concentrator
 
 critical bugs
 mfm-wallet переделать под контракт usdt
@@ -11,8 +12,6 @@ mfm-wallet убрать сиды
 mfm-telegram принять и войти в телеге
 mfm-wallet автоматически закрываются диалоги
 mfm-wallet иногда не работает ng-click
-mfm-wallet выяснить кто поднял до 23M сложность
-mfm-wallet - секунд
 mfm-exchange нет цен не вавилона
 mfm-telegram нет умедомление на опуск цены
 mfm-release выкупить 5 вавилонов
@@ -21,6 +20,8 @@ mfm-telegram цена упала не приходит сообщение
 mfm-landing docs аналитика на серкаке
 mfm-landing кеши поубирать в mustache
 mfm-landing token Your token в дескрипшен
+mfm-gdb лок файлов другими приложениями
+mfm-telegram поднятие опускание цены
 
 
 medium bugs
@@ -28,7 +29,9 @@ mfm-landing www
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
 mfm-wallet search предзагрузкить топ волюма
+mfm-wallet divident среднее количество времени на эпоху
 mfm-wallet home если не залогинен то не показывается иконка звездочки
+mfm-wallet airdrop пиксели в угле карточки
 mfm-wallet miner инструмент по статистике кто сколько майнит
 mfm-wallet pin воодить при первом входе
 mfm-wallet нажимаешь на кнопку и рандомный токен
