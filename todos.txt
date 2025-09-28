@@ -7,25 +7,22 @@ next week
     concentrator
 
 critical bugs
-mfm-wallet переделать под контракт usdt
-mfm-wallet убрать сиды
-mfm-telegram принять и войти в телеге
-mfm-wallet автоматически закрываются диалоги
-mfm-wallet иногда не работает ng-click
-mfm-exchange нет цен не вавилона
-mfm-telegram нет умедомление на опуск цены
-mfm-release выкупить 5 вавилонов
-mfm-telegram перевести первые сообщения в боте
 mfm-telegram цена упала не приходит сообщение
-mfm-landing docs аналитика на серкаке
-mfm-landing кеши поубирать в mustache
-mfm-landing token Your token в дескрипшен
-mfm-gdb лок файлов другими приложениями
+mfm-wallet иногда не работает ng-click
 mfm-telegram поднятие опускание цены
 
 
 medium bugs
-mfm-landing www
+mfm-release выкупить 5 вавилонов
+mfm-telegram перевести первые сообщения в боте
+mfm-telegram принять и войти в телеге
+mfm-wallet автоматически закрываются диалоги
+mfm-landing docs аналитика на серкаке
+mfm-landing token Your token в дескрипшен
+mfm-wallet убрать сиды
+mfm-gdb лок файлов другими приложениями
+mfm-landing кеши поубирать в mustache
+mfm-release доменное имя до January 2, 2026
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
 mfm-wallet search предзагрузкить топ волюма

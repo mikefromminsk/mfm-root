@@ -31,7 +31,11 @@ sudo systemctl restart mfm
 
 sudo apt-get update
 sudo apt-get install certbot -y
+// - для одного домена без добавления txt
 sudo certbot certonly --standalone -d mytoken.space
+// + для всех доменов с добавления txt
+certbot certonly --manual --preferred-challenges=dns -d "*.mytoken.space" -d "mytoken.space" --agree-tos --manual-public-ip-logging-ok --email your-email@example.com
+// генерация keystore
 openssl pkcs12 -export -in /etc/letsencrypt/live/mytoken.space/fullchain.pem -inkey /etc/letsencrypt/live/mytoken.space/privkey.pem -out keystore.p12 -name jetty -password pass:x29a100
 keytool -importkeystore -srckeystore keystore.p12 -srcstoretype pkcs12 -srcstorepass x29a100 -destkeystore keystore.jks -deststoretype JKS -deststorepass x29a100
 sudo apt-get remove certbot
