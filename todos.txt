@@ -7,35 +7,26 @@ next week
     concentrator
 
 critical bugs
-mfm-telegram цена упала не приходит сообщение
 mfm-wallet иногда не работает ng-click
-mfm-telegram поднятие опускание цены
 
 
 medium bugs
-mfm-release выкупить 5 вавилонов
-mfm-telegram перевести первые сообщения в боте
 mfm-telegram принять и войти в телеге
-mfm-wallet автоматически закрываются диалоги
-mfm-landing docs аналитика на серкаке
-mfm-landing token Your token в дескрипшен
-mfm-wallet убрать сиды
 mfm-gdb лок файлов другими приложениями
-mfm-landing кеши поубирать в mustache
-mfm-release доменное имя до January 2, 2026
 safari свайп вбок почему то на wallet
 safari mfm-wallet launch distibution recipe не закрылось окно
+mfm-wallet автоматически закрываются диалоги
+mfm-wallet убрать сиды
 mfm-wallet search предзагрузкить топ волюма
-mfm-wallet divident среднее количество времени на эпоху
 mfm-wallet home если не залогинен то не показывается иконка звездочки
 mfm-wallet airdrop пиксели в угле карточки
 mfm-wallet miner инструмент по статистике кто сколько майнит
 mfm-wallet pin воодить при первом входе
 mfm-wallet нажимаешь на кнопку и рандомный токен
-mfm-wallet генерация seed по деревативному пути
 mfm-wallet dividends после завершения эпохи не обновляется даныне о следующей
 mfm-token генерация seed по деревативному пути
-mfm-landing скачать apk
+mfm-landing docs аналитика на серкаке
+mfm-landing token Your token в дескрипшен
 mfm-landing docs все стили из landing
 mfm-landing docs сравнение с конкурентами
 mfm-landing profile переделать и рекомендации
@@ -43,23 +34,8 @@ mfm-landing перекресные ссылки на lannding docs profile
 mfm-landing одометр на аналитику
 mfm-landing dosc форум статей wiki
 mfm-landing Поменять второй слайд в лендинге на почему мы отличаемся от других криптовалют
-mfm-landing Добавить на лендинг аналитику в виде блоков
-    Количество аккаунтов и транзакций
-    Количество инвестиций в долларах
-    Количество разработчиков и документы
-    Количество приложений инструкция плюс время за которое создать своё приложение
-    Количество токенов и объёмы
-    Суммарная сложность майнинга
-    Окры 30д 7д
-mfm-telegram вышел на биржу токен (добавили supply)
-mfm-telegram регулярные сообщения
-mfm-telegram токен достиг исторического максимума
-mfm-telegram задание для спящих пользователй что бы получить энергию
-mfm-telegram уведомление о возросшей сложности и цене больше 5% в день
-mfm-deposit сохранять сиды отдельно от кода и настройки выше на уровень от всех модулей + keystore
 mfm-deposit withdrawal пока сделать ручной
 mfm-deposit tron withdrawal usdt + analytics на общее количество токенов в контракте
-mfm-servers синхронность только set запроса
 mfm-mining мощности майнинга второго сервера
 mfm-mining нужно показывать когда баланс закончится
 mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
@@ -70,17 +46,22 @@ mfm-mining buy energy screen
 mfm-mining поиск токенов и убрать что не майнятся
 mfm-mining когда включаешь toggle без энергии то открыть окно покупки энергии
 mfm-exchange bitcoin 0.0000
-mfm-exchange bot майнер который покупает энергию если выгодно и использует в контракте
-mfm-exchange bot который повышает цену по приближению к концу эпохи
-mfm-exchange вернуть токены которые без postlimit ордера
 mfm-exchange зяпятая вместо точки в price
 mfm-exchange available округление и красный цвет проверить
-mfm-exchange восстановление пользовательских ордеров после перезагрузки
 mfm-android андройд приложение в сторе и скачать в landing
 
 
 
 low bugs and ideas
+mfm-exchange bot который повышает цену по приближению к концу эпохи
+mfm-landing скачать apk
+mfm-release доменное имя до January 2, 2026
+mfm-landing кеши поубирать в mustache
+mfm-wallet калькулятор цены вавилона
+mfm-telegram регулярные сообщения
+mfm-telegram токен достиг исторического максимума
+mfm-telegram задание для спящих пользователй что бы получить энергию
+mfm-wallet divident среднее количество времени на эпоху
 mfm-telegram эмулировать работу эфириум ноды
 mfm-telegram сообщение чтопересчет закончен
 mfm-telegram уведомления что сегодня намайнило если энергии больше 1000
@@ -224,6 +205,17 @@ mfm-token 1 000 000 одновременных подключений
 mfm-trans выбор периода
 mfm-trans AI консенсус адаптивный самоулучшающийся
 mfm-trans limits На создание usdt делать задержку аккаунта чтобы нельзя было создавать мультиакки
+mfm-landing Добавить на лендинг аналитику в виде блоков
+    Количество аккаунтов и транзакций
+    Количество инвестиций в долларах
+    Количество разработчиков и документы
+    Количество приложений инструкция плюс время за которое создать своё приложение
+    Количество токенов и объёмы
+    Суммарная сложность майнинга
+    Окры 30д 7д
+
+ethereum integration
+mfm-wallet генерация seed по деревативному пути
 
 mfm-swap разделить в аналитике cex price и dex price
 mfm-swap buy switcher
