@@ -65,7 +65,7 @@ evel
 thorchain.org
 bitethsol
 .network
-
+vavi.org
 
 
 landing
