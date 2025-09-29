@@ -53,7 +53,8 @@ mfm-android андройд приложение в сторе и скачать 
 
 
 low bugs and ideas
-mfm-exchange bot который повышает цену по приближению к концу эпохи
+mfm-servers vpn proxy для доступа к децентрализованному интернету
+mfm-servers лимитирование на выполнение задачи по ip по эндпойнту и общее
 mfm-landing скачать apk
 mfm-release доменное имя до January 2, 2026
 mfm-landing кеши поубирать в mustache
