@@ -8,23 +8,32 @@ next week
 
 critical bugs
 mfm-wallet иногда не работает ng-click
+mfm-wallet автоматически закрываются диалоги
+safari свайп вбок почему то на wallet
 
 
 medium bugs
 mfm-telegram принять и войти в телеге
-mfm-gdb лок файлов другими приложениями
-safari свайп вбок почему то на wallet
-safari mfm-wallet launch distibution recipe не закрылось окно
-mfm-wallet автоматически закрываются диалоги
 mfm-wallet убрать сиды
-mfm-wallet search предзагрузкить топ волюма
-mfm-wallet home если не залогинен то не показывается иконка звездочки
-mfm-wallet airdrop пиксели в угле карточки
-mfm-wallet miner инструмент по статистике кто сколько майнит
 mfm-wallet pin воодить при первом входе
-mfm-wallet нажимаешь на кнопку и рандомный токен
-mfm-wallet dividends после завершения эпохи не обновляется даныне о следующей
-mfm-token генерация seed по деревативному пути
+mfm-deposit withdrawal пока сделать ручной
+mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
+mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
+mfm-mining web сообщение нужно usdt Для майнинга
+mfm-mining buy energy screen
+mfm-mining когда включаешь toggle без энергии то открыть окно покупки энергии
+mfm-exchange bitcoin 0.0000
+mfm-exchange зяпятая вместо точки в price
+mfm-exchange available округление и красный цвет проверить
+
+
+
+low bugs and ideas
+mfm-mining мощности майнинга второго сервера на вторую крипту с новым контрактом
+mfm-token maven
+mfm-mining web аналитика кто сколько намайнил вручную и чего
+mfm-mining поиск токенов и убрать что не майнятся
+mfm-wallet miner инструмент по статистике кто сколько майнит
 mfm-landing docs аналитика на серкаке
 mfm-landing token Your token в дескрипшен
 mfm-landing docs все стили из landing
@@ -34,26 +43,11 @@ mfm-landing перекресные ссылки на lannding docs profile
 mfm-landing одометр на аналитику
 mfm-landing dosc форум статей wiki
 mfm-landing Поменять второй слайд в лендинге на почему мы отличаемся от других криптовалют
-mfm-deposit withdrawal пока сделать ручной
-mfm-deposit tron withdrawal usdt + analytics на общее количество токенов в контракте
-mfm-mining мощности майнинга второго сервера
-mfm-mining нужно показывать когда баланс закончится
-mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
-mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
-mfm-mining web аналитика кто сколько намайнил вручную и чего
-mfm-mining web сообщение нужно usdt Для майнинга
-mfm-mining buy energy screen
-mfm-mining поиск токенов и убрать что не майнятся
-mfm-mining когда включаешь toggle без энергии то открыть окно покупки энергии
-mfm-exchange bitcoin 0.0000
-mfm-exchange зяпятая вместо точки в price
-mfm-exchange available округление и красный цвет проверить
-mfm-android андройд приложение в сторе и скачать в landing
-
-
-
-low bugs and ideas
-mfm-servers vpn proxy для доступа к децентрализованному интернету
+mfm-release перейти на 128 бит хеширование
+mfm-wallet нажимаешь на кнопку и казино покупки рандомный токен
+mfm-gdb лок файлов другими приложениями
+mfm-wallet launch distibution recipe переделать верстку для клавиатуры снизу
+mfm-servers vpn proxy для доступа к децентрализованному интернету jvm-libp2
 mfm-servers мотивация хранения файлов и dht
 mfm-servers библиотека с доступом к динамическому контенту
 mfm-servers блокировка спама по хедеру User-Pow
