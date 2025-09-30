@@ -17,20 +17,20 @@ mfm-telegram принять и войти в телеге
 mfm-wallet убрать сиды
 mfm-wallet pin воодить при первом входе
 mfm-deposit withdrawal пока сделать ручной
-mfm-mining в транзакциях покаывается + 0.0003 а должно быть минус
-mfm-mining не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
-mfm-mining web сообщение нужно usdt Для майнинга
-mfm-mining buy energy screen
-mfm-mining когда включаешь toggle без энергии то открыть окно покупки энергии
-mfm-exchange bitcoin 0.0000
-mfm-exchange зяпятая вместо точки в price
-mfm-exchange available округление и красный цвет проверить
-
+mfm-wallet miner в транзакциях покаывается + 0.0003 а должно быть минус
+mfm-mining miner не существует кошелька если зашел в другой токен и не можешь вывести с майнинга
+mfm-wallet webminer сообщение нужно usdt Для майнинга
+mfm-wallet miner energy buy screen
+mfm-wallet miner energy когда включаешь toggle без энергии то открыть окно покупки энергии
+mfm-wallet exchange bitcoin 0.0000
+mfm-wallet exchange зяпятая вместо точки в price
+mfm-wallet exchange available округление и красный цвет проверить
 
 
 low bugs and ideas
 mfm-mining мощности майнинга второго сервера на вторую крипту с новым контрактом
 mfm-token maven
+mfm-token размер адреса поменяется на 128 бит
 mfm-mining web аналитика кто сколько намайнил вручную и чего
 mfm-mining поиск токенов и убрать что не майнятся
 mfm-wallet miner инструмент по статистике кто сколько майнит
