@@ -31,14 +31,17 @@ sudo systemctl restart mfm
 
 sudo apt-get update
 sudo apt-get install certbot -y
-// - для одного домена без добавления txt
-sudo certbot certonly --standalone -d mytoken.space
-// + для всех доменов с добавления txt
-certbot certonly --manual --preferred-challenges=dns -d "*.mytoken.space" -d "mytoken.space" --agree-tos --manual-public-ip-logging-ok --email your-email@example.com
+// для одного домена
+sudo certbot certonly --standalone -d vavilon.org --force-renewal
+
 // генерация keystore
-openssl pkcs12 -export -in /etc/letsencrypt/live/mytoken.space/fullchain.pem -inkey /etc/letsencrypt/live/mytoken.space/privkey.pem -out keystore.p12 -name jetty -password pass:x29a100
+openssl pkcs12 -export -in /etc/letsencrypt/live/[vavilon.org-0001]/fullchain.pem -inkey /etc/letsencrypt/live/[vavilon.org-0001]/privkey.pem -out keystore.p12 -name jetty -password pass:x29a100
 keytool -importkeystore -srckeystore keystore.p12 -srcstoretype pkcs12 -srcstorepass x29a100 -destkeystore keystore.jks -deststoretype JKS -deststorepass x29a100
-sudo apt-get remove certbot
+
+
+// для поддоменов с добавлением txt записи в dns
+// certbot certonly --manual --preferred-challenges=dns -d "*.vavilon.org" -d "vavilon.org" --agree-tos --manual-public-ip-logging-ok --email your-email@example.com
+
 
 # отключить системные логи а то переполняет постоянную память
 в файле /etc/logrotate.d/rsyslog
